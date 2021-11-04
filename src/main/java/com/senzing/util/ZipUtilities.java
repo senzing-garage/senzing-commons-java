@@ -151,7 +151,9 @@ public class ZipUtilities {
   }
 
   /**
+   * Manual test function.
    *
+   * @param args The command-line arguments.
    */
   public static void main(String[] args) {
     try {

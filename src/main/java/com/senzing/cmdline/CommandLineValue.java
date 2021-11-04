@@ -1,12 +1,13 @@
 package com.senzing.cmdline;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a value obtained from the command-line parser for a given
  * {@link CommandLineOption}.
  */
-public class CommandLineValue {
+public class CommandLineValue implements SpecifiedOption {
   /**
    * The option for this value.
    */
@@ -38,18 +39,18 @@ public class CommandLineValue {
    * value and {@link List} of {@link String} parameters that were used to
    * specify this option.
    *
-   * @param option The {@link CommandLineOption} that for with this value.
    * @param source The {@link CommandLineSource} that represents the source of
    *               the value.
+   * @param option The {@link CommandLineOption} that for with this value.
    * @param processedValue The processed value from the command-line parser.
    * @param parameters The {@link String} parameters used to specify this.
    */
-  public CommandLineValue(CommandLineOption option,
-                          CommandLineSource source,
+  public CommandLineValue(CommandLineSource source,
+                          CommandLineOption option,
                           Object            processedValue,
                           List<String>      parameters)
   {
-    this(option, source, null, processedValue, parameters);
+    this(source, option, null, processedValue, parameters);
   }
 
   /**
@@ -57,17 +58,17 @@ public class CommandLineValue {
    * value and {@link List} of {@link String} parameters that were used to
    * specify this option.
    *
-   * @param option The {@link CommandLineOption} that for with this value.
    * @param source The {@link CommandLineSource} that represents the source of
    *               the value.
+   * @param option The {@link CommandLineOption} that for with this value.
    * @param specifier The {@link String} specifier associated with the {@link
    *                  CommandLineSource} or <code>null</code> if it does not
    *                  apply.
    * @param processedValue The processed value from the command-line parser.
    * @param parameters The {@link String} parameters used to specify this.
    */
-  public CommandLineValue(CommandLineOption option,
-                          CommandLineSource source,
+  public CommandLineValue(CommandLineSource source,
+                          CommandLineOption option,
                           String            specifier,
                           Object            processedValue,
                           List<String>      parameters)
@@ -84,6 +85,7 @@ public class CommandLineValue {
    *
    * @return The associated {@link CommandLineOption}.
    */
+  @Override
   public CommandLineOption getOption() {
     return this.option;
   }
@@ -93,6 +95,7 @@ public class CommandLineValue {
    *
    * @return The associated {@link CommandLineSource}.
    */
+  @Override
   public CommandLineSource getSource() {
     return this.source;
   }
@@ -113,6 +116,7 @@ public class CommandLineValue {
    * @return The specifier associated with the {@link CommandLineSource}, or
    *         <code>null</code> if none.
    */
+  @Override
   public String getSpecifier() {
     return this.specifier;
   }
@@ -166,5 +170,39 @@ public class CommandLineValue {
    */
   public void setParameters(List<String> parameters) {
     this.parameters = parameters;
+  }
+
+  /**
+   * Returns a diagnostic {@link String} describing this instance.
+   *
+   * @return A diagnostic {@link String} describing this instance.
+   */
+  public String toString() {
+    return ("{ option=[ " + this.getOption() + " ], processedValue=[ "
+            + this.getProcessedValue() + " ], source=[ " + this.getSource()
+            + " ], specifier=[ " + this.getSpecifier() + " ], parameters=[ "
+            + this.getParameters() + " ] }");
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    CommandLineValue value = (CommandLineValue) o;
+
+    return Objects.equals(this.getOption(), value.getOption())
+        && this.getSource() == value.getSource()
+        && Objects.equals(this.getSpecifier(), value.getSpecifier())
+        && Objects.equals(this.getProcessedValue(), value.getProcessedValue())
+        && Objects.equals(this.getParameters(), value.getParameters());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.getOption(),
+                        this.getSource(),
+                        this.getSpecifier(),
+                        this.getProcessedValue(),
+                        this.getParameters());
   }
 }

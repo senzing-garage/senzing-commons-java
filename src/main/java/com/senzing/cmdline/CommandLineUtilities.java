@@ -9,7 +9,6 @@ import java.io.StringWriter;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.senzing.util.LoggingUtilities.*;
 import static com.senzing.cmdline.CommandLineSource.*;
 
 /**
@@ -91,25 +90,6 @@ public class CommandLineUtilities {
   }
 
   /**
-   * Utility method to ensure a command line argument with the specified index
-   * exists and if not then throws an exception.
-   *
-   * @param args  The array of command line arguments.
-   * @param index The index to check.
-   * @throws IllegalArgumentException If the argument does not exist.
-   */
-  public static void ensureArgument(String[] args, int index) {
-    if (index >= args.length) {
-      String msg = "Missing expected argument following " + args[index - 1];
-
-      System.err.println();
-      System.err.println(msg);
-
-      setLastLoggedAndThrow(new IllegalArgumentException(msg));
-    }
-  }
-
-  /**
    * Returns a new {@link String} array that contains the same elements as
    * the specified array except for the first N arguments where N is the
    * specified count.
@@ -118,11 +98,20 @@ public class CommandLineUtilities {
    * @param count The number of arguments to shift.
    * @return The shifted argument array.
    * @throws IllegalArgumentException If the specified count is negative.
+   * @throws TooFewArgumentsException If there are not enough arguments for
+   *                                  the shift.
    */
-  public static String[] shiftArguments(String[] args, int count) {
+  public static String[] shiftArguments(String[] args, int count)
+  {
     if (count < 0) {
       throw new IllegalArgumentException(
           "The specified count cannot be negative: " + count);
+    }
+    if ((args.length - count) < 0) {
+      throw new TooFewArgumentsException(
+          "The specified shift count cannot be greater than the array length.  "
+          + "arrayLength=[ " + args.length + " ], shiftCount=[ " + count
+          + " ]");
     }
     String[] args2 = new String[args.length - count];
     for (int index = 0; index < args2.length; index++) {
@@ -132,61 +121,48 @@ public class CommandLineUtilities {
   }
 
   /**
-   * Returns a descriptor for the source of the {@link CommandLineValue}
-   * for building error messages.
-   *
-   * @param commandLineValue The {@link CommandLineValue}.
-   * @param <T> The enumerated type that implements {@link CommandLineOption}.
-   */
-  private static <T extends Enum<T> & CommandLineOption<T>> String
-    sourceDescriptor(CommandLineValue commandLineValue)
-  {
-    switch (commandLineValue.getSource()) {
-      case COMMAND_LINE:
-        return commandLineValue.getSpecifier() + " option";
-      case ENVIRONMENT:
-        return commandLineValue.getSpecifier() + " environment variable";
-      default:
-        return commandLineValue.getOption().getCommandLineFlag() + " default";
-    }
-  }
-
-  /**
    * Stores the option and its value(s) in the specified option map, first
    * checking to ensure that the option is NOT already specified and
    * checking if the option has any conflicts.  If the specified option is
-   * deprecated then a warning message is returned.  If only a single option
-   * is specified then it is placed as the value.  If more than one option is
-   * specified then the value in the map is an array of the specified values.
+   * deprecated then a warning message is printed.
    *
    * @param optionMap The {@link Map} to put the option in.
    * @param value the {@link CommandLineValue} to add to the {@link Map}.
+   *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
+   *
+   * @throws CommandLineException If the specified {@link CommandLineValue}
+   *                              cannot be put in the specified {@link Map}
+   *                              due to a validation problem.
    */
-  public static <T extends Enum<T> & CommandLineOption<T>> void putValue(
-      Map<CommandLineOption, CommandLineValue>  optionMap,
-      CommandLineValue                          value)
+  public static <T extends Enum<T> & CommandLineOption<T, B>,
+                 B extends Enum<B> & CommandLineOption<B, ?>>
+      void putValue(Map<CommandLineOption, CommandLineValue>  optionMap,
+                    CommandLineValue                          value)
+    throws CommandLineException
   {
     CommandLineOption option = value.getOption();
     Set<CommandLineOption> optionKeys = optionMap.keySet();
     CommandLineValue prevValue = optionMap.get(option);
     if (prevValue != null) {
-      String msg = (prevValue.getSpecifier().equals(value.getSpecifier()))
-          ? "The " + sourceDescriptor(value) + " cannot be specified more than "
-            + "once."
-          : "Cannot specify both the " + sourceDescriptor(prevValue)
-            + " and " + sourceDescriptor(value) + ".";
-
-      System.err.println();
-      System.err.println(msg);
-
-      setLastLoggedAndThrow(new IllegalArgumentException(msg));
+      Set<String> flags = new HashSet<>();
+      if (value.getSource() == COMMAND_LINE) {
+        flags.add(value.getSpecifier());
+      }
+      if (prevValue.getSource() == COMMAND_LINE) {
+        flags.add(prevValue.getSpecifier());
+      }
+      throw new RepeatedOptionException(option, flags);
     }
 
     // check for conflicts if the value is NOT a defaulted value
     if (!checkNoArgFalse(value) && (value.getSource() != DEFAULT)) {
       Set<CommandLineOption> conflicts = option.getConflicts();
-      for (CommandLineOption<?> opt : optionKeys) {
+      for (CommandLineOption<?, ?> opt : optionKeys) {
         // get the reverse conflicts in case not symmetrical
         Set<CommandLineOption> revConflicts = opt.getConflicts();
 
@@ -203,39 +179,9 @@ public class CommandLineUtilities {
           // no conflict if the other is a no-arg option with a false value
           if (checkNoArgFalse(conflictValue)) continue;
 
-          // handle the conflict
-          String msg = "Cannot specify both the "
-              + sourceDescriptor(conflictValue) + " and "
-              + sourceDescriptor(value) + ".";
-
-          System.err.println();
-          System.err.println(msg);
-
-          setLastLoggedAndThrow(new IllegalArgumentException(msg));
+          throw new ConflictingOptionsException(conflictValue, value);
         }
       }
-    }
-
-    // check for deprecation
-    if (option.isDeprecated()) {
-      System.err.println();
-      System.err.println("WARNING: The " + sourceDescriptor(value)
-                             + " option is deprecated and will be removed in a "
-                             + "future release.");
-      Set<T> alternatives = option.getDeprecationAlternatives();
-      if (alternatives.size() == 1) {
-        T alternative = alternatives.iterator().next();
-        System.err.println();
-        System.err.println("Consider using " + alternative.getCommandLineFlag()
-                               + " instead.");
-      } else if (alternatives.size() > 1) {
-        System.err.println();
-        System.err.println("Consider using one of the following instead:");
-        for (T alternative : alternatives) {
-          System.err.println("     " + alternative.getCommandLineFlag());
-        }
-      }
-      System.err.println();
     }
 
     // put it in the option map
@@ -244,14 +190,19 @@ public class CommandLineUtilities {
 
   /**
    * Checks if the specified {@link CommandLineValue} is a zero or
-   * single-valued boolean flag.
+   * single-valued boolean flag and the value is false.
    *
    * @param cmdLineValue The {@link CommandLineValue} to check.
    *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>> boolean
-    checkNoArgFalse(CommandLineValue cmdLineValue)
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
+    boolean checkNoArgFalse(CommandLineValue cmdLineValue)
   {
     CommandLineOption option = cmdLineValue.getOption();
     // special-case no-arg boolean flags
@@ -281,15 +232,23 @@ public class CommandLineUtilities {
    *         not found.
    *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  public static <T extends Enum<T> & CommandLineOption<T>> T lookup(
-      Class<T> enumClass,
-      String commandLineFlag) {
+  public static <T extends Enum<T> & CommandLineOption<T, B>,
+                 B extends Enum<B> & CommandLineOption<B, ?>>
+      T lookup(Class<T> enumClass, String commandLineFlag)
+  {
     // just iterate to find it rather than using a lookup map given that
     // enums are usually not more than a handful of values
     EnumSet<T> enumSet = EnumSet.allOf(enumClass);
     for (T enumVal : enumSet) {
       if (enumVal.getCommandLineFlag().equals(commandLineFlag)) {
+        return enumVal;
+      }
+      if (enumVal.getSynonymFlags().contains(commandLineFlag)) {
         return enumVal;
       }
     }
@@ -306,9 +265,14 @@ public class CommandLineUtilities {
    *         <code>false</code>.
    *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>> boolean
-    checkPrimaryRequired(Class<T> enumClass)
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
+    boolean checkPrimaryRequired(Class<T> enumClass)
   {
     // check if we need a primary option
     boolean primaryRequired = false;
@@ -342,8 +306,13 @@ public class CommandLineUtilities {
    *         <code>false</code>.
    *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>>
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
     Set<CommandLineOption> getPrimaryOptions(Class<T> enumClass)
   {
     // create the result
@@ -364,9 +333,14 @@ public class CommandLineUtilities {
    *         <code>false</code>.
    *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>>
-  void populatePrimaryOptions(Set<CommandLineOption> set, Class<T> enumClass)
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
+    void populatePrimaryOptions(Set<CommandLineOption> set, Class<T> enumClass)
   {
     // check if we need a primary option
     EnumSet<T> enumSet = EnumSet.allOf(enumClass);
@@ -393,9 +367,14 @@ public class CommandLineUtilities {
    * @param enumClass The starting class for the type chain.
    *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>>
-   Set<Class<? extends CommandLineOption>> getTypeChain(Class<T> enumClass)
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
+    Set<Class<? extends CommandLineOption>> getTypeChain(Class<T> enumClass)
   {
     Set<Class<? extends CommandLineOption>> result = new LinkedHashSet<>();
     populateTypeChain(result, enumClass);
@@ -408,8 +387,15 @@ public class CommandLineUtilities {
    *
    * @param set The {@link} set to populate.
    * @param enumClass The starting class for the type chain.
+   *
+   * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>>
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
     void populateTypeChain(Set<Class<? extends CommandLineOption>>  set,
                            Class<T>                                 enumClass)
   {
@@ -430,10 +416,17 @@ public class CommandLineUtilities {
    *
    * @param set The {@link} set to populate.
    * @param enumClass The starting class for the options chain.
+   *
+   * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>>
-  void populateOptionsChain(Set<CommandLineOption>  set,
-                            Class<T>                enumClass)
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
+    void populateOptionsChain(Set<CommandLineOption>  set,
+                              Class<T>                enumClass)
   {
     if (enumClass == null) return;
     EnumSet<T> enumSet = EnumSet.allOf(enumClass);
@@ -459,29 +452,51 @@ public class CommandLineUtilities {
    *                  that implements {@link CommandLineOption}.
    * @param optionValues The {@link Map} of {@link CommandLineOption} keys to
    *                     {@link CommandLineValue} values.
+   *
+   * @return A {@link List} of {@link DeprecatedOptionWarning} instances
+   *         describing the deprecation warnings (if any), or <code>null</code>
+   *         if there are no deprecation warnings.
+   *
    * @throws IllegalArgumentException If the specified options are invalid
    *                                  together.
+   * @throws CommandLineException If the specified command-line options fail
+   *                              validation.
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  public static <T extends Enum<T> & CommandLineOption<T>> void validateOptions(
-      Class<T>                                  enumClass,
-      Map<CommandLineOption, CommandLineValue>  optionValues)
-      throws IllegalArgumentException
+  public static <T extends Enum<T> & CommandLineOption<T, B>,
+                 B extends Enum<B> & CommandLineOption<B, ?>>
+    List<DeprecatedOptionWarning> validateOptions(
+        Class<T>                                  enumClass,
+        Map<CommandLineOption, CommandLineValue>  optionValues)
+    throws IllegalArgumentException, CommandLineException
   {
+    List<DeprecatedOptionWarning> deprecatedList = new LinkedList<>();
+
     // create the set of legal option classes
     Set<Class<? extends CommandLineOption>> typeChainSet
         = getTypeChain(enumClass);
 
     // check the types in the key set
-    for (CommandLineOption option : optionValues.keySet()) {
+    optionValues.forEach((option, optionValue) -> {
+      if (option != optionValue.getOption()) {
+        throw new IllegalArgumentException(
+            "Mismatch on option values key/value pair.  The option key does "
+            + "not the associated CommandLineValue's option.  optionKey=[ "
+            + option + " ], optionValue=[ " + optionValue.getOption() + " ]");
+      }
+
       if (!typeChainSet.contains(option.getClass())) {
         throw new IllegalArgumentException(
             "The specified option values map contains an option of an illegal "
-            + "type given the specified CommandLineOption type.  found=[ "
-            + option + " ], foundType=[ " + option.getClass()
-            + " ], expected=[ " + typeChainSet + " ]");
+                + "type given the specified CommandLineOption type.  found=[ "
+                + option + " ], foundType=[ " + option.getClass()
+                + " ], expected=[ " + typeChainSet + " ]");
       }
-    }
+    });
 
     // check if we need a primary option
     Set<CommandLineOption> primaryOptions = getPrimaryOptions(enumClass);
@@ -497,28 +512,27 @@ public class CommandLineUtilities {
         }
       }
       if (primaryCount == 0) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-
-        pw.println("Must specify at least one of the following:");
-        for (CommandLineOption option : primaryOptions) {
-          pw.println("     " + option.getCommandLineFlag()
-                     + (option.isDeprecated() ? " (deprecated)" : ""));
-        }
-
-        String msg = sw.toString();
-        pw.flush();
-        System.err.println();
-        System.err.println(msg);
-        setLastLoggedAndThrow(new IllegalArgumentException(msg));
+        throw new NoPrimaryOptionException(primaryOptions);
       }
     }
 
     // check for conflicts and dependencies
-    optionValues.values().forEach(cmdLineValue -> {
-      if (cmdLineValue.getSource() == DEFAULT) return;
+    for (CommandLineValue cmdLineValue : optionValues.values()) {
+      // check if this is a default value
+      if (cmdLineValue.getSource() == DEFAULT) continue;
+
+      // get the option
       CommandLineOption option = (CommandLineOption) cmdLineValue.getOption();
+
+      // check for deprecation
+      if (option.isDeprecated()) {
+        deprecatedList.add(new DeprecatedOptionWarning(cmdLineValue));
+      }
+
+      // check for conflicts
       Set<CommandLineOption> conflicts = option.getConflicts();
+
+      // get the dependencies
       Set<Set<CommandLineOption>> dependencies = option.getDependencies();
       if (conflicts != null) {
         for (CommandLineOption conflict : conflicts) {
@@ -529,13 +543,8 @@ public class CommandLineUtilities {
           CommandLineValue conflictValue = optionValues.get(conflict);
           if (conflictValue != null) {
             if (conflictValue.getSource() == DEFAULT) continue;
-            String msg = "Cannot specify both the "
-                + sourceDescriptor(cmdLineValue)
-                + " and the " + sourceDescriptor(conflictValue);
-            System.err.println();
-            System.err.println(msg);
 
-            setLastLoggedAndThrow(new IllegalArgumentException(msg));
+            throw new ConflictingOptionsException(cmdLineValue, conflictValue);
           }
         }
       }
@@ -550,46 +559,15 @@ public class CommandLineUtilities {
         }
       }
       if (!satisfied) {
-        System.err.println();
-        if (dependencies.size() == 1) {
-          System.err.println(
-              "The " + sourceDescriptor(cmdLineValue) + " also requires:");
-          Set<CommandLineOption> dependencySet = dependencies.iterator().next();
-          for (CommandLineOption dependency : dependencySet) {
-            if (!optionValues.containsKey(dependency)) {
-              System.err.println("     " + dependency.getCommandLineFlag());
-            }
-          }
-        } else {
-          System.err.println(
-              "The " + sourceDescriptor(cmdLineValue) + " also requires:");
-          String leader = "     ";
-          for (Set<CommandLineOption> dependencySet : dependencies) {
-            String prefix = "";
-            String prevOption = null;
-            System.err.print(leader);
-            leader = "  or ";
-            for (CommandLineOption dependency : dependencySet) {
-              int count = 0;
-              if (!optionValues.containsKey(dependency)) {
-                if (prevOption != null) {
-                  count++;
-                  System.err.print(prefix + prevOption);
-                }
-                prevOption = dependency.getCommandLineFlag();
-                prefix = ", ";
-              }
-              if (count > 0) {
-                System.err.print(" and ");
-              }
-              System.err.println(prevOption);
-            }
-          }
-        }
-        setLastLoggedAndThrow(new IllegalArgumentException(
-            "Missing dependencies for " + sourceDescriptor(cmdLineValue)));
+        throw new MissingDependenciesException(cmdLineValue.getSource(),
+                                               cmdLineValue.getOption(),
+                                               cmdLineValue.getSpecifier(),
+                                               optionValues.keySet());
       }
-    });
+    }
+
+    // return the list of deprecation warnings
+    return (deprecatedList.size() == 0) ? null : deprecatedList;
   }
 
   /**
@@ -688,17 +666,36 @@ public class CommandLineUtilities {
    * @param args The arguments to parse.
    * @param processor The {@link ParameterProcessor} to use for handling the
    *                  parameters to the options.
-   * @return A {@link Map} of {@link CommandLineOption} keys to
+   * @param targetOptionMap The {@link Map} to populate with the result of
+   *                        the parsing.
+   *
+   * @return A {@link List} of {@link DeprecatedOptionWarning} instances
+   *         describing the deprecation warnings (if any), or <code>null</code>
+   *         if there are no deprecation warnings.
+   *
+   * @throws CommandLineException If a command-line option parsing error occurs.
+   *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  public static <T extends Enum<T> & CommandLineOption<T>>
-    Map<CommandLineOption, CommandLineValue> parseCommandLine(
-        Class<T>            enumClass,
-        String[]            args,
-        ParameterProcessor  processor)
+  public static <T extends Enum<T> & CommandLineOption<T, B>,
+                 B extends Enum<B> & CommandLineOption<B, ?>>
+    List<DeprecatedOptionWarning> parseCommandLine(
+        Class<T>                                  enumClass,
+        String[]                                  args,
+        ParameterProcessor                        processor,
+        Map<CommandLineOption, CommandLineValue>  targetOptionMap)
+      throws CommandLineException
   {
-    return parseCommandLine(
-        enumClass, args, processor, false, null);
+    return parseCommandLine(enumClass,
+                            args,
+                            processor,
+                            false,
+                            null,
+                            targetOptionMap);
   }
 
   /**
@@ -715,18 +712,37 @@ public class CommandLineUtilities {
    *                  parameters to the options.
    * @param ignoreEnvironment Flag indicating if the environment variables
    *                          should be ignored in the processing.
-   * @return A {@link Map} of {@link CommandLineOption} keys to
+   * @param targetOptionMap The {@link Map} to populate with the result of
+   *                        the parsing.
+   *
+   * @return A {@link List} of {@link DeprecatedOptionWarning} instances
+   *         describing the deprecation warnings (if any), or <code>null</code>
+   *         if there are no deprecation warnings.
+   *
+   * @throws CommandLineException If a command-line option parsing error occurs.
+   *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  public static <T extends Enum<T> & CommandLineOption<T>>
-    Map<CommandLineOption, CommandLineValue> parseCommandLine(
-        Class<T>            enumClass,
-        String[]            args,
-        ParameterProcessor  processor,
-        boolean             ignoreEnvironment)
+  public static <T extends Enum<T> & CommandLineOption<T, B>,
+                 B extends Enum<B> & CommandLineOption<B, ?>>
+    List<DeprecatedOptionWarning> parseCommandLine(
+        Class<T>                                  enumClass,
+        String[]                                  args,
+        ParameterProcessor                        processor,
+        boolean                                   ignoreEnvironment,
+        Map<CommandLineOption, CommandLineValue>  targetOptionMap)
+    throws CommandLineException
   {
-    return parseCommandLine(
-        enumClass, args, processor, false, null);
+    return parseCommandLine(enumClass,
+                            args,
+                            processor,
+                            false,
+                            null,
+                            targetOptionMap);
   }
 
   /**
@@ -748,19 +764,37 @@ public class CommandLineUtilities {
    *                        other than <code>false</code> will cause the environment
    *                        to be ignored in processing.
    *
-   * @return A {@link Map} of {@link CommandLineOption} keys to {@link
-   *         CommandLineValue} values.
+   * @param targetOptionMap The {@link Map} to populate with the result of
+   *                        the parsing.
+   *
+   * @return A {@link List} of {@link DeprecatedOptionWarning} instances
+   *         describing the deprecation warnings (if any), or <code>null</code>
+   *         if there are no deprecation warnings.
+   *
+   * @throws CommandLineException If a command-line option parsing error occurs.
+   *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  public static <T extends Enum<T> & CommandLineOption<T>>
-    Map<CommandLineOption, CommandLineValue> parseCommandLine(
-        Class<T>            enumClass,
-        String[]            args,
-        ParameterProcessor  processor,
-        CommandLineOption   ignoreEnvOption)
+  public static <T extends Enum<T> & CommandLineOption<T, B>,
+                 B extends Enum<B> & CommandLineOption<B, ?>>
+    List<DeprecatedOptionWarning> parseCommandLine(
+        Class<T>                                  enumClass,
+        String[]                                  args,
+        ParameterProcessor                        processor,
+        CommandLineOption                         ignoreEnvOption,
+        Map<CommandLineOption, CommandLineValue>  targetOptionMap)
+      throws CommandLineException
   {
-    return parseCommandLine(
-        enumClass, args, processor, false, ignoreEnvOption);
+    return parseCommandLine(enumClass,
+                            args,
+                            processor,
+                            false,
+                            ignoreEnvOption,
+                            targetOptionMap);
   }
 
   /**
@@ -770,11 +804,16 @@ public class CommandLineUtilities {
    * @param processor The {@link ParameterProcessor}, or <code>null</code> if none.
    * @param params The {@link List} of {@link String} parameters.
    * @return The processed value.
+   * @throws BadOptionParametersException If the parameter values cannot be
+   *                                      processed without an error.
    */
   private static Object processValue(
+      CommandLineSource   source,
       CommandLineOption   option,
+      String              specifier,
       ParameterProcessor  processor,
       List<String>        params)
+    throws BadOptionParametersException
   {
     // process the parameters
     if (processor != null) {
@@ -783,18 +822,20 @@ public class CommandLineUtilities {
       try {
         value = processor.process(option, params);
       } catch (Exception e) {
-        System.err.println();
-        System.err.println("Bad parameters for " + option.getCommandLineFlag()
-                               + " option:");
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+
+        pw.println();
+        pw.println("Bad parameters for " + option.getCommandLineFlag()
+                   + " option:");
         for (String p : params) {
-          System.err.println("    o " + p);
+          pw.println("    o " + p);
         }
-        System.err.println();
-        System.err.println(e.getMessage());
-        if (e instanceof RuntimeException) {
-          LoggingUtilities.setLastLoggedAndThrow((RuntimeException) e);
-        }
-        LoggingUtilities.setLastLoggedAndThrow(new RuntimeException(e));
+        pw.println();
+        pw.println(e.getMessage());
+        pw.flush();
+        throw new BadOptionParametersException(
+            source, option, specifier, params, sw.toString());
       }
       return value;
 
@@ -824,23 +865,37 @@ public class CommandLineUtilities {
    *                          should be ignored in the processing.
    * @param ignoreEnvOption The option to trigger ignoring the environment.
    *
-   * @return A {@link Map} of {@link CommandLineOption} keys to {@link
-   *         CommandLineValue} values.
+   * @param targetOptionMap The {@link Map} to populate with the result of
+   *                        the parsing.
+   *
+   * @return A {@link List} of {@link DeprecatedOptionWarning} instances
+   *         describing the deprecation warnings (if any), or <code>null</code>
+   *         if there are no deprecation warnings.
+   *
+   * @throws CommandLineException If the specified command line arguments fail
+   *                              to parse.
+   *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>>
-    Map<CommandLineOption, CommandLineValue> parseCommandLine(
-        Class<T>           enumClass,
-        String[]           args,
-        ParameterProcessor processor,
-        boolean            ignoreEnvironment,
-        CommandLineOption  ignoreEnvOption)
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
+    List<DeprecatedOptionWarning> parseCommandLine(
+        Class<T>                                  enumClass,
+        String[]                                  args,
+        ParameterProcessor                        processor,
+        boolean                                   ignoreEnvironment,
+        CommandLineOption                         ignoreEnvOption,
+        Map<CommandLineOption, CommandLineValue>  targetOptionMap)
+    throws CommandLineException
   {
     // create a lookup map for the flags to their options
     Map<String, CommandLineOption> lookupMap = createFlagLookupMap(enumClass);
 
     // iterate over the args and build a map
-    Map<CommandLineOption, CommandLineValue> result     = new LinkedHashMap<>();
     Map<CommandLineOption, String>           usedFlags  = new LinkedHashMap<>();
     for (int index = 0; index < args.length; index++) {
       // get the next flag
@@ -851,29 +906,15 @@ public class CommandLineUtilities {
 
       // check if the option is recognized
       if (option == null) {
-        System.err.println();
-        System.err.println("Unrecognized option: " + flag);
-
-        setLastLoggedAndThrow(new IllegalArgumentException(
-            "Unrecognized command line option: " + flag));
+        throw new UnrecognizedOptionException(
+            flag, "Unrecognized command line option: " + flag);
       }
 
       // check if the option has already been specified
       String usedFlag = usedFlags.get(option);
-      if (usedFlag != null && usedFlag.equals(flag)) {
-        System.err.println();
-        System.err.println("Option specified more than once: " + flag);
-
-        setLastLoggedAndThrow(new IllegalArgumentException(
-            "Option specified more than once: " + flag));
-
-      } else if (usedFlag != null) {
-        System.err.println();
-        System.err.println(
-            "Option specified more than once: " + usedFlag + " and " + flag);
-
-        setLastLoggedAndThrow(new IllegalArgumentException(
-            "Option specified more than once: " + usedFlag + " and " + flag));
+      if (usedFlag != null) {
+        Set<String> flags = Set.of(flag, usedFlag);
+        throw new RepeatedOptionException(option, flags);
       }
 
       // get the option parameters
@@ -890,9 +931,16 @@ public class CommandLineUtilities {
         // check if there are enough parameters
         int max = index + minParamCount;
         for (index++; index <= max; index++) {
-          ensureArgument(args, index);
+          if (index >= args.length) {
+            throw new BadOptionParameterCountException(
+                COMMAND_LINE, option, flag, params);
+          }
+
+          // add the parameter to the list
           params.add(args[index]);
         }
+
+        // back up the index by one so when we advance it later it is correct
         index--;
       }
 
@@ -919,7 +967,8 @@ public class CommandLineUtilities {
                 params.add(args[++index].trim().toLowerCase());
                 break;
               default:
-                throw new IllegalArgumentException(
+                throw new BadOptionParametersException(
+                    COMMAND_LINE, option, flag, List.of(param),
                     "The " + flag + " command line option can be specified "
                     + "with no parameters, but if a parameter is provided it "
                     + "must be \"true\" or \"false\": " + args[index + 1]);
@@ -940,6 +989,22 @@ public class CommandLineUtilities {
           params.add(args[nextIndex]);
           index++;
         }
+
+        // check if there are more (unexpected) parameters
+        for (int nextIndex = index + 1;
+             (nextIndex < args.length && !args[nextIndex].startsWith("-")
+              && !lookupMap.containsKey(args[index]));
+             nextIndex++)
+        {
+          params.add(args[nextIndex]);
+          index++;
+        }
+
+        // check if too many parameters
+        if (params.size() > maxParamCount) {
+          throw new BadOptionParameterCountException(
+              COMMAND_LINE, option, flag, params);
+        }
       }
 
       defaultParams = option.getDefaultParameters();
@@ -954,28 +1019,28 @@ public class CommandLineUtilities {
       }
 
       // process the parameters
-      Object processedValue = processValue(option, processor, params);
+      Object processedValue = processValue(
+          COMMAND_LINE, option, flag, processor, params);
 
       // create the command-line value
-      CommandLineValue cmdLineVal = new CommandLineValue(option,
-                                                         COMMAND_LINE,
+      CommandLineValue cmdLineVal = new CommandLineValue(COMMAND_LINE,
+                                                         option,
                                                          flag,
                                                          processedValue,
                                                          params);
 
       // add to the options map
-      putValue(result, cmdLineVal);
-
+      putValue(targetOptionMap, cmdLineVal);
     }
 
     // optionally process the environment
     ignoreEnvironment
         = (ignoreEnvironment
-          || (result.containsKey(ignoreEnvOption)
-              && (!Boolean.FALSE.equals(result.get(ignoreEnvOption)))));
+          || (targetOptionMap.containsKey(ignoreEnvOption)
+              && (!Boolean.FALSE.equals(targetOptionMap.get(ignoreEnvOption)))));
     if (!ignoreEnvironment) {
       try {
-        processEnvironment(enumClass, processor, result);
+        processEnvironment(enumClass, processor, targetOptionMap);
       } catch (NullPointerException e) {
         e.printStackTrace();
         throw e;
@@ -984,7 +1049,7 @@ public class CommandLineUtilities {
 
     try {
       // handle setting the default values
-      processDefaults(enumClass, processor, result);
+      processDefaults(enumClass, processor, targetOptionMap);
     } catch (NullPointerException e) {
       e.printStackTrace();
       throw e;
@@ -992,13 +1057,13 @@ public class CommandLineUtilities {
 
     // validate the options
     try {
-      validateOptions(enumClass, result);
-    } catch (NullPointerException e) {
+      return validateOptions(enumClass, targetOptionMap);
+    } catch (CommandLineException e) {
+      throw e;
+    } catch (Exception e) {
       e.printStackTrace();
       throw e;
     }
-
-    return result;
   }
 
   /**
@@ -1008,12 +1073,22 @@ public class CommandLineUtilities {
    * @param processor The {@link ParameterProcessor} to use.
    * @param optionValues The {@link Map} of {@link CommandLineOption} keys
    *                     to {@link CommandLineValue} values.
+   * @throws CommandLineException If a command-line option processing error
+   *                              occurs.
+   *
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>> void
-  processEnvironment(Class<T>                                 enumClass,
-                     ParameterProcessor                       processor,
-                     Map<CommandLineOption, CommandLineValue> optionValues)
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
+    void processEnvironment(
+        Class<T>                                  enumClass,
+        ParameterProcessor                        processor,
+        Map<CommandLineOption, CommandLineValue>  optionValues)
+    throws CommandLineException
   {
     Set<CommandLineOption> options = new LinkedHashSet<>();
     populateOptionsChain(options, enumClass);
@@ -1077,20 +1152,22 @@ public class CommandLineUtilities {
 
     // check the fallback options
     if (fallbackOptions.size() > 0) {
-      System.err.println();
       processEnvironment(fallbackOptions, processor, optionValues, true);
     }
   }
 
   /**
-   * Checka for command-line option values in the environment.
+   * Checks for command-line option values in the environment.
    *
+   * @throws CommandLineException If the specified environment command line
+   *                              arguments are illegal.
    */
   private static void processEnvironment(
       Set<? extends CommandLineOption>          enumSet,
       ParameterProcessor                        processor,
       Map<CommandLineOption, CommandLineValue>  optionValues,
       boolean                                   fallBacks)
+    throws CommandLineException
   {
     // get the environment
     Map<String, String> env = System.getenv();
@@ -1189,25 +1266,22 @@ public class CommandLineUtilities {
       if (paramCount != 1 || minParamCount != 0 || maxParamCount != 0) {
         // handle the options with parameters
         if (paramCount < minParamCount) {
-          throw new IllegalArgumentException(
-              "Expected at least " + minParamCount + " parameter(s) but "
-                  + "found " + paramCount + " for " + foundVar
-                  + " environment variable: " + envVal);
+          throw new BadOptionParameterCountException(
+              ENVIRONMENT, option, foundVar, params);
         }
         if ((maxParamCount >= 0) && (paramCount > maxParamCount)) {
-          throw new IllegalArgumentException(
-              "Expected at most " + maxParamCount + " parameter(s) but "
-                  + "found " + paramCount + " for " + foundVar
-                  + " environment variable: " + envVal);
+          throw new BadOptionParameterCountException(
+              ENVIRONMENT, option, foundVar, params);
         }
       }
 
       // process the parameters
-      Object processedValue = processValue(option, processor, params);
+      Object processedValue = processValue(
+          ENVIRONMENT, option, foundVar, processor, params);
 
       // create the command line value
-      CommandLineValue cmdLineVal = new CommandLineValue(option,
-                                                         ENVIRONMENT,
+      CommandLineValue cmdLineVal = new CommandLineValue(ENVIRONMENT,
+                                                         option,
                                                          foundVar,
                                                          processedValue,
                                                          params);
@@ -1218,14 +1292,29 @@ public class CommandLineUtilities {
   }
 
   /**
-   * Checka for command-line option values in the environment.
+   * Check for command-line option values in the environment.
    *
+   * @param enumClass The option enum class that implements {@link
+   *                  CommandLineOption}.
+   * @param processor The {@link ParameterProcessor} for processing the
+   *                  parameters.
+   * @param optionValues The {@link Map} of {@link CommandLineOption} keys to
+   *                     {@link CommandLineValue} values.
+   *
+   * @throws CommandLineException If a command-line option processing error
+   *                              occurs.
    * @param <T> The enumerated type that implements {@link CommandLineOption}.
+   * @param <B> The base enumerated type that the command-line options extend,
+   *            <b>OR</b> the same as type <code>T</code> if the command-line
+   *            option type has no base and returns <code>null</code> from
+   *            {@link CommandLineOption#getBaseOptionType()}.
    */
-  private static <T extends Enum<T> & CommandLineOption<T>> void
-    processDefaults(Class<T>                                  enumClass,
-                    ParameterProcessor                        processor,
-                    Map<CommandLineOption, CommandLineValue>  optionValues)
+  private static <T extends Enum<T> & CommandLineOption<T, B>,
+                  B extends Enum<B> & CommandLineOption<B, ?>>
+    void processDefaults(Class<T>                                  enumClass,
+                         ParameterProcessor                        processor,
+                         Map<CommandLineOption, CommandLineValue>  optionValues)
+    throws CommandLineException
   {
     Set<CommandLineOption> options = new LinkedHashSet<>();
     populateOptionsChain(options, enumClass);
@@ -1242,11 +1331,12 @@ public class CommandLineUtilities {
       if (params == null || params.size() == 0) continue;
 
       // process the parameters
-      Object processedValue = processValue(option, processor, params);
+      Object processedValue = processValue(
+          DEFAULT, option, null, processor, params);
 
       // create the command line value
-      CommandLineValue cmdLineVal = new CommandLineValue(option,
-                                                         DEFAULT,
+      CommandLineValue cmdLineVal = new CommandLineValue(DEFAULT,
+                                                         option,
                                                          processedValue,
                                                          params);
 
@@ -1368,7 +1458,7 @@ public class CommandLineUtilities {
     boolean doJson = (jsonBuilder != null || stringBuilder != null);
 
     // check if we need to create the JSON object builder
-    JsonObjectBuilder job = (doJson && jsonBuilder == null)
+    JsonObjectBuilder job = (doJson && (jsonBuilder == null || stringBuilder != null))
         ? Json.createObjectBuilder() : jsonBuilder;
 
     // iterate over the option values and handle them
@@ -1404,7 +1494,11 @@ public class CommandLineUtilities {
         }
 
         // add to the JsonObjectBuilder
-        job.add(key.toString(), job2);
+        JsonObject jsonObject = job2.build();
+        job.add(key.toString(), jsonObject);
+        if (jsonBuilder != null && job != jsonBuilder) {
+          jsonBuilder.add(key.toString(), jsonObject);
+        }
       }
 
       // add to the map

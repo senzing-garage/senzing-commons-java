@@ -81,6 +81,8 @@ public class WorkerThreadPool {
   /**
    * Checks if this pool has been closed.  Once closed, the pool can no longer
    * be used to execute any further tasks.
+   *
+   * @return <code>true</code> if closed and <code>false</code> if not.
    */
   public boolean isClosed() {
     synchronized (this.available) {

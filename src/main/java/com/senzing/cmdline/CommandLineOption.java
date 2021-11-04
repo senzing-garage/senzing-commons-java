@@ -10,18 +10,24 @@ import java.util.Set;
  * to enable them to be used with {@link CommandLineUtilities}.
  *
  * @param <T> The enumerated type that enumerates the command-line options.
+ * @param <B> The base enumerated type that these command-line options extend,
+ *            <b>OR</b> the same as type <code>T</code> if this command-line
+ *           option type has no base and returns <code>null</code> from
+ *           {@link #getBaseOptionType()}.
  */
-public interface CommandLineOption<T extends Enum<T> & CommandLineOption> {
+public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
+                                   B extends Enum<B> & CommandLineOption<B, ?>>
+{
   /**
    * Gets the base {@link CommandLineOption} type that this one extends.  This
-   * returns <code>null</code> if there is no base type.
+   * returns <code>null</code> if there is no base type.  <b>NOTE:</b> The type
+   * returned is the base generic parameter type or the same type of this class
+   * if no base.
    *
    * @return The base {@link CommandLineOption} type that this one extends, or
    *         <code>null</code> if there is no base type.
-   *
-   * @param <B> The enumerated type that implements {@link CommandLineOption}.
    */
-  default <B extends Enum<B> & CommandLineOption<B>> Class<B> getBaseOptionType() {
+  default Class<B> getBaseOptionType() {
     return null;
   }
 
