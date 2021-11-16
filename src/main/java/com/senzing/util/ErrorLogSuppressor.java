@@ -25,7 +25,7 @@ public class ErrorLogSuppressor {
   /**
    * The state of the suppressor.
    */
-  public static enum State {
+  public enum State {
     /**
      * Logging of these errors is currently being suppresed.
      */
@@ -145,9 +145,19 @@ public class ErrorLogSuppressor {
   private long timeWindow = DEFAULT_TIME_WINDOW;
 
   /**
+   * The suppression duration in nanoseconds.
+   */
+  private long nanoWindow = DEFAULT_TIME_WINDOW * 1000000L;
+
+  /**
    * The number of milliseconds to suppress the reporting.
    */
   private long suppressDuration = DEFAULT_SUPPRESS_DURATION;
+
+  /**
+   * The suppression duration in nanoseconds.
+   */
+  private long nanoDuration = DEFAULT_SUPPRESS_DURATION * 1000000L;
 
   /**
    * The threshold for the number of errors that can occur within the specified
@@ -178,9 +188,23 @@ public class ErrorLogSuppressor {
                             long timeWindow,
                             long suppressDuration)
   {
+    if (errorLimit <= 0) {
+      throw new IllegalArgumentException(
+          "Error limit must be a positive number: " + errorLimit);
+    }
+    if (timeWindow <= 0L) {
+      throw new IllegalArgumentException(
+          "Time window must be a positive number: " + timeWindow);
+    }
+    if (suppressDuration <= 0L) {
+      throw new IllegalArgumentException(
+          "Suppress duration must be a positive number: " + suppressDuration);
+    }
     this.errorLimit       = errorLimit;
     this.timeWindow       = timeWindow;
     this.suppressDuration = suppressDuration;
+    this.nanoWindow       = this.timeWindow * 1000000L;
+    this.nanoDuration     = this.suppressDuration * 1000000L;
   }
 
   /**
@@ -258,7 +282,7 @@ public class ErrorLogSuppressor {
    * @return The result of handling the error.
    */
   public synchronized Result updateOnError() {
-    long  now = System.currentTimeMillis();
+    long  now = System.nanoTime();
     State state = null;
     int   count = 0;
 
@@ -267,7 +291,7 @@ public class ErrorLogSuppressor {
 
     if (this.suppressing) {
       // check if suppressing is over
-      if ((now - this.lastReportTime) > this.suppressDuration) {
+      if ((now - this.lastReportTime) > this.nanoDuration) {
         // suppression is over, set state for reactivation
         count = this.suppressedCount;
         state = State.REACTIVATED;
@@ -277,14 +301,15 @@ public class ErrorLogSuppressor {
         this.periodCount      = 1;
 
       } else {
-        // suppression is continuing, incremement the suppressed count
+        // suppression is continuing, increment the suppressed count
         this.suppressedCount++;
+        this.periodCount++;
         this.suppressing = true;
         count = this.suppressedCount;
         state = State.SUPPRESSED;
       }
 
-    } else if ((now - this.lastReportTime) > this.timeWindow) {
+    } else if ((now - this.lastReportTime) > this.nanoWindow) {
       // last error was before the time window, reset the period
       this.periodCount      = 1;
       this.suppressedCount  = 0;

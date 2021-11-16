@@ -161,12 +161,12 @@ public class IOUtilities {
     }
     detector.dataEnd();
     String encoding = detector.getDetectedCharset();
-    if (encoding != null) return encoding;
+    //if (encoding != null) return encoding;
 
-    // check if all all ascii
+    // check if all ascii
     byte[] bytes = baos.toByteArray();
     for (byte b : bytes) {
-      if (((int)b) > 127) {
+      if (((int)b) < 0) {
         allAscii = false;
         break;
       }
@@ -204,6 +204,7 @@ public class IOUtilities {
         break;
       }
     }
+    if (bestMatch == null && encoding != null) return encoding;
     if (bestMatch == null && allAscii) return "UTF-8";
     if (bestMatch == null) return null;
     if (bestMatch.getConfidence() < 50 && allAscii) return "UTF-8";
@@ -263,15 +264,23 @@ public class IOUtilities {
    *
    * @param dir The {@link File} representing the directory.
    *
-   * @throws IOException If a failure occurs.
+   * @return <code>true</code> if the directory was created and
+   *         <code>false</code> if the directory already existed.
+   *
+   * @throws IOException If a failure occurs creating the directory or if
+   *                     the named directory exists but is not a directory.
    */
-  public static void createDirectoryIfMissing(File dir) throws IOException {
-    if (!dir.exists()) {
-      boolean created = dir.mkdirs();
-      if (!created) {
-        throw new IOException("Failed to create directory: " + dir);
-      }
+  public static boolean createDirectoryIfMissing(File dir) throws IOException {
+    if (dir.exists() && dir.isDirectory()) return false;
+    if (dir.exists()) {
+      throw new IOException(
+          "The named directory file exists, but is not a directory: " + dir);
     }
+    boolean created = dir.mkdirs();
+    if (!created) {
+      throw new IOException("Failed to create directory: " + dir);
+    }
+    return true;
   }
 
   /**
@@ -349,6 +358,7 @@ public class IOUtilities {
                                          boolean  timestampSignificant)
       throws IOException
   {
+    if (file1.equals(file2)) return false;
     if (!file1.exists() && !file2.exists()) return false;
     if (!file1.exists() || !file2.exists()) return true;
     if (file1.length() != file2.length()) return true;
@@ -456,7 +466,7 @@ public class IOUtilities {
    *         Writer}, but will not close the backing {@link Writer}
    *         when closed.
    */
-  public static Writer nonClosingWriter(Writer writer) {
+  public static Writer nonClosingWrapper(Writer writer) {
     return new NonClosingWriter(writer);
   }
 

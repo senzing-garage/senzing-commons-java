@@ -24,7 +24,7 @@ import static com.senzing.cmdline.ExtendedTestOption.*;
  * Tests for {@link CommandLineUtilities}.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.CONCURRENT)
 public class CommandLineUtilitiesTest {
   /**
    * Converts the specified array to a diagnostic {@link String}.
@@ -1329,8 +1329,6 @@ public class CommandLineUtilitiesTest {
                        "Unexpected JSON text result: " + testInfo);
         }
       }
-
-      Thread.dumpStack();
 
     } catch (Exception e) {
       e.printStackTrace();

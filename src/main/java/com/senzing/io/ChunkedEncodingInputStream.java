@@ -1,6 +1,7 @@
 package com.senzing.io;
 
 import java.io.*;
+import java.nio.file.FileSystemNotFoundException;
 
 /**
  * Provides a {@link FilterInputStream} implementation that will wrap an
@@ -39,7 +40,7 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
       // check if the underlying input stream has a chunk available
       int available = this.in.available();
       if (available > 0) {
-        // if a chunk is a available, read it -- this should not block
+        // if a chunk is available, read it -- this should not block
         this.readChunk();
       } else {
         // if no chunk is available return zero (0)
@@ -162,15 +163,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
               + sb.toString());
         }
 
-        // check if we have a blank line -- if so we eat it and continue
-        if (sb.length() == 0) {
-          // reset the carriage return flag and continue to read the next line
-          cr = false;
-          continue;
-        } else {
-          // if line is not blank then it is the chunk size -- we break
-          break;
-        }
+        // we should have the chunk size so break here
+        break;
 
       } else if (readByte == ((int) '\n')) {
         throw new IOException(
@@ -192,7 +186,7 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
     if (!cr) {
       this.eof = true;
       throw new IOException(
-          "Bad chunked encoding.  Unexpected EOF: " + sb.toString());
+          "Bad chunked encoding.  Unexpected EOF (" + sb.length() + "): " + sb);
     }
 
     // get the chunk line
@@ -204,18 +198,50 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
     // check if final chunk was received
     if (readCount == 0) {
       this.eof = true;
-      return false;
     }
 
     // get the chunk bytes
-    byte[] chunkBytes = this.in.readNBytes(readCount);
-    if (chunkBytes.length != readCount) {
-      this.eof = true;
-      throw new IOException(
-          "Bad chunked encoding.  Unexpected EOF while reading chunk of size "
-          + readCount + " (only " + chunkBytes.length + " read): " + chunkLine);
+    byte[] chunkBytes = null;
+    if (readCount > 0) {
+      chunkBytes = this.in.readNBytes(readCount);
+
+      if (chunkBytes.length != readCount) {
+        this.eof = true;
+        throw new IOException(
+            "Bad chunked encoding.  Unexpected EOF while reading chunk of size "
+                + readCount + " (only " + chunkBytes.length + " read): " + chunkLine);
+      }
     }
-    this.currentChunk = new ByteArrayInputStream(chunkBytes);
-    return true;
+
+    // read the next 2 bytes and assert that they are CRLF
+    int trailerByte = this.in.read();
+    if (trailerByte < 0) {
+      throw new IOException(
+          "Bad chunked encoding.  EOF prior to trailing CR following chunk: "
+          + Integer.toString(readCount, 16).toUpperCase());
+    }
+    if (trailerByte != '\r') {
+      throw new IOException(
+          "Bad chunked encoding.  Expected trailing CR following chunk ("
+          + Integer.toString(readCount, 16).toUpperCase()
+              + "), but got code point: " + trailerByte);
+    }
+    trailerByte = this.in.read();
+    if (trailerByte < 0) {
+      throw new IOException(
+          "Bad chunked encoding.  EOF prior to trailing LF following chunk: "
+              + Integer.toString(readCount, 16).toUpperCase());
+    }
+    if (trailerByte != '\n') {
+      throw new IOException(
+          "Bad chunked encoding.  Expected trailing LF following chunk ("
+              + Integer.toString(readCount, 16).toUpperCase()
+              + "), but got code point: " + trailerByte);
+    }
+
+    // create the next chunk stream
+    this.currentChunk = (chunkBytes == null)
+        ? null : new ByteArrayInputStream(chunkBytes);
+    return (this.currentChunk != null);
   }
 }

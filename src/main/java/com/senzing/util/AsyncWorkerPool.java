@@ -114,7 +114,7 @@ public class AsyncWorkerPool<T> {
    * Executes the specified {@link Task} asynchronously and returns the {@link
    * AsyncResult} (if any) produced by a previous execution of the assigned
    * worker.  The returned {@link AsyncResult} is <code>null</code> if the assigned
-   * worker's0 result has already been consumed or has not exceuted a previous
+   * worker's result has already been consumed or has not executed a previous
    * task.
    *
    * @param task The task to execute.
