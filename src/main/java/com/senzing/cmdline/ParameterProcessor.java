@@ -16,9 +16,9 @@ public interface ParameterProcessor {
    * @return The {@link Object} or array of {@link Object} instances
    *         representing the processed parameters.
    *
-   * @throws IllegalArgumentException If the parameters are illegal in some
-   *                                  way.
+   * @throws BadOptionParametersException If the parameter(s) to the option are
+   *                                      illegal in some way.
    */
   Object process(CommandLineOption commandLineOption, List<String> params)
-    throws IllegalArgumentException;
+    throws BadOptionParametersException;
 }

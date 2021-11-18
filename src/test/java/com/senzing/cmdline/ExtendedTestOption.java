@@ -15,7 +15,8 @@ public enum ExtendedTestOption
     implements CommandLineOption<ExtendedTestOption, TestOption>
 {
   SQS_QUEUE_URL("--sqs"),
-  DATABASE_TABLE("--table");
+  DATABASE_TABLE("--table"),
+  DATABASE_PASSWORD("--database-password");
 
   ExtendedTestOption(String cmdLineFlag) {
     this.cmdLineFlag = cmdLineFlag;
@@ -63,6 +64,7 @@ public enum ExtendedTestOption
     switch (this) {
       case SQS_QUEUE_URL:
       case DATABASE_TABLE:
+      case DATABASE_PASSWORD:
         return 1;
       default:
         return 0;
@@ -74,6 +76,7 @@ public enum ExtendedTestOption
     switch (this) {
       case SQS_QUEUE_URL:
       case DATABASE_TABLE:
+      case DATABASE_PASSWORD:
         return 1;
       default:
         return 0;
@@ -84,9 +87,22 @@ public enum ExtendedTestOption
   public Set<CommandLineOption> getConflicts() {
     switch (this) {
       case SQS_QUEUE_URL:
-        return Set.of(DATABASE_TABLE, HELP, VERSION);
+        return Set.of(DATABASE_TABLE, DATABASE_PASSWORD, HELP, VERSION);
       case DATABASE_TABLE:
         return Set.of(SQS_QUEUE_URL, HELP, VERSION);
+      default:
+        throw new IllegalStateException("Unrecognized option: " + this);
+    }
+  }
+
+  @Override
+  public Set<Set<CommandLineOption>> getDependencies() {
+    switch (this) {
+      case DATABASE_PASSWORD:
+        return Set.of(Set.of(DATABASE_TABLE));
+      case SQS_QUEUE_URL:
+      case DATABASE_TABLE:
+        return Set.of();
       default:
         throw new IllegalStateException("Unrecognized option: " + this);
     }
@@ -97,7 +113,9 @@ public enum ExtendedTestOption
    */
   private static class ParamProcessor implements ParameterProcessor
   {
-    public Object process(CommandLineOption option,  List<String> params) {
+    public Object process(CommandLineOption option,  List<String> params)
+      throws BadOptionParametersException
+    {
       if (option instanceof TestOption) {
         return TestOption.PARAMETER_PROCESSOR.process(option, params);
       }

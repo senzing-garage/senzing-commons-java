@@ -1,6 +1,7 @@
 package com.senzing.cmdline;
 
 import com.senzing.util.JsonUtils;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -659,6 +660,7 @@ public class CommandLineUtilitiesTest {
    */
   public List<Arguments> getParseCommandLineParameters() {
     List<Arguments> result = new LinkedList<>();
+    List emptyList = List.of();
 
     Map<CommandLineOption, CommandLineValue> defaultMap = Map.of(
       VERBOSE,
@@ -697,7 +699,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            expectedResult,
-                           null,
+                           emptyList,
                            null));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -706,7 +708,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            expectedResult,
-                           null,
+                           emptyList,
                            null));
 
       args = new String[] { "-help" };
@@ -725,7 +727,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            expectedResult,
-                           null,
+                           emptyList,
                            null));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -734,7 +736,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            expectedResult,
-                           null,
+                           emptyList,
                            null));
 
       args = new String[] { "--help", "--version" };
@@ -745,7 +747,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            ConflictingOptionsException.class));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -754,7 +756,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            ConflictingOptionsException.class));
 
       args = new String[] { "-help", "-version" };
@@ -765,7 +767,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            ConflictingOptionsException.class));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -774,7 +776,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            ConflictingOptionsException.class));
 
       args = new String[] { "--port", "9080", "--interface", "localhost" };
@@ -785,7 +787,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            NoPrimaryOptionException.class));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -794,7 +796,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            NoPrimaryOptionException.class));
 
       args = new String[] { "--port", "9080", "5080", "--interface", "localhost" };
@@ -805,7 +807,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            BadOptionParameterCountException.class));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -814,7 +816,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            BadOptionParameterCountException.class));
 
       args = new String[] { "--port", "9080", "--interface" };
@@ -825,7 +827,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            BadOptionParameterCountException.class));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -834,7 +836,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            BadOptionParameterCountException.class));
 
       args = new String[] {"--config", "test.conf", "--url", "localhost:9080"};
@@ -885,7 +887,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            MissingDependenciesException.class));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -894,7 +896,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            MissingDependenciesException.class));
 
       args = new String[] { "--config", "test.conf", "--url", "localhost:AB12" };
@@ -905,7 +907,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            BadOptionParametersException.class));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -914,7 +916,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            BadOptionParametersException.class));
 
       args = new String[] { "--config", "test1.conf", "-config", "test2.conf" };
@@ -925,7 +927,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            RepeatedOptionException.class));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -934,7 +936,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            RepeatedOptionException.class));
 
       args = new String[] { "--config", "test.conf", "--input", "input.json" };
@@ -945,7 +947,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            UnrecognizedOptionException.class));
 
       result.add(arguments(ExtendedTestOption.class,
@@ -954,7 +956,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            null,
-                           null,
+                           emptyList,
                            UnrecognizedOptionException.class));
 
       args = new String[] { "--config", "test.conf", "--table", "RECORDS" };
@@ -981,7 +983,7 @@ public class CommandLineUtilitiesTest {
                            ignoreOpts[0],
                            ignoreOpts[1],
                            expectedResult,
-                           null,
+                           emptyList,
                            null));
     }
 
@@ -1025,19 +1027,19 @@ public class CommandLineUtilitiesTest {
       }
 
       // declare the result
-      Map<CommandLineOption, CommandLineValue> map = new LinkedHashMap<>();
-      List<DeprecatedOptionWarning> list = null;
+      Map<CommandLineOption, CommandLineValue> map = null;
+      List<DeprecatedOptionWarning> list = new LinkedList<>();
 
       // determine which parseCommandLine() function to call
       if (ignoreEnv == null && ignoreEnvOption == null) {
-        list = parseCommandLine(optionClass, args, processor, map);
+        map = parseCommandLine(optionClass, args, processor, list);
 
       } else if (ignoreEnv == null) {
-        list = parseCommandLine(
-            optionClass, args, processor, ignoreEnvOption, map);
+        map = parseCommandLine(
+            optionClass, args, processor, ignoreEnvOption, list);
 
       } else {
-        list = parseCommandLine(optionClass, args, processor, ignoreEnv, map);
+        map = parseCommandLine(optionClass, args, processor, ignoreEnv, list);
       }
 
       // check if an exception was expected
@@ -1189,10 +1191,18 @@ public class CommandLineUtilitiesTest {
                              "--url",
                              "localhost/127.0.0.1:9080",
                              List.of("localhost:9080")));
+    optionValues.put(
+        PASSWORD,
+        new CommandLineValue(ENVIRONMENT,
+                             PASSWORD,
+                             "SENZING_TEST_PASSWORD",
+                             "secret",
+                             List.of("secret")));
 
     expectedResult = new LinkedHashMap<>(processedDefaults);
     expectedResult.put(CONFIG, new File("test.conf"));
     expectedResult.put(URL, "localhost/127.0.0.1:9080");
+    expectedResult.put(PASSWORD, "secret");
 
     expectedJson = JsonUtils.parseJsonObject(
         "{\"VERBOSE\": "
@@ -1208,7 +1218,11 @@ public class CommandLineUtilitiesTest {
             + "\"COMMAND_LINE\", \"via\": \"--config\"},"
             + "\"URL\": "
             + "{\"value\": \"localhost:9080\", \"source\": "
-            + "\"COMMAND_LINE\", \"via\": \"--url\"}}");
+            + "\"COMMAND_LINE\", \"via\": \"--url\"},"
+            + "\"PASSWORD\": "
+            + "{\"value\": \"" + REDACTED_SENSITIVE_VALUE
+            + "\", \"source\": \"ENVIRONMENT\","
+            + "\"via\": \"SENZING_TEST_PASSWORD\"}}");
 
     result.add(arguments(optionValues,
                          expectedResult,
@@ -1336,4 +1350,29 @@ public class CommandLineUtilitiesTest {
     }
   }
 
+  public List<Arguments> getSensitiveTestParameters() {
+    List<Arguments> result = new LinkedList<>();
+    result.add(arguments(PORT, false));
+    result.add(arguments(CONFIG, false));
+    result.add(arguments(INTERFACE, false));
+    result.add(arguments(URL, false));
+    result.add(arguments(PASSWORD, true));
+    result.add(arguments(DATABASE_PASSWORD, true));
+    return result;
+  }
+
+  @ParameterizedTest
+  @MethodSource("getSensitiveTestParameters")
+  public <T extends CommandLineOption> void sensitiveTest(T       option,
+                                                          boolean sensitive)
+  {
+    try {
+      assertEquals(sensitive, option.isSensitive(),
+                   "Option sensitivity not as expected.");
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail("Failed sensitive option test: " + option);
+    }
+  }
 }
