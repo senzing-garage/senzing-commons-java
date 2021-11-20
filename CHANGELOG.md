@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2021-11-20
+
+### Added to 0.6.0
+
+- Modified `com.senzing.cmdline.CommandLineOption` to add `isSensitive()`
+  function with a default implementation based on the naming of the enum  
+  constant being either `PASSWORD` or ending in `_PASSWORD`.
+- Chnaged the semantics of `parseCommandLine()` function in 
+  `com.senzing.cmndline.CommandLineUtilites` so that it returns the `Map` 
+  describing the command-line options and takes an optional `List` to 
+  populate with `DeprecatedOptionWarning` instances if the caller is interested.
+- Fixed parameters and `throws` clause on `CommandLineParser.parseCommandLine()`
+  to better match `CommandLineUtilities.parseCommandLine()`
+- Fixed `throws` clause for `ParameterProcessor.process()` so that it now 
+  throws `BadOptionParameterException`.
+
 ## [0.5.0] - 2021-11-16
 
 ### Added to 0.5.0 (Initial Public Prerelease)

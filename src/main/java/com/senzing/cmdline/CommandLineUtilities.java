@@ -17,6 +17,13 @@ import static com.senzing.cmdline.CommandLineSource.*;
  */
 @SuppressWarnings("unchecked")
 public class CommandLineUtilities {
+  /**
+   * The value to use in the JSON representation of the parsed command-line
+   * parameters when a {@linkplain CommandLineOption#isSensitive() sensitive}
+   * option is encountered.
+   */
+  public static final String REDACTED_SENSITIVE_VALUE = "********";
+
   /***
    * The Regular Expression pattern for JSON arrays.
    */
@@ -666,12 +673,13 @@ public class CommandLineUtilities {
    * @param args The arguments to parse.
    * @param processor The {@link ParameterProcessor} to use for handling the
    *                  parameters to the options.
-   * @param targetOptionMap The {@link Map} to populate with the result of
-   *                        the parsing.
+   * @param deprecationWarnings The {@link List} to be populated with any
+   *                            {@link DeprecatedOptionWarning} instances that
+   *                            are generated, or <code>null</code> if the
+   *                            caller is not interested in deprecation
+   *                            warnings.
    *
-   * @return A {@link List} of {@link DeprecatedOptionWarning} instances
-   *         describing the deprecation warnings (if any), or <code>null</code>
-   *         if there are no deprecation warnings.
+   * @return The {@link Map} to populate with the result of the parsing.
    *
    * @throws CommandLineException If a command-line option parsing error occurs.
    *
@@ -683,11 +691,11 @@ public class CommandLineUtilities {
    */
   public static <T extends Enum<T> & CommandLineOption<T, B>,
                  B extends Enum<B> & CommandLineOption<B, ?>>
-    List<DeprecatedOptionWarning> parseCommandLine(
+    Map<CommandLineOption, CommandLineValue> parseCommandLine(
         Class<T>                                  enumClass,
         String[]                                  args,
         ParameterProcessor                        processor,
-        Map<CommandLineOption, CommandLineValue>  targetOptionMap)
+        List<DeprecatedOptionWarning>             deprecationWarnings)
       throws CommandLineException
   {
     return parseCommandLine(enumClass,
@@ -695,7 +703,7 @@ public class CommandLineUtilities {
                             processor,
                             false,
                             null,
-                            targetOptionMap);
+                            deprecationWarnings);
   }
 
   /**
@@ -712,12 +720,13 @@ public class CommandLineUtilities {
    *                  parameters to the options.
    * @param ignoreEnvironment Flag indicating if the environment variables
    *                          should be ignored in the processing.
-   * @param targetOptionMap The {@link Map} to populate with the result of
-   *                        the parsing.
+   * @param deprecationWarnings The {@link List} to be populated with any
+   *                            {@link DeprecatedOptionWarning} instances that
+   *                            are generated, or <code>null</code> if the
+   *                            caller is not interested in deprecation
+   *                            warnings.
    *
-   * @return A {@link List} of {@link DeprecatedOptionWarning} instances
-   *         describing the deprecation warnings (if any), or <code>null</code>
-   *         if there are no deprecation warnings.
+   * @return The {@link Map} to populate with the result of the parsing.
    *
    * @throws CommandLineException If a command-line option parsing error occurs.
    *
@@ -729,12 +738,12 @@ public class CommandLineUtilities {
    */
   public static <T extends Enum<T> & CommandLineOption<T, B>,
                  B extends Enum<B> & CommandLineOption<B, ?>>
-    List<DeprecatedOptionWarning> parseCommandLine(
+    Map<CommandLineOption, CommandLineValue> parseCommandLine(
         Class<T>                                  enumClass,
         String[]                                  args,
         ParameterProcessor                        processor,
         boolean                                   ignoreEnvironment,
-        Map<CommandLineOption, CommandLineValue>  targetOptionMap)
+        List<DeprecatedOptionWarning>             deprecationWarnings)
     throws CommandLineException
   {
     return parseCommandLine(enumClass,
@@ -742,7 +751,7 @@ public class CommandLineUtilities {
                             processor,
                             false,
                             null,
-                            targetOptionMap);
+                            deprecationWarnings);
   }
 
   /**
@@ -764,12 +773,13 @@ public class CommandLineUtilities {
    *                        other than <code>false</code> will cause the environment
    *                        to be ignored in processing.
    *
-   * @param targetOptionMap The {@link Map} to populate with the result of
-   *                        the parsing.
+   * @param deprecationWarnings The {@link List} to be populated with any
+   *                            {@link DeprecatedOptionWarning} instances that
+   *                            are generated, or <code>null</code> if the
+   *                            caller is not interested in deprecation
+   *                            warnings.
    *
-   * @return A {@link List} of {@link DeprecatedOptionWarning} instances
-   *         describing the deprecation warnings (if any), or <code>null</code>
-   *         if there are no deprecation warnings.
+   * @return The {@link Map} to populate with the result of the parsing.
    *
    * @throws CommandLineException If a command-line option parsing error occurs.
    *
@@ -781,12 +791,12 @@ public class CommandLineUtilities {
    */
   public static <T extends Enum<T> & CommandLineOption<T, B>,
                  B extends Enum<B> & CommandLineOption<B, ?>>
-    List<DeprecatedOptionWarning> parseCommandLine(
+    Map<CommandLineOption, CommandLineValue> parseCommandLine(
         Class<T>                                  enumClass,
         String[]                                  args,
         ParameterProcessor                        processor,
         CommandLineOption                         ignoreEnvOption,
-        Map<CommandLineOption, CommandLineValue>  targetOptionMap)
+        List<DeprecatedOptionWarning>             deprecationWarnings)
       throws CommandLineException
   {
     return parseCommandLine(enumClass,
@@ -794,63 +804,7 @@ public class CommandLineUtilities {
                             processor,
                             false,
                             ignoreEnvOption,
-                            targetOptionMap);
-  }
-
-  /**
-   * Handles processing the specified parameters for the specified option.
-   *
-   * @param option The relevant option.
-   * @param processor The {@link ParameterProcessor}, or <code>null</code> if none.
-   * @param params The {@link List} of {@link String} parameters.
-   * @return The processed value.
-   * @throws BadOptionParametersException If the parameter values cannot be
-   *                                      processed without an error.
-   */
-  private static Object processValue(
-      CommandLineSource   source,
-      CommandLineOption   option,
-      String              specifier,
-      ParameterProcessor  processor,
-      List<String>        params)
-    throws BadOptionParametersException
-  {
-    // process the parameters
-    if (processor != null) {
-      // handle the case where a processor is defined for the parameters
-      Object value = null;
-      try {
-        value = processor.process(option, params);
-      } catch (Exception e) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-
-        pw.println();
-        pw.println("Bad parameters for " + option.getCommandLineFlag()
-                   + " option:");
-        for (String p : params) {
-          pw.println("    o " + p);
-        }
-        pw.println();
-        pw.println(e.getMessage());
-        pw.flush();
-        throw new BadOptionParametersException(
-            source, option, specifier, params, sw.toString());
-      }
-      return value;
-
-    } else if (params.size() == 0) {
-      // handle the case of no parameters and no parameter processor
-      return null;
-
-    } else if (params.size() == 1) {
-      // handle the case of one parameter and no parameter processor
-      return params.get(0);
-
-    } else {
-      // handle the case of multiple parameters and no parameter processor
-      return params.toArray();
-    }
+                            deprecationWarnings);
   }
 
   /**
@@ -865,12 +819,14 @@ public class CommandLineUtilities {
    *                          should be ignored in the processing.
    * @param ignoreEnvOption The option to trigger ignoring the environment.
    *
-   * @param targetOptionMap The {@link Map} to populate with the result of
-   *                        the parsing.
+   * @param deprecationWarnings The {@link List} to be populated with any
+   *                            {@link DeprecatedOptionWarning} instances that
+   *                            are generated, or <code>null</code> if the
+   *                            caller is not interested in deprecation
+   *                            warnings.
    *
-   * @return A {@link List} of {@link DeprecatedOptionWarning} instances
-   *         describing the deprecation warnings (if any), or <code>null</code>
-   *         if there are no deprecation warnings.
+   * @return The {@link Map} of {@link CommandLineOption} keys to {@link
+   *         CommandLineValue} values that are the result of the parsing.
    *
    * @throws CommandLineException If the specified command line arguments fail
    *                              to parse.
@@ -883,20 +839,22 @@ public class CommandLineUtilities {
    */
   private static <T extends Enum<T> & CommandLineOption<T, B>,
                   B extends Enum<B> & CommandLineOption<B, ?>>
-    List<DeprecatedOptionWarning> parseCommandLine(
+    Map<CommandLineOption, CommandLineValue> parseCommandLine(
         Class<T>                                  enumClass,
         String[]                                  args,
         ParameterProcessor                        processor,
         boolean                                   ignoreEnvironment,
         CommandLineOption                         ignoreEnvOption,
-        Map<CommandLineOption, CommandLineValue>  targetOptionMap)
+        List<DeprecatedOptionWarning>             deprecationWarnings)
     throws CommandLineException
   {
+    Map<CommandLineOption, CommandLineValue> result = new LinkedHashMap<>();
+
     // create a lookup map for the flags to their options
     Map<String, CommandLineOption> lookupMap = createFlagLookupMap(enumClass);
 
     // iterate over the args and build a map
-    Map<CommandLineOption, String>           usedFlags  = new LinkedHashMap<>();
+    Map<CommandLineOption, String> usedFlags = new LinkedHashMap<>();
     for (int index = 0; index < args.length; index++) {
       // get the next flag
       String flag = args[index];
@@ -1030,17 +988,17 @@ public class CommandLineUtilities {
                                                          params);
 
       // add to the options map
-      putValue(targetOptionMap, cmdLineVal);
+      putValue(result, cmdLineVal);
     }
 
     // optionally process the environment
     ignoreEnvironment
         = (ignoreEnvironment
-          || (targetOptionMap.containsKey(ignoreEnvOption)
-              && (!Boolean.FALSE.equals(targetOptionMap.get(ignoreEnvOption)))));
+          || (result.containsKey(ignoreEnvOption)
+              && (!Boolean.FALSE.equals(result.get(ignoreEnvOption)))));
     if (!ignoreEnvironment) {
       try {
-        processEnvironment(enumClass, processor, targetOptionMap);
+        processEnvironment(enumClass, processor, result);
       } catch (NullPointerException e) {
         e.printStackTrace();
         throw e;
@@ -1049,7 +1007,7 @@ public class CommandLineUtilities {
 
     try {
       // handle setting the default values
-      processDefaults(enumClass, processor, targetOptionMap);
+      processDefaults(enumClass, processor, result);
     } catch (NullPointerException e) {
       e.printStackTrace();
       throw e;
@@ -1057,12 +1015,74 @@ public class CommandLineUtilities {
 
     // validate the options
     try {
-      return validateOptions(enumClass, targetOptionMap);
+      List<DeprecatedOptionWarning> warnings
+          = validateOptions(enumClass, result);
+      if (deprecationWarnings != null && warnings != null) {
+        deprecationWarnings.addAll(warnings);
+      }
+      return result;
+
     } catch (CommandLineException e) {
       throw e;
     } catch (Exception e) {
       e.printStackTrace();
       throw e;
+    }
+  }
+
+  /**
+   * Handles processing the specified parameters for the specified option.
+   *
+   * @param option The relevant option.
+   * @param processor The {@link ParameterProcessor}, or <code>null</code> if none.
+   * @param params The {@link List} of {@link String} parameters.
+   * @return The processed value.
+   * @throws BadOptionParametersException If the parameter values cannot be
+   *                                      processed without an error.
+   */
+  private static Object processValue(
+      CommandLineSource   source,
+      CommandLineOption   option,
+      String              specifier,
+      ParameterProcessor  processor,
+      List<String>        params)
+      throws BadOptionParametersException
+  {
+    // process the parameters
+    if (processor != null) {
+      // handle the case where a processor is defined for the parameters
+      Object value = null;
+      try {
+        value = processor.process(option, params);
+      } catch (Exception e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+
+        pw.println();
+        pw.println("Bad parameters for " + option.getCommandLineFlag()
+                       + " option:");
+        for (String p : params) {
+          pw.println("    o " + p);
+        }
+        pw.println();
+        pw.println(e.getMessage());
+        pw.flush();
+        throw new BadOptionParametersException(
+            source, option, specifier, params, sw.toString());
+      }
+      return value;
+
+    } else if (params.size() == 0) {
+      // handle the case of no parameters and no parameter processor
+      return null;
+
+    } else if (params.size() == 1) {
+      // handle the case of one parameter and no parameter processor
+      return params.get(0);
+
+    } else {
+      // handle the case of multiple parameters and no parameter processor
+      return params.toArray();
     }
   }
 
@@ -1463,6 +1483,14 @@ public class CommandLineUtilities {
 
     // iterate over the option values and handle them
     optionValues.forEach( (key, cmdLineVal) -> {
+      // confirm the option is consistent between the key and value
+      if (key != cmdLineVal.getOption()) {
+        throw new IllegalArgumentException(
+            "CommandLineOption key does not match the option from the paired "
+            + "CommandLineValue value.  key=[ " + key + " ], value=[ "
+            + cmdLineVal + " ]");
+      }
+
       // create the sub-builder if doing JSON
       JsonObjectBuilder job2 = (doJson) ? Json.createObjectBuilder() : null;
 
@@ -1472,7 +1500,11 @@ public class CommandLineUtilities {
       // add the parameters if doing JSON
       if (doJson) {
         // check if there is only a single parameter
-        if (params.size() == 1) {
+        if (key.isSensitive()) {
+          // handle sensitive values
+          job2.add("value", REDACTED_SENSITIVE_VALUE);
+
+        } else if (params.size() == 1) {
           // handle a single parameter
           job2.add("value", params.get(0));
         } else {

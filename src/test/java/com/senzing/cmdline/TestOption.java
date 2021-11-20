@@ -1,7 +1,5 @@
 package com.senzing.cmdline;
 
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.net.InetAddress;
 import java.util.*;
@@ -17,7 +15,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   CONFIG("--config"),
   PORT("--port"),
   INTERFACE("--interface"),
-  URL("--url");
+  URL("--url"),
+  PASSWORD("--password");
 
   TestOption(String cmdLineFlag) {
     this.cmdLineFlag = cmdLineFlag;
@@ -109,6 +108,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
       case PORT:
       case INTERFACE:
       case CONFIG:
+      case PASSWORD:
         return Set.of(HELP, VERSION);
       case IGNORE_ENV:
         return Set.of();
@@ -125,6 +125,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
       case VERBOSE:
       case CONFIG:
         return Collections.emptySet();
+      case PASSWORD:
+        return Set.of(Set.of(CONFIG, INTERFACE, PORT), Set.of(CONFIG, URL));
       case URL:
         return Set.of(Set.of(CONFIG));
       case PORT:
@@ -145,6 +147,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
       case INTERFACE:
       case CONFIG:
       case URL:
+      case PASSWORD:
         return 1;
       default:
         return 0;
@@ -158,6 +161,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
       case INTERFACE:
       case CONFIG:
       case URL:
+      case PASSWORD:
         return 1;
       default:
         return 0;
@@ -234,6 +238,9 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
 
           return address + ":"+ port;
         }
+
+        case PASSWORD:
+          return params.get(0);
 
         default:
           throw new IllegalArgumentException(

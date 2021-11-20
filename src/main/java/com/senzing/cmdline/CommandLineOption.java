@@ -1,5 +1,7 @@
 package com.senzing.cmdline;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -158,6 +160,33 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
   }
 
   /**
+   * Checks if the command-line option has a value that is considered
+   * sensitive and should not be logged.
+   *
+   * @return <code>true</code> if the option's value is considered sensitive,
+   *         and <code>fals</code>
+   */
+  default boolean isSensitive() {
+    final int PUBLIC_STATIC = Modifier.PUBLIC | Modifier.STATIC;
+    Class c = this.getClass();
+    Field[] fields = c.getFields();
+    for (Field field : fields) {
+      // skip this one if not public and static
+      if ((field.getModifiers() & PUBLIC_STATIC) == 0) continue;
+      try {
+        if (field.get(null) == this) {
+          String fieldName = field.getName().toUpperCase();
+          return (fieldName.equals("PASSWORD")
+                  || fieldName.endsWith("_PASSWORD"));
+        }
+      } catch (IllegalAccessException ignore) {
+        continue;
+      }
+    }
+    return false;
+  }
+
+  /**
    * Returns the minimum number of additional parameters that should follow this
    * command line option.  This should return a non-negative number and at least
    * this many parameters will be consumed.  By default this returns zero (0).
@@ -198,41 +227,4 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
   default List<String> getDefaultParameters() {
     return null;
   }
-
-//  /**
-//   * Returns the group name for the option assuming the option belongs to a
-//   * group of with other options.  This returns <code>null</code> if the option
-//   * does not belong to a group.  The default implementation of this method
-//   * returns <code>null</code>.
-//   *
-//   * @return The group name for the option, or <code>null</code> if the option does
-//   *         not belong to a group.
-//   */
-//  default String getGroupName() {
-//    return null;
-//  }
-
-//  /**
-//   * Assuming the option belongs to a group, this method returns the property
-//   * key identifying the option with that group.  This returns <code>null</code> if
-//   * the option does not belong to a group.  The default implementation of this
-//   * method returns <code>null</code>.
-//   *
-//   * @return The property key for this option with its option group, or
-//   *         <code>null</code> if the option does not belong to an option group.
-//   */
-//  default String getGroupPropertyKey() {
-//    return null;
-//  }
-
-//  /**
-//   * Assuming this option belongs to a group, this method checks if this option
-//   * is optional with the group.  The default implementation of this method
-//   * returns <code>false</code>.
-//   *
-//   * @return Whether or not this option is optional within its option group.
-//   */
-//  default boolean isGroupOptional() {
-//    return false;
-//  }
 }

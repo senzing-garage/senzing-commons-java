@@ -13,7 +13,7 @@ import static com.senzing.util.ErrorLogSuppressor.*;
  * Tests for {@link ErrorLogSuppressor}.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.CONCURRENT)
 public class ErrorLogSuppressorTest {
   @Test
   public void errorLogSuppressorTest() {
