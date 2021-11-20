@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `com.senzing.cmndline.CommandLineUtilites` so that it returns the `Map` 
   describing the command-line options and takes an optional `List` to 
   populate with `DeprecatedOptionWarning` instances if the caller is interested.
+- Fixed parameters and `throws` clause on `CommandLineParser.parseCommandLine()`
+  to better match `CommandLineUtilities.parseCommandLine()`
+- Fixed `throws` clause for `ParameterProcessor.process()` so that it now 
+  throws `BadOptionParameterException`.
 
 ## [0.5.0] - 2021-11-16
 
