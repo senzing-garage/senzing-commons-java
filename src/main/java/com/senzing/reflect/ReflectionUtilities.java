@@ -170,8 +170,14 @@ public class ReflectionUtilities {
    * then <code>null</code> is returned.
    *
    * @param value The value to be converted.
+   * @param numType The {@link Class} indicating the type of primitive number
+   *                to convert to which must be associated with a primitive
+   *                numeric type.
    * @return The converted value or <code>null</code> if the specified value
    *         was <code>null</code>.
+   * @throws NullPointerException If the specified numeric type is
+   *                              <code>null</code>.
+   * @throws IllegalArgumentException If an illegal numeric type is specified.
    */
   public static Number convertPrimitiveNumber(Number value, Class numType)
   {
