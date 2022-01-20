@@ -810,7 +810,7 @@ public class JsonUtils {
 
   /**
    * Creates a {@link JsonObject} with the specified property and value.
-   * The value is interpretted according to {@link
+   * The value is interpreted according to {@link
    * #addProperty(JsonObjectBuilder, String, Object)}.
    *
    * @param property The property name.
@@ -1195,5 +1195,4 @@ public class JsonUtils {
       throw new RuntimeException(e);
     }
   }
-
 }

@@ -4,9 +4,61 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Provides utilities for Java reflection.
+ */
 public class ReflectionUtilities {
+  /**
+   * An <b>unmodifiable</b> {@link Map} of primitive types to their
+   * corresponding promoted object types.
+   */
+  private static final Map<Class, Class> PROMOTED_TYPE_MAP;
+
+  /**
+   * An <b>unmodifiable</b> {@link Map} of promoted object types to their
+   * corresponding primitive types.
+   */
+  private static final Map<Class, Class> PRIMITIVE_TYPE_MAP;
+
+  static {
+    Map<Class, Class> primitiveMap = new LinkedHashMap<>();
+    Map<Class, Class> promotedMap = new LinkedHashMap<>();
+    try {
+      promotedMap.put(void.class, Void.class);
+      promotedMap.put(boolean.class, Boolean.class);
+      promotedMap.put(char.class, Character.class);
+      promotedMap.put(byte.class, Byte.class);
+      promotedMap.put(short.class, Short.class);
+      promotedMap.put(int.class, Integer.class);
+      promotedMap.put(long.class, Long.class);
+      promotedMap.put(float.class, Float.class);
+      promotedMap.put(double.class, Double.class);
+
+      promotedMap.forEach((primitive, promoted) -> {
+        primitiveMap.put(promoted, primitive);
+      });
+
+      promotedMap.keySet().forEach((primitive) -> {
+        primitiveMap.put(primitive, primitive);
+      });
+
+      primitiveMap.keySet().forEach(keyType -> {
+        if (!keyType.isPrimitive()) {
+          promotedMap.put(keyType, keyType);
+        }
+      });
+
+    } finally {
+      PROMOTED_TYPE_MAP   = Collections.unmodifiableMap(promotedMap);
+      PRIMITIVE_TYPE_MAP  = Collections.unmodifiableMap(primitiveMap);
+    }
+  }
+
   /**
    * Provides a synchronized handler that synchronizes on the proxy for
    * every method that is invoked.
@@ -72,6 +124,93 @@ public class ReflectionUtilities {
           throw new RuntimeException(e);
         }
       }
+    }
+  }
+
+  /**
+   * Gets the primitive type associated with the specified promoted object
+   * type for that primitive type.  If a type is specified that does not
+   * correspond to a primitive type then <code>null</code> is returned.  If
+   * the specified type is itself {@linkplain Class#isPrimitive() primitive}
+   * then the specified type is returned.
+   *
+   * @param promotedType The promoted type for which the primitive type is
+   *                     being requested.
+   *
+   * @return The primitive type corresponding to the specified promoted type,
+   *         or <code>null</code> if the specified type does not have a
+   *         corresponding primitive type.
+   */
+  public static Class getPrimitiveType(Class promotedType) {
+    return PRIMITIVE_TYPE_MAP.get(promotedType);
+  }
+
+  /**
+   * Gets the promoted object type associated with the specified primitive type.
+   * If a type is specified that is not primitive then <code>null</code> is
+   * returned.
+   *
+   * @param primitiveType The primitive type for which the promoted object type
+   *                      is being requested.
+   *
+   * @return The primitive type corresponding to the specified promoted type,
+   *         or <code>null</code> if the specified type does not have a
+   *         corresponding primitive type.
+   */
+  public static Class getPromotedType(Class primitiveType) {
+    return PROMOTED_TYPE_MAP.get(primitiveType);
+  }
+
+  /**
+   * Converts a {@link Number} value to the target number type that must have
+   * a corresponding primitive {@link Number} type (e.g.: {@link
+   * java.math.BigInteger} and {@link java.math.BigDecimal} are not allowed
+   * here).  This helps with converting between numeric types when trying to
+   * invoke methods by reflection.  If the specified value is <code>null</code>
+   * then <code>null</code> is returned.
+   *
+   * @param value The value to be converted.
+   * @return The converted value or <code>null</code> if the specified value
+   *         was <code>null</code>.
+   */
+  public static Number convertPrimitiveNumber(Number value, Class numType)
+  {
+    // verify the target number type is valid
+    Objects.requireNonNull(numType, "Number type cannot be null");
+
+    if (numType.isPrimitive()) numType = getPromotedType(numType);
+
+    if (!Number.class.isAssignableFrom(numType)
+        || (getPrimitiveType(numType) == null))
+    {
+      throw new IllegalArgumentException(
+          "The specified target number type must extend java.lang.Number and "
+              + "have a corresponding primitive numeric type: "
+              +  numType.getName());
+    }
+
+    // if a null value was specified then return null
+    if (value == null) return null;
+
+    numType = getPromotedType(numType);
+
+    // switch on the target type name
+    switch (numType.getName()) {
+      case "java.lang.Byte":
+        return value.byteValue();
+      case "java.lang.Short":
+        return value.shortValue();
+      case "java.lang.Integer":
+        return value.intValue();
+      case "java.lang.Long":
+        return value.longValue();
+      case "java.lang.Float":
+        return value.floatValue();
+      case "java.lang.Double":
+        return value.doubleValue();
+      default:
+        throw new IllegalStateException(
+            "Unable to convert to target number type: " + numType);
     }
   }
 
