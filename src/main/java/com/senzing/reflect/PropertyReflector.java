@@ -16,6 +16,9 @@ import static com.senzing.reflect.ReflectionUtilities.*;
 
 /**
  * Encapsulates the automatic reflection of bean property values.
+ *
+ * @param <T> The type for which the property reflector will obtain the
+ *            properties and operate on.
  */
 public class PropertyReflector<T> {
   /**
@@ -44,6 +47,7 @@ public class PropertyReflector<T> {
    * @param cls The {@link Class} for which the {@link PropertyReflector} is
    *            being requested.
    *
+   * @param <T> The type for the property reflector instance.
    * @return The {@link PropertyReflector} for the specified {@link Class}.
    */
   public static synchronized <T> PropertyReflector<T> getInstance(Class<T> cls)
