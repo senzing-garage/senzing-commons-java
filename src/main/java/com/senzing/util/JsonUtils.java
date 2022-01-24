@@ -66,9 +66,38 @@ public class JsonUtils {
     if (obj == null) return defaultValue;
     if (!obj.containsKey(key)) return defaultValue;
     JsonValue jsonValue = obj.get(key);
+    return valueAsString(jsonValue, defaultValue);
+  }
+
+  /**
+   * Converts a {@link JsonValue} to a {@link String}.
+   *
+   * @param jsonValue The {@link JsonValue} to convert.
+   * @return The {@link String} representation of the value, or
+   *         <code>null</code> if the specified {@link JsonValue}
+   *         is <code>null</code>.
+   */
+  private static String valueAsString(JsonValue jsonValue)
+  {
+    return valueAsString(jsonValue, null);
+  }
+
+  /**
+   * Converts a {@link JsonValue} to a {@link String}.
+   *
+   * @param jsonValue The {@link JsonValue} to convert.
+   * @param defaultValue The default value to return if the specified {@link
+   *                     JsonValue} is <code>null</code> or {@link
+   *                     JsonValue.ValueType#NULL}.
+   * @return The {@link String} representation of the value, or the specified
+   *         default value if <code>null</code>.
+   */
+  private static String valueAsString(JsonValue jsonValue, String defaultValue)
+  {
+    if (jsonValue == null) return defaultValue;
     switch (jsonValue.getValueType()) {
       case STRING:
-        return obj.getString(key);
+        return ((JsonString) jsonValue).getString();
       case NULL:
         return defaultValue;
       case TRUE:
@@ -147,7 +176,7 @@ public class JsonUtils {
     if (obj == null) return defaultValue;
     if (!obj.containsKey(key) || obj.isNull(key)) return defaultValue;
     return Collections.unmodifiableList(
-        obj.getJsonArray(key).getValuesAs(JsonString::getString));
+        obj.getJsonArray(key).getValuesAs(JsonUtils::valueAsString));
   }
 
   /**
@@ -190,6 +219,7 @@ public class JsonUtils {
   {
     if (obj == null) return defaultValue;
     if (!obj.containsKey(key)) return defaultValue;
+
     return obj.isNull(key) ? defaultValue : obj.getJsonNumber(key).intValue();
   }
 
