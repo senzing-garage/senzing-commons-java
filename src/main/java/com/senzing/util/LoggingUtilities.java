@@ -1,17 +1,14 @@
 package com.senzing.util;
 
 import com.senzing.g2.engine.G2Fallible;
-import jdk.jfr.StackTrace;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Provides logging utilities.
