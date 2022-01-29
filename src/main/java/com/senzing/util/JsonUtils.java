@@ -26,10 +26,11 @@ public class JsonUtils {
   }
 
   /**
-   * Gets a String value from the specified {@link JsonObject} using the
+   * Gets a {@link String} value from the specified {@link JsonObject} using the
    * specified key.  If the specified key is missing or has a null value then
    * <code>null</code> is returned, otherwise the {@link String} value is
-   * returned.
+   * returned.  <b>NOTE:</b> This function will convert any non-string
+   * value that is found to a {@link String} representation.
    *
    * @param obj The {@link JsonObject} to get the value from.
    *
@@ -44,10 +45,11 @@ public class JsonUtils {
   }
 
   /**
-   * Gets a String value from the specified {@link JsonObject} using the
+   * Gets a {@link String} value from the specified {@link JsonObject} using the
    * specified key.  If the specified key is missing or has a null value then
-   * <code>null</code> is returned, otherwise the {@link String} value is
-   * returned.
+   * the specified default value is returned, otherwise the {@link String}
+   * value is returned.  <b>NOTE:</b> This function will convert any
+   * non-string value that is found to a {@link String} representation.
    *
    * @param obj The {@link JsonObject} to get the value from.
    *
@@ -66,6 +68,49 @@ public class JsonUtils {
     if (obj == null) return defaultValue;
     if (!obj.containsKey(key)) return defaultValue;
     JsonValue jsonValue = obj.get(key);
+    return valueAsString(jsonValue, defaultValue);
+  }
+
+  /**
+   * Gets a {@link String} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If the specified index has a null
+   * value then <code>null</code> is returned, otherwise the {@link String}
+   * value is returned.  <b>NOTE:</b> This function will convert any
+   * non-string value that is found to a {@link String} representation.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link String} value at the index, or <code>null</code> if the
+   *         JSON value is <code>null</code> or missing.
+   */
+  public static String getString(JsonArray arr, int index)
+  {
+    return getString(arr, index, null);
+  }
+
+  /**
+   * Gets a String value from the specified {@link JsonObject} using the
+   * specified key.  If the specified key is missing or has a null value then
+   * the specified default value is returned, otherwise the {@link String}
+   * value is returned.  <b>NOTE:</b> This function will convert any
+   * non-string value that is found to a {@link String} representation.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @param defaultValue The value to return if the value at the array position
+   *                     is <code>null</code>.
+   *
+   * @return The {@link String} value at the specified index or specified
+   *         default value if the JSON value is <code>null</code>.
+   */
+  public static String getString(JsonArray arr, int index, String defaultValue)
+  {
+    if (arr == null) return defaultValue;
+    JsonValue jsonValue = arr.get(index);
     return valueAsString(jsonValue, defaultValue);
   }
 
@@ -130,6 +175,24 @@ public class JsonUtils {
   }
 
   /**
+   * Obtains the {@link JsonArray} at the specified position from the specified
+   * {@link JsonArray}.  If the JSON value at the position is null, then
+   * <code>null</code> is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link JsonArray} for the specified key, or <code>null</code>
+   *         if not found or if the value is null.
+   */
+  public static JsonArray getJsonArray(JsonArray arr, int index) {
+    if (arr == null) return null;
+    if (arr.isNull(index)) return null;
+    return arr.getJsonArray(index);
+  }
+
+  /**
    * Obtains a {@link List} of {@link String} instances from a {@link JsonArray}
    * of {@link JsonString} instances bound to the specified {@link JsonObject}
    * by the specified key.  If the specified key is missing or has a null value
@@ -180,6 +243,58 @@ public class JsonUtils {
   }
 
   /**
+   * Obtains a {@link List} of {@link String} instances from a {@link
+   * JsonArray} of {@link JsonString} instances bound to the specified {@link
+   * JsonArray} at the specified index.  If there is a null JSON value at the
+   * specified index then <code>null</code> is returned, otherwise a {@link
+   * List} containing the {@link String} instances from the array is returned.
+   * <b>NOTE:</b> This function will convert any non-string value that is found
+   * to a {@link String} representation.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return A {@link List} of {@link String} values for the values found in
+   *         the array at the specified position or <code>null</code> if the
+   *         JSON value at the specified position is null.
+   */
+  public static List<String> getStrings(JsonArray arr, int index)
+  {
+    return getStrings(arr, index, null);
+  }
+
+  /**
+   * Obtains a {@link List} of {@link String} instances from a {@link JsonArray}
+   * of {@link JsonString} instances bound to the specified {@link JsonObject}
+   * by the specified key.  If the specified key is missing or has a null value
+   * then <code>null</code> is returned, otherwise a {@link List} containing the
+   * {@link String} instances from the array is returned.  <b>NOTE:</b> This
+   * function will convert any non-string value that is found to a
+   * {@link String} representation.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @param defaultValue The value to return if the JSON value at the specified
+   *                     array position is <code>null</code>.
+   *
+   * @return A {@link List} of {@link String} values for the values found in
+   *         the array at the specified position or the specified default value
+   *         if the JSON value at the specified position is null.
+   */
+  public static List<String> getStrings(JsonArray     arr,
+                                        int           index,
+                                        List<String>  defaultValue)
+  {
+    if (arr == null) return defaultValue;
+    if (arr.isNull(index)) return defaultValue;
+    return Collections.unmodifiableList(
+        arr.getJsonArray(index).getValuesAs(JsonUtils::valueAsString));
+  }
+
+  /**
    * Gets an integer value from the specified {@link JsonObject} using the
    * specified key.  If the specified key is missing or has a null value then
    * <code>null</code> is returned, otherwise the {@link Integer} value is
@@ -200,8 +315,8 @@ public class JsonUtils {
   /**
    * Gets an integer value from the specified {@link JsonObject} using the
    * specified key.  If the specified key is missing or has a null value then
-   * <code>null</code> is returned, otherwise the {@link Integer} value is
-   * returned.
+   * the specified default value is returned, otherwise the {@link Integer}
+   * value is returned.
    *
    * @param obj The {@link JsonObject} to get the value from.
    *
@@ -220,7 +335,58 @@ public class JsonUtils {
     if (obj == null) return defaultValue;
     if (!obj.containsKey(key)) return defaultValue;
 
-    return obj.isNull(key) ? defaultValue : obj.getJsonNumber(key).intValue();
+    if (obj.isNull(key)) {
+      return defaultValue;
+    } else {
+      return obj.getJsonNumber(key).intValue();
+    }
+  }
+
+  /**
+   * Gets an integer value from the specified {@link JsonArray} at the array
+   * position for the specified index.  If the array has a JSON null value at
+   * the specified position then <code>null</code> is returned, otherwise the
+   * {@link Integer} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link Integer} value at the specified array position, or
+   *         <code>null</code> if the JSON value at the array position is null.
+   */
+  public static Integer getInteger(JsonArray arr, int index)
+  {
+    return getInteger(arr, index, null);
+  }
+
+  /**
+   * Gets an integer value from the specified {@link JsonObject} using the
+   * specified key.  If the specified key is missing or has a null value then
+   * the specified default value is returned, otherwise the {@link Integer}
+   * value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @param defaultValue The value to return if the JSON value at the specified
+   *                     array position is <code>null</code>.
+   *
+   * @return The {@link Integer} value at the specified array position, or the
+   *         specified default value if the JSON value at the array position
+   *         is null.
+   */
+  public static Integer getInteger(JsonArray  arr,
+                                   int        index,
+                                   Integer    defaultValue)
+  {
+    if (arr == null) return defaultValue;
+    if (arr.isNull(index)) {
+      return defaultValue;
+    } else {
+      return arr.getJsonNumber(index).intValue();
+    }
   }
 
   /**
@@ -244,8 +410,8 @@ public class JsonUtils {
   /**
    * Gets a long integer value from the specified {@link JsonObject} using the
    * specified key.  If the specified key is missing or has a null value then
-   * <code>null</code> is returned, otherwise the {@link Long} value is
-   * returned.
+   * the specified default value is returned, otherwise the {@link Long} value
+   * is returned.
    *
    * @param obj The {@link JsonObject} to get the value from.
    *
@@ -263,7 +429,435 @@ public class JsonUtils {
   {
     if (obj == null) return defaultValue;
     if (!obj.containsKey(key)) return defaultValue;
-    return obj.isNull(key) ? defaultValue : obj.getJsonNumber(key).longValue();
+    if (obj.isNull(key)) {
+      return defaultValue;
+    } else {
+      return obj.getJsonNumber(key).longValue();
+    }
+  }
+
+  /**
+   * Gets a long integer value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then <code>null</code> is
+   * returned, otherwise the {@link Long} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link Long} value at the array position for the specified
+   *         index, or <code>null</code> if the JSON value at the array
+   *         position is null.
+   */
+  public static Long getLong(JsonArray arr, int index)
+  {
+    return getLong(arr, index, null);
+  }
+
+  /**
+   * Gets a long integer value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then the specified default
+   * value is returned, otherwise the {@link Long} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @param defaultValue The value to return if the JSON value at the specified
+   *                     array position is <code>null</code>.
+   *
+   * @return The {@link Long} value at the array position for the specified
+   *         index, or the specified default value if the JSON value at the
+   *         array position is null.
+   */
+  public static Long getLong(JsonArray  arr,
+                             int        index,
+                             Long       defaultValue)
+  {
+    if (arr == null) return defaultValue;
+    if (arr.isNull(index)) {
+      return defaultValue;
+    } else {
+      return arr.getJsonNumber(index).longValue();
+    }
+  }
+
+  /**
+   * Gets a {@link BigInteger} value from the specified {@link JsonObject}
+   * using the specified key.  If the specified key is missing or has a null
+   * value then <code>null</code> is returned, otherwise the {@link BigInteger}
+   * value is returned.
+   *
+   * @param obj The {@link JsonObject} to get the value from.
+   *
+   * @param key The non-null {@link String} key for the value.
+   *
+   * @return The {@link BigInteger} value for the key, or <code>null</code> if
+   *         the JSON value is <code>null</code> or missing.
+   */
+  public static BigInteger getBigInteger(JsonObject obj, String key)
+  {
+    return getBigInteger(obj, key, null);
+  }
+
+  /**
+   * Gets a {@link BigInteger} value from the specified {@link JsonObject}
+   * using the specified key.  If the specified key is missing or has a null
+   * value then the specified default value is returned, otherwise the
+   * {@link BigInteger} value is returned.
+   *
+   * @param obj The {@link JsonObject} to get the value from.
+   *
+   * @param key The non-null {@link String} key for the value.
+   *
+   * @param defaultValue The value to return if the key is missing or its
+   *                     value is <code>null</code>.
+   *
+   * @return The {@link BigInteger} value for the key, or the specified default
+   *         value if the JSON value is <code>null</code> or missing.
+   */
+  public static BigInteger getBigInteger(JsonObject obj,
+                                         String     key,
+                                         BigInteger defaultValue)
+  {
+    if (obj == null) return defaultValue;
+    if (!obj.containsKey(key)) return defaultValue;
+    if (obj.isNull(key)) {
+      return defaultValue;
+    } else {
+      return obj.getJsonNumber(key).bigIntegerValue();
+    }
+  }
+
+  /**
+   * Gets a {@link BigInteger} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then <code>null</code> is
+   * returned, otherwise the {@link BigInteger} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link BigInteger} value at the array position for the
+   *         specified index, or <code>null</code> if the JSON value at the
+   *         array position is null.
+   */
+  public static BigInteger getBigInteger(JsonArray arr, int index)
+  {
+    return getBigInteger(arr, index, null);
+  }
+
+  /**
+   * Gets a {@link BigInteger} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then the specified default
+   * value is returned, otherwise the {@link BigInteger} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @param defaultValue The value to return if the JSON value at the specified
+   *                     array position is <code>null</code>.
+   *
+   * @return The {@link BigInteger} value at the array position for the
+   *         specified index, or the specified default value if the JSON value
+   *         at the array position is null.
+   */
+  public static BigInteger getBigInteger(JsonArray  arr,
+                                         int        index,
+                                         BigInteger defaultValue)
+  {
+    if (arr == null) return defaultValue;
+    if (arr.isNull(index)) {
+      return defaultValue;
+    } else {
+      return arr.getJsonNumber(index).bigIntegerValue();
+    }
+  }
+
+  /**
+   * Gets a single-precision floating-point value from the specified {@link
+   * JsonObject} using the specified key.  If the specified key is missing or
+   * has a null value then <code>null</code> is returned, otherwise the
+   * {@link Float} value is returned.
+   *
+   * @param obj The {@link JsonObject} to get the value from.
+   *
+   * @param key The non-null {@link String} key for the value.
+   *
+   * @return The {@link Long} value for the key, or <code>null</code> if the
+   *         JSON value is <code>null</code> or missing.
+   */
+  public static Float getFloat(JsonObject obj, String key)
+  {
+    return getFloat(obj, key, null);
+  }
+
+  /**
+   * Gets a single-precision floating-point value from the specified {@link
+   * JsonObject} using the specified key.  If the specified key is missing or
+   * has a null value then the specified default value is returned, otherwise
+   * the {@link Float} value is returned.
+   *
+   * @param obj The {@link JsonObject} to get the value from.
+   *
+   * @param key The non-null {@link String} key for the value.
+   *
+   * @param defaultValue The value to return if the key is missing or its
+   *                     value is <code>null</code>.
+   *
+   * @return The {@link Double} value for the key, or the specified default
+   *         value if the JSON value is <code>null</code> or missing.
+   */
+  public static Float getFloat(JsonObject obj,
+                               String     key,
+                               Float      defaultValue)
+  {
+    if (obj == null) return defaultValue;
+    if (!obj.containsKey(key)) return defaultValue;
+    if (obj.isNull(key)) {
+      return defaultValue;
+    } else {
+      return obj.getJsonNumber(key).numberValue().floatValue();
+    }
+  }
+
+  /**
+   * Gets a {@link Float} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then <code>null</code> is
+   * returned, otherwise the {@link Float} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link Float} value at the array position for the
+   *         specified index, or <code>null</code> if the JSON value at the
+   *         array position is null.
+   */
+  public static Float getFloat(JsonArray arr, int index)
+  {
+    return getFloat(arr, index, null);
+  }
+
+  /**
+   * Gets a {@link Float} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then the specified default
+   * value is returned, otherwise the {@link Float} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @param defaultValue The value to return if the JSON value at the specified
+   *                     array position is <code>null</code>.
+   *
+   * @return The {@link Float} value at the array position for the specified
+   *         index, or the specified default value if the JSON value at the
+   *         array position is null.
+   */
+  public static Float getFloat(JsonArray arr, int index, Float defaultValue)
+  {
+    if (arr == null) return defaultValue;
+    if (arr.isNull(index)) {
+      return defaultValue;
+    } else {
+      return arr.getJsonNumber(index).numberValue().floatValue();
+    }
+  }
+
+  /**
+   * Gets a double-precision floating-point value from the specified {@link
+   * JsonObject} using the specified key.  If the specified key is missing or
+   * has a null value then <code>null</code> is returned, otherwise the
+   * {@link Double} value is returned.
+   *
+   * @param obj The {@link JsonObject} to get the value from.
+   *
+   * @param key The non-null {@link String} key for the value.
+   *
+   * @return The {@link Long} value for the key, or <code>null</code> if the
+   *         JSON value is <code>null</code> or missing.
+   */
+  public static Double getDouble(JsonObject obj, String key)
+  {
+    return getDouble(obj, key, null);
+  }
+
+  /**
+   * Gets a double-precision floating-point value from the specified {@link
+   * JsonObject} using the specified key.  If the specified key is missing or
+   * has a null value then the specified default value is returned, otherwise
+   * the {@link Double} value is returned.
+   *
+   * @param obj The {@link JsonObject} to get the value from.
+   *
+   * @param key The non-null {@link String} key for the value.
+   *
+   * @param defaultValue The value to return if the key is missing or its
+   *                     value is <code>null</code>.
+   *
+   * @return The {@link Double} value for the key, or the specified default
+   *         value if the JSON value is <code>null</code> or missing.
+   */
+  public static Double getDouble(JsonObject obj,
+                                 String     key,
+                                 Double     defaultValue)
+  {
+    if (obj == null) return defaultValue;
+    if (!obj.containsKey(key)) return defaultValue;
+    if (obj.isNull(key)) {
+      return defaultValue;
+    } else {
+      return obj.getJsonNumber(key).doubleValue();
+    }
+  }
+
+  /**
+   * Gets a {@link Double} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then <code>null</code> is
+   * returned, otherwise the {@link Double} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link Double} value at the array position for the
+   *         specified index, or <code>null</code> if the JSON value at the
+   *         array position is null.
+   */
+  public static Double getDouble(JsonArray arr, int index)
+  {
+    return getDouble(arr, index, null);
+  }
+
+  /**
+   * Gets a {@link Double} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then the specified default
+   * value is returned, otherwise the {@link Double} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @param defaultValue The value to return if the JSON value at the specified
+   *                     array position is <code>null</code>.
+   *
+   * @return The {@link Double} value at the array position for the specified
+   *         index, or the specified default value if the JSON value at the
+   *         array position is null.
+   */
+  public static Double getDouble(JsonArray arr, int index, Double defaultValue)
+  {
+    if (arr == null) return defaultValue;
+    if (arr.isNull(index)) {
+      return defaultValue;
+    } else {
+      return arr.getJsonNumber(index).doubleValue();
+    }
+  }
+
+  /**
+   * Gets a {@link BigDecimal} value from the specified {@link JsonObject}
+   * using the specified key.  If the specified key is missing or has a null
+   * value then <code>null</code> is returned, otherwise the {@link BigDecimal}
+   * value is returned.
+   *
+   * @param obj The {@link JsonObject} to get the value from.
+   *
+   * @param key The non-null {@link String} key for the value.
+   *
+   * @return The {@link Long} value for the key, or <code>null</code> if the
+   *         JSON value is <code>null</code> or missing.
+   */
+  public static BigDecimal getBigDecimal(JsonObject obj, String key)
+  {
+    return getBigDecimal(obj, key, null);
+  }
+
+  /**
+   * Gets a {@link BigDecimal} value from the specified {@link JsonObject} using
+   * the specified key.  If the specified key is missing or has a null value
+   * then the specified default value is returned, otherwise the
+   * {@link BigDecimal} value is returned.
+   *
+   * @param obj The {@link JsonObject} to get the value from.
+   *
+   * @param key The non-null {@link String} key for the value.
+   *
+   * @param defaultValue The value to return if the key is missing or its
+   *                     value is <code>null</code>.
+   *
+   * @return The {@link BigDecimal} value for the key, or the specified default
+   *         value if the JSON value is <code>null</code> or missing.
+   */
+  public static BigDecimal getBigDecimal(JsonObject obj,
+                                         String     key,
+                                         BigDecimal defaultValue)
+  {
+    if (obj == null) return defaultValue;
+    if (!obj.containsKey(key)) return defaultValue;
+    if (obj.isNull(key)) {
+      return defaultValue;
+    } else {
+      return obj.getJsonNumber(key).bigDecimalValue();
+    }
+  }
+
+  /**
+   * Gets a {@link BigDecimal} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then <code>null</code> is
+   * returned, otherwise the {@link BigDecimal} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link BigDecimal} value at the array position for the
+   *         specified index, or <code>null</code> if the JSON value at the
+   *         array position is null.
+   */
+  public static BigDecimal getBigDecimal(JsonArray arr, int index)
+  {
+    return getBigDecimal(arr, index, null);
+  }
+
+  /**
+   * Gets a {@link BigDecimal} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then the specified default
+   * value is returned, otherwise the {@link BigDecimal} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @param defaultValue The value to return if the JSON value at the specified
+   *                     array position is <code>null</code>.
+   *
+   * @return The {@link BigDecimal} value at the array position for the
+   *         specified index, or the specified default value if the JSON value
+   *         at the array position is null.
+   */
+  public static BigDecimal getBigDecimal(JsonArray  arr,
+                                         int        index,
+                                         BigDecimal defaultValue)
+  {
+    if (arr == null) return defaultValue;
+    if (arr.isNull(index)) {
+      return defaultValue;
+    } else {
+      return arr.getJsonNumber(index).bigDecimalValue();
+    }
   }
 
   /**
@@ -287,8 +881,8 @@ public class JsonUtils {
   /**
    * Gets an integer value from the specified {@link JsonObject} using the
    * specified key.  If the specified key is missing or has a null value then
-   * <code>null</code> is returned, otherwise the {@link Boolean} value is
-   * returned.
+   * the specified default value is returned, otherwise the {@link Boolean}
+   * value is returned.
    *
    * @param obj The {@link JsonObject} to get the value from.
    *
@@ -306,12 +900,65 @@ public class JsonUtils {
   {
     if (obj == null) return defaultValue;
     if (!obj.containsKey(key)) return defaultValue;
-    return obj.isNull(key) ? defaultValue : obj.getBoolean(key);
+    if (obj.isNull(key)) {
+      return defaultValue;
+    } else {
+      return obj.getBoolean(key);
+    }
+  }
+
+  /**
+   * Gets a {@link Boolean} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then <code>null</code> is
+   * returned, otherwise the {@link Boolean} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link Boolean} value at the array position for the
+   *         specified index, or <code>null</code> if the JSON value at the
+   *         array position is null.
+   */
+  public static Boolean getBoolean(JsonArray arr, int index)
+  {
+    return getBoolean(arr, index, null);
+  }
+
+  /**
+   * Gets a {@link Boolean} value from the specified {@link JsonArray} at the
+   * array position for the specified index.  If there is a JSON null value at
+   * the array position for the specified index then the specified default
+   * value is returned, otherwise the {@link Boolean} value is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @param defaultValue The value to return if the JSON value at the specified
+   *                     array position is <code>null</code>.
+   *
+   * @return The {@link Boolean} value at the array position for the
+   *         specified index, or the specified default value if the JSON value
+   *         at the array position is null.
+   */
+  public static Boolean getBoolean(JsonArray  arr,
+                                   int        index,
+                                   Boolean    defaultValue)
+  {
+    if (arr == null) return defaultValue;
+    if (arr.isNull(index)) {
+      return defaultValue;
+    } else {
+      return arr.getBoolean(index);
+    }
   }
 
   /**
    * Gets the {@link JsonValue} for the specified key in the specified object.
-   * If the key is not found in the object then <code>null</code> is returned.
+   * If the specified {@link JsonObject} is <code>null</code> <b>or</b> if the
+   * key is not found in the object then <code>null</code> is returned.
    *
    * @param obj The {@link JsonObject} from which to obtain the value.
    *
@@ -328,7 +975,8 @@ public class JsonUtils {
 
   /**
    * Gets the {@link JsonObject} for the specified key in the specified object.
-   * If the key is not found in the object then <code>null</code> is returned.
+   * If the specified {@link JsonObject} is <code>null</code> <b>or</b> if the
+   * key is not found in the object then <code>null</code> is returned.
    *
    * @param obj The {@link JsonObject} from which to obtain the value.
    *
@@ -340,7 +988,34 @@ public class JsonUtils {
   public static JsonObject getJsonObject(JsonObject obj, String key) {
     if (obj == null) return null;
     if (!obj.containsKey(key)) return null;
-    return obj.getJsonObject(key);
+    if (obj.isNull(key)) {
+      return null;
+    } else {
+      return obj.getJsonObject(key);
+    }
+  }
+
+  /**
+   * Gets the {@link JsonObject} at the array position for the specified index
+   * from the specified {@link JsonArray}.  If the specified {@link JsonArray}
+   * is <code>null</code> <b>or</b> if a null JSON value is found at
+   * the array position then <code>null</code> is returned.
+   *
+   * @param arr The {@link JsonArray} to get the value from.
+   *
+   * @param index The index of the array position to read.
+   *
+   * @return The {@link JsonObject} at the array position for the specified
+   *         index or <code>null</code> if the JSON value at the array
+   *         position is <code>null</code>.
+   */
+  public static JsonObject getJsonObject(JsonArray arr, int index) {
+    if (arr == null) return null;
+    if (arr.isNull(index)) {
+      return null;
+    } else {
+      return arr.getJsonObject(index);
+    }
   }
 
   /**
@@ -662,22 +1337,20 @@ public class JsonUtils {
    * {@link JsonArrayBuilder#addNull()} is used, otherwise
    * {@link JsonArrayBuilder#add(BigDecimal)} is used.
    *
-   * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
-   *
-   * @param key The {@link String} key.
+   * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
    *
    * @param val The {@link BigDecimal} value, or <code>null</code>.
    *
    * @return The {@link JsonArrayBuilder} that was specified.
    */
-  public static JsonArrayBuilder add(JsonArrayBuilder job, String key, BigDecimal val)
+  public static JsonArrayBuilder add(JsonArrayBuilder jab, BigDecimal val)
   {
     if (val == null) {
-      job.addNull();
+      jab.addNull();
     } else {
-      job.add(val);
+      jab.add(val);
     }
-    return job;
+    return jab;
   }
 
   /**
@@ -686,21 +1359,19 @@ public class JsonUtils {
    * {@link JsonArrayBuilder#addNull()} is used, otherwise
    * {@link JsonArrayBuilder#add(boolean)} is used.
    *
-   * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
-   *
-   * @param key The {@link String} key.
+   * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
    *
    * @param val The {@link Boolean} value, or <code>null</code>.
    *
    * @return The {@link JsonArrayBuilder} that was specified.
    */
-  public static JsonArrayBuilder add(JsonArrayBuilder job, String key, Boolean val) {
+  public static JsonArrayBuilder add(JsonArrayBuilder jab, Boolean val) {
     if (val == null) {
-      job.addNull();
+      jab.addNull();
     } else {
-      job.add(val);
+      jab.add(val);
     }
-    return job;
+    return jab;
   }
 
   /**
@@ -839,6 +1510,177 @@ public class JsonUtils {
   }
 
   /**
+   * Adds a property to the specified {@link JsonObjectBuilder} with the
+   * specified property name and value.  The specified value can be null, a
+   * {@link String}, {@link Boolean}, {@link Integer}, {@link Long},
+   * {@link Short}, {@link Float}, {@link Double}, {@link BigInteger} or
+   * {@link BigDecimal}.  It can also be a {@link List} or a {@link Map} with
+   * non-null {@link String} keys.  If a {@link List} then the property value
+   * is set as a {@link JsonArray} using {@link #addElement(JsonArrayBuilder,
+   * Object)}.  If a {@link Map} with all non-null {@link String} keys then
+   * this function is recursively called to make a {@link JsonObject} property
+   * value with the keys and values of the {@link Map} as the properties of the
+   * {@link JsonObject}.  Anything else is converted to a {@link String} via
+   * its {@link #toString()} method.
+   *
+   * @param builder The {@link JsonObjectBuilder} to add the property to.
+   *
+   * @param property The property name.
+   *
+   * @param value The value for the property.
+   *
+   * @return The specified {@link JsonObjectBuilder}.
+   */
+  public static JsonObjectBuilder addProperty(JsonObjectBuilder builder,
+                                              String            property,
+                                              Object            value)
+  {
+    if (value == null) {
+      builder.addNull(property);
+    } else if (value instanceof String) {
+      builder.add(property, (String) value);
+    } else if (value instanceof Boolean) {
+      builder.add(property, (Boolean) value);
+    } else if (value instanceof Integer) {
+      builder.add(property, (Integer) value);
+    } else if (value instanceof Long) {
+      builder.add(property, (Long) value);
+    } else if (value instanceof Short) {
+      builder.add(property, (Short) value);
+    } else if (value instanceof Float) {
+      builder.add(property, (Float) value);
+    } else if (value instanceof Double) {
+      builder.add(property, (Double) value);
+    } else if (value instanceof BigInteger) {
+      builder.add(property, (BigInteger) value);
+    } else if (value instanceof BigDecimal) {
+      builder.add(property, (BigDecimal) value);
+    } else if (value instanceof List) {
+      List list = (List) value;
+      JsonArrayBuilder jab = Json.createArrayBuilder();
+      for (Object elem: list) {
+        addElement(jab, elem);
+      }
+      builder.add(property, jab);
+
+    } else if (value instanceof Map) {
+      Map map = (Map) value;
+
+      // check if all the map keys are strings
+      boolean stringKeys = true;
+      for (Object key : map.keySet()) {
+        if (key == null || (!(key instanceof String))) {
+          stringKeys = false;
+          break;
+        }
+      }
+
+      // choose how to add based on the keys
+      if (stringKeys) {
+        // if all string keys then add an object property with sub-object value
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        map.forEach((subKey, subValue) -> {
+          addProperty(job, ((String) subKey), subValue);
+        });
+        builder.add(property, job);
+
+      } else {
+        // if NOT all strings then add the value as a string
+        builder.add(property, value.toString());
+      }
+
+    } else {
+      builder.add(property, value.toString());
+    }
+
+    return builder;
+  }
+
+  /**
+   * Adds a property to the specified {@link JsonArrayBuilder} with the
+   * specified value.  The specified value can be null, a {@link String},
+   * {@link Boolean}, {@link Integer}, {@link Long}, {@link Short},
+   * {@link Float}, {@link Double}, {@link BigInteger} or {@link BigDecimal}.
+   * It can also be a {@link List} or a {@link Map} with non-null {@link String}
+   * keys.  If a {@link List} then the property value is set as a {@link
+   * JsonArray} by recursively calling this function using the liste elements
+   * as the array values.  If a {@link Map} with all non-null {@link String}
+   * keys then {@link #addProperty(JsonObjectBuilder,String, Object)} is called
+   * to make a {@link JsonObject} property value with the keys and values of
+   * the {@link Map} as the properties of the {@link JsonObject}.  Anything
+   * else is converted to a {@link String} via its {@link #toString()} method.
+   * Anything else is converted to a {@link String} via its {@link #toString()}
+   * method.
+   *
+   * @param builder The {@link JsonObjectBuilder} to add the property to.
+   *
+   * @param value The value for the property.
+   *
+   * @return The specified {@link JsonObjectBuilder}.
+   */
+  public static JsonArrayBuilder addElement(JsonArrayBuilder builder,
+                                            Object           value)
+  {
+    if (value == null) {
+      builder.addNull();
+    } else if (value instanceof String) {
+      builder.add((String) value);
+    } else if (value instanceof Boolean) {
+      builder.add((Boolean) value);
+    } else if (value instanceof Integer) {
+      builder.add((Integer) value);
+    } else if (value instanceof Long) {
+      builder.add((Long) value);
+    } else if (value instanceof Short) {
+      builder.add((Short) value);
+    } else if (value instanceof Float) {
+      builder.add((Float) value);
+    } else if (value instanceof Double) {
+      builder.add((Double) value);
+    } else if (value instanceof BigInteger) {
+      builder.add((BigInteger) value);
+    } else if (value instanceof BigDecimal) {
+      builder.add((BigDecimal) value);
+    } else if (value instanceof List) {
+      List list = (List) value;
+      JsonArrayBuilder jab = Json.createArrayBuilder();
+      for (Object elem: list) {
+        addElement(jab, elem);
+      }
+      builder.add(jab);
+
+    } else if (value instanceof Map) {
+      Map map = (Map) value;
+
+      // check if all the map keys are strings
+      boolean stringKeys = true;
+      for (Object key : map.keySet()) {
+        if (key == null || (!(key instanceof String))) {
+          stringKeys = false;
+          break;
+        }
+      }
+
+      // choose how to add based on the keys
+      if (stringKeys) {
+        // if all string keys then add an object property with sub-object value
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        map.forEach((subKey, subValue) -> {
+          addProperty(job, ((String) subKey), subValue);
+        });
+        builder.add(job);
+
+      } else {
+        // if NOT all strings then add the value as a string
+        builder.add(value.toString());
+      }
+    } else {
+      builder.add(value.toString());
+    }
+    return builder;
+  }
+
+  /**
    * Creates a {@link JsonObject} with the specified property and value.
    * The value is interpreted according to {@link
    * #addProperty(JsonObjectBuilder, String, Object)}.
@@ -856,7 +1698,7 @@ public class JsonUtils {
 
   /**
    * Creates a {@link JsonObject} with the specified properties and values.
-   * The values are interpretted according to {@link
+   * The values are interpreted according to {@link
    * #addProperty(JsonObjectBuilder, String, Object)}.
    *
    * @param property1 The first property name.
@@ -885,7 +1727,7 @@ public class JsonUtils {
 
   /**
    * Creates a {@link JsonObject} with the specified properties and values.
-   * The values are interpretted according to {@link
+   * The values are interpreted according to {@link
    * #addProperty(JsonObjectBuilder, String, Object)}.
    *
    * @param property1 The first property name.
@@ -923,49 +1765,72 @@ public class JsonUtils {
   }
 
   /**
-   * Adds a property to the specified {@link JsonObjectBuilder} with the
-   * specified property name and value.  The specified value can be null, a
-   * {@link String}, {@link Boolean}, {@link Integer}, {@link Long},
-   * {@link Short}, {@link Float}, {@link Double}, {@link BigInteger} or
-   * {@link BigDecimal}.  Anything else is converted to a {@link String} via
-   * its {@link #toString()} method.
+   * Creates a {@link JsonArray} with the specified values. The values are
+   * interpreted according to {@link #addElement(JsonArrayBuilder, Object)}.
    *
-   * @param builder The {@link JsonObjectBuilder} to add the property to.
+   * @param values The zero or more values.
    *
-   * @param property The property name.
-   *
-   * @param value The value for the property.
-   *
-   * @return The specified {@link JsonObjectBuilder}.
+   * @return The created {@link JsonArray}.
    */
-  public static JsonObjectBuilder addProperty(JsonObjectBuilder builder,
-                                              String            property,
-                                              Object            value)
+  public static JsonArray toJsonArray(Object... values)
   {
-    if (value == null) {
-      builder.addNull(property);
-    } else if (value instanceof String) {
-      builder.add(property, (String) value);
-    } else if (value instanceof Boolean) {
-      builder.add(property, (Boolean) value);
-    } else if (value instanceof Integer) {
-      builder.add(property, (Integer) value);
-    } else if (value instanceof Long) {
-      builder.add(property, (Long) value);
-    } else if (value instanceof Short) {
-      builder.add(property, (Short) value);
-    } else if (value instanceof Float) {
-      builder.add(property, (Float) value);
-    } else if (value instanceof Double) {
-      builder.add(property, (Double) value);
-    } else if (value instanceof BigInteger) {
-      builder.add(property, (BigInteger) value);
-    } else if (value instanceof BigDecimal) {
-      builder.add(property, (BigDecimal) value);
-    } else {
-      builder.add(property, value.toString());
+    JsonArrayBuilder builder = Json.createArrayBuilder();
+    for (Object value: values) {
+      addElement(builder, value);
     }
-    return builder;
+    return builder.build();
+  }
+
+  /**
+   * Attempts to convert the specified {@link Map} of {@link String} keys to
+   * {@link Object} values to a {@link JsonObject}.  This will leverage the
+   * {@link #addProperty(JsonObjectBuilder,String,Object)} and {@link
+   * #addElement(JsonArrayBuilder, Object)} functions and has the same
+   * limitations that those have with regard to the types of values that can
+   * be handled and how they are handled.  For example, if a value is
+   * encountered that is a {@link Map} whose keys are <b>not</b> non-null
+   * {@link String} values then that object will simply be converted to a
+   * {@link JsonString} value via its {@link Object#toString()} implementation.
+   *
+   * @param map The {@link Map} of {@link String} keys to {@link Object} values.
+   *
+   * @return The {@link JsonObject} created for the specified {@link Map}, or
+   *         <code>null</code> if the specified {@link Map} is
+   *         <code>null</code>.
+   */
+  public static JsonObject toJsonObject(Map<String, ?> map) {
+    if (map == null) return null;
+    JsonObjectBuilder builder = Json.createObjectBuilder();
+    map.forEach((key, value) -> {
+      addProperty(builder, key, value);
+    });
+    return builder.build();
+  }
+
+  /**
+   * Attempts to convert the specified {@link List} of {@link Object} values to
+   * a {@link JsonArray}.  This will leverage the {@link
+   * #addElement(JsonArrayBuilder, Object)} and {@link
+   * #addProperty(JsonObjectBuilder,String,Object)} functions and has the same
+   * limitations that those have with regard to the types of values that can
+   * be handled and how they are handled.  For example, if a value is
+   * encountered that is a {@link Map} whose keys are <b>not</b> non-null
+   * {@link String} values then that object will simply be converted to a
+   * {@link JsonString} value via its {@link Object#toString()} implementation.
+   *
+   * @param list The {@link List} of {@link Object} values.
+   *
+   * @return The {@link JsonArray} created for the specified {@link List}, or
+   *         <code>null</code> if the specified {@link List} is
+   *         <code>null</code>.
+   */
+  public static JsonArray toJsonArray(List<?> list) {
+    if (list == null) return null;
+    JsonArrayBuilder builder = Json.createArrayBuilder();
+    list.forEach((value) -> {
+      addElement(builder, value);
+    });
+    return builder.build();
   }
 
   /**
