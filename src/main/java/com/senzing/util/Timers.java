@@ -1,7 +1,6 @@
 package com.senzing.util;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Provides functionality to measure timing values associated with functions
@@ -94,13 +93,35 @@ public class Timers {
    * timer keys.  All of these timers will start immediately with the same
    * timestamp.
    *
-   * @param initialTimers The zero or more names of the initial timers.
+   * @param initialTimers The zero or more names of the initial timers.  A
+   *                      <code>null</code> array is treated like an empty
+   *                      array.
+   *
+   * @throws NullPointerException If any of the specified parameters are
+   *                              <code>null</code>.
+   * @throws IllegalArgumentException If any of the specified timer names is
+   *                                  duplicated.
    */
-  public Timers(String... initialTimers) {
+  public Timers(String... initialTimers)
+    throws NullPointerException, IllegalArgumentException
+  {
     this.timerInfos = new LinkedHashMap<>();
     long startTime = now();
     if (initialTimers != null) {
       for (String initialTimer : initialTimers) {
+        // check for null
+        if (initialTimer == null) {
+          throw new NullPointerException(
+              "Timer cannot have a null name: "
+                  + (Arrays.asList(initialTimers)));
+        }
+
+        // check for a duplicate
+        if (this.timerInfos.containsKey(initialTimer)) {
+          throw new IllegalArgumentException(
+              "At least one timer (" + initialTimer + ") is duplicated: "
+              + (Arrays.asList(initialTimers)));
+        }
         this.timerInfos.put(initialTimer, new TimerInfo(startTime));
       }
     }
