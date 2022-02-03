@@ -10,7 +10,7 @@ import javax.json.*;
 
 import static javax.json.stream.JsonGenerator.PRETTY_PRINTING;
 
-public class JsonUtils {
+public class JsonUtilities {
   /**
    * Pretty printing {@link JsonWriterFactory}.
    */
@@ -21,7 +21,7 @@ public class JsonUtils {
   /**
    * Private constructor since this class only has static methods.
    */
-  private JsonUtils() {
+  private JsonUtilities() {
     // do nothing
   }
 
@@ -152,7 +152,7 @@ public class JsonUtils {
       case NUMBER:
         return "" + ((JsonNumber) jsonValue).numberValue();
       default:
-        return JsonUtils.toJsonText(jsonValue, true);
+        return JsonUtilities.toJsonText(jsonValue, true);
     }
   }
 
@@ -239,7 +239,7 @@ public class JsonUtils {
     if (obj == null) return defaultValue;
     if (!obj.containsKey(key) || obj.isNull(key)) return defaultValue;
     return Collections.unmodifiableList(
-        obj.getJsonArray(key).getValuesAs(JsonUtils::valueAsString));
+        obj.getJsonArray(key).getValuesAs(JsonUtilities::valueAsString));
   }
 
   /**
@@ -291,7 +291,7 @@ public class JsonUtils {
     if (arr == null) return defaultValue;
     if (arr.isNull(index)) return defaultValue;
     return Collections.unmodifiableList(
-        arr.getJsonArray(index).getValuesAs(JsonUtils::valueAsString));
+        arr.getJsonArray(index).getValuesAs(JsonUtilities::valueAsString));
   }
 
   /**
@@ -1846,7 +1846,7 @@ public class JsonUtils {
    */
   public static <T extends Writer> T toJsonText(T writer, JsonValue jsonValue)
   {
-    return JsonUtils.toJsonText(writer, jsonValue, false);
+    return JsonUtilities.toJsonText(writer, jsonValue, false);
   }
 
   /**
@@ -1857,7 +1857,7 @@ public class JsonUtils {
    * @return The specified {@link JsonValue} converted to a JSON string.
    */
   public static String toJsonText(JsonValue jsonValue) {
-    return JsonUtils.toJsonText(jsonValue, false);
+    return JsonUtilities.toJsonText(jsonValue, false);
   }
 
   /**
@@ -1874,7 +1874,7 @@ public class JsonUtils {
   public static <T extends Writer> T toJsonText(T                 writer,
                                                 JsonObjectBuilder builder)
   {
-    return JsonUtils.toJsonText(writer, builder, false);
+    return JsonUtilities.toJsonText(writer, builder, false);
   }
 
 
@@ -1886,7 +1886,7 @@ public class JsonUtils {
    * @return The specified {@link JsonObjectBuilder} converted to a JSON string.
    */
   public static String toJsonText(JsonObjectBuilder builder) {
-    return JsonUtils.toJsonText(
+    return JsonUtilities.toJsonText(
         new StringWriter(), builder, false).toString();
   }
 
@@ -1904,7 +1904,7 @@ public class JsonUtils {
   public static <T extends Writer> T toJsonText(T                 writer,
                                                 JsonArrayBuilder  builder)
   {
-    return JsonUtils.toJsonText(writer, builder, false);
+    return JsonUtilities.toJsonText(writer, builder, false);
   }
 
   /**
@@ -1915,7 +1915,7 @@ public class JsonUtils {
    * @return The specified {@link JsonArrayBuilder} converted to a JSON string.
    */
   public static String toJsonText(JsonArrayBuilder builder) {
-    return JsonUtils.toJsonText(
+    return JsonUtilities.toJsonText(
         new StringWriter(), builder, false).toString();
   }
 
@@ -1961,7 +1961,7 @@ public class JsonUtils {
    * @return The specified {@link JsonValue} converted to a JSON string.
    */
   public static String toJsonText(JsonValue jsonValue, boolean prettyPrint) {
-    return JsonUtils.toJsonText(
+    return JsonUtilities.toJsonText(
         new StringWriter(), jsonValue, prettyPrint).toString();
   }
 
@@ -2007,7 +2007,7 @@ public class JsonUtils {
   public static String toJsonText(JsonObjectBuilder builder,
                                   boolean           prettyPrint)
   {
-    return JsonUtils.toJsonText(
+    return JsonUtilities.toJsonText(
         new StringWriter(), builder, prettyPrint).toString();
   }
 
@@ -2053,7 +2053,7 @@ public class JsonUtils {
   public static String toJsonText(JsonArrayBuilder builder,
                                   boolean          prettyPrint)
   {
-    return JsonUtils.toJsonText(
+    return JsonUtilities.toJsonText(
         new StringWriter(), builder, prettyPrint).toString();
   }
 
@@ -2078,7 +2078,7 @@ public class JsonUtils {
         section.entrySet().forEach(sectionEntry -> {
           String key    = sectionEntry.getKey();
           String value  = sectionEntry.getValue();
-          JsonUtils.add(sectionBuilder, key, value);
+          JsonUtilities.add(sectionBuilder, key, value);
         });
 
         job.add(sectionKey, sectionBuilder);

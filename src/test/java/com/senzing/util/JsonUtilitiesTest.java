@@ -14,17 +14,17 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-import static com.senzing.util.JsonUtils.*;
+import static com.senzing.util.JsonUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
- * Tests for {@link JsonUtils}.
+ * Tests for {@link JsonUtilities}.
  */
 @SuppressWarnings("unchecked")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class JsonUtilsTest {
+public class JsonUtilitiesTest {
 
   public List<Arguments> provideGetStringFromObjectParams() {
     List<Arguments> result = new LinkedList<>();
@@ -347,7 +347,7 @@ public class JsonUtilsTest {
     JsonObject  jsonObj = job.build();
 
     JsonObject  childObj = jsonObj.getJsonArray("mixed").getJsonObject(6);
-    String      childText = JsonUtils.toJsonText(childObj, true);
+    String      childText = JsonUtilities.toJsonText(childObj, true);
 
     List<String> mixedList = new ArrayList<>();
     mixedList.add("One");
@@ -458,7 +458,7 @@ public class JsonUtilsTest {
     JsonArray  jsonArr = builder.build();
 
     JsonObject  childObj = jsonArr.getJsonArray(2).getJsonObject(6);
-    String      childText = JsonUtils.toJsonText(childObj, true);
+    String      childText = JsonUtilities.toJsonText(childObj, true);
 
     List<String> mixedList = new ArrayList<>();
     mixedList.add("One");

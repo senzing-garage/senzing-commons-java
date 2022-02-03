@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2022-02-03
+
+### Added to 2.0.0
+
+- Initial production release with complete unit tests
+- Renamed JsonUtils to JsonUtilities to be consistent with other utility classes
+- Added error checking to `com.senzing.util.Timers`
+- Added `com.senzing.reflect.PropertyReflector` class
+- Added primitive/promoted type functions to `com.senzing.reflect.ReflectionUtilities`
+- Changed version to 2.0.0 for initial production release to indicate 
+  compatibility with Senzing 2.x (i.e.: `com.senzing.io.RecordReader` will parse
+  records as Senzing 2.x expects them)
+
 ## [0.7.0] - 2022-01-07
 
 ### Added to 0.7.0
