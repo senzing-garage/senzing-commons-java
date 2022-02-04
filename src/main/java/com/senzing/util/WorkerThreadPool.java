@@ -8,6 +8,12 @@ import java.util.*;
  */
 public class WorkerThreadPool {
   /**
+   * The default base name used as a prefix for threads created in the pool if
+   * none is specified.
+   */
+  public static final String DEFAULT_BASE_NAME = "WorkerThread";
+
+  /**
    * The list of available {@link WorkerThread} instances.
    */
   private List<WorkerThread> available;
@@ -35,7 +41,7 @@ public class WorkerThreadPool {
    */
   public WorkerThreadPool(int size)
   {
-    this("WorkerThread", size);
+    this(DEFAULT_BASE_NAME, size);
   }
 
   /**
@@ -49,6 +55,11 @@ public class WorkerThreadPool {
    */
   public WorkerThreadPool(String baseName, int size)
   {
+    if (size < 1) {
+      throw new IllegalArgumentException(
+          "The thread-pool size must be a positive number.  size=[ " + size
+          + " ]");
+    }
     this.available    = new LinkedList<>();
     this.allThreads   = new LinkedList<>();
     this.closed       = false;
@@ -100,6 +111,7 @@ public class WorkerThreadPool {
   {
     // mark this pool as closed and notify
     synchronized (this.available) {
+      if (this.closed) return;
       this.closed = true;
       this.available.notifyAll();
     }
