@@ -1,6 +1,6 @@
 package com.senzing.io;
 
-import com.senzing.util.JsonUtils;
+import com.senzing.util.JsonUtilities;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -513,7 +513,7 @@ public class RecordReader {
   {
     if (record == null) return null;
     JsonObjectBuilder job = Json.createObjectBuilder(record);
-    String dsrc = JsonUtils.getString(record, "DATA_SOURCE", "");
+    String dsrc = JsonUtilities.getString(record, "DATA_SOURCE", "");
     dsrc = dsrc.trim().toUpperCase();
 
     // get the mapped data source
@@ -672,7 +672,7 @@ public class RecordReader {
 
           // parse the line
           try {
-            record = JsonUtils.parseJsonObject(line);
+            record = JsonUtilities.parseJsonObject(line);
 
           } catch (JsonParsingException e) {
             this.errorLineNumber = this.lineNumber;
@@ -796,7 +796,7 @@ public class RecordReader {
                record = recordReader.readRecord())
           {
             index++;
-            System.out.println(index + ": " + JsonUtils.toJsonText(record));
+            System.out.println(index + ": " + JsonUtilities.toJsonText(record));
             System.out.println();
           }
           System.out.println("COUNT   : " + index);

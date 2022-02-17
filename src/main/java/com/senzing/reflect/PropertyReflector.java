@@ -52,6 +52,7 @@ public class PropertyReflector<T> {
    */
   public static synchronized <T> PropertyReflector<T> getInstance(Class<T> cls)
   {
+    @SuppressWarnings("unchecked")
     PropertyReflector<T> result = REFLECTOR_INSTANCES.get(cls);
     if (result == null) {
       result = new PropertyReflector<>(cls);
@@ -201,6 +202,7 @@ public class PropertyReflector<T> {
    *
    * @throws IllegalArgumentException If the property key is not recognized.
    */
+  @SuppressWarnings("unchecked")
   public void setPropertyValue(T target, String propertyKey, Object propertyValue)
       throws IllegalArgumentException
   {
@@ -428,6 +430,7 @@ public class PropertyReflector<T> {
    * @throws NullPointerException If either of the specified parameters is
    *                              <code>null</code>.
    */
+  @SuppressWarnings("unchecked")
   private static JsonObjectBuilder buildJsonObject(IdentityHashMap   visited,
                                                    JsonObjectBuilder builder,
                                                    Object            object)
@@ -450,10 +453,10 @@ public class PropertyReflector<T> {
       // check if the object map is null
       if (objectMap == null) {
         // if null then initialize the property reflector variables and key set
-        Class cls = object.getClass();
-        reflector = PropertyReflector.getInstance(cls);
-        accessors = reflector.getAccessors();
-        keySet    = accessors.keySet();
+        Class<?> cls  = object.getClass();
+        reflector     = PropertyReflector.getInstance(cls);
+        accessors     = reflector.getAccessors();
+        keySet        = accessors.keySet();
 
       } else {
         // get the key set from the object map if we have an object map
@@ -565,6 +568,7 @@ public class PropertyReflector<T> {
    * @param value The value to be added.
    * @return The specified {@link JsonArrayBuilder}.
    */
+  @SuppressWarnings("unchecked")
   private static JsonArrayBuilder addToJsonArray(IdentityHashMap  visited,
                                                  JsonArrayBuilder builder,
                                                  Object           value)
@@ -671,10 +675,11 @@ public class PropertyReflector<T> {
   /**
    *
    */
+  @SuppressWarnings("unchecked")
   private static Map<String, ?> getObjectMap(Object object) {
     // check if we have a map
     if (!(object instanceof Map)) return null;
-    Map map = (Map) object;
+    Map<String, ?> map = (Map<String, ?>) object;
     for (Object key : map.keySet()) {
       if (!(key instanceof String)) {
         return null;

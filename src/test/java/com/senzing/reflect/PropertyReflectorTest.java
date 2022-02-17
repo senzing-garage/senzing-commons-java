@@ -20,6 +20,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 /**
  * Tests for {@link PropertyReflector}.
  */
+@SuppressWarnings("unchecked")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 public class PropertyReflectorTest {

@@ -1,7 +1,6 @@
 package com.senzing.cmdline;
 
-import com.senzing.util.JsonUtils;
-import org.junit.jupiter.api.Test;
+import com.senzing.util.JsonUtilities;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -39,7 +38,7 @@ public class CommandLineUtilitiesTest {
       jab.add(array[index]);
     }
     JsonArray jsonArray = jab.build();
-    return JsonUtils.toJsonText(jsonArray);
+    return JsonUtilities.toJsonText(jsonArray);
   }
 
   /**
@@ -1112,7 +1111,7 @@ public class CommandLineUtilitiesTest {
         = new LinkedHashMap<>(processedDefaults);
     expectedResult.put(HELP, true);
 
-    JsonObject expectedJson = JsonUtils.parseJsonObject(
+    JsonObject expectedJson = JsonUtilities.parseJsonObject(
         "{\"VERBOSE\": "
         + "{\"value\": \"false\", \"source\": \"DEFAULT\"},"
         + "\"IGNORE_ENV\": "
@@ -1148,7 +1147,7 @@ public class CommandLineUtilitiesTest {
                                           Boolean.TRUE,
                                           List.of()));
 
-    expectedJson = JsonUtils.parseJsonObject(
+    expectedJson = JsonUtilities.parseJsonObject(
         "{\"VERBOSE\": "
             + "{\"value\": \"false\", \"source\": \"DEFAULT\"},"
             + "\"IGNORE_ENV\": "
@@ -1204,7 +1203,7 @@ public class CommandLineUtilitiesTest {
     expectedResult.put(URL, "localhost/127.0.0.1:9080");
     expectedResult.put(PASSWORD, "secret");
 
-    expectedJson = JsonUtils.parseJsonObject(
+    expectedJson = JsonUtilities.parseJsonObject(
         "{\"VERBOSE\": "
             + "{\"value\": \"false\", \"source\": \"DEFAULT\"},"
             + "\"IGNORE_ENV\": "
@@ -1259,7 +1258,7 @@ public class CommandLineUtilitiesTest {
     expectedResult.put(CONFIG, new File("test.conf"));
     expectedResult.put(DATABASE_TABLE, "RECORDS");
 
-    expectedJson = JsonUtils.parseJsonObject(
+    expectedJson = JsonUtilities.parseJsonObject(
         "{\"VERBOSE\": "
             + "{\"value\": \"false\", \"source\": \"DEFAULT\"},"
             + "\"IGNORE_ENV\": "
@@ -1337,7 +1336,7 @@ public class CommandLineUtilitiesTest {
                      "Unexpected JSON object result: " + testInfo);
 
         if (expectText) {
-          jsonObject = JsonUtils.parseJsonObject(resultJson);
+          jsonObject = JsonUtilities.parseJsonObject(resultJson);
 
           assertEquals(expectedJson, jsonObject,
                        "Unexpected JSON text result: " + testInfo);

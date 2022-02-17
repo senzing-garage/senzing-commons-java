@@ -1,7 +1,6 @@
 package com.senzing.cmdline;
 
-import com.senzing.util.JsonUtils;
-import com.senzing.util.LoggingUtilities;
+import com.senzing.util.JsonUtilities;
 
 import javax.json.*;
 import java.io.PrintWriter;
@@ -1267,7 +1266,7 @@ public class CommandLineUtilities {
                  && (JSON_ARRAY_PATTERN.matcher(envVal).matches()))
       {
         // handle the case of multiple parameters and a JSON array
-        JsonArray jsonArray = JsonUtils.parseJsonArray(envVal.trim());
+        JsonArray jsonArray = JsonUtilities.parseJsonArray(envVal.trim());
         params = new ArrayList<>(jsonArray.size());
         for (JsonString jsonString: jsonArray.getValuesAs(JsonString.class)) {
           params.add(jsonString.getString());
@@ -1539,7 +1538,7 @@ public class CommandLineUtilities {
 
     // append the JSON text if requested
     if (stringBuilder != null) {
-      stringBuilder.append(JsonUtils.toJsonText(job));
+      stringBuilder.append(JsonUtilities.toJsonText(job));
     }
 
     // return the map

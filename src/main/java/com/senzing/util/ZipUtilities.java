@@ -135,7 +135,6 @@ public class ZipUtilities {
       }
       File targetFile = new File(targetDirectory, name);
       if (directory) {
-        System.out.println(targetFile);
         targetFile.mkdirs();
       } else {
         try (FileOutputStream fos = new FileOutputStream(targetFile)) {

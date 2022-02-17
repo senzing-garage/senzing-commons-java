@@ -1,6 +1,6 @@
 package com.senzing.io;
 
-import com.senzing.util.JsonUtils;
+import com.senzing.util.JsonUtilities;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -92,7 +92,7 @@ public class RecordReaderTest {
 
     pw.println("DATA_SOURCE,NAME_FIRST,NAME_LAST,PHONE_NUMBER");
     for (JsonObject obj: this.records) {
-      pw.print(JsonUtils.getString(obj,"DATA_SOURCE", ""));
+      pw.print(JsonUtilities.getString(obj, "DATA_SOURCE", ""));
       pw.print(",");
       pw.print(obj.getString("NAME_FIRST"));
       pw.print(",");
@@ -133,14 +133,14 @@ public class RecordReaderTest {
     }
     JsonArray recordArraySansDS = jab.build();
 
-    this.jsonRecords = JsonUtils.toJsonText(recordArray, true);
-    this.jsonRecordsSansDS = JsonUtils.toJsonText(recordArraySansDS, true);
+    this.jsonRecords = JsonUtilities.toJsonText(recordArray, true);
+    this.jsonRecordsSansDS = JsonUtilities.toJsonText(recordArraySansDS, true);
 
     sw = new StringWriter();
     pw = new PrintWriter(sw);
 
     for (JsonObject obj: this.records) {
-      pw.println(JsonUtils.toJsonText(obj));
+      pw.println(JsonUtilities.toJsonText(obj));
     }
     pw.flush();
     this.jsonLinesRecords = sw.toString();
@@ -149,7 +149,7 @@ public class RecordReaderTest {
     pw = new PrintWriter(sw);
 
     for (JsonObject obj: recordsSansDS) {
-      pw.println(JsonUtils.toJsonText(obj));
+      pw.println(JsonUtilities.toJsonText(obj));
     }
     pw.flush();
 
@@ -213,9 +213,9 @@ public class RecordReaderTest {
                      multilineFormat(
                          "Record not as expected:",
                          "EXPECTED: ",
-                         JsonUtils.toJsonText(expected, true),
+                         JsonUtilities.toJsonText(expected, true),
                          "ACTUAL: ",
-                         JsonUtils.toJsonText(actual, true)));
+                         JsonUtilities.toJsonText(actual, true)));
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -291,9 +291,9 @@ public class RecordReaderTest {
                          " --> dataSourceMap: "
                              + ((dsMap != null) ? dsMap.toString() : null),
                          "EXPECTED: ",
-                         JsonUtils.toJsonText(expected, true),
+                         JsonUtilities.toJsonText(expected, true),
                          "ACTUAL: ",
-                         JsonUtils.toJsonText(actual, true)));
+                         JsonUtilities.toJsonText(actual, true)));
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -306,7 +306,7 @@ public class RecordReaderTest {
                                           String              sourceId)
   {
     JsonObjectBuilder job = Json.createObjectBuilder(record);
-    String dataSource = JsonUtils.getString(
+    String dataSource = JsonUtilities.getString(
         record, "DATA_SOURCE", "");
 
     dataSource = dataSource.trim().toUpperCase();
