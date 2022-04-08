@@ -111,6 +111,19 @@ public class AsyncWorkerPool<T> {
   }
 
   /**
+   * Checks if one or more tasks are currently executing.
+   *
+   * @return <code>true</code> if one or more tasks are currently executing,
+   *         otherwise <code>false</code>.
+   */
+  public boolean isBusy() {
+    synchronized (this.available) {
+      if (this.isClosed()) return false;
+      return (this.available.size() < this.allThreads.size());
+    }
+  }
+
+  /**
    * Executes the specified {@link Task} asynchronously and returns the {@link
    * AsyncResult} (if any) produced by a previous execution of the assigned
    * worker.  The returned {@link AsyncResult} is <code>null</code> if the assigned
