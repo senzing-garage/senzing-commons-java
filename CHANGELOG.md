@@ -6,16 +6,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2022-04-08
+
+### Added in 2.1.0
+
+- Added `AsyncWorkerPool.isBusy()` function and associated unit tests.
+- Added `Timers.getElapsedTime()` function and associated unit tests.
+- Minor change to `JsonUtilities.addProperty()` and `JsonUtilities.addElement()`
+  to allow conversion of `Set` and `Array` values to be treated the same as
+  `List`.  It now handles all `Collection` values the same as `List` and all 
+  `Array` values as lists as well.
+- Modified `JsonUtilitiesTest` to validate the changes made to
+  `JsonUtilities.addProperty()` and `JsonUtilities.addElement()`.
+
+## [2.0.2] - 2022-03-18
+
+### Added in 2.0.2
+
+- Added `Timers.getElapsedTime(String)` function to obtain the time for a
+  specific named timer.
+- Added `AsyncWorkerPool.isBusy()` function to check if a task is currently 
+  executing.
+
 ## [2.0.1] - 2022-03-07
 
-### Added to 2.0.1
+### Added in 2.0.1
 
 - Updates to `pom.xml` to prevent pulling beta versions of `senzing-sdk-java`
   version `3.0.0` via the Maven dependency range.
 
 ## [2.0.0] - 2022-02-03
 
-### Added to 2.0.0
+### Added in 2.0.0
 
 - Initial production release with complete unit tests
 - Renamed JsonUtils to JsonUtilities to be consistent with other utility classes
@@ -28,13 +50,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.0] - 2022-01-07
 
-### Added to 0.7.0
+### Added in 0.7.0
 
 - Added `com.senzing.reflect.PropertyReflector` utility class.
 
 ## [0.6.0] - 2021-11-20
 
-### Added to 0.6.0
+### Added in 0.6.0
 
 - Modified `com.senzing.cmdline.CommandLineOption` to add `isSensitive()`
   function with a default implementation based on the naming of the enum  
@@ -50,7 +72,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.0] - 2021-11-16
 
-### Added to 0.5.0 (Initial Public Prerelease)
+### Added in 0.5.0 (Initial Public Prerelease)
 
 - Initial refactoring from `Senzing/senzing-api-server` project
 - Added many unit tests

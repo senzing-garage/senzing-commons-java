@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.json.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
@@ -2958,7 +2959,11 @@ public class JsonUtilitiesTest {
     result.add(arguments(123.456,       JsonValue.ValueType.NUMBER));
     result.add(arguments(123.456F,      JsonValue.ValueType.NUMBER));
     result.add(arguments(
+        new Object[] { 10L, 5.5, true, "three"}, JsonValue.ValueType.ARRAY));
+    result.add(arguments(
         List.of(10L, 5.5, true, "three"), JsonValue.ValueType.ARRAY));
+    result.add(arguments(
+        Set.of(10L, 5.5, true, "three"), JsonValue.ValueType.ARRAY));
     result.add(arguments(
         Map.of("foo", "bar", "phoo", true, "num", 25L),
         JsonValue.ValueType.OBJECT));
@@ -3056,9 +3061,21 @@ public class JsonUtilitiesTest {
           actual = ((JsonNumber) jsonValue).bigDecimalValue();
           break;
         default:
-          if (value instanceof List) {
+          if (value.getClass().isArray()) {
             // convert to a list
             actual = normalizeJsonValue(jsonValue);
+
+            int length = Array.getLength(value);
+            List list = new ArrayList<>(length);
+            for (int index = 0; index < length; index++) {
+              list.add(Array.get(value, index));
+            }
+            expected = list;
+
+          } else if (value instanceof Collection) {
+            // convert to a list
+            actual    = normalizeJsonValue(jsonValue);
+            expected  = new ArrayList((Collection) value);
 
           } else if (value instanceof Map) {
             boolean stringKeys = true;

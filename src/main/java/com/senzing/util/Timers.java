@@ -165,6 +165,21 @@ public class Timers {
   }
 
   /**
+   * Gets the recorded elapsed time for the specified timer name.  This returns
+   * a negative number if the specified timer name is not recognized.
+   *
+   * @param timerName The name of the timer being requested.
+   *
+   * @return The accumulated elapsed number of milliseconds for the timer with
+   *         the specified name or negative-one (-1) if the specified timer
+   *         name is not recognized.
+   */
+  public long getElapsedTime(String timerName) {
+    TimerInfo info = this.timerInfos.get(timerName);
+    return (info != null ? info.getDuration() : -1L);
+  }
+
+  /**
    * Starts one or more new timers with the specified names.  This method
    * checks each of the timer names to see if they already exist and if a
    * timer by the specified name already exists and is running then it is

@@ -116,6 +116,28 @@ public class TimersTest {
   }
 
   @Test
+  public void elapsedTimeTest() {
+    long start = System.nanoTime();
+    Timers timers = new Timers("foo");
+    try {
+      Thread.sleep(10L);
+    } catch (InterruptedException ignore) {
+      // ignore the exception
+    }
+    timers.pause("foo");
+    long end = System.nanoTime();
+    long duration = (end - start) / 1000000L;
+    long elapsed = timers.getElapsedTime("foo");
+    assertTrue((elapsed <= duration),
+               "The elapsed time (" + elapsed + ") exceeds the bookend "
+               + "duration (" + duration + ").");
+
+    Map<String, Long> timings = timers.getTimings();
+    assertEquals(timings.get("foo"), elapsed,
+                 "The elapsed time does not match the timings.");
+  }
+
+  @Test
   public void usageTest()
   {
     try {
