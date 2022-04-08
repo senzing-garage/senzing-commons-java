@@ -3,6 +3,7 @@ package com.senzing.util;
 import org.ini4j.Wini;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
@@ -1555,10 +1556,19 @@ public class JsonUtilities {
       builder.add(property, (BigInteger) value);
     } else if (value instanceof BigDecimal) {
       builder.add(property, (BigDecimal) value);
-    } else if (value instanceof List) {
-      List list = (List) value;
+
+    } else if (value.getClass().isArray()) {
+      int length = Array.getLength(value);
       JsonArrayBuilder jab = Json.createArrayBuilder();
-      for (Object elem: list) {
+      for (int index = 0; index < length; index++) {
+        addElement(jab,Array.get(value, index));
+      }
+      builder.add(property, jab);
+
+    } else if (value instanceof Collection) {
+      Collection collection = (Collection) value;
+      JsonArrayBuilder jab = Json.createArrayBuilder();
+      for (Object elem: collection) {
         addElement(jab, elem);
       }
       builder.add(property, jab);
@@ -1641,10 +1651,19 @@ public class JsonUtilities {
       builder.add((BigInteger) value);
     } else if (value instanceof BigDecimal) {
       builder.add((BigDecimal) value);
-    } else if (value instanceof List) {
-      List list = (List) value;
+
+    } else if (value.getClass().isArray()) {
+      int length = Array.getLength(value);
       JsonArrayBuilder jab = Json.createArrayBuilder();
-      for (Object elem: list) {
+      for (int index = 0; index < length; index++) {
+        addElement(jab,Array.get(value, index));
+      }
+      builder.add(jab);
+
+    } else if (value instanceof Collection) {
+      Collection collection = (Collection) value;
+      JsonArrayBuilder jab = Json.createArrayBuilder();
+      for (Object elem: collection) {
         addElement(jab, elem);
       }
       builder.add(jab);

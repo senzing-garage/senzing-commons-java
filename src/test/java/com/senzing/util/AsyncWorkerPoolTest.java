@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.*;
 
@@ -123,5 +126,33 @@ public class AsyncWorkerPoolTest {
       e.printStackTrace();
       fail("asyncWorkerPoolTest() failed with exception: " + e);
     }
+  }
+
+  @ParameterizedTest
+  @CsvSource({"1, 1", "1, 2" ,"1, 5", "2, 1", "2, 2", "2, 5", "3, 5"})
+  public void busyTest(int tasks, int poolSize) {
+    AsyncWorkerPool<Long> pool = new AsyncWorkerPool<>(poolSize);
+    for (int index = 0; index < tasks; index++) {
+      pool.execute(() -> {
+        long start = System.nanoTime();
+        Thread.sleep(100L);
+        return System.nanoTime() - start;
+      });
+    }
+
+    assertTrue(pool.isBusy(), "Pool is not busy, but should be: "
+               + tasks + " tasks / " + poolSize + " threads");
+    try {
+      Thread.sleep(tasks * 200L);
+    } catch (InterruptedException ignore) {
+      // do nothing
+    }
+    assertFalse(pool.isBusy(), "Pool is busy, but should not be: "
+        + tasks + " tasks / " + poolSize + " threads");
+
+    // close the pool
+    pool.close();
+    assertFalse(pool.isBusy(), "Closed pool is busy: "
+        + tasks + " tasks / " + poolSize + " threads");
   }
 }
