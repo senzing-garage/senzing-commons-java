@@ -41,7 +41,7 @@
     <dependency>
       <groupId>com.senzing</groupId>
       <artifactId>g2</artifactId>
-      <version>3.0.0-b02</version>
+      <version>[3.0.0, 3.999.999)</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish</groupId>
