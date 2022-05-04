@@ -4,7 +4,7 @@
   <groupId>com.senzing</groupId>
   <artifactId>senzing-commons</artifactId>
   <packaging>jar</packaging>
-  <version>2.1.0</version>
+  <version>3.0.0</version>
   <name>Senzing Commons</name>
   <description>Utility classes and functions common to multiple Senzing projects.</description>
   <url>http://github.com/Senzing/senzing-commons-java</url>
@@ -39,9 +39,9 @@
   </scm>
   <dependencies>
     <dependency>
-     <groupId>com.senzing</groupId>
-     <artifactId>g2</artifactId>
-       <version>[2.0.0-SNAPSHOT,2.999.999]</version>
+      <groupId>com.senzing</groupId>
+      <artifactId>g2</artifactId>
+      <version>[3.0.0, 3.999.999)</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish</groupId>

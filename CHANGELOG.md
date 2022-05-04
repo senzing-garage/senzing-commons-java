@@ -6,10 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2022-05-04
+
+### Changed in 3.0.0
+- Modified `RecordReader` to eliminate functionality pertaining to entity types.
+
 ## [2.1.0] - 2022-04-08
 
-### Added in 2.1.0
-
+### Changed in 2.1.0
 - Added `AsyncWorkerPool.isBusy()` function and associated unit tests.
 - Added `Timers.getElapsedTime()` function and associated unit tests.
 - Minor change to `JsonUtilities.addProperty()` and `JsonUtilities.addElement()`
@@ -21,8 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.2] - 2022-03-18
 
-### Added in 2.0.2
-
+### Changed in 2.0.2
 - Added `Timers.getElapsedTime(String)` function to obtain the time for a
   specific named timer.
 - Added `AsyncWorkerPool.isBusy()` function to check if a task is currently 
@@ -30,38 +33,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.1] - 2022-03-07
 
-### Added in 2.0.1
-
+### Changed in 2.0.1
 - Updates to `pom.xml` to prevent pulling beta versions of `senzing-sdk-java`
   version `3.0.0` via the Maven dependency range.
 
 ## [2.0.0] - 2022-02-03
 
-### Added in 2.0.0
-
+### Changed in 2.0.0
 - Initial production release with complete unit tests
-- Renamed JsonUtils to JsonUtilities to be consistent with other utility classes
 - Added error checking to `com.senzing.util.Timers`
 - Added `com.senzing.reflect.PropertyReflector` class
 - Added primitive/promoted type functions to `com.senzing.reflect.ReflectionUtilities`
-- Changed version to 2.0.0 for initial production release to indicate 
+- Renamed JsonUtils to JsonUtilities to be consistent with other utility classes
+- Changed version to 2.0.0 for initial production release to indicate
   compatibility with Senzing 2.x (i.e.: `com.senzing.io.RecordReader` will parse
   records as Senzing 2.x expects them)
 
 ## [0.7.0] - 2022-01-07
 
-### Added in 0.7.0
-
+### Changed in 0.7.0
 - Added `com.senzing.reflect.PropertyReflector` utility class.
 
 ## [0.6.0] - 2021-11-20
 
-### Added in 0.6.0
-
+### Changed in 0.6.0
 - Modified `com.senzing.cmdline.CommandLineOption` to add `isSensitive()`
   function with a default implementation based on the naming of the enum  
   constant being either `PASSWORD` or ending in `_PASSWORD`.
-- Chnaged the semantics of `parseCommandLine()` function in 
+- Changed the semantics of `parseCommandLine()` function in 
   `com.senzing.cmndline.CommandLineUtilites` so that it returns the `Map` 
   describing the command-line options and takes an optional `List` to 
   populate with `DeprecatedOptionWarning` instances if the caller is interested.
@@ -72,7 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.0] - 2021-11-16
 
-### Added in 0.5.0 (Initial Public Prerelease)
+### Changed in 0.5.0 (Initial Public Prerelease)
 
 - Initial refactoring from `Senzing/senzing-api-server` project
 - Added many unit tests
