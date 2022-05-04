@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed in 3.0.0
 - Modified `RecordReader` to eliminate functionality pertaining to entity types.
+- Modified `pom.xml` dependency for `g2-sdk-java` for version `3.0.0` or later.
 
 ## [2.1.0] - 2022-04-08
 
