@@ -1532,6 +1532,7 @@ public class JsonUtilities {
    *
    * @return The specified {@link JsonObjectBuilder}.
    */
+  @SuppressWarnings("unchecked")
   public static JsonObjectBuilder addProperty(JsonObjectBuilder builder,
                                               String            property,
                                               Object            value)
@@ -1628,6 +1629,7 @@ public class JsonUtilities {
    *
    * @return The specified {@link JsonObjectBuilder}.
    */
+  @SuppressWarnings("unchecked")
   public static JsonArrayBuilder addElement(JsonArrayBuilder builder,
                                             Object           value)
   {
@@ -1819,11 +1821,33 @@ public class JsonUtilities {
    */
   public static JsonObject toJsonObject(Map<String, ?> map) {
     if (map == null) return null;
+    return toJsonObjectBuilder(map).build();
+  }
+
+  /**
+   * Attempts to convert the specified {@link Map} of {@link String} keys to
+   * {@link Object} values to a {@link JsonObjectBuilder}.  This will leverage
+   * the {@link #addProperty(JsonObjectBuilder,String,Object)} and {@link
+   * #addElement(JsonArrayBuilder, Object)} functions and has the same
+   * limitations that those have with regard to the types of values that can
+   * be handled and how they are handled.  For example, if a value is
+   * encountered that is a {@link Map} whose keys are <b>not</b> non-null
+   * {@link String} values then that object will simply be converted to a
+   * {@link JsonString} value via its {@link Object#toString()} implementation.
+   *
+   * @param map The {@link Map} of {@link String} keys to {@link Object} values.
+   *
+   * @return The {@link JsonObjectBuilder} created for the specified {@link
+   *         Map}, or <code>null</code> if the specified {@link Map} is
+   *         <code>null</code>.
+   */
+  public static JsonObjectBuilder toJsonObjectBuilder(Map<String, ?> map) {
+    if (map == null) return null;
     JsonObjectBuilder builder = Json.createObjectBuilder();
     map.forEach((key, value) -> {
       addProperty(builder, key, value);
     });
-    return builder.build();
+    return builder;
   }
 
   /**
@@ -1845,11 +1869,33 @@ public class JsonUtilities {
    */
   public static JsonArray toJsonArray(List<?> list) {
     if (list == null) return null;
+    return toJsonArrayBuilder(list).build();
+  }
+
+  /**
+   * Attempts to convert the specified {@link List} of {@link Object} values to
+   * a {@link JsonArrayBuilder}.  This will leverage the {@link
+   * #addElement(JsonArrayBuilder, Object)} and {@link
+   * #addProperty(JsonObjectBuilder,String,Object)} functions and has the same
+   * limitations that those have with regard to the types of values that can
+   * be handled and how they are handled.  For example, if a value is
+   * encountered that is a {@link Map} whose keys are <b>not</b> non-null
+   * {@link String} values then that object will simply be converted to a
+   * {@link JsonString} value via its {@link Object#toString()} implementation.
+   *
+   * @param list The {@link List} of {@link Object} values.
+   *
+   * @return The {@link JsonArrayBuilder} created for the specified
+   *         {@link List}, or <code>null</code> if the specified {@link List}
+   *         is <code>null</code>.
+   */
+  public static JsonArrayBuilder toJsonArrayBuilder(List<?> list) {
+    if (list == null) return null;
     JsonArrayBuilder builder = Json.createArrayBuilder();
     list.forEach((value) -> {
       addElement(builder, value);
     });
-    return builder.build();
+    return builder;
   }
 
   /**

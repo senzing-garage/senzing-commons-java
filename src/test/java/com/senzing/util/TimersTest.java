@@ -77,6 +77,7 @@ public class TimersTest {
 
   @ParameterizedTest
   @MethodSource("provideHasTimerParams")
+  @SuppressWarnings("unchecked")
   public void hasTimerTest(Timers   timer,
                            String   timerName,
                            Boolean  expectedResult,

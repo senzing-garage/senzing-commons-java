@@ -4,7 +4,7 @@
   <groupId>com.senzing</groupId>
   <artifactId>senzing-commons</artifactId>
   <packaging>jar</packaging>
-  <version>3.0.0</version>
+  <version>3.1.0</version>
   <name>Senzing Commons</name>
   <description>Utility classes and functions common to multiple Senzing projects.</description>
   <url>http://github.com/Senzing/senzing-commons-java</url>
@@ -74,6 +74,12 @@
       <version>5.4.2</version>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>org.jetbrains</groupId>
+          <artifactId>annotations</artifactId>
+          <version>RELEASE</version>
+          <scope>compile</scope>
+      </dependency>
   </dependencies>
   <properties>
     <gpg.skip>true</gpg.skip> <!-- skip GPG unless release profile -->
