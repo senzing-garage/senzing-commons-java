@@ -711,20 +711,6 @@ public class ConnectionPool {
   }
 
   /**
-   * Acquires a {@link Connection} from the {@link ConnectionPool}, blocking
-   * indefinitely if necessary.  If no {@link Connection} instances are
-   * available and the pool has not reached its {@linkplain #getMaximumSize()
-   * maximum size} then a new {@link Connection} is opened.
-   *
-   * @return The {@link Connection} acquired from the pool.
-   *
-   * @throws SQLException If a failure occurs.
-   */
-  public Connection acquire() throws SQLException {
-    return this.acquire(0L);
-  }
-
-  /**
    * Computes the number of milliseconds since the specified starting
    * nanosecond system time.
    *
@@ -737,29 +723,44 @@ public class ConnectionPool {
 
   /**
    * Acquires a {@link Connection} from the {@link ConnectionPool}, blocking
-   * for the specified maximum wait time if necessary.  If no {@link Connection}
-   * instances are available and the pool has not reached its {@linkplain
-   * #getMaximumSize() maximum size} then a new {@link Connection} is opened.
-   * If the specified wait time is zero (0) then this method will block
-   * indefinitely waiting for a connection.
-   *
-   * @param maxWait The maximum about af time (in milliseconds) to wait for a
-   *                {@link Connection} to become available, or zero (0) if no
-   *                maximum and willing to wait indefinitely.
+   * indefinitely if necessary.  If no {@link Connection} instances are
+   * available and the pool has not reached its {@linkplain #getMaximumSize()
+   * maximum size} then a new {@link Connection} is opened.
    *
    * @return The {@link Connection} acquired from the pool.
    *
-   * @throws IllegalArgumentException If the specified wait time is negative.
+   * @throws SQLException If a failure occurs.
+   */
+  public Connection acquire() throws SQLException {
+    return this.acquire(-1L);
+  }
+
+  /**
+   * Acquires a {@link Connection} from the {@link ConnectionPool}, blocking
+   * for the specified maximum wait time if necessary.  If no {@link Connection}
+   * instances are available and the pool has not reached its {@linkplain
+   * #getMaximumSize() maximum size} then a new {@link Connection} is opened.
+   * If the specified wait time is zero (0) then this method will not wait for
+   * a {@link Connection} to become available, but will immediately return a
+   * {@link Connection} if one is available or if the {@link ConnectionPool} can
+   * grow/expand to make one available, otherwise it returns <code>null</code>.
+   * Finally, a negative wait time can be specified to indicate no maximum
+   * wait time and therefore indefinite waiting for a {@link Connection} to
+   * become available.
+   *
+   * @param maxWait The maximum about af time (in milliseconds) to wait for a
+   *                {@link Connection} to become available, or zero (0) if not
+   *                waiting at all (only returning a {@link Connection} if one
+   *                is immediately available, or a negative number if no
+   *                maximum wait time and willing to wait indefinitely.
+   *
+   * @return The {@link Connection} acquired from the pool.
    *
    * @throws SQLException If a failure occurs.
    */
   public Connection acquire(long maxWait)
     throws SQLException, IllegalArgumentException
   {
-    if (maxWait < 0L) {
-      throw new IllegalArgumentException(
-          "The specified maximum wait time cannot be negative: " + maxWait);
-    }
     final long startTime = System.nanoTime();
     PooledConnection  acquired      = null;
     Integer           newPoolSize   = null;
@@ -767,21 +768,24 @@ public class ConnectionPool {
     synchronized (this) {
       // loop until we have an acquired connection
       while (acquired == null && !this.isShutdown()
-             && (maxWait == 0L || elapsed(startTime) < maxWait))
+             && (maxWait <= 0L || elapsed(startTime) < maxWait))
       {
         // wait for a connection to become available
         while (!this.isShutdown() && (this.availableConnections.size() == 0)
                && (this.allConnections.size() == this.getMaximumSize())
-               && (maxWait == 0L || elapsed(startTime) < maxWait))
+               && (maxWait < 0L || elapsed(startTime) < maxWait))
         {
-          try {
-            long timeout = (maxWait == 0L) ? WAIT_TIMEOUT
-                : Math.min(WAIT_TIMEOUT, maxWait - elapsed(startTime));
-            if (timeout < 0L) break;
-            this.wait(timeout);
+          // unless no-wait was specified, then wait for a connection
+          if (maxWait != 0L) {
+            try {
+              long timeout = (maxWait < 0L) ? WAIT_TIMEOUT
+                  : Math.min(WAIT_TIMEOUT, maxWait - elapsed(startTime));
+              if (timeout < 0L) break;
+              this.wait(timeout);
 
-          } catch (InterruptedException ignore) {
-            // do nothing
+            } catch (InterruptedException ignore) {
+              // do nothing
+            }
           }
         }
 
@@ -813,11 +817,14 @@ public class ConnectionPool {
 
           // record the new pool size
           newPoolSize = this.allConnections.size();
-          
+
         } else if (this.availableConnections.size() > 0) {
           // acquire the first connection
           acquired = this.availableConnections.remove(0);
         }
+
+        // check if no wait and skip looping
+        if (maxWait == 0L) break;
       }
 
       // check if shutdown
@@ -828,13 +835,15 @@ public class ConnectionPool {
       }
 
       // we must have an acquired connection
-      if (acquired == null && maxWait == 0L) {
+      if (acquired == null && maxWait < 0L) {
+        // we must have an acquired connection
         throw new IllegalStateException(
             "Exited wait loop, but did not acquire a pooled connection.");
       }
 
       // check if we acquired a connection
       if (acquired != null) {
+        // we must have an acquired connection
         // create a handler
         PooledConnectionHandler handler
             = new PooledConnectionHandler(this, acquired.getConnection());
@@ -891,6 +900,9 @@ public class ConnectionPool {
     if (acquired == null) {
       return null;
     }
+
+    // ensure auto-commit is turned off
+    acquired.getConnection().setAutoCommit(false);
 
     // return the proxied connection
     return acquired.getCurrentLeaseHandler().getProxiedConnection();
@@ -959,6 +971,13 @@ public class ConnectionPool {
 
       // if not null then do some cleanup and release
       this.leasedMap.remove(connection);
+
+      // rollback anything not committed in the transaction
+      Connection backingConn = pooledConn.getConnection();
+      if (!backingConn.getAutoCommit()) {
+        backingConn.rollback();
+      }
+      backingConn.setAutoCommit(false);
 
       // get the new leased count
       leasedCount = this.leasedMap.size();

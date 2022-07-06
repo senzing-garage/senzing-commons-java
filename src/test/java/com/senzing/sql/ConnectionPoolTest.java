@@ -8,16 +8,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.security.SecureRandom;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,6 +39,7 @@ public class ConnectionPoolTest {
     private IdentityHashMap<Connection, Thread> connThreadMap = null;
     private IdentityHashMap<Thread, Connection> threadConnMap = null;
     private boolean closed = false;
+    private boolean autoCommit = true;
 
     public DummyConnectionHandler(
         List<Exception>                     failures,
@@ -66,6 +65,14 @@ public class ConnectionPoolTest {
           return System.identityHashCode(proxy);
         case "toString":
           return "Connection(" + System.identityHashCode(proxy) + ")";
+        case "getAutoCommit":
+          return this.autoCommit;
+        case "setAutoCommit":
+          this.autoCommit = (Boolean) args[0];
+          return null;
+        case "rollback":
+          // used by connection pool
+          return null;
         default:
           try {
             this.record((Connection) proxy);
@@ -215,7 +222,7 @@ public class ConnectionPoolTest {
     private List<Exception> failures = null;
     private IdentityHashMap<Connection, Thread> connThreadMap = null;
     private IdentityHashMap<Thread, Connection> threadConnMap = null;
-    private long maxWait = 0L;
+    private long maxWait = -1L;
     private int iterationCount = 1;
     private long minDuration  = 20L;
     private long maxDuration  = 50L;
@@ -382,7 +389,7 @@ public class ConnectionPoolTest {
       try {
         for (int index = 0; index < minPoolSize; index++) {
           long startNanos = System.nanoTime();
-          Connection conn = pool.acquire(500L);
+          Connection conn = pool.acquire(PRNG.nextBoolean() ? 500L : 0L);
           long endNanos = System.nanoTime();
           long elapsed = (endNanos - startNanos) / ONE_MILLION;
           assertNotNull(conn, "Connection not acquired.  index=[ "
@@ -453,6 +460,61 @@ public class ConnectionPoolTest {
   }
 
   /**
+   * Tests the waiting on acquire() calls.
+   */
+  @Test
+  public void waitTest()
+  {
+    final int minPoolSize = 5;
+    final int maxPoolSize = 10;
+    ConnectionPool pool = null;
+    try {
+      IdentityHashMap<Connection, Thread> connThreadMap
+          = new IdentityHashMap<>();
+      IdentityHashMap<Thread, Connection> threadConnMap
+          = new IdentityHashMap<>();
+      List<Exception> failures = new LinkedList<>();
+
+      DummyConnector connector = new DummyConnector(failures,
+                                                    connThreadMap,
+                                                    threadConnMap);
+
+      pool = new ConnectionPool(connector, 5, 10);
+
+      // attempt to acquire connections up to the min pool size
+      List<Connection> leased = new LinkedList<>();
+      try {
+        for (int index = 0; index < maxPoolSize; index++) {
+          Connection conn = pool.acquire(0L);
+          assertNotNull(conn, "Connection not immediately acquired.  "
+              + "leased=[ " + leased.size() + " ], minPoolSize=[ "
+              + minPoolSize + " ], maxPoolSize=[ " + maxPoolSize + " ]");
+
+          leased.add(conn);
+        }
+
+        // now try to acquire when none are available and pool cannot grow
+        Connection unavailable = pool.acquire(100L);
+        assertNull(unavailable, "Connection acquired when none should "
+            + "have been available.  leased=[ " + leased.size()
+            + " ], minPoolSize=[ " + minPoolSize + " ], maxPoolSize=[ "
+            + maxPoolSize + " ]");
+
+      } finally {
+        for (Connection connection: leased) {
+          SQLUtilities.close(connection);
+        }
+        leased.clear();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail("Received a SQL exception", e);
+    } finally {
+      if (pool != null) pool.shutdown();
+    }
+  }
+
+  /**
    * Tests the basics of the connection pool.
    */
   @ParameterizedTest
@@ -486,7 +548,7 @@ public class ConnectionPoolTest {
       try {
         for (int index = 0; index < maxPoolSize; index++) {
           long startNanos = System.nanoTime();
-          Connection conn = pool.acquire(500L);
+          Connection conn = pool.acquire(PRNG.nextBoolean() ? 500L : 0L);
           long endNanos = System.nanoTime();
           long elapsed = (endNanos - startNanos) / ONE_MILLION;
           assertNotNull(conn, "Connection not acquired.  index=[ "
@@ -568,7 +630,9 @@ public class ConnectionPoolTest {
         threads.add(new DummyThread(index,
                                     threadCount,
                                     pool,
-                                    (threadCount <= maxPoolSize) ? 500L : 0,
+                                    (threadCount > maxPoolSize)
+                                        ? -1L
+                                        : (PRNG.nextBoolean() ? 500L : 0L),
                                     5,
                                     5L,
                                     10L,
@@ -1073,4 +1137,149 @@ public class ConnectionPoolTest {
     }
   }
 
+  /**
+   *
+   */
+  @Test
+  public void sqliteTest() {
+    ConnectionPool    pool  = null;
+    Connection        conn  = null;
+    PreparedStatement ps    = null;
+    Statement         stmt  = null;
+    ResultSet         rs    = null;
+    try {
+      final File tempFile = File.createTempFile("test-", ".db");
+      tempFile.deleteOnExit();
+      final String path = tempFile.getCanonicalPath();
+
+      Connector connector
+          = () -> DriverManager.getConnection("jdbc:sqlite:" + path);
+
+      pool = new ConnectionPool(connector, 1);
+
+      conn = pool.acquire();
+
+      assertFalse(conn.getAutoCommit(), "Auto-commit is not false");
+
+      List<String> setupList = List.of(
+          "PRAGMA foreign_keys = ON;",
+          "PRAGMA journal_mode = WAL;",
+          "PRAGMA synchronous = 0;",
+          "PRAGMA secure_delete = 0;",
+          "PRAGMA automatic_index = 0;",
+          "CREATE TABLE foo (foo_id INTEGER PRIMARY_KEY, description TEXT)");
+
+      conn.setAutoCommit(true);
+      stmt = conn.createStatement();
+      for (String sql: setupList) {
+        stmt.execute(sql);
+      }
+      stmt = SQLUtilities.close(stmt);
+
+      Connection prev = conn;
+      conn = SQLUtilities.close(conn);
+
+      conn = pool.acquire();
+
+      assertFalse(conn.getAutoCommit(), "Auto-commit is not false");
+      assertFalse((conn == prev), "Got identical proxy connection");
+
+      ps = conn.prepareStatement("INSERT INTO foo (description) VALUES (?)");
+      String[] values = { "phoo", "bar", "bax", "foo" };
+      for (String value : values) {
+        ps.setString(1, value);
+        ps.executeUpdate();
+      }
+      ps = SQLUtilities.close(ps);
+
+      // now close the connection WITHOUT committing
+      prev = conn;
+      conn = SQLUtilities.close(conn);
+
+      // get a new connection
+      conn = pool.acquire();
+      assertFalse(conn.getAutoCommit(), "Auto-commit is not false");
+      assertFalse((conn == prev), "Got identical proxy connection");
+
+      // query to ensure we rolled back
+      stmt = conn.createStatement();
+      rs = stmt.executeQuery("SELECT COUNT (*) FROM foo");
+      int result = rs.getInt(1);
+      assertEquals(0, result,
+                   "Got more rows than expected: " + result);
+
+      rs = SQLUtilities.close(rs);
+      stmt = SQLUtilities.close(stmt);
+
+      ps = conn.prepareStatement("INSERT INTO foo (description) VALUES (?)");
+      for (String value : values) {
+        ps.setString(1, value);
+        ps.executeUpdate();
+      }
+      ps = SQLUtilities.close(ps);
+
+      // this time, explicitly roll back
+      conn.rollback();
+
+      // now close the connection after rollback
+      prev = conn;
+      conn = SQLUtilities.close(conn);
+
+      // get a new connection
+      conn = pool.acquire();
+      assertFalse(conn.getAutoCommit(), "Auto-commit is not false");
+      assertFalse((conn == prev), "Got identical proxy connection");
+
+      // query to ensure we rolled back
+      stmt = conn.createStatement();
+      rs = stmt.executeQuery("SELECT COUNT (*) FROM foo");
+      result = rs.getInt(1);
+      assertEquals(0, result,
+                   "Got more rows than expected: " + result);
+
+      rs = SQLUtilities.close(rs);
+      stmt = SQLUtilities.close(stmt);
+
+      ps = conn.prepareStatement("INSERT INTO foo (description) VALUES (?)");
+      for (String value : values) {
+        ps.setString(1, value);
+        ps.executeUpdate();
+      }
+      ps = SQLUtilities.close(ps);
+
+      // this time we commit the transaction
+      conn.commit();
+
+      // now close the connection after commit
+      prev = conn;
+      conn = SQLUtilities.close(conn);
+
+      // get a new connection
+      conn = pool.acquire();
+      assertFalse(conn.getAutoCommit(), "Auto-commit is not false");
+      assertFalse((conn == prev), "Got identical proxy connection");
+
+      // query to ensure we rolled back
+      stmt = conn.createStatement();
+      rs = stmt.executeQuery("SELECT COUNT (*) FROM foo");
+      result = rs.getInt(1);
+      assertEquals(values.length, result,
+                   "Got unexpected number of rows: " + result);
+
+      rs = SQLUtilities.close(rs);
+      stmt = SQLUtilities.close(stmt);
+      conn = SQLUtilities.close(conn);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail("Received a SQL exception", e);
+    } finally {
+      rs    = SQLUtilities.close(rs);
+      ps    = SQLUtilities.close(ps);
+      stmt  = SQLUtilities.close(stmt);
+      conn  = SQLUtilities.close(conn);
+      if (pool != null) pool.shutdown();
+
+    }
+  }
 }
