@@ -8,7 +8,7 @@ import java.util.Objects;
  * A {@link ConnectionProvider} implementation that is backed by a {@link
  * ConnectionPool} with an optional maximum wait time.
  */
-public class PoolConnectionProvider {
+public class PoolConnectionProvider implements ConnectionProvider {
   /**
    * The {@link ConnectionPool} to back this instance.
    */

@@ -1608,8 +1608,8 @@ public class CommandLineUtilities {
 
     int columnIndex = 0;
     for (CommandLineOption option: options) {
-      String flag       = option.getCommandLineFlag();
-      int    spaceCount = maxLength - flag.length() - bullet.length();
+      String flag = option.getCommandLineFlag();
+      int spaceCount = maxLength - flag.length() - bullet.length();
       if (columnIndex == 0) pw.print(indenter);
       else pw.print(spacer);
       pw.print(bullet);

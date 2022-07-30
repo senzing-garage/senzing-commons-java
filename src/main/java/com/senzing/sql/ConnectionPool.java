@@ -462,6 +462,12 @@ public class ConnectionPool {
     averageLeaseTime(MILLISECOND_UNITS),
 
     /**
+     * The total number of {@link Connection} leases that have been
+     * granted by this pool.
+     */
+    lifetimeLeaseCount(LEASE_UNITS),
+
+    /**
      * The number of milliseconds that have passed since the last time a
      * {@link Connection} lease was requested.  If a {@link Connection} lease
      * has never been requested then this returns the number of milliseconds
@@ -680,6 +686,7 @@ public class ConnectionPool {
       putStat(result, greatestAcquireTime, this.getGreatestAcquisitionTime());
       putStat(result, Statistic.greatestLeaseTime, this.getGreatestLeaseTime());
       putStat(result, averageLeaseTime, this.getAverageLeaseTime());
+      putStat(result, lifetimeLeaseCount, this.getLifetimeLeaseCount());
       putStat(result, currentPoolSize, this.getCurrentPoolSize());
       putStat(result, Statistic.availableConnections,
               this.getAvailableConnectionCount());
@@ -1022,7 +1029,12 @@ public class ConnectionPool {
       }
 
       // update the statistics
-      if (leasedTime != null) this.totalLeaseTime += leasedTime;
+      if (leasedTime != null) {
+        if (leasedTime > this.greatestLeaseTime) {
+          this.greatestLeaseTime = leasedTime;
+        }
+        this.totalLeaseTime += leasedTime;
+      }
       if (leasedCount != null) {
         this.cumulativeLeaseCount += leasedCount;
         this.cumulativeLeaseChecks++;
@@ -1429,6 +1441,19 @@ public class ConnectionPool {
   public long getIdleTime() {
     synchronized (this) {
       return (System.nanoTime() - this.idleStartTimeNanos) / ONE_MILLION;
+    }
+  }
+
+  /**
+   * Gets the total number of leases that have been granted over the lifetime
+   * of this {@link ConnectionPool}.
+   *
+   * @return The total number of leases that have been granted over the lifetime
+   *         of this {@link ConnectionPool}.
+   */
+  public long getLifetimeLeaseCount() {
+    synchronized (this) {
+      return this.totalLeaseCount;
     }
   }
 

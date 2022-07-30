@@ -1,6 +1,7 @@
 package com.senzing.sql;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
@@ -210,9 +211,12 @@ class PooledConnectionHandler implements InvocationHandler {
         default:
           // check if the connection is already closed
           if (open) {
-            // if not closed then delegate to the backing object
-            result = method.invoke(this.backingObject, args);
-
+            try {
+              // if not closed then delegate to the backing object
+              result = method.invoke(this.backingObject, args);
+            } catch (InvocationTargetException e) {
+              throw e.getTargetException();
+            }
           } else {
             // if closed then throw an exception
             throw new SQLException("Connection already closed.");
@@ -220,7 +224,11 @@ class PooledConnectionHandler implements InvocationHandler {
       }
     } else {
       // just call the method on the backing object
-      result = method.invoke(this.backingObject, args);
+      try {
+        result = method.invoke(this.backingObject, args);
+      } catch (InvocationTargetException e) {
+        throw e.getTargetException();
+      }
     }
 
     // check the result
