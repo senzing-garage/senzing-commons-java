@@ -360,9 +360,9 @@ public class ConnectionPoolTest {
       assertEquals(minPoolSize, pool.getGreatestPoolSize(),
                    "Greatest pool size not as expected: " + info);
       assertNull(pool.getExpiredConnectionCount(),
-                 "Expired connection count s not null: " + info);
+                 "Expired connection count is not null: " + info);
       assertNull(pool.getRetiredConnectionCount(),
-                 "Retired connection count s not null: " + info);
+                 "Retired connection count is not null: " + info);
       assertNull(pool.getAverageAcquisitionTime(),
                  "Average acquisition time is not initially null: "
                      + info);

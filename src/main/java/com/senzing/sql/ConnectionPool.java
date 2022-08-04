@@ -200,6 +200,12 @@ public class ConnectionPool {
   private Connector connector = null;
 
   /**
+   * The {@link TransactionIsolation} level to set on the {@link Connection}
+   * before returning it, or <code>null</code> if none is to be set.
+   */
+  private TransactionIsolation isolationLevel = null;
+
+  /**
    * The {@link List} of all {@link PooledConnection} instances managed by
    * the pool.
    */
@@ -506,7 +512,7 @@ public class ConnectionPool {
    *                  connections.
    * @param poolSize  The number of connections to initialize the connection
    *                  pool with.
-   * @throws SQLException If a failure occurs in establishing a connection.
+   * @throws SQLException             If a failure occurs in establishing a connection.
    * @throws IllegalArgumentException If the specified pool size is less-than
    *                                  or equal-to zero (0).
    * @throws NullPointerException     If the specified {@link Connector} is
@@ -514,7 +520,31 @@ public class ConnectionPool {
    */
   public ConnectionPool(Connector connector, int poolSize)
       throws SQLException, IllegalArgumentException, NullPointerException {
-    this(connector, poolSize, poolSize);
+    this(connector, null, poolSize);
+  }
+
+  /**
+   * Constructs with the {@link Connector} and the size of the connection pool.
+   *
+   * @param connector      The {@link Connector} for establishing new database
+   *                       connections.
+   * @param isolationLevel The {@link TransactionIsolation} level to ensure is
+   *                       set on each {@link Connection} before providing it,
+   *                       or <code>null</code> if the isolation level need not
+   *                       be verified and set.
+   * @param poolSize       The number of connections to initialize the connection
+   *                       pool with.
+   * @throws SQLException             If a failure occurs in establishing a connection.
+   * @throws IllegalArgumentException If the specified pool size is less-than
+   *                                  or equal-to zero (0).
+   * @throws NullPointerException     If the specified {@link Connector} is
+   *                                  <code>null</code>.
+   */
+  public ConnectionPool(Connector connector,
+                        TransactionIsolation isolationLevel,
+                        int poolSize)
+      throws SQLException, IllegalArgumentException, NullPointerException {
+    this(connector, isolationLevel, poolSize, poolSize);
   }
 
   /**
@@ -529,7 +559,7 @@ public class ConnectionPool {
    *                    connection pool with.
    * @param maxPoolSize The maximum number of connections that the pool can
    *                    grow to have.
-   * @throws SQLException If a failure occurs in establishing a connection.
+   * @throws SQLException             If a failure occurs in establishing a connection.
    * @throws IllegalArgumentException If the specified maximum pool size is
    *                                  less-than or equal-to zero (0), the
    *                                  minimum pool size is less-than zero (0),
@@ -542,7 +572,40 @@ public class ConnectionPool {
                         int minPoolSize,
                         int maxPoolSize)
       throws SQLException, IllegalArgumentException, NullPointerException {
-    this(connector, minPoolSize, maxPoolSize, 0, 0);
+    this(connector, null, minPoolSize, maxPoolSize);
+  }
+
+  /**
+   * Constructs with the specified {@link Connector} for establishing new
+   * JDBC connections, a minimum connection pool size and maximum connection
+   * pool size.  The pool will start at the minimum size and grow to the
+   * maximum size if demand for connections requires it.
+   *
+   * @param connector      The {@link Connector} for establishing new database
+   *                       connections.
+   * @param isolationLevel The {@link TransactionIsolation} level to ensure is
+   *                       set on each {@link Connection} before providing it,
+   *                       or <code>null</code> if the isolation level need not
+   *                       be verified and set.
+   * @param minPoolSize    The minimum number of connections to initialize the
+   *                       connection pool with.
+   * @param maxPoolSize    The maximum number of connections that the pool can
+   *                       grow to have.
+   * @throws SQLException             If a failure occurs in establishing a connection.
+   * @throws IllegalArgumentException If the specified maximum pool size is
+   *                                  less-than or equal-to zero (0), the
+   *                                  minimum pool size is less-than zero (0),
+   *                                  or the minimum pool size is greater-than
+   *                                  the maximum pool size.
+   * @throws NullPointerException     If the specified {@link Connector} is
+   *                                  <code>null</code>.
+   */
+  public ConnectionPool(Connector             connector,
+                        TransactionIsolation  isolationLevel,
+                        int                   minPoolSize,
+                        int                   maxPoolSize)
+      throws SQLException, IllegalArgumentException, NullPointerException {
+    this(connector, isolationLevel, minPoolSize, maxPoolSize, 0, 0);
   }
 
   /**
@@ -583,7 +646,56 @@ public class ConnectionPool {
                         int       minPoolSize,
                         int       maxPoolSize,
                         int       expireTime,
-                        int retireLimit)
+                        int       retireLimit)
+      throws SQLException, IllegalArgumentException, NullPointerException
+  {
+    this(connector, null, minPoolSize, maxPoolSize, expireTime, retireLimit);
+  }
+
+  /**
+   * Constructs with the specified {@link Connector} for establishing new
+   * JDBC connections, a minimum connection pool size and maximum connection
+   * pool size.  The pool will start at the minimum size and grow to the
+   * maximum size if demand for connections requires it.  Additionally, optional
+   * limits on the lifespan of a {@link Connection} (an expire time) and on the
+   * number of times a {@link Connection} will be leased (a retire count) can
+   * be specified as non-zero values to impose limits.
+   *
+   * @param connector The {@link Connector} for establishing new database
+   *                  connections.
+   * @param isolationLevel The {@link TransactionIsolation} level to ensure is
+   *                       set on each {@link Connection} before providing it,
+   *                       or <code>null</code> if the isolation level need not
+   *                       be verified and set.
+   * @param minPoolSize The minimum number of connections to initialize the
+   *                    connection pool with.
+   * @param maxPoolSize The maximum number of connections that the pool can
+   *                    grow to have.
+   * @param expireTime The maximum number of <b>seconds</b> that a
+   *                   {@link Connection} will be used before it is closed and
+   *                   replaced, or zero (0) then {@link Connection} instances
+   *                   will not be expired based on time.
+   * @param retireLimit The maximum number of times a {@link Connection}
+   *                    will be leased before it is closed and replaced, or
+   *                    zero (0) if {@link Connection} instances should not be
+   *                    retired after exceeding a number of leases.
+   * @throws SQLException If a failure occurs in establishing a connection.
+   * @throws IllegalArgumentException If the specified maximum pool size is
+   *                                  less-than or equal-to zero (0), the
+   *                                  minimum pool size is less-than zero (0),
+   *                                  or the minimum pool size is greater-than
+   *                                  the maximum pool size or if the maximum
+   *                                  lifespan or number of leases are less-than
+   *                                  or equal-to zero (0).
+   * @throws NullPointerException If the specified {@link Connector} is
+   *                              <code>null</code>.
+   */
+  public ConnectionPool(Connector             connector,
+                        TransactionIsolation  isolationLevel,
+                        int                   minPoolSize,
+                        int                   maxPoolSize,
+                        int                   expireTime,
+                        int                   retireLimit)
       throws SQLException, IllegalArgumentException, NullPointerException
   {
     // check if the connector is null
@@ -622,11 +734,12 @@ public class ConnectionPool {
     }
 
     // set the fields
-    this.connector    = connector;
-    this.minPoolSize  = minPoolSize;
-    this.maxPoolSize  = maxPoolSize;
-    this.expireTime   = (expireTime * 1000);
-    this.retireLimit  = retireLimit;
+    this.connector      = connector;
+    this.isolationLevel = isolationLevel;
+    this.minPoolSize    = minPoolSize;
+    this.maxPoolSize    = maxPoolSize;
+    this.expireTime     = (expireTime * 1000);
+    this.retireLimit    = retireLimit;
 
     // loop through and populate the initial connections
     this.allConnections = new IdentityHashMap<>();
@@ -660,6 +773,19 @@ public class ConnectionPool {
 
     // initialize the idle start time
     this.idleStartTimeNanos = System.nanoTime();
+  }
+
+  /**
+   * Gets the {@link TransactionIsolation} level that is ensured on the
+   * {@link Connection} instances when they are acquired.  This returns
+   * <code>null</code> if no isolation level is being enforced.
+   *
+   * @return The {@link TransactionIsolation} level that is ensured on the
+   *         {@link Connection} instances when they are acquired, or
+   *         <code>null</code> if none is enforced.
+   */
+  public TransactionIsolation getIsolationLevel() {
+    return this.isolationLevel;
   }
 
   /**
@@ -908,8 +1034,16 @@ public class ConnectionPool {
       return null;
     }
 
+    // get the connection
+    Connection conn = acquired.getConnection();
+
     // ensure auto-commit is turned off
-    acquired.getConnection().setAutoCommit(false);
+    if (conn.getAutoCommit()) conn.setAutoCommit(false);
+
+    // check isolation level
+    if (this.getIsolationLevel() != null) {
+      this.getIsolationLevel().applyTo(conn);
+    }
 
     // return the proxied connection
     return acquired.getCurrentLeaseHandler().getProxiedConnection();
