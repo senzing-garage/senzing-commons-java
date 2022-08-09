@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `com.senzing.sql.Connector` interface
 - Added `com.senzing.sql.SQLiteConnector` class
 - Added `com.senzing.sql.PostgreSqlConnector` class
+- Added `com.senzing.naming.Registry` class
 - Modified `com.senzing.util.ZipUtilities` with new compression methods
 - Updated dependencies to newer versions:
   - Updated ICU4j to version `71.1`
