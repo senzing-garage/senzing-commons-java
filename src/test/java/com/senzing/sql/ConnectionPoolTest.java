@@ -395,8 +395,8 @@ public class ConnectionPoolTest {
           assertNotNull(conn, "Connection not acquired.  index=[ "
               + index + " ], " + info);
           leased.add(conn);
-          assertTrue((elapsed < 100L),
-                     "Blocked for more than 100ms (" + elapsed
+          assertTrue((elapsed < 200L),
+                     "Blocked for more than 200ms (" + elapsed
                          + "ms) waiting for a connection.  index=[ "
                          + index + " ], " + info);
         }
@@ -554,8 +554,8 @@ public class ConnectionPoolTest {
           assertNotNull(conn, "Connection not acquired.  index=[ "
               + index + " ], " + info);
           leased.add(conn);
-          assertTrue((elapsed < 100L),
-                     "Blocked for more than 100ms (" + elapsed
+          assertTrue((elapsed < 200L),
+                     "Blocked for more than 200ms (" + elapsed
                          + "ms) waiting for a connection.  index=[ "
                          + index + " ], " + info);
         }
