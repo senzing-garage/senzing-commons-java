@@ -877,7 +877,7 @@ public class CommandLineUtilities {
       // get the option parameters
       int minParamCount = option.getMinimumParameterCount();
       int maxParamCount = option.getMaximumParameterCount();
-      if (maxParamCount > 0 && maxParamCount < minParamCount) {
+      if (maxParamCount >= 0 && maxParamCount < minParamCount) {
         throw new IllegalStateException(
             "The non-negative maximum parameter count is less than the minimum "
             + "parameter count.  min=[ " + minParamCount + " ], max=[ "
@@ -958,7 +958,7 @@ public class CommandLineUtilities {
         }
 
         // check if too many parameters
-        if (params.size() > maxParamCount) {
+        if (maxParamCount >= 0 && params.size() > maxParamCount) {
           throw new BadOptionParameterCountException(
               COMMAND_LINE, option, flag, params);
         }
