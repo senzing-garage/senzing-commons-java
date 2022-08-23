@@ -1117,8 +1117,22 @@ public class CommandLineUtilities {
                        optionValues,
                        false);
 
+    // create a set if fallback options to check
+    Set<CommandLineOption> fallbackOptions = new LinkedHashSet<>();
+
+    // check fallbacks for primary options if not specified otherwise
+    Set<CommandLineOption> primaryOptions = getPrimaryOptions(enumClass);
+    for (CommandLineOption primaryOption : primaryOptions) {
+      // check if not contained
+      if (!optionValues.containsKey(primaryOption)) {
+        List<String> fallbacks = primaryOption.getEnvironmentFallbacks();
+        if (fallbacks != null && fallbacks.size() > 0) {
+          fallbackOptions.add(primaryOption);
+        }
+      }
+    }
+
     Set<? extends CommandLineOption>  optionKeys      = optionValues.keySet();
-    Set<CommandLineOption>            fallbackOptions = new LinkedHashSet<>();
     for (CommandLineOption option : optionKeys) {
       // get the dependency sets
       Set<Set<CommandLineOption>> dependencySets = option.getDependencies();
