@@ -1376,6 +1376,21 @@ public class JsonUtilities {
   }
 
   /**
+   * Parses JSON text as a {@link JsonValue}.  If the specified text is not
+   * formatted as a JSON then an exception will be thrown.
+   *
+   * @param jsonText The JSON text to be parsed.
+   *
+   * @return The parsed {@link JsonValue}.
+   */
+  public static JsonValue parseValue(String jsonText) {
+    if (jsonText == null) return null;
+    StringReader sr = new StringReader(jsonText);
+    JsonReader jsonReader = Json.createReader(sr);
+    return jsonReader.readValue();
+  }
+
+  /**
    * Parses JSON text as a {@link JsonObject}.  If the specified text is not
    * formatted as a JSON object then an exception will be thrown.
    *
