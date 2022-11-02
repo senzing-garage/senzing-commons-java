@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.1.0] - 2022-08-09
+## [3.1.0] - 2022-12-01
 
 ### Changed in 3.1.0
 
@@ -28,6 +28,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated Maven Compiler Plugin to version `3.10.1`
   - Updated Maven Javadoc Plugin to version `3.4.0`
   - Updated Nexus Staging Maven Plugin to version `1.6.13`
+
+## [3.0.2] - 2022-11-01
+
+### Changed in 3.0.2
+- Updated RecordReader to handle surrounding spaces around quoted strings in
+  CSV records
+- Updated RecordReaderTest to test for surrounding spaces, leading spaces and
+  trailing spaces for quoted strings
+- Added JsonUtilities.parseValue() method
+- Updated Apache Commons CSV to version 1.9.0
+- Changed usage of CSVFormat to CSVFormat.Builder (in according with v1.9.0)
 
 ## [3.0.1] - 2022-08-23
 
