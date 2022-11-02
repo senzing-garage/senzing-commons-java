@@ -5,9 +5,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParserFactory;
 import javax.json.stream.JsonParsingException;
@@ -714,8 +712,9 @@ public class RecordReader {
     private Long errorLineNumber = null;
 
     public CsvRecordProvider(Reader reader) {
-      CSVFormat csvFormat = CSVFormat.DEFAULT
-          .withFirstRecordAsHeader().withIgnoreEmptyLines(true).withTrim(true);
+      CSVFormat csvFormat = CSVFormat.Builder.create(CSVFormat.DEFAULT)
+          .setHeader().setSkipHeaderRecord(true).setIgnoreEmptyLines(true)
+          .setTrim(true).setIgnoreSurroundingSpaces(true).build();
 
       try {
         this.parser = new CSVParser(reader, csvFormat);
@@ -747,6 +746,7 @@ public class RecordReader {
             entryIter.remove();
           }
         }
+
         @SuppressWarnings("unchecked")
         Map<String,Object> map = (Map) recordMap;
 

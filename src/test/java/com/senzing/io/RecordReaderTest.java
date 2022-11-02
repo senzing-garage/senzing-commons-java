@@ -11,10 +11,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.json.*;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,9 +92,9 @@ public class RecordReaderTest {
       pw.print(JsonUtilities.getString(obj, "DATA_SOURCE", ""));
       pw.print(",");
       pw.print(obj.getString("NAME_FIRST"));
-      pw.print(",");
+      pw.print("     ,    ");
       pw.print(obj.getString("NAME_LAST"));
-      pw.print(",");
+      pw.print(",  ");
       pw.print(obj.getString("PHONE_NUMBER"));
       pw.println();
     }
@@ -111,7 +108,7 @@ public class RecordReaderTest {
     pw.println("NAME_FIRST,NAME_LAST,PHONE_NUMBER");
     for (JsonObject obj: this.recordsSansDS) {
       pw.print(obj.getString("NAME_FIRST"));
-      pw.print(",");
+      pw.print("  ,  ");
       pw.print(obj.getString("NAME_LAST"));
       pw.print(",");
       pw.print(obj.getString("PHONE_NUMBER"));
@@ -154,6 +151,60 @@ public class RecordReaderTest {
     pw.flush();
 
     this.jsonLinesRecordsSansDS = sw.toString();
+  }
+
+
+  @Test
+  public void testSurroundingSpacesInCSV() {
+    String  CSV_SPEC      = "text/csv";
+
+    StringWriter sw  = new StringWriter();
+    PrintWriter  pw  = new PrintWriter(sw);
+
+    pw.println("RECORD_ID,DATA_SOURCE,NAME_FULL,PHONE_NUMBER");
+    pw.println("ABC123,\"CUSTOMER\"  ,\"JOE SCHMOE\"  ,702-555-1212");
+    pw.println("DEF456,  \"CUSTOMER\",  \"JOHN DOE\",702-555-1313");
+    pw.println("GHI789,  \"CUSTOMER\"  ,  \"JANE SMITH\"  ,702-555-1313");
+    pw.flush();
+
+    String        csvText = sw.toString();
+    StringReader  sr      = new StringReader(csvText);
+    try {
+      RecordReader rr = new RecordReader(sr);
+      assertEquals(CSV, rr.getFormat(),
+                   "Record format is not as expected for records: "
+                       + csvText);
+
+      // test first record
+      JsonObject record1 = rr.readRecord();
+      assertNotNull(record1);
+      assertEquals("ABC123", record1.getString("RECORD_ID"));
+      assertEquals("CUSTOMER", record1.getString("DATA_SOURCE"));
+      assertEquals("JOE SCHMOE", record1.getString("NAME_FULL"));
+
+      // test the second record
+      JsonObject record2 = rr.readRecord();
+      assertNotNull(record2);
+      assertEquals("DEF456", record2.getString("RECORD_ID"));
+      assertEquals("CUSTOMER", record2.getString("DATA_SOURCE"));
+      assertEquals("JOHN DOE", record2.getString("NAME_FULL"));
+
+      // test the third record
+      JsonObject record3 = rr.readRecord();
+      assertNotNull(record3);
+      assertEquals("GHI789", record3.getString("RECORD_ID"));
+      assertEquals("CUSTOMER", record3.getString("DATA_SOURCE"));
+      assertEquals("JANE SMITH", record3.getString("NAME_FULL"));
+
+      // test the end of records
+      JsonObject record4 = rr.readRecord();
+      assertNull(record4);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+      fail("Failed with I/O exception", e);
+    }
+
   }
 
   @Test

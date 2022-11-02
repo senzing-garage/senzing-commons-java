@@ -29,6 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated Maven Javadoc Plugin to version `3.4.0`
   - Updated Nexus Staging Maven Plugin to version `1.6.13`
 
+## [3.0.1] - 2022-08-23
+
+### Changed in 3.0.1
+- Fixed a bug in `CommandLineUtilities.java` that prevented primary options
+  (typically options with no dependencies) from using fallback environment
+  variables.
+
 ## [3.0.0] - 2022-05-04
 
 ### Changed in 3.0.0
