@@ -63,18 +63,37 @@ public class MissingDependenciesException extends SpecifiedOptionException {
   {
     StringWriter  sw = new StringWriter();
     PrintWriter   pw = new PrintWriter(sw);
-    pw.println();
 
     String sourceDescriptor
         = SpecifiedOption.sourceDescriptor(source, option, specifier);
 
-    pw.println("Dependent options for the" + sourceDescriptor
+    pw.println("Dependent options for the " + sourceDescriptor
                    + " are missing.");
     pw.println("The " + sourceDescriptor + " also requires:");
 
     Set<Set<CommandLineOption>> dependencies = option.getDependencies();
-    if (dependencies.size() == 1) {
-      Set<CommandLineOption> dependencySet = dependencies.iterator().next();
+    String prefix = null;
+    for (Set<CommandLineOption> dependencySet : dependencies) {
+      boolean conflicting = false;
+      // ignore dependency sets that conflict with other specified options
+      for (CommandLineOption specifiedOption: specifiedOptions) {
+        Set<CommandLineOption> conflicts = specifiedOption.getConflicts();
+        if (conflicts != null) {
+          for (CommandLineOption conflict : conflicts) {
+            if (dependencySet.contains(conflict)) {
+              conflicting = true;
+              break;
+            }
+          }
+        }
+        if (conflicting) break;
+      }
+      if (conflicting) continue;
+      pw.println();
+      if (prefix != null) {
+        pw.println(prefix);
+        pw.println();
+      }
       for (CommandLineOption dependency : dependencySet) {
         if (!specifiedOptions.contains(dependency)) {
           pw.print("     o " + dependency.getCommandLineFlag());
@@ -84,34 +103,8 @@ public class MissingDependenciesException extends SpecifiedOptionException {
           pw.println();
         }
       }
-
-    } else {
-      String leader = "     o ";
-      for (Set<CommandLineOption> dependencySet : dependencies) {
-        String prefix = "";
-        String prevOption = null;
-        pw.print(leader);
-        leader = "  or ";
-        for (CommandLineOption dependency : dependencySet) {
-          int count = 0;
-          if (!specifiedOptions.contains(dependency)) {
-            if (prevOption != null) {
-              count++;
-              pw.print(prefix + prevOption);
-            }
-            prevOption = dependency.getCommandLineFlag();
-            if (dependency.getEnvironmentVariable() != null) {
-              prevOption += " (env: " + dependency.getEnvironmentVariable()
-                  + ")";
-            }
-            prefix = ", ";
-          }
-          if (count > 0) {
-            pw.print(" and ");
-          }
-          pw.println(prevOption);
-        }
-      }
+      prefix = "     ==================================  OR  "
+          + "==================================";
     }
 
     pw.flush();
