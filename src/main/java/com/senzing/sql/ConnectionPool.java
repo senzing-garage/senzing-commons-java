@@ -1,12 +1,14 @@
 package com.senzing.sql;
 
+import com.senzing.util.Quantified;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
-import static com.senzing.sql.ConnectionPool.Statistic.*;
+import static com.senzing.sql.ConnectionPool.Stat.*;
 
 /**
  * Provides a pool for JDBC {@link Connection} instances.  The pool can
@@ -15,7 +17,7 @@ import static com.senzing.sql.ConnectionPool.Statistic.*;
  * have a maximum lifespan and a maximum number of uses before being
  * replaced with a new {@link Connection}.
  */
-public class ConnectionPool {
+public class ConnectionPool implements Quantified {
   /**
    * Constant for converting between nanoseconds and milliseconds.
    */
@@ -350,7 +352,7 @@ public class ConnectionPool {
   /**
    * Enumerates the statistics associated with a {@link ConnectionPool}.
    */
-  public enum Statistic {
+  public enum Stat implements Statistic {
     /**
      * The minimum number of {@link Connection} instances maintained
      * in the {@link ConnectionPool}.
@@ -486,7 +488,7 @@ public class ConnectionPool {
      *
      * @param units The units for the statistics.
      */
-    Statistic(String units) {
+    Stat(String units) {
       this.units = units;
     }
 
@@ -495,6 +497,7 @@ public class ConnectionPool {
      *
      * @return The description of the units for the statistic.
      */
+    @Override
     public String getUnits() {
       return this.units;
     }
@@ -789,32 +792,32 @@ public class ConnectionPool {
   }
 
   /**
-   * Gets the statistics for this instance as a {@link Map} of {@link Statistic}
+   * Gets the statistics for this instance as a {@link Map} of {@link Stat}
    * keys to {@link Number} values.
    *
    * @return The statistics for this instance as a {@link Map} of {@link
-   * Statistic} keys to {@link Number} values.
+   * Stat} keys to {@link Number} values.
    */
   public Map<Statistic, Number> getStatistics() {
     Map<Statistic, Number> result = new LinkedHashMap<>();
     synchronized (this) {
       putStat(result, minimumSize, this.getMinimumSize());
       putStat(result, maximumSize, getMaximumSize());
-      putStat(result, Statistic.expireTime, this.getExpireTime());
-      putStat(result, Statistic.retireLimit, this.getRetireLimit());
-      putStat(result, Statistic.greatestLeasedCount,
+      putStat(result, Stat.expireTime, this.getExpireTime());
+      putStat(result, Stat.retireLimit, this.getRetireLimit());
+      putStat(result, Stat.greatestLeasedCount,
               this.getGreatestLeasedCount());
       putStat(result, averageLeasedCount, this.getAverageLeasedCount());
-      putStat(result, Statistic.greatestPoolSize, this.getGreatestPoolSize());
+      putStat(result, Stat.greatestPoolSize, this.getGreatestPoolSize());
       putStat(result, expiredConnections, this.getExpiredConnectionCount());
       putStat(result, retiredConnections, this.getRetiredConnectionCount());
       putStat(result, averageAcquireTime, this.getAverageAcquisitionTime());
       putStat(result, greatestAcquireTime, this.getGreatestAcquisitionTime());
-      putStat(result, Statistic.greatestLeaseTime, this.getGreatestLeaseTime());
+      putStat(result, Stat.greatestLeaseTime, this.getGreatestLeaseTime());
       putStat(result, averageLeaseTime, this.getAverageLeaseTime());
       putStat(result, lifetimeLeaseCount, this.getLifetimeLeaseCount());
       putStat(result, currentPoolSize, this.getCurrentPoolSize());
-      putStat(result, Statistic.availableConnections,
+      putStat(result, Stat.availableConnections,
               this.getAvailableConnectionCount());
       putStat(result, outstandingLeases, this.getOutstandingLeaseCount());
       putStat(result, greatestOutstandingLeaseTime,
@@ -827,7 +830,7 @@ public class ConnectionPool {
   }
 
   /**
-   * Puts a {@link Statistic} key and {@link Number} value in the specified
+   * Puts a {@link Stat} key and {@link Number} value in the specified
    * {@link Map} if the specified value is not <code>null</code>.  It does
    * nothing if the value is <code>null</code>.
    *
@@ -836,7 +839,7 @@ public class ConnectionPool {
    * @param value The value to associate with the key.
    */
   private static void putStat(Map<Statistic, Number>  map,
-                              Statistic               key,
+                              Stat                    key,
                               Number                  value)
   {
     if (value == null) return;

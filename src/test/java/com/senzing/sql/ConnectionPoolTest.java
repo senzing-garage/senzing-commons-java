@@ -20,7 +20,8 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static com.senzing.sql.ConnectionPool.*;
-import static com.senzing.sql.ConnectionPool.Statistic.*;
+import static com.senzing.sql.ConnectionPool.Stat.*;
+import static com.senzing.util.Quantified.*;
 
 /**
  * Tests for {@link ConnectionPool}.
@@ -917,7 +918,7 @@ public class ConnectionPoolTest {
       long startTime2 = System.nanoTime();
       Thread.sleep(50L);
       long lowerLimit = (System.nanoTime() - startTime2) / ONE_MILLION;
-      Map<ConnectionPool.Statistic, Number> statsMap = pool.getStatistics();
+      Map<Statistic, Number> statsMap = pool.getStatistics();
 
       assertEquals(minPoolSize, statsMap.get(minimumSize),
                    "Minimum pool size is not as expected: " + info);
@@ -926,11 +927,11 @@ public class ConnectionPoolTest {
                    "Maximum pool size is not as expected: " + info);
 
       if (retireLimit == 0) {
-        assertFalse(statsMap.containsKey(Statistic.retireLimit),
+        assertFalse(statsMap.containsKey(Stat.retireLimit),
                     "Retire limit unexpectedly present in map: "
                     + info);
       } else {
-        assertEquals(retireLimit, statsMap.get(Statistic.retireLimit),
+        assertEquals(retireLimit, statsMap.get(Stat.retireLimit),
                      "Maximum connection leases not as expected: " + info);
       }
       if (expireSeconds == 0) {
@@ -1049,11 +1050,11 @@ public class ConnectionPoolTest {
                    "Maximum pool size is not as expected: " + info);
 
       if (retireLimit == 0) {
-        assertFalse(statsMap.containsKey(Statistic.retireLimit),
+        assertFalse(statsMap.containsKey(Stat.retireLimit),
                     "Retire limit unexpectedly present in map: "
                         + info);
       } else {
-        assertEquals(retireLimit, statsMap.get(Statistic.retireLimit),
+        assertEquals(retireLimit, statsMap.get(Stat.retireLimit),
                      "Maximum connection leases not as expected: " + info);
       }
       if (expireSeconds == 0) {
