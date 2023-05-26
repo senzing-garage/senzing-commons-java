@@ -1,5 +1,7 @@
 package com.senzing.sql;
 
+import com.senzing.util.Timers;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -9,6 +11,11 @@ import java.util.Objects;
  * ConnectionPool} with an optional maximum wait time.
  */
 public class PoolConnectionProvider implements ConnectionProvider {
+  /**
+   * Constant used for converting nano seconds to milliseconds.
+   */
+  private static final long ONE_MILLION = 1000000L;
+
   /**
    * The {@link ConnectionPool} to back this instance.
    */
@@ -65,11 +72,14 @@ public class PoolConnectionProvider implements ConnectionProvider {
    * @throws SQLException If a failure occurs.
    */
   public Connection getConnection() throws SQLException {
-    Connection conn =this.pool.acquire(this.getMaximumWaitTime());
+    long startTime = System.nanoTime();
+    Connection conn = this.pool.acquire(this.getMaximumWaitTime());
+    long elapsedMillis = (System.nanoTime() - startTime) / ONE_MILLION;
     if (conn == null) {
       throw new SQLException(
           "The connection could not be obtained within the allotted time.  "
-          + "maximumWait=[ " + this.getMaximumWaitTime() + " ]");
+          + "maximumWait=[ " + this.getMaximumWaitTime() + " ], elapsed=[ "
+              + elapsedMillis + " ]");
     }
     return conn;
   }
