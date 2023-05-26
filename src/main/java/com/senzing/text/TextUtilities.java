@@ -1,10 +1,19 @@
 package com.senzing.text;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.senzing.io.IOUtilities.UTF_8;
+
+
+/**
+ * Provides text utility functions.
+ */
 public class TextUtilities {
   /**
    * The random number generator to use for generating encryption keys.
@@ -123,5 +132,35 @@ public class TextUtilities {
       sb.append(allowedChars.get(PRNG.nextInt(max)));
     }
     return sb.toString();
+  }
+
+  /**
+   * URL encodes the specified text using UTF-8 encoding.
+   *
+   * @param text The text to be encoded.
+   *
+   * @return The encoded text.
+   */
+  public static String urlEncodeUtf8(String text) {
+    try {
+      return URLEncoder.encode(text, UTF_8);
+    } catch (UnsupportedEncodingException cannotHappen) {
+      throw new IllegalStateException("UTF-8 encoding was not supported");
+    }
+  }
+
+  /**
+   * URL decodes the specified text using UTF-8 encoding.
+   *
+   * @param encodedText The text to be decoded.
+   *
+   * @return The decoded text.
+   */
+  public static String urlDecodeUtf8(String encodedText) {
+    try {
+      return URLDecoder.decode(encodedText, UTF_8);
+    } catch (UnsupportedEncodingException cannotHappen) {
+      throw new IllegalStateException("UTF-8 encoding was not supported");
+    }
   }
 }
