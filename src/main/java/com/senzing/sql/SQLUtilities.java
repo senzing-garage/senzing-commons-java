@@ -830,7 +830,9 @@ public class SQLUtilities {
   }
 
   /**
+   * The test main function for this class.
    *
+   * @param args The command-line arguments.
    */
   public static void main(String[] args) {
     try {
