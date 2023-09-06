@@ -2,6 +2,7 @@ package com.senzing.util;
 
 import com.senzing.g2.engine.G2Fallible;
 
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Instant;
@@ -14,6 +15,16 @@ import java.util.Map;
  * Provides logging utilities.
  */
 public class LoggingUtilities {
+  /**
+   * Used for good measure to avoid interlacing of out debug output.
+   */
+  private static final Object STDOUT_MONITOR = new Object();
+
+  /**
+   * Used for good measure to avoid interlacing of out debug output.
+   */
+  private static final Object STDERR_MONITOR = new Object();
+
   /**
    * The date-time pattern for the build number.
    */
@@ -91,6 +102,16 @@ public class LoggingUtilities {
           return PRODUCT_ID_MAP.get(packageName);
         }
 
+        // check if the package name begins with com.senzing and get next part
+        int prefixLength = "com.senzing.".length();
+        if (packageName.startsWith("com.senzing.")
+            && packageName.length() > prefixLength)
+        {
+          int index = packageName.indexOf(".", prefixLength);
+          if (index < 0) index = packageName.length();
+          return packageName.substring(prefixLength, index);
+        }
+
         // strip off the last part of the package name
         int index = packageName.lastIndexOf('.');
         if (index <= 0) break;
@@ -117,16 +138,119 @@ public class LoggingUtilities {
   }
 
   /**
+   * Produces a single or multi-line error log message with a consistent prefix
+   * and timestamp.
+   *
+   * @param lines The lines of text to log, which may be objects that will be
+   *              converted to text via {@link Object#toString()}.
+   */
+  public static void logError(Object... lines)
+  {
+    log(System.err, STDERR_MONITOR, "ERROR", lines, null);
+  }
+
+  /**
+   * Produces a multi-line error log message with a consistent prefix
+   * and timestamp that will conclude with the stack trace for the specified
+   * {@link Throwable}.
+   *
+   * @param throwable The {@link Throwable} whose stack trace should be logged.
+   * @param lines The lines of text to log, which may be objects that will be
+   *              converted to text via {@link Object#toString()}.
+   */
+  public static void logError(Throwable throwable, Object... lines)
+  {
+    log(System.err, STDERR_MONITOR, "ERROR", lines, throwable);
+  }
+
+  /**
+   * Produces a single or multi-line warning log message with a consistent
+   * prefix and timestamp.
+   *
+   * @param lines The lines of text to log, which may be objects that will be
+   *              converted to text via {@link Object#toString()}.
+   */
+  public static void logWarning(Object... lines)
+  {
+    log(System.err, STDERR_MONITOR, "WARNING", lines, null);
+  }
+
+  /**
+   * Produces a multi-line warning log message with a consistent prefix
+   * and timestamp that will conclude with the stack trace for the specified
+   * {@link Throwable}.
+   *
+   * @param throwable The {@link Throwable} whose stack trace should be logged.
+   * @param lines The lines of text to log, which may be objects that will be
+   *              converted to text via {@link Object#toString()}.
+   */
+  public static void logWarning(Throwable throwable, Object... lines)
+  {
+    log(System.err, STDERR_MONITOR, "WARNING", lines, throwable);
+  }
+
+  /**
+   * Produces a single or multi-line error log message with a consistent prefix
+   * and timestamp.
+   *
+   * @param lines The lines of text to log, which may be objects that will be
+   *              converted to text via {@link Object#toString()}.
+   */
+  public static void logInfo(Object... lines)
+  {
+    log(System.out, STDOUT_MONITOR, "INFO", lines, null);
+  }
+
+  /**
    * Produces a single or multi-line debug message with a consistent prefix
    * and timestamp IF {@linkplain #isDebugLogging() debug logging} is turned on.
    *
-   * @param lines The lines of text to log.
+   * @param lines The lines of text to log, which may be objects that will be
+   *              converted to text via {@link Object#toString()}.
    */
-  public static void debugLog(String... lines) {
+  public static void logDebug(Object... lines)
+  {
     if (!isDebugLogging()) return;
+    log(System.out, STDOUT_MONITOR, "DEBUG", lines, null);
+  }
+
+  /**
+   * Produces a single or multi-line debug message with a consistent prefix
+   * and timestamp IF {@linkplain #isDebugLogging() debug logging} is turned on.
+   *
+   * @param lines The lines of text to log, which may be objects that will be
+   *              converted to text via {@link Object#toString()}.
+   * @deprecated Use {@link #logDebug(Object...)} instead.
+   * @see #logDebug(Object...)
+   */
+  public static void debugLog(String... lines)
+  {
+    if (!isDebugLogging()) return;
+    log(System.out, STDOUT_MONITOR, "DEBUG", lines, null);
+  }
+
+  /**
+   * Produces a single or multi-line log message with a consistent prefix
+   * and timestamp using the specified {@link PrintStream}, {@link Object} to
+   * synchronize on, {@link String} log type and lines of text to log.
+   *
+   * @param ps The {@link PrintStream} to write to.
+   * @param monitor The {@link Object} to synchronize on when writing and
+   *                flushing the {@link PrintStream}.
+   * @param logType The logging type such as <code>"DEBUG"</code> or
+   *                <code>"ERROR"</code>.
+   * @param lines The lines of text to log.
+   * @param throwable The exception to log.
+   */
+  private static void log(PrintStream ps,
+                          Object      monitor,
+                          String      logType,
+                          Object[]    lines,
+                          Throwable   throwable)
+  {
     Thread currentThread = Thread.currentThread();
     StackTraceElement[] stackTrace = currentThread.getStackTrace();
-    StackTraceElement caller = stackTrace[2];
+    StackTraceElement caller = stackTrace[3];
     String callingClass = caller.getClassName();
     int index = callingClass.lastIndexOf(".");
 
@@ -138,12 +262,26 @@ public class LoggingUtilities {
     StringBuilder sb = new StringBuilder();
     String timestamp
         = LOG_DATE_FORMATTER.format(Instant.now().atZone(LOG_DATE_ZONE));
-    sb.append(timestamp).append(" senzing-").append(productId).append("DEBUG")
-        .append(" [").append(callingClass).append(".")
+    sb.append(timestamp).append(" senzing-").append(productId)
+        .append(" (").append(logType).append(")")
+        .append(" [").append(Thread.currentThread().getId())
+        .append("|").append(callingClass).append(".")
         .append(caller.getMethodName()).append(":")
         .append(caller.getLineNumber()).append("] ")
         .append(multilineFormat(lines));
-    System.out.print(sb);
+
+    // handle the stack trace if a throwable is provided
+    if (throwable != null) {
+      StringWriter  sw = new StringWriter();
+      PrintWriter   pw = new PrintWriter(sw);
+      throwable.printStackTrace(pw);
+      sb.append(sw.toString());
+    }
+
+    synchronized (monitor) {
+      ps.print(sb);
+      ps.flush();
+    }
   }
 
   /**
@@ -153,11 +291,11 @@ public class LoggingUtilities {
    *
    * @return The formatted multiline {@link String}.
    */
-  public static String multilineFormat(String... lines) {
+  public static String multilineFormat(Object... lines) {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
-    for (String line : lines) {
-      pw.println(line);
+    for (Object line : lines) {
+      pw.println("" + line);
     }
     pw.flush();
     return sw.toString();

@@ -1,16 +1,247 @@
 package com.senzing.util;
 
+
 import java.io.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
+import java.util.Base64;
+import java.util.zip.*;
 
 import static com.senzing.io.IOUtilities.*;
 
 /**
- * Utilities for working with ZIP files.
+ * Utilities for working with ZIP files and ZIP-compressed data.
  */
 public class ZipUtilities {
+  /**
+   * Compresses the specified byte array using the deflater zlib compression
+   * algorithm.
+   *
+   * @param uncompressedData The byte array containing the uncompressed data.
+   * @return The compressed byte array.
+   */
+  public static byte[] zip(byte[] uncompressedData) {
+    try {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      try (DeflaterOutputStream dos = new DeflaterOutputStream(baos)) {
+        dos.write(uncompressedData, 0, uncompressedData.length);
+        dos.finish();
+      }
+      return baos.toByteArray();
+    } catch (IOException e) {
+      throw new IllegalStateException(
+          "IOException when using Byte-Array streams", e);
+    }
+  }
+
+  /**
+   * Decompresses the specified byte array using the inflater zlib compression
+   * algorithm.
+   *
+   * @param compressedData The byte array containing the compressed data.
+   * @return The uncompressed byte array.
+   */
+  public static byte[] unzip(byte[] compressedData) {
+    try {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      ByteArrayInputStream bais = new ByteArrayInputStream(compressedData);
+      byte[] buffer = new byte[8192];
+      try (InflaterInputStream iis = new InflaterInputStream(bais)) {
+        for (int readCount = iis.read(buffer);
+             readCount >= 0;
+             readCount = iis.read(buffer))
+        {
+          baos.write(buffer, 0, readCount);
+        }
+      }
+      return baos.toByteArray();
+    } catch (IOException e) {
+      throw new IllegalStateException(
+          "IOException when using Byte-Array streams", e);
+    }
+
+  }
+
+  /**
+   * Compresses the specified byte array using the deflater zlib compression
+   * algorithm and returns a Base-64 encoded {@link String}.
+   *
+   * @param uncompressedData The byte array containing the uncompressed data.
+   * @return The compressed data encoded as Base-64.
+   */
+  public static String zip64(byte[] uncompressedData) {
+    try {
+      byte[] data = zip(uncompressedData);
+      return new String(Base64.getEncoder().encode(data), UTF_8);
+
+    } catch (UnsupportedEncodingException e) {
+      throw new IllegalStateException(
+          "UTF-8 encoding not recognized", e);
+    }
+  }
+
+  /**
+   * Decompresses the specified Base-64 encoded {@link String} of compressed
+   * data using the inflater zlib compression algorithm.
+   *
+   * @param compressedBase64Data The base-64 encoded {@link String} containing
+   *                             the compressed data.
+   * @return The uncompressed byte array.
+   */
+  public static byte[] unzip64(String compressedBase64Data) {
+    byte[] compressedData = Base64.getDecoder().decode(compressedBase64Data);
+    return unzip(compressedData);
+  }
+
+  /**
+   * Compresses the specified text by converting it to UTF-8 bytes, compressing
+   * it with the deflater zlib compression algorithm and encoding the result
+   * in Base-64 encoding.
+   *
+   * @param uncompressedText The byte array containing the uncompressed data.
+   * @return The compressed byte array.
+   */
+  public static String zipText64(String uncompressedText) {
+    try {
+      return zip64(uncompressedText.getBytes(UTF_8));
+    } catch (UnsupportedEncodingException e) {
+      throw new IllegalStateException(
+          "UTF-8 encoding not recognized", e);
+    }
+
+  }
+
+  /**
+   * Decompresses the specified Base-64 encoded {@link String} of compressed
+   * data using the inflater zlib compression algorithm and returns the {@link
+   * String} built with the uncompressed data and UTF-8 encoding.
+   *
+   * @param compressedBase64Data The base-64 encoded {@link String} containing
+   *                             the compressed data.
+   * @return The uncompressed text reconstructed from the bytes using the
+   *         UTF-8 encoding.
+   */
+  public static String unzipText64(String compressedBase64Data) {
+    try {
+      byte[] data = unzip64(compressedBase64Data);
+      return new String(data, UTF_8);
+    } catch (UnsupportedEncodingException e) {
+      throw new IllegalStateException(
+          "UTF-8 encoding not recognized", e);
+    }
+  }
+
+  /**
+   * Compresses the specified byte array using the GZip compression algorithm.
+   *
+   * @param uncompressedData The byte array containing the uncompressed data.
+   * @return The compressed byte array.
+   */
+  public static byte[] gzip(byte[] uncompressedData) {
+    try {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      try (GZIPOutputStream gzos = new GZIPOutputStream(baos)) {
+        gzos.write(uncompressedData, 0, uncompressedData.length);
+        gzos.finish();
+      }
+      return baos.toByteArray();
+    } catch (IOException e) {
+      throw new IllegalStateException(
+          "IOException when using Byte-Array streams", e);
+    }
+  }
+
+  /**
+   * Decompresses the specified byte array using the GZip compression algorithm.
+   *
+   * @param compressedData The byte array containing the compressed data.
+   * @return The uncompressed byte array.
+   */
+  public static byte[] gunzip(byte[] compressedData) {
+    try {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      ByteArrayInputStream bais = new ByteArrayInputStream(compressedData);
+      byte[] buffer = new byte[8192];
+      try (GZIPInputStream gzis = new GZIPInputStream(bais)) {
+        for (int readCount = gzis.read(buffer);
+             readCount >= 0;
+             readCount = gzis.read(buffer)) {
+          baos.write(buffer, 0, readCount);
+        }
+      }
+      return baos.toByteArray();
+
+    } catch (IOException e) {
+      throw new IllegalStateException(
+          "IOException when using Byte-Array streams", e);
+    }
+  }
+
+  /**
+   * Compresses the specified byte array using the GZip compression algorithm
+   * and returns a Base-64 encoded {@link String}.
+   *
+   * @param uncompressedData The byte array containing the uncompressed data.
+   * @return The compressed data encoded as Base-64.
+   */
+  public static String gzip64(byte[] uncompressedData) {
+    try {
+      byte[] data = gzip(uncompressedData);
+      return new String(Base64.getEncoder().encode(data), UTF_8);
+    } catch (UnsupportedEncodingException e) {
+      throw new IllegalStateException(
+          "UTF-8 encoding not recognized", e);
+    }
+  }
+
+  /**
+   * Decompresses the specified Base-64 encoded {@link String} of compressed
+   * data using the GZip compression algorithm.
+   *
+   * @param compressedBase64Data The base-64 encoded {@link String} containing
+   *                             the compressed data.
+   * @return The uncompressed byte array.
+   */
+  public static byte[] gunzip64(String compressedBase64Data) {
+    byte[] compressedData = Base64.getDecoder().decode(compressedBase64Data);
+    return gunzip(compressedData);
+  }
+
+  /**
+   * Compresses the specified text by converting it to UTF-8 bytes, compressing
+   * it with the GZip compression algorithm and encoding the result in Base-64
+   * encoding.
+   *
+   * @param uncompressedText The byte array containing the uncompressed data.
+   * @return The compressed byte array.
+   */
+  public static String gzipText64(String uncompressedText) {
+    try {
+      return gzip64(uncompressedText.getBytes(UTF_8));
+    } catch (UnsupportedEncodingException e) {
+      throw new IllegalStateException(
+          "UTF-8 encoding not recognized", e);
+    }
+  }
+
+  /**
+   * Decompresses the specified Base-64 encoded {@link String} of compressed
+   * data using the GZip compression algorithm and returns the {@link String}
+   * built with the uncompressed data and UTF-8 encoding.
+   *
+   * @param compressedBase64Data The base-64 encoded {@link String} containing
+   *                             the compressed data.
+   * @return The uncompressed text reconstructed from the bytes using the
+   *         UTF-8 encoding.
+   */
+  public static String gunzipText64(String compressedBase64Data) {
+    try {
+      byte[] data = gunzip64(compressedBase64Data);
+      return new String(data, UTF_8);
+    } catch (UnsupportedEncodingException e) {
+      throw new IllegalStateException(
+          "UTF-8 encoding not recognized", e);
+    }
+  }
+
   /**
    * Creates a ZIP archive of the specified directory or file.
    *
@@ -156,30 +387,45 @@ public class ZipUtilities {
    */
   public static void main(String[] args) {
     try {
-      if (args.length != 2) {
-        System.err.println("Expected two arguments.");
-        System.exit(1);
+      File source = null;
+      File target = null;
+      if (args.length == 2) {
+        source = new File(args[0]);
+        target = new File(args[1]);
+        if (!source.exists()) source = null;
       }
-      File source = new File(args[0]);
-      File target = new File(args[1]);
-      if (!source.exists()) {
-        System.err.println("The source file (first argument) must exist: ");
-        System.err.println("   " + source);
-        System.exit(1);
-      }
-      boolean sourceZip = (source.getName().toLowerCase().endsWith(".zip")
-                           && !source.isDirectory());
-      boolean targetZip = (target.getName().toLowerCase().endsWith(".zip")
-                           && !target.isDirectory());
+      if (source == null || target == null) {
+        for (int index = 0; index < args.length; index++) {
+          String arg = args[index];
+          String compressed = zipText64(arg);
+          String uncompressed = unzipText64(compressed);
+          System.out.println();
+          System.out.println(index + " (zip): From " + arg.length() + " to "
+                                 + compressed.length() + " --> "
+                                 + arg.equals(uncompressed));
 
-      // check if extracting
-      if (target.exists() && target.isDirectory() && sourceZip) {
-        unzip(source, target);
-      } else if (targetZip) {
-        zip(source, target);
+          compressed = gzipText64(arg);
+          uncompressed = gunzipText64(compressed);
+          System.out.println(index + " (gzip): From " + arg.length() + " to "
+                                 + compressed.length() + " --> "
+                                 + arg.equals(uncompressed));
+
+        }
       } else {
-        System.err.println("At least one argument must be a ZIP file");
-        System.exit(1);
+        boolean sourceZip = (source.getName().toLowerCase().endsWith(".zip")
+            && !source.isDirectory());
+        boolean targetZip = (target.getName().toLowerCase().endsWith(".zip")
+            && !target.isDirectory());
+
+        // check if extracting
+        if (target.exists() && target.isDirectory() && sourceZip) {
+          unzip(source, target);
+        } else if (targetZip) {
+          zip(source, target);
+        } else {
+          System.err.println("At least one argument must be a ZIP file");
+          System.exit(1);
+        }
       }
 
     } catch (Exception e) {

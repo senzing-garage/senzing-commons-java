@@ -877,7 +877,7 @@ public class CommandLineUtilities {
       // get the option parameters
       int minParamCount = option.getMinimumParameterCount();
       int maxParamCount = option.getMaximumParameterCount();
-      if (maxParamCount > 0 && maxParamCount < minParamCount) {
+      if (maxParamCount >= 0 && maxParamCount < minParamCount) {
         throw new IllegalStateException(
             "The non-negative maximum parameter count is less than the minimum "
             + "parameter count.  min=[ " + minParamCount + " ], max=[ "
@@ -958,7 +958,7 @@ public class CommandLineUtilities {
         }
 
         // check if too many parameters
-        if (params.size() > maxParamCount) {
+        if (maxParamCount >= 0 && params.size() > maxParamCount) {
           throw new BadOptionParameterCountException(
               COMMAND_LINE, option, flag, params);
         }
@@ -1622,8 +1622,8 @@ public class CommandLineUtilities {
 
     int columnIndex = 0;
     for (CommandLineOption option: options) {
-      String flag       = option.getCommandLineFlag();
-      int    spaceCount = maxLength - flag.length() - bullet.length();
+      String flag = option.getCommandLineFlag();
+      int spaceCount = maxLength - flag.length() - bullet.length();
       if (columnIndex == 0) pw.print(indenter);
       else pw.print(spacer);
       pw.print(bullet);

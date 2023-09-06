@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2023-09-06
+
+### Changed in 3.1.0
+
+- Added `com.senzing.sql.ConnectionPool` class
+- Added `com.senzing.sql.SQLUtilities` class
+- Added `com.senzing.sql.DatabaseType` class
+- Added `com.senzing.sql.TransactionIsolation` class
+- Added `com.senzing.sql.ConnectionProvider` interface
+- Added `com.senzing.sql.PoolConnectionProvider` class
+- Added `com.senzing.sql.PooledConnectionHandler` class
+- Added `com.senzing.sql.Connector` interface
+- Added `com.senzing.sql.SQLiteConnector` class
+- Added `com.senzing.sql.PostgreSqlConnector` class
+- Added `com.senzing.naming.Registry` class
+- Modified `com.senzing.util.ZipUtilities` with new compression methods
+- Updated dependencies to newer versions:
+  - Updated ICU4j to version `71.1`
+  - Updated Apache Commons-CSV to version `1.9.0`
+  - Updated Maven Compiler Plugin to version `3.10.1`
+  - Updated Maven Javadoc Plugin to version `3.4.0`
+  - Updated Nexus Staging Maven Plugin to version `1.6.13`
+
 ## [3.0.3] - 2023-03-10
 
 ### Changed in 3.0.3

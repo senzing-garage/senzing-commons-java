@@ -63,6 +63,7 @@ public class SemanticVersionTest {
   }
   @ParameterizedTest
   @MethodSource("provideEqualParams")
+  @SuppressWarnings("unchecked")
   public void testEquals(String   version1,
                          String   version2,
                          Boolean  expectedResult,
@@ -157,6 +158,7 @@ public class SemanticVersionTest {
 
   @ParameterizedTest
   @MethodSource("provideToStringParams")
+  @SuppressWarnings("unchecked")
   public void testToString(String version,
                            String expectedResult,
                            Class  expectedFailure)
@@ -221,6 +223,7 @@ public class SemanticVersionTest {
 
   @ParameterizedTest
   @MethodSource("provideCompareParams")
+  @SuppressWarnings("unchecked")
   public void testCompare(String  version1,
                           String  version2,
                           Integer expectedResult,

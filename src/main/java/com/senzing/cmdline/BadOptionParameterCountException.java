@@ -86,8 +86,10 @@ public class BadOptionParameterCountException extends SpecifiedOptionException
     } else {
       throw new IllegalArgumentException(
           "The specified parameter list has a parameter count that is valid "
-          + "for the specified option.  count=[ " + paramCount
-          + " ], minCount=[ " + minCount + " ], maxCount=[ " + maxCount + " ]");
+              + "for the specified option.  source=[ " + source + " ], "
+              + "option=[ " + option + " ], specifier=[ " + specifier
+              + " ], count=[ " + paramCount + " ], minCount=[ " + minCount
+              + " ], maxCount=[ " + maxCount + " ], params=[ " + params + " ]");
     }
     sb.append(" parameters for the ");
     sb.append(SpecifiedOption.sourceDescriptor(source, option, specifier));
