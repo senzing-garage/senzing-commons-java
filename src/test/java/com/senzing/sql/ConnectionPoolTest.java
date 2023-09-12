@@ -130,7 +130,7 @@ public class ConnectionPoolTest {
    * Call this function after releasing the connection for a thread.
    */
   public static void clearTracking(
-      @org.jetbrains.annotations.NotNull IdentityHashMap<Connection, Thread> connThreadMap,
+      IdentityHashMap<Connection, Thread> connThreadMap,
       IdentityHashMap<Thread, Connection> threadConnMap)
   {
     synchronized (connThreadMap) {
