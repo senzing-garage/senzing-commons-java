@@ -75,15 +75,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>RELEASE</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
-      <version>3.36.0.3</version>
+      <version>3.41.2.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

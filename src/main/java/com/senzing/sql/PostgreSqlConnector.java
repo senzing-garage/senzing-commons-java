@@ -49,6 +49,7 @@ public class PostgreSqlConnector implements Connector {
    * @param database The name of the PostgreSql database.
    * @param user The user name for authentication with the PostgreSql server.
    * @param password The password for authentication with the PostgreSql server.
+   * @param addlProperties The additional properties for connecting to the database.
    */
   public PostgreSqlConnector(String     host,
                              int        port,
