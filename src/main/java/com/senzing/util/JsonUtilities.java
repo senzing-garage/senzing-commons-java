@@ -1,6 +1,7 @@
 package com.senzing.util;
 
-import org.ini4j.Wini;
+import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -2188,27 +2189,35 @@ public class JsonUtilities {
    */
   public static JsonObject iniToJson(File iniFile) {
     try {
-      Wini windowsIni = new Wini(iniFile);
+      INIConfiguration ini = new INIConfiguration();
+
+      try (FileReader fileReader = new FileReader(iniFile)) {
+        ini.read(fileReader);
+      }
 
       JsonObjectBuilder job = Json.createObjectBuilder();
 
-      windowsIni.entrySet().forEach(entry -> {
-        String              sectionKey  = entry.getKey();
-        Map<String,String>  section     = entry.getValue();
+      for (String sectionKey : ini.getSections()) {
+        SubnodeConfiguration section = ini.getSection(sectionKey);
 
         JsonObjectBuilder sectionBuilder = Json.createObjectBuilder();
-        section.entrySet().forEach(sectionEntry -> {
-          String key    = sectionEntry.getKey();
-          String value  = sectionEntry.getValue();
+
+        Iterator<String> iter = section.getKeys();
+
+        while (iter.hasNext()) {
+          String  key   = iter.next();
+          String  value = section.getProperty(key).toString();
           JsonUtilities.add(sectionBuilder, key, value);
-        });
+        }
 
         job.add(sectionKey, sectionBuilder);
-      });
+      }
 
       return job.build();
 
-    } catch (IOException e) {
+    } catch (RuntimeException e) {
+      throw e;
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
