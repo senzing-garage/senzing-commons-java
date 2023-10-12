@@ -285,6 +285,66 @@ public class LoggingUtilities {
   }
 
   /**
+   * Formats an array of {@link StackTraceElement} instances using {@link
+   * #formatStackTrace(StackTraceElement)} with a single element per line.
+   * 
+   * @param stackTrace The array of {@link StackTraceElement} instances to format.
+   * 
+   * @return The formatted {@link String} describing the array of {@link 
+   *         StackTraceElement} instances or <code>null</code> if the specified
+   *         array is <code>null</code>.
+   */
+  public static String formatStackTrace(StackTraceElement[] stackTrace) {
+    if (stackTrace == null) return null;
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    for (StackTraceElement elem : stackTrace) {
+      pw.println(formatStackTrace(elem));
+    }
+    return sw.toString();
+  }
+
+  /**
+   * Formats a single {@link StackTraceElement} in the same format as they would appear
+   * in an exception stack trace.
+   * 
+   * @param elem The {@link StackTraceElement} to format.
+   * 
+   * @return The formatted {@link String} describing the {@link StackTraceElement}.
+   */
+  public static String formatStackTrace(StackTraceElement elem) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("        at ");
+    
+    // handle a null element
+    if (elem == null) {
+      sb.append("[unknown: null]");
+      return sb.toString();
+    }
+
+    String moduleName = elem.getModuleName();
+    if (moduleName != null && moduleName.length() > 0) {
+      sb.append(moduleName).append("/");
+    }
+    sb.append(elem.getClassName());
+    sb.append(".");
+    sb.append(elem.getMethodName());
+    sb.append("(");
+    String fileName = elem.getFileName();
+    sb.append((fileName == null) ? "[unknown file]" : fileName);
+    sb.append(":");
+    int lineNumber = elem.getLineNumber();
+    if (lineNumber < 0) {
+      sb.append("[unknown line]");
+    } else {
+      sb.append(lineNumber);
+    }
+    sb.append(")");
+
+    return sb.toString();
+  }
+
+  /**
    * Formats a multiline message.
    *
    * @param lines The lines to be formatted.
