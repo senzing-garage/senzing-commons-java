@@ -117,6 +117,7 @@ public enum DatabaseType {
 
         ps.setString(index, DATE_TIME_FORMATTER.format(zonedDateTime));
       }
+      break;
       default:
         ps.setTimestamp(index, value, UTC_CALENDAR);
     }
