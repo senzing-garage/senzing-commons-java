@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.1.2] - 2023-10-13
+
+### Changed in 3.1.2
+
+- Fixed bug in `DatabaseType` for `SQLITE` handing of `setTimestamp()`.
+- Addded functionality to `LoggingUtilities` to format `StackTraceElement` as
+  a stack trace.
+
 ## [3.1.1] - 2023-09-13
 
 ### Changed in 3.1.1
