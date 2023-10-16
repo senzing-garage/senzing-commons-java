@@ -7,6 +7,11 @@ import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.senzing.util.LoggingUtilities;
+
+import java.io.StringWriter;
+import java.io.PrintWriter;
+
 /**
  * Provides an {@link InvocationHandler} that prevents the returning the
  * backing JDBC {@link Connection} and ensures closing of the proxied
@@ -57,6 +62,16 @@ class PooledConnectionHandler implements InvocationHandler {
   private long closedTimeNanos = -1L;
 
   /**
+   * Thread that obtained the connection.
+   */
+  private Thread thread = null;
+
+  /** 
+   * Stack trace when the connection as obtained.
+   */
+  private StackTraceElement[] stackTrace = null;
+
+  /**
    * Constructs with the backing {@link ConnectionPool}, backing
    * {@link Connection}.  This constructor will create a {@link Proxy}
    * {@link Connection] which can be obtained via {@link
@@ -75,6 +90,8 @@ class PooledConnectionHandler implements InvocationHandler {
     this.backingConnection  = backingConnection;
     this.backingObject      = backingConnection;
     this.closed             = false;
+    this.thread             = Thread.currentThread();
+    this.stackTrace         = this.thread.getStackTrace();
     this.proxiedConnection  = (Connection) Proxy.newProxyInstance(
         this.getClass().getClassLoader(), interfaces, this);
   }
@@ -99,6 +116,8 @@ class PooledConnectionHandler implements InvocationHandler {
     this.proxiedConnection  = parentHandler.proxiedConnection;
     this.closed             = false;
     this.backingObject      = backingObject;
+    this.thread             = Thread.currentThread();
+    this.stackTrace         = this.thread.getStackTrace();
   }
 
   /**
@@ -255,5 +274,24 @@ class PooledConnectionHandler implements InvocationHandler {
 
     // if we get here then just return the result
     return result;
+  }
+
+  /**
+   * Gets diagnostic info for the 
+   */
+  public String getDiagnosticInfo() {
+    long duration = (System.nanoTime() - this.createdTimeNanos) / ONE_MILLION;
+    StringWriter  sw = new StringWriter();
+    PrintWriter   pw = new PrintWriter(sw);
+
+    pw.println("-----------------------------------------------------------");
+    pw.println("LEASE DURATION: " + duration + "ms");
+    pw.println();
+    pw.println("LEASE OBTAINED AT: ");
+    pw.println(LoggingUtilities.formatStackTrace(this.stackTrace));
+    pw.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+    pw.println("LEASE-HOLDER CURRENT STACK TRACE: ");
+    pw.println(LoggingUtilities.formatStackTrace(this.thread.getStackTrace()));
+    return sw.toString();
   }
 }
