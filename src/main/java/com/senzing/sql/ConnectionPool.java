@@ -7,6 +7,8 @@ import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 import static com.senzing.sql.ConnectionPool.Stat.*;
 
@@ -792,6 +794,25 @@ public class ConnectionPool implements Quantified {
   }
 
   /**
+   * Obtains a diagnostic string describing where each leased connection was obtained
+   * and the state of the current lease holder threads.
+   * 
+   * @return The diagnostic {@link String} describing the state of this instance.
+   */
+  public synchronized String getDiagnosticLeaseInfo() {
+    StringWriter  sw = new StringWriter();
+    PrintWriter   pw = new PrintWriter(sw);
+
+    leasedMap.values().forEach((pooledConnection) -> {
+      PooledConnectionHandler handler = pooledConnection.getCurrentLeaseHandler();
+      pw.println();
+      pw.println(handler.getDiagnosticInfo());
+    });
+
+    return sw.toString();
+  }
+
+  /**
    * Gets the statistics for this instance as a {@link Map} of {@link Stat}
    * keys to {@link Number} values.
    *
@@ -890,7 +911,8 @@ public class ConnectionPool implements Quantified {
    *                is immediately available, or a negative number if no
    *                maximum wait time and willing to wait indefinitely.
    *
-   * @return The {@link Connection} acquired from the pool.
+   * @return The {@link Connection} acquired from the pool, or <code>null</code>
+   *         if a connection could not be obtained within the time allotted.
    *
    * @throws SQLException If a failure occurs.
    */
