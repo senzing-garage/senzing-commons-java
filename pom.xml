@@ -98,7 +98,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <compi qlerArgs>
+          <compilerArgs>
             <arg>-Xlint:unchecked</arg>
             <arg>-Xlint:deprecation</arg>
           </compilerArgs>
