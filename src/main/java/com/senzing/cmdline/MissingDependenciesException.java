@@ -31,7 +31,41 @@ public class MissingDependenciesException extends SpecifiedOptionException {
                                       Set<CommandLineOption>  specifiedOptions)
   {
     super(source, option, specifier,
-          buildErrorMessage(source, option, specifier, specifiedOptions));
+          buildErrorMessage(source, 
+                            option, 
+                            option.getDependencies(),
+                            specifier, 
+                            specifiedOptions));
+  }
+
+  /**
+   * Constructs with the specified parameters.
+   *
+   * @param source The {@link CommandLineSource} describing how the option
+   *               was specified.
+   * @param option The {@link CommandLineOption} that was missing required
+   *               parameters.
+   * @param dependencySets The {@link Set} of {@link CommandLineOption} 
+   *                       {@link Set} values representing the missing
+   *                       dependencies to report.
+   * @param specifier The command-line flag or environment variable used to
+   *                  specify the option, or <code>null</code> if specified as a
+   *                  default value.
+   * @param specifiedOptions The {@link Set} of {@link CommandLineOption}
+   *                         instances that were specified.
+   */
+  public MissingDependenciesException(CommandLineSource           source,
+                                      CommandLineOption           option,
+                                      Set<Set<CommandLineOption>> dependencySets,
+                                      String                      specifier,
+                                      Set<CommandLineOption>      specifiedOptions)
+  {
+    super(source, option, specifier,
+          buildErrorMessage(source, 
+                            option, 
+                            dependencySets,
+                            specifier,
+                            specifiedOptions));
   }
 
   /**
@@ -41,6 +75,9 @@ public class MissingDependenciesException extends SpecifiedOptionException {
    *               was specified.
    * @param option The {@link CommandLineOption} that was missing required
    *               parameters.
+   * @param dependencySets The {@link Set} of {@link CommandLineOption} 
+   *                       {@link Set} values representing the missing
+   *                       dependencies to report.
    * @param specifier The command-line flag or environment variable used to
    *                  specify the option, or <code>null</code> if specified as a
    *                  default value.
@@ -56,10 +93,11 @@ public class MissingDependenciesException extends SpecifiedOptionException {
    */
   @SuppressWarnings("unchecked")
   public static String buildErrorMessage(
-      CommandLineSource       source,
-      CommandLineOption       option,
-      String                  specifier,
-      Set<CommandLineOption>  specifiedOptions)
+      CommandLineSource           source,
+      CommandLineOption           option,
+      Set<Set<CommandLineOption>> dependencySets,
+      String                      specifier,
+      Set<CommandLineOption>      specifiedOptions)
   {
     StringWriter  sw = new StringWriter();
     PrintWriter   pw = new PrintWriter(sw);
@@ -71,9 +109,8 @@ public class MissingDependenciesException extends SpecifiedOptionException {
                    + " are missing.");
     pw.println("The " + sourceDescriptor + " also requires:");
 
-    Set<Set<CommandLineOption>> dependencies = option.getDependencies();
     String prefix = null;
-    for (Set<CommandLineOption> dependencySet : dependencies) {
+    for (Set<CommandLineOption> dependencySet : dependencySets) {
       boolean conflicting = false;
       // ignore dependency sets that conflict with other specified options
       for (CommandLineOption specifiedOption: specifiedOptions) {
