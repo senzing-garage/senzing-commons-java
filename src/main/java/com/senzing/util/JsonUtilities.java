@@ -1024,6 +1024,84 @@ public class JsonUtilities {
    * Adds the specified key/value pair to the specified {@link
    * JsonObjectBuilder}.  If the specified value is <code>null</code> then
    * {@link JsonObjectBuilder#addNull(String)} is used, otherwise
+   * {@link JsonObjectBuilder#add(String,JsonObjectBuilder)} is used.
+   *
+   * @param job The {@link JsonObjectBuilder} to add the key/value pair to.
+   *
+   * @param key The {@link String} key.
+   *
+   * @param val The {@link JsonObjectBuilder} value, or <code>null</code>.
+   *
+   * @return The first {@link JsonObjectBuilder} that was specified.
+   */
+  public static JsonObjectBuilder add(JsonObjectBuilder job, 
+                                      String            key, 
+                                      JsonObjectBuilder val) 
+  {
+    if (val == null) {
+      job.addNull(key);
+    } else {
+      job.add(key, val);
+    }
+    return job;
+  }
+
+  /**
+   * Adds the specified key/value pair to the specified {@link
+   * JsonObjectBuilder}.  If the specified value is <code>null</code> then
+   * {@link JsonObjectBuilder#addNull(String)} is used, otherwise
+   * {@link JsonObjectBuilder#add(String,JsonArrayBuilder)} is used.
+   *
+   * @param job The {@link JsonObjectBuilder} to add the key/value pair to.
+   *
+   * @param key The {@link String} key.
+   *
+   * @param val The {@link JsonArrayBuilder} value, or <code>null</code>.
+   *
+   * @return The {@link JsonObjectBuilder} that was specified.
+   */
+  public static JsonObjectBuilder add(JsonObjectBuilder job, 
+                                      String            key, 
+                                      JsonArrayBuilder  val) 
+  {
+    if (val == null) {
+      job.addNull(key);
+    } else {
+      job.add(key, val);
+    }
+    return job;
+  }
+
+  /**
+   * Adds the specified key/value pair to the specified {@link
+   * JsonObjectBuilder}.  If the specified value is <code>null</code> then
+   * {@link JsonObjectBuilder#addNull(String)} is used, otherwise
+   * {@link JsonObjectBuilder#add(String,JsonValue)} is used.
+   *
+   * @param job The {@link JsonObjectBuilder} to add the key/value pair to.
+   *
+   * @param key The {@link String} key.
+   *
+   * @param val The {@link JsonValue} value, or <code>null</code>.
+   *
+   * @return The {@link JsonObjectBuilder} that was specified.
+   */
+  public static JsonObjectBuilder add(JsonObjectBuilder job, 
+                                      String            key, 
+                                      JsonValue         val) 
+  {
+    if (val == null) {
+      job.addNull(key);
+    } else {
+      job.add(key, val);
+    }
+    return job;
+  }
+
+  /**
+   * Adds the specified key/value pair to the specified {@link
+   * JsonObjectBuilder}.  If the specified value is <code>null</code> then
+   * {@link JsonObjectBuilder#addNull(String)} is used, otherwise
    * {@link JsonObjectBuilder#add(String,String)} is used.
    *
    * @param job The {@link JsonObjectBuilder} to add the key/value pair to.
@@ -1202,6 +1280,75 @@ public class JsonUtilities {
       job.addNull(key);
     } else {
       job.add(key, val);
+    }
+    return job;
+  }
+
+  /**
+   * Adds the specified key/value pair to the specified {@link
+   * JsonArrayBuilder}.  If the specified value is <code>null</code> then
+   * {@link JsonArrayBuilder#addNull()} is used, otherwise
+   * {@link JsonArrayBuilder#add(JsonObjectBuilder)} is used.
+   *
+   * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+   *
+   * @param val The {@link JsonObjectBuilder} value, or <code>null</code>.
+   *
+   * @return The {@link JsonArrayBuilder} that was specified.
+   */
+  public static JsonArrayBuilder add(JsonArrayBuilder   job, 
+                                     JsonObjectBuilder  val) 
+  {
+    if (val == null) {
+      job.addNull();
+    } else {
+      job.add(val);
+    }
+    return job;
+  }
+
+  /**
+   * Adds the specified key/value pair to the specified {@link
+   * JsonArrayBuilder}.  If the specified value is <code>null</code> then
+   * {@link JsonArrayBuilder#addNull()} is used, otherwise
+   * {@link JsonArrayBuilder#add(JsonArrayBuilder)} is used.
+   *
+   * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+   *
+   * @param val The {@link JsonArrayBuilder} value, or <code>null</code>.
+   *
+   * @return The first {@link JsonArrayBuilder} that was specified.
+   */
+  public static JsonArrayBuilder add(JsonArrayBuilder job, 
+                                     JsonArrayBuilder val) 
+  {
+    if (val == null) {
+      job.addNull();
+    } else {
+      job.add(val);
+    }
+    return job;
+  }
+
+  /**
+   * Adds the specified key/value pair to the specified {@link
+   * JsonArrayBuilder}.  If the specified value is <code>null</code> then
+   * {@link JsonArrayBuilder#addNull()} is used, otherwise
+   * {@link JsonArrayBuilder#add(JsonValue)} is used.
+   *
+   * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+   *
+   * @param val The {@link JsonValue} value, or <code>null</code>.
+   *
+   * @return The {@link JsonArrayBuilder} that was specified.
+   */
+  public static JsonArrayBuilder add(JsonArrayBuilder   job, 
+                                     JsonValue          val) 
+  {
+    if (val == null) {
+      job.addNull();
+    } else {
+      job.add(val);
     }
     return job;
   }

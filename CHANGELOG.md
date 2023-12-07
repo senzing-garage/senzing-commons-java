@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.4] - 2023-12-07
+
+### Changed in 3.1.4
+
+- Added `com.senzing.sql.SQLUtilities.UTC_CALENDAR` to provide a reusable `Calendar` 
+  instance for working with UTC timestmaps in SQL databases for JDBC `getTimestamp()`
+  function.
+- Added additional constructors for `MissingDependenciesException`.
+- Added new functions to `JsonUtilities`:
+  - `JsonUtilities.add(JsonObjectBuilder,String,JsonObjectBuilder)`
+  - `JsonUtilities.add(JsonObjectBuilder,String,JsonArrayBuilder)`
+  - `JsonUtilities.add(JsonObjectBuilder,String,JsonValue)`
+  - `JsonUtilities.add(JsonArrayBuilder,JsonObjectBuilder)`
+  - `JsonUtilities.add(JsonArrayBuilder,JsonArrayBuilder)`
+  - `JsonUtilities.add(JsonArrayBuilder,JsonValue)`
+- Changed `sqlite-jdbc` dependency to version `3.42.0.1` to avoid the problematic
+  version `3.43.x.x` which carelessly breaks backwards compatibility by removing
+  functionality that has been supported for sixteen (16) years. 
+- Updated runtime and build dependencies.
+
 ## [3.1.3] - 2023-10-16
 
 ### Changed in 3.1.3
