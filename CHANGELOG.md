@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed in 3.1.5
 
-- Updated depdendncies to newer versions.
+- Updated depdendncies to newer versions:
   - Updated `icu4j` to version `74.2`
   - Updated `maven-compiler-plugin` to version `3.12.1`
   - Updated `maven-surefire-plugin` to version `3.2.3`
