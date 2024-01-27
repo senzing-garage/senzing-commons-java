@@ -7,7 +7,7 @@
   <version>3.1.5</version>
   <name>Senzing Commons</name>
   <description>Utility classes and functions common to multiple Senzing projects.</description>
-  <url>http://github.com/Senzing/senzing-commons-java</url>
+  <url>http://github.com/senzing-garage/senzing-commons-java</url>
   <licenses>
     <license>
       <name>The Apache License, Version 2.0</name>
@@ -33,9 +33,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/Senzing/senzing-commons-java.git</connection>
-    <developerConnection>scm:git:ssh://github.com:Senzing/senzing-commons-java.git</developerConnection>
-    <url>http://github.com/Senzing/senzing-commons-java/tree/main</url>
+    <connection>scm:git:git://github.com/senzing-garage/senzing-commons-java.git</connection>
+    <developerConnection>scm:git:ssh://github.com:senzing-garage/senzing-commons-java.git</developerConnection>
+    <url>http://github.com/senzing-garage/senzing-commons-java/tree/main</url>
   </scm>
   <dependencies>
     <dependency>
