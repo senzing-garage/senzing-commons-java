@@ -172,7 +172,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed in 0.5.0 (Initial Public Prerelease)
 
-- Initial refactoring from `Senzing/senzing-api-server` project
+- Initial refactoring from `senzing-garage/senzing-api-server` project
 - Added many unit tests
 - Unit tests still pending before version `1.0.0` release are as follows:
   - `com.senzing.util.JsonUtils`
