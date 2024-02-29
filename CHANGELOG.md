@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2024-02-29
+
+### Changed in 3.2.0
+
+- Added `sqlLeast` and `sqlGreatest` functions to `com.senzing.sql.DatabaseType`
+- Updated depdendncies to newer versions:
+
 ## [3.1.5] - 2024-01-10
 
 ### Changed in 3.1.5
