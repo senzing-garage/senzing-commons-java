@@ -1,5 +1,6 @@
 package com.senzing.sql;
 
+import java.util.Objects;
 import java.sql.*;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -146,6 +147,82 @@ public enum DatabaseType {
       default:
         cs.setTimestamp(index, value, UTC_CALENDAR);
     }
+  }
+
+  /**
+   * Provides a generic way to format the equivalent of the SQL 
+   * "least" function for the database type.
+   * 
+   * @param first The first parameter to the LEAST function.
+   * @param second The second parameter to the LEAST function.
+   * @param other The optional other parameters to the LEAST
+   *              function for variable length parameters.
+   * @return The formatted SQL "least" function for the respective
+   *         database. 
+   * @throws NullPointerException If either the first or second
+   *                              parameters is <code>null</code>.
+   */
+  public String sqlLeast(String first, String second, String... other) 
+    throws NullPointerException
+  {
+    Objects.requireNonNull(first, 
+      "The first parameter to LEAST cannot be null");
+    Objects.requireNonNull(first, 
+      "The second parameter to LEAST cannot be null");
+    StringBuilder sb = new StringBuilder();
+    switch (this) {
+      case SQLITE:
+        sb.append("MIN");
+        break;
+      default:
+        sb.append("LEAST");
+    }
+    sb.append("(").append(first).append(", ").append(second);
+    if (other != null) {
+      for (String param: other) {
+        sb.append(", ").append(param);
+      }
+    }
+    sb.append(")");
+    return sb.toString();
+  }
+
+    /**
+   * Provides a generic way to format the equivalent of the SQL 
+   * "least" function for the database type.
+   * 
+   * @param first The first parameter to the LEAST function.
+   * @param second The second parameter to the LEAST function.
+   * @param other The optional other parameters to the LEAST
+   *              function for variable length parameters.
+   * @return The formatted SQL "least" function for the respective
+   *         database. 
+   * @throws NullPointerException If either the first or second
+   *                              parameters is <code>null</code>.
+   */
+  public String sqlGreatest(String first, String second, String... other) 
+    throws NullPointerException
+  {
+    Objects.requireNonNull(first, 
+      "The first parameter to GREATEST cannot be null");
+    Objects.requireNonNull(first, 
+      "The second parameter to GREATEST cannot be null");
+    StringBuilder sb = new StringBuilder();
+    switch (this) {
+      case SQLITE:
+        sb.append("MAX");
+        break;
+      default:
+        sb.append("GREATEST");
+    }
+    sb.append("(").append(first).append(", ").append(second);
+    if (other != null) {
+      for (String param: other) {
+        sb.append(", ").append(param);
+      }
+    }
+    sb.append(")");
+    return sb.toString();
   }
 
   /**
