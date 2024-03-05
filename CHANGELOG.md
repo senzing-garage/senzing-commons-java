@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `sqlLeast` and `sqlGreatest` functions to `com.senzing.sql.DatabaseType`
 - Updated depdendncies to newer versions:
-
+  - Upgraded `junit-jupiter` from version `5.10.1` to `5.10.2`
+  - Upgraded `maven-surefire-plugin` from version `3.2.3` to version `3.2.5`
+  
 ## [3.1.5] - 2024-01-10
 
 ### Changed in 3.1.5
