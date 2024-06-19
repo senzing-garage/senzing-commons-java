@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2024-06-19
+
+### Changed in 3.3.0
+
+- Updated depdendncies to newer versions:
+  - Upgraded `commons-csv` from version `1.10.0` to `1.11.0`
+  - Upgraded `commons-configuration2` from version `2.9.0` to `2.11.0`
+  - Upgraded `icu4j` from version `74.2` to `75.1`
+  - Upgraded `maven-compiler-plugin` from version `3.12.1` to `3.13.0`
+  - Upgraded `maven-surefire-plugin` from version `3.2.5` to `3.3.0`
+  - Upgraded `maven-source-plugin` from version `3.3.0` to `3.3.1`
+  - Upgraded `maven-javadoc-plugin` from version `3.6.3` to `3.7.0`
+  - Upgraded `maven-gpg-plugin` from version `3.1.0` to `3.2.4`
+  - Upgraded `nexus-staging-maven-plugin` from version `1.6.13` to `1.7.0`
+
 ## [3.2.0] - 2024-02-29
 
 ### Changed in 3.2.0
