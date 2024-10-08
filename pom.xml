@@ -4,7 +4,7 @@
   <groupId>com.senzing</groupId>
   <artifactId>senzing-commons</artifactId>
   <packaging>jar</packaging>
-  <version>3.3.0</version>
+  <version>3.3.1</version>
   <name>Senzing Commons</name>
   <description>Utility classes and functions common to multiple Senzing projects.</description>
   <url>http://github.com/senzing-garage/senzing-commons-java</url>
@@ -107,7 +107,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.1</version>
         <configuration>
           <systemPropertyVariables>
             <project.build.directory>${project.build.directory}</project.build.directory>
