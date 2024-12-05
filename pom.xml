@@ -4,7 +4,7 @@
   <groupId>com.senzing</groupId>
   <artifactId>senzing-commons</artifactId>
   <packaging>jar</packaging>
-  <version>3.3.1</version>
+  <version>3.3.2</version>
   <name>Senzing Commons</name>
   <description>Utility classes and functions common to multiple Senzing projects.</description>
   <url>http://github.com/senzing-garage/senzing-commons-java</url>
@@ -66,12 +66,12 @@
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
-      <version>75.1</version>
+      <version>76.1</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.11.2</version>
+      <version>5.11.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -107,7 +107,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.5.2</version>
         <configuration>
           <systemPropertyVariables>
             <project.build.directory>${project.build.directory}</project.build.directory>
@@ -139,7 +139,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.11.1</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
