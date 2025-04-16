@@ -6,11 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.3] - 2025-04-16
+
+### Changed in 3.3.3
+
+- Updated dependencies to newer versions:
+  - Upgraded `commons-csv` from version `1.12.0` to `1.14.0`
+  - Upgraded `icu4j` from version `76.1` to `77.1`
+  - Upgraded `junit-jupiter` from version `5.11.3` to `5.12.2`
+
 ## [3.3.2] - 2024-12-05
 
 ### Changed in 3.3.2
 
-- Updated depdendncies to newer versions:
+- Updated dependencies to newer versions:
   - Upgraded `icu4j` from version `75.1` to `76.1`
   - Upgraded `junit-jupiter` from version `5.11.2` to `5.11.3`
   - Upgraded `maven-surefire-plugin` from version `3.5.1` to `3.5.2`
@@ -20,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed in 3.3.1
 
-- Updated depdendncies to newer versions:
+- Updated dependencies to newer versions:
   - Upgraded `commons-csv` from version `1.11.0` to `1.12.0`
   - Upgraded `junit-jupiter` from version `5.10.3` to `5.11.2`
   - Upgraded `maven-surefire-plugin` from version `3.3.0` to `3.5.1`
@@ -31,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed in 3.3.0
 
-- Updated depdendncies to newer versions:
+- Updated dependencies to newer versions:
   - Upgraded `commons-csv` from version `1.10.0` to `1.11.0`
   - Upgraded `commons-configuration2` from version `2.9.0` to `2.11.0`
   - Upgraded `icu4j` from version `74.2` to `75.1`
@@ -47,7 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed in 3.2.0
 
 - Added `sqlLeast` and `sqlGreatest` functions to `com.senzing.sql.DatabaseType`
-- Updated depdendncies to newer versions:
+- Updated dependencies to newer versions:
   - Upgraded `junit-jupiter` from version `5.10.1` to `5.10.2`
   - Upgraded `maven-surefire-plugin` from version `3.2.3` to version `3.2.5`
   
@@ -55,7 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed in 3.1.5
 
-- Updated depdendncies to newer versions:
+- Updated dependencies to newer versions:
   - Updated `icu4j` to version `74.2`
   - Updated `maven-compiler-plugin` to version `3.12.1`
   - Updated `maven-surefire-plugin` to version `3.2.3`
