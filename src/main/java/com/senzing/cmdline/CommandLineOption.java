@@ -14,15 +14,13 @@ import java.util.Set;
  * @param <T> The enumerated type that enumerates the command-line options.
  * @param <B> The base enumerated type that these command-line options extend,
  *            <b>OR</b> the same as type <code>T</code> if this command-line
- *           option type has no base and returns <code>null</code> from
- *           {@link #getBaseOptionType()}.
+ *            option type has no base and returns <code>null</code> from
+ *            {@link #getBaseOptionType()}.
  */
-public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
-                                   B extends Enum<B> & CommandLineOption<B, ?>>
-{
+public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> {
   /**
-   * Gets the base {@link CommandLineOption} type that this one extends.  This
-   * returns <code>null</code> if there is no base type.  <b>NOTE:</b> The type
+   * Gets the base {@link CommandLineOption} type that this one extends. This
+   * returns <code>null</code> if there is no base type. <b>NOTE:</b> The type
    * returned is the base generic parameter type or the same type of this class
    * if no base.
    *
@@ -42,10 +40,10 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
 
   /**
    * Gets the <b>unmodifiable</b> {@link Set} of {@link String} synonym flags
-   * for this option.  These are alternate command-line flags that can be used
+   * for this option. These are alternate command-line flags that can be used
    * instead of the primary flag specified by {@link #getCommandLineFlag()}.
    * This is useful when a flag changes and the old version of it is
-   * deprecated but still supported.  It is <b>NOT</b> allowed to pass multiple
+   * deprecated but still supported. It is <b>NOT</b> allowed to pass multiple
    * flags for the same option.
    *
    * @return The <b>unmodifiable</b> {@link Set} of {@link String} synonym flags
@@ -60,7 +58,7 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
    * this option, or <code>null</code> if the value for this option cannot be
    * set with an environment variable.
    *
-   * @return The  environment variable that can be used to set the value for
+   * @return The environment variable that can be used to set the value for
    *         this option, or <code>null</code> if the value for this option
    *         cannot be set with an environment variable.
    */
@@ -70,17 +68,17 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
 
   /**
    * Gets the <b>unmodifiable</b> {@link Set} of {@link String} synonym
-   * environment variables for this option.  These are alternate environment
+   * environment variables for this option. These are alternate environment
    * variables that can be used instead of the primary environment variable
-   * specified by {@link #getEnvironmentVariable()}.  This is useful when an
+   * specified by {@link #getEnvironmentVariable()}. This is useful when an
    * environment variable changes and the old version of it is deprecated but
-   * still supported.  Having multiple environment variables set in the
+   * still supported. Having multiple environment variables set in the
    * environment for this option is allowed, however, they are taken in order
    * of preference (first the primary environment variable and then each of
    * those in returned {@link Set} in order).
    *
    * @return The <b>unmodifiable</b> {@link Set} of {@link String} synonym flags
-   *         for this optionl, or an empty set if there are no synonyms.
+   *         for this optional, or an empty set if there are no synonyms.
    *
    */
   default Set<String> getEnvironmentSynonyms() {
@@ -89,11 +87,11 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
 
   /**
    * Gets the <b>unmodifiable</b> {@link List} of {@link String} fall-back
-   * environment variables for this option.  These are environment variables
+   * environment variables for this option. These are environment variables
    * that are only checked if another option is specified that is dependent
-   * on this option and this option is missing.  The environment variables
+   * on this option and this option is missing. The environment variables
    * in the returned {@link List} are checked in order until the first one is
-   * found.  These are essentially environment synonyms that are only
+   * found. These are essentially environment synonyms that are only
    * conditionally checked until the first is found.
    *
    * @return The ordered {@link List} of {@link String} fall-back environment
@@ -114,7 +112,7 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
 
   /**
    * Gets the {@link Set} of {@link Set} instances describing combinations
-   * of sets of options that this option depends on.  At least one of the
+   * of sets of options that this option depends on. At least one of the
    * contained {@link Set} instances must be satisfied for this option to
    * be used.
    *
@@ -137,8 +135,8 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
   }
 
   /**
-   * Checks if this command line option is a primary option.  At least one
-   * primary option must be specified.  Whether or not multiple primary options
+   * Checks if this command line option is a primary option. At least one
+   * primary option must be specified. Whether or not multiple primary options
    * are allowed depends on the {@linkplain #getConflicts() conflicts} for
    * each option.
    *
@@ -164,7 +162,7 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
    * sensitive and should not be logged.
    *
    * @return <code>true</code> if the option's value is considered sensitive,
-   *         and <code>fals</code>
+   *         and <code>false</code>
    */
   default boolean isSensitive() {
     final int PUBLIC_STATIC = Modifier.PUBLIC | Modifier.STATIC;
@@ -172,12 +170,13 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
     Field[] fields = c.getFields();
     for (Field field : fields) {
       // skip this one if not public and static
-      if ((field.getModifiers() & PUBLIC_STATIC) == 0) continue;
+      if ((field.getModifiers() & PUBLIC_STATIC) == 0)
+        continue;
       try {
         if (field.get(null) == this) {
           String fieldName = field.getName().toUpperCase();
           return (fieldName.equals("PASSWORD")
-                  || fieldName.endsWith("_PASSWORD"));
+              || fieldName.endsWith("_PASSWORD"));
         }
       } catch (IllegalAccessException ignore) {
         continue;
@@ -188,8 +187,8 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
 
   /**
    * Returns the minimum number of additional parameters that should follow this
-   * command line option.  This should return a non-negative number and at least
-   * this many parameters will be consumed.  By default this returns zero (0).
+   * command line option. This should return a non-negative number and at least
+   * this many parameters will be consumed. By default this returns zero (0).
    *
    * @return The minimum number of additional parameters that should follow this
    *         command line option.
@@ -200,10 +199,10 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
 
   /**
    * Returns the maximum number of additional parameters that should follow this
-   * command line option.  If this returns a negative number then parameters
+   * command line option. If this returns a negative number then parameters
    * are read until the next recognized command line option is read after
    * consuming at least the {@linkplain #getMinimumParameterCount()} minimum
-   * number of parameters}.  By default this returns negative one (-1).
+   * number of parameters}. By default this returns negative one (-1).
    *
    * @return The maximum number of additional parameters that should follow this
    *         command line option, or a negative number to indicate that
@@ -214,11 +213,10 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
     return -1;
   }
 
-
   /**
-   * Returns the default parameter values associated with the option.  These are
-   * the parameters that are set if none are specified.  If no default
-   * parameters then this returns <code>null</code>.  An empty {@link List}
+   * Returns the default parameter values associated with the option. These are
+   * the parameters that are set if none are specified. If no default
+   * parameters then this returns <code>null</code>. An empty {@link List}
    * indicates that the option is specified by default but with no parameters.
    * The default implementation returns <code>null</code>.
    *

@@ -8,10 +8,10 @@ public interface ParameterProcessor {
    * {@link CommandLineOption} into an {@link Object} or array of
    * {@link Object} instances and determines if the parameters appear valid.
    *
-   * @param commandLineOption The {@link CommandLineOption} asssociated with
+   * @param commandLineOption The {@link CommandLineOption} associated with
    *                          the parameters.
    *
-   * @param params The {@link List} of {@link String} parameters.
+   * @param params            The {@link List} of {@link String} parameters.
    *
    * @return The {@link Object} or array of {@link Object} instances
    *         representing the processed parameters.
@@ -20,5 +20,5 @@ public interface ParameterProcessor {
    *                                      illegal in some way.
    */
   Object process(CommandLineOption commandLineOption, List<String> params)
-    throws BadOptionParametersException;
+      throws BadOptionParametersException;
 }

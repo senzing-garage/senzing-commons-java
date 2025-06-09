@@ -19,21 +19,21 @@ public class CollectionUtilities {
    * The behavior of this recursion depends on the values of the specified
    * {@link List}:
    * <ul>
-   *   <li>{@link Set} - Uses {@link Collections#unmodifiableSet(Set)}
-   *       to make the {@link Set} unmodifiable, but does not recurse further
-   *       because the elements of a {@link Set} cannot be modified in place.
-   *   </li>
-   *   <li>{@link List} - Recursively calls {@link
-   *       #recursivelyUnmodifiableList(List)} on the {@link List} value to
-   *       make it unmodifiable.
-   *   </li>
-   *   <li>{@link Map} - Calls {@link #recursivelyUnmodifiableMap(Map)} on the
-   *       {@link Map} value to make it unmodifiable.
-   *   </li>
-   *   <li>All other values (including <code>null</code> values) are left as-is</li>
+   * <li>{@link Set} - Uses {@link Collections#unmodifiableSet(Set)}
+   * to make the {@link Set} unmodifiable, but does not recurse further
+   * because the elements of a {@link Set} cannot be modified in place.
+   * </li>
+   * <li>{@link List} - Recursively calls {@link
+   * #recursivelyUnmodifiableList(List)} on the {@link List} value to
+   * make it unmodifiable.
+   * </li>
+   * <li>{@link Map} - Calls {@link #recursivelyUnmodifiableMap(Map)} on the
+   * {@link Map} value to make it unmodifiable.
+   * </li>
+   * <li>All other values (including <code>null</code> values) are left as-is</li>
    * </ul>
    *
-   * @param list The {@link List} to make recursively undmodifiable.
+   * @param list The {@link List} to make recursively unmodifiable.
    * @return The recursively unmodifiable view of the specified {@link List}.
    * @param <T> The type of element in the specified {@link List}.
    */
@@ -57,29 +57,29 @@ public class CollectionUtilities {
    * The keys of the {@link Map} are left unmodifiable, but the behavior of this
    * recursion depends on the values of the specified {@link Map}:
    * <ul>
-   *   <li>{@link Set} - Uses {@link Collections#unmodifiableSet(Set)}
-   *       to make the {@link Set} unmodifiable, but does not recurse further
-   *       because the elements of a {@link Set} cannot be modified in place.
-   *   </li>
-   *   <li>{@link List} - Calls {@link #recursivelyUnmodifiableList(List)} on
-   *       the {@link List} value to make it unmodifiable.
-   *   </li>
-   *   <li>{@link Map} - Recursively calls {@link
-   *       #recursivelyUnmodifiableMap(Map)} on the {@link Map} value to make
-   *       it unmodifiable.
-   *   </li>
-   *   <li>All other values (including <code>null</code> values) are left as-is</li>
+   * <li>{@link Set} - Uses {@link Collections#unmodifiableSet(Set)}
+   * to make the {@link Set} unmodifiable, but does not recurse further
+   * because the elements of a {@link Set} cannot be modified in place.
+   * </li>
+   * <li>{@link List} - Calls {@link #recursivelyUnmodifiableList(List)} on
+   * the {@link List} value to make it unmodifiable.
+   * </li>
+   * <li>{@link Map} - Recursively calls {@link
+   * #recursivelyUnmodifiableMap(Map)} on the {@link Map} value to make
+   * it unmodifiable.
+   * </li>
+   * <li>All other values (including <code>null</code> values) are left as-is</li>
    * </ul>
    *
-   * @param map The {@link Map} to make recursively undmodifiable.
+   * @param map The {@link Map} to make recursively unmodifiable.
    * @return The recursively unmodifiable view of the specified {@link List}.
    * @param <K> The type of keys in the specified {@link Map}.
    * @param <V> The type of values in the specified {@link Map}.
    */
-  public static <K, V> Map<K,V> recursivelyUnmodifiableMap(Map<K,V> map) {
-    Iterator<Map.Entry<K,V>> iter = map.entrySet().iterator();
+  public static <K, V> Map<K, V> recursivelyUnmodifiableMap(Map<K, V> map) {
+    Iterator<Map.Entry<K, V>> iter = map.entrySet().iterator();
     while (iter.hasNext()) {
-      Map.Entry<K,V> entry = iter.next();
+      Map.Entry<K, V> entry = iter.next();
       V value = entry.getValue();
       if (value != null) {
         if (value instanceof Set) {
@@ -127,6 +127,5 @@ public class CollectionUtilities {
     }
     return set;
   }
-
 
 }
