@@ -1,0 +1,45 @@
+{
+  // Version of the setting file.  Always 0.2
+  "version": "0.2",
+  // language - current active spelling language
+  "language": "en",
+  // words - list of words to be always considered correct
+  "words": [
+    "baos",
+    "CCLA",
+    "cmdline",
+    "CODEOWNER",
+    "Dskip",
+    "dsrc",
+    "ICLA",
+    "javabuilder",
+    "javadocs",
+    "javanature",
+    "jdbc",
+    "jsonlines",
+    "phoo",
+    "PKCS",
+    "PRNG",
+    "pushback",
+    "rethrowing",
+    "Senzing",
+    "stackoverflow",
+    "STRFTIME",
+    "Unsynchronized"
+  ],
+  "ignorePaths": [
+    ".git/**",
+    ".gitignore",
+    "javabuilder",
+    "javanature",
+    "pom.xml",
+    "src/main/java/com/senzing/util/ZipUtilities.java",
+    "src/test/java/com/senzing/io/ChunkedEncodingInputStreamTest.java",
+    "src/test/java/com/senzing/io/IOUtilitiesTest.java",
+    "src/test/java/com/senzing/io/RecordReaderTest.java",
+    "src/test/java/com/senzing/util/JsonUtilitiesTest.java",
+    "src/test/java/com/senzing/util/TimersTest.java",
+    "src/test/java/com/senzing/util/ZipUtilitiesTest.java",
+    "target/**"
+  ]
+}

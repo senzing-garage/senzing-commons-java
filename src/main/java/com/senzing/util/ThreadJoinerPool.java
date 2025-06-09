@@ -35,15 +35,15 @@ public class ThreadJoinerPool implements AutoCloseable {
   /**
    * Constructs a pool of threads whose job it is to background join other
    * threads so you can throttle the number of outstanding threads waiting
-   * in thebackground for completion.
+   * in the background for completion.
    *
    * @param poolSize The max pool size which is what throttles how many
    *                 concurrent threads.
    */
   public ThreadJoinerPool(int poolSize) {
-    this.joiners    = new LinkedList<>();
+    this.joiners = new LinkedList<>();
     this.allJoiners = new ArrayList<>(poolSize);
-    this.closed     = false;
+    this.closed = false;
 
     for (int index = 0; index < poolSize; index++) {
       Joiner joiner = new Joiner();
@@ -67,7 +67,7 @@ public class ThreadJoinerPool implements AutoCloseable {
    * Immediately returns if available joiners in the pool, but if all
    * joiners are busy, then this blocks until one is available.
    *
-   * @param thread The {@link Thread} to join against.
+   * @param thread   The {@link Thread} to join against.
    *
    * @param callback The {@link PostJoinCallback} to execute after the joining.
    */
@@ -75,8 +75,7 @@ public class ThreadJoinerPool implements AutoCloseable {
     Joiner joiner = null;
     // wait until a joiner is available
     synchronized (this.joiners) {
-      while (this.joiners.size() == 0 && !this.closed)
-      {
+      while (this.joiners.size() == 0 && !this.closed) {
         try {
           this.joiners.wait(5000L);
         } catch (InterruptedException ignore) {
@@ -106,7 +105,8 @@ public class ThreadJoinerPool implements AutoCloseable {
     // flag this instance as closed
     synchronized (this.joiners) {
       // check if already closed
-      if (this.closed) return;
+      if (this.closed)
+        return;
 
       this.closed = true;
       this.joiners.notifyAll();
@@ -151,7 +151,6 @@ public class ThreadJoinerPool implements AutoCloseable {
     });
   }
 
-
   /**
    * Checks if this instance has been closed.
    *
@@ -176,8 +175,7 @@ public class ThreadJoinerPool implements AutoCloseable {
       this.callback = null;
     }
 
-    private synchronized void join(Thread thread, PostJoinCallback callback)
-    {
+    private synchronized void join(Thread thread, PostJoinCallback callback) {
       if (this.currentThread != null) {
         throw new IllegalStateException(
             "Cannot join a thread while one is pending.");
@@ -193,20 +191,20 @@ public class ThreadJoinerPool implements AutoCloseable {
       while (!pool.isClosed()) {
         synchronized (this) {
           // wait until a request is available
-          if (this.currentThread == null)
-          {
+          if (this.currentThread == null) {
             try {
               this.wait(15000L);
             } catch (InterruptedException ignore) {
               continue;
             }
           }
-          if (this.currentThread == null) continue;
+          if (this.currentThread == null)
+            continue;
         }
 
         // get the thread to join
-        Thread            thread    = this.currentThread;
-        PostJoinCallback  postJoin  = this.callback;
+        Thread thread = this.currentThread;
+        PostJoinCallback postJoin = this.callback;
 
         // clear the field holding the reference to the current thread
         this.currentThread = null;
@@ -222,7 +220,8 @@ public class ThreadJoinerPool implements AutoCloseable {
           }
 
         } catch (InterruptedException e) {
-          if (pool.isClosed()) return;
+          if (pool.isClosed())
+            return;
         }
 
         synchronized (pool.joiners) {

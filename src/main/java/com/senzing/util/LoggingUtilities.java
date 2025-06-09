@@ -36,14 +36,14 @@ public class LoggingUtilities {
   private static final ZoneId LOG_DATE_ZONE = ZoneId.of("UTC");
 
   /**
-   * The {@link DateTimeFormatter} for interpretting the build number as a
+   * The {@link DateTimeFormatter} for interpreting the build number as a
    * LocalDateTime instance.
    */
-  private static final DateTimeFormatter LOG_DATE_FORMATTER
-      = DateTimeFormatter.ofPattern(LOG_DATE_PATTERN).withZone(LOG_DATE_ZONE);
+  private static final DateTimeFormatter LOG_DATE_FORMATTER = DateTimeFormatter.ofPattern(LOG_DATE_PATTERN)
+      .withZone(LOG_DATE_ZONE);
 
   /**
-   * The base product ID to log with if the calling package is not overidden.
+   * The base product ID to log with if the calling package is not overridden.
    */
   public static final String BASE_PRODUCT_ID = "5025";
 
@@ -55,14 +55,12 @@ public class LoggingUtilities {
   /**
    * The last logged exception in this thread.
    */
-  private static final ThreadLocal<Long> LAST_LOGGED_EXCEPTION
-      = new ThreadLocal<>();
+  private static final ThreadLocal<Long> LAST_LOGGED_EXCEPTION = new ThreadLocal<>();
 
   /**
    * The {@link Map} of package prefixes to product ID's.
    */
-  private static final Map<String, String> PRODUCT_ID_MAP
-      = new LinkedHashMap<>();
+  private static final Map<String, String> PRODUCT_ID_MAP = new LinkedHashMap<>();
 
   /**
    * Private default constructor
@@ -76,11 +74,10 @@ public class LoggingUtilities {
    * specified package name.
    *
    * @param packageName The package name.
-   * @param productId The product ID to use for the package.
+   * @param productId   The product ID to use for the package.
    */
   public static void setProductIdForPackage(String packageName,
-                                            String productId)
-  {
+      String productId) {
     synchronized (PRODUCT_ID_MAP) {
       PRODUCT_ID_MAP.put(packageName, productId);
     }
@@ -105,17 +102,19 @@ public class LoggingUtilities {
         // check if the package name begins with com.senzing and get next part
         int prefixLength = "com.senzing.".length();
         if (packageName.startsWith("com.senzing.")
-            && packageName.length() > prefixLength)
-        {
+            && packageName.length() > prefixLength) {
           int index = packageName.indexOf(".", prefixLength);
-          if (index < 0) index = packageName.length();
+          if (index < 0)
+            index = packageName.length();
           return packageName.substring(prefixLength, index);
         }
 
         // strip off the last part of the package name
         int index = packageName.lastIndexOf('.');
-        if (index <= 0) break;
-        if (index == (packageName.length() - 1)) break;
+        if (index <= 0)
+          break;
+        if (index == (packageName.length() - 1))
+          break;
         packageName = packageName.substring(0, index);
 
       } while (packageName.length() > 0 && !packageName.equals("com.senzing"));
@@ -133,7 +132,8 @@ public class LoggingUtilities {
    */
   public static boolean isDebugLogging() {
     String value = System.getProperty(DEBUG_SYSTEM_PROPERTY);
-    if (value == null) return false;
+    if (value == null)
+      return false;
     return (value.trim().equalsIgnoreCase(Boolean.TRUE.toString()));
   }
 
@@ -144,8 +144,7 @@ public class LoggingUtilities {
    * @param lines The lines of text to log, which may be objects that will be
    *              converted to text via {@link Object#toString()}.
    */
-  public static void logError(Object... lines)
-  {
+  public static void logError(Object... lines) {
     log(System.err, STDERR_MONITOR, "ERROR", lines, null);
   }
 
@@ -155,11 +154,10 @@ public class LoggingUtilities {
    * {@link Throwable}.
    *
    * @param throwable The {@link Throwable} whose stack trace should be logged.
-   * @param lines The lines of text to log, which may be objects that will be
-   *              converted to text via {@link Object#toString()}.
+   * @param lines     The lines of text to log, which may be objects that will be
+   *                  converted to text via {@link Object#toString()}.
    */
-  public static void logError(Throwable throwable, Object... lines)
-  {
+  public static void logError(Throwable throwable, Object... lines) {
     log(System.err, STDERR_MONITOR, "ERROR", lines, throwable);
   }
 
@@ -170,8 +168,7 @@ public class LoggingUtilities {
    * @param lines The lines of text to log, which may be objects that will be
    *              converted to text via {@link Object#toString()}.
    */
-  public static void logWarning(Object... lines)
-  {
+  public static void logWarning(Object... lines) {
     log(System.err, STDERR_MONITOR, "WARNING", lines, null);
   }
 
@@ -181,11 +178,10 @@ public class LoggingUtilities {
    * {@link Throwable}.
    *
    * @param throwable The {@link Throwable} whose stack trace should be logged.
-   * @param lines The lines of text to log, which may be objects that will be
-   *              converted to text via {@link Object#toString()}.
+   * @param lines     The lines of text to log, which may be objects that will be
+   *                  converted to text via {@link Object#toString()}.
    */
-  public static void logWarning(Throwable throwable, Object... lines)
-  {
+  public static void logWarning(Throwable throwable, Object... lines) {
     log(System.err, STDERR_MONITOR, "WARNING", lines, throwable);
   }
 
@@ -196,8 +192,7 @@ public class LoggingUtilities {
    * @param lines The lines of text to log, which may be objects that will be
    *              converted to text via {@link Object#toString()}.
    */
-  public static void logInfo(Object... lines)
-  {
+  public static void logInfo(Object... lines) {
     log(System.out, STDOUT_MONITOR, "INFO", lines, null);
   }
 
@@ -208,9 +203,9 @@ public class LoggingUtilities {
    * @param lines The lines of text to log, which may be objects that will be
    *              converted to text via {@link Object#toString()}.
    */
-  public static void logDebug(Object... lines)
-  {
-    if (!isDebugLogging()) return;
+  public static void logDebug(Object... lines) {
+    if (!isDebugLogging())
+      return;
     log(System.out, STDOUT_MONITOR, "DEBUG", lines, null);
   }
 
@@ -223,9 +218,9 @@ public class LoggingUtilities {
    * @deprecated Use {@link #logDebug(Object...)} instead.
    * @see #logDebug(Object...)
    */
-  public static void debugLog(String... lines)
-  {
-    if (!isDebugLogging()) return;
+  public static void debugLog(String... lines) {
+    if (!isDebugLogging())
+      return;
     log(System.out, STDOUT_MONITOR, "DEBUG", lines, null);
   }
 
@@ -234,34 +229,32 @@ public class LoggingUtilities {
    * and timestamp using the specified {@link PrintStream}, {@link Object} to
    * synchronize on, {@link String} log type and lines of text to log.
    *
-   * @param ps The {@link PrintStream} to write to.
-   * @param monitor The {@link Object} to synchronize on when writing and
-   *                flushing the {@link PrintStream}.
-   * @param logType The logging type such as <code>"DEBUG"</code> or
-   *                <code>"ERROR"</code>.
-   * @param lines The lines of text to log.
+   * @param ps        The {@link PrintStream} to write to.
+   * @param monitor   The {@link Object} to synchronize on when writing and
+   *                  flushing the {@link PrintStream}.
+   * @param logType   The logging type such as <code>"DEBUG"</code> or
+   *                  <code>"ERROR"</code>.
+   * @param lines     The lines of text to log.
    * @param throwable The exception to log.
    */
   private static void log(PrintStream ps,
-                          Object      monitor,
-                          String      logType,
-                          Object[]    lines,
-                          Throwable   throwable)
-  {
+      Object monitor,
+      String logType,
+      Object[] lines,
+      Throwable throwable) {
     Thread currentThread = Thread.currentThread();
     StackTraceElement[] stackTrace = currentThread.getStackTrace();
     StackTraceElement caller = stackTrace[3];
     String callingClass = caller.getClassName();
     int index = callingClass.lastIndexOf(".");
 
-    String packageName  = callingClass.substring(0, index);
-    callingClass = callingClass.substring(index+1);
+    String packageName = callingClass.substring(0, index);
+    callingClass = callingClass.substring(index + 1);
 
     String productId = getProductIdForPackage(packageName);
 
     StringBuilder sb = new StringBuilder();
-    String timestamp
-        = LOG_DATE_FORMATTER.format(Instant.now().atZone(LOG_DATE_ZONE));
+    String timestamp = LOG_DATE_FORMATTER.format(Instant.now().atZone(LOG_DATE_ZONE));
     sb.append(timestamp).append(" senzing-").append(productId)
         .append(" (").append(logType).append(")")
         .append(" [").append(Thread.currentThread().getId())
@@ -272,8 +265,8 @@ public class LoggingUtilities {
 
     // handle the stack trace if a throwable is provided
     if (throwable != null) {
-      StringWriter  sw = new StringWriter();
-      PrintWriter   pw = new PrintWriter(sw);
+      StringWriter sw = new StringWriter();
+      PrintWriter pw = new PrintWriter(sw);
       throwable.printStackTrace(pw);
       sb.append(sw.toString());
     }
@@ -290,12 +283,13 @@ public class LoggingUtilities {
    * 
    * @param stackTrace The array of {@link StackTraceElement} instances to format.
    * 
-   * @return The formatted {@link String} describing the array of {@link 
+   * @return The formatted {@link String} describing the array of {@link
    *         StackTraceElement} instances or <code>null</code> if the specified
    *         array is <code>null</code>.
    */
   public static String formatStackTrace(StackTraceElement[] stackTrace) {
-    if (stackTrace == null) return null;
+    if (stackTrace == null)
+      return null;
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
     for (StackTraceElement elem : stackTrace) {
@@ -305,17 +299,19 @@ public class LoggingUtilities {
   }
 
   /**
-   * Formats a single {@link StackTraceElement} in the same format as they would appear
+   * Formats a single {@link StackTraceElement} in the same format as they would
+   * appear
    * in an exception stack trace.
    * 
    * @param elem The {@link StackTraceElement} to format.
    * 
-   * @return The formatted {@link String} describing the {@link StackTraceElement}.
+   * @return The formatted {@link String} describing the
+   *         {@link StackTraceElement}.
    */
   public static String formatStackTrace(StackTraceElement elem) {
     StringBuilder sb = new StringBuilder();
     sb.append("        at ");
-    
+
     // handle a null element
     if (elem == null) {
       sb.append("[unknown: null]");
@@ -361,7 +357,6 @@ public class LoggingUtilities {
     return sw.toString();
   }
 
-
   /**
    * Formats an error message from a {@link G2Fallible} instance, including
    * the details (which may contain sensitive PII information) as part of
@@ -369,12 +364,11 @@ public class LoggingUtilities {
    *
    * @param operation The name of the operation from the native API interface
    *                  that was attempted but failed.
-   * @param fallible The {@link G2Fallible} from which to extract the error
-   *                 message.
+   * @param fallible  The {@link G2Fallible} from which to extract the error
+   *                  message.
    * @return The multi-line formatted log message.
    */
-  public static String formatError(String operation, G2Fallible fallible)
-  {
+  public static String formatError(String operation, G2Fallible fallible) {
     return formatError(operation, fallible, true);
   }
 
@@ -383,20 +377,20 @@ public class LoggingUtilities {
    * including the details (which may contain sensitive PII information) as
    * part of the result.
    *
-   * @param operation The name of the operation from the native API interface
-   *                  that was attempted but failed.
-   * @param fallible The {@link G2Fallible} from which to extract the error
-   *                 message.
+   * @param operation      The name of the operation from the native API interface
+   *                       that was attempted but failed.
+   * @param fallible       The {@link G2Fallible} from which to extract the error
+   *                       message.
    * @param includeDetails <code>true</code> to include the details of the failure
-   *                       failure in the resultant message, and <code>false</code>
+   *                       failure in the resultant message, and
+   *                       <code>false</code>
    *                       to exclude them (usually to avoid logging sensitive
    *                       information).
    * @return The multi-line formatted log message.
    */
-  public static String formatError(String     operation,
-                                   G2Fallible fallible,
-                                   boolean    includeDetails)
-  {
+  public static String formatError(String operation,
+      G2Fallible fallible,
+      boolean includeDetails) {
     int errorCode = fallible.getLastExceptionCode();
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -421,12 +415,11 @@ public class LoggingUtilities {
    *
    * @param operation The name of the operation from the native API interface
    *                  that was attempted but failed.
-   * @param fallible The {@link G2Fallible} from which to extract the error
-   *                 message.
+   * @param fallible  The {@link G2Fallible} from which to extract the error
+   *                  message.
    */
-  public static void logError(String      operation,
-                              G2Fallible  fallible)
-  {
+  public static void logError(String operation,
+      G2Fallible fallible) {
     logError(operation, fallible, true);
   }
 
@@ -435,19 +428,19 @@ public class LoggingUtilities {
    * including the details (which may contain sensitive PII information) as
    * part of the result.
    *
-   * @param operation The name of the operation from the native API interface
-   *                  that was attempted but failed.
-   * @param fallible The {@link G2Fallible} from which to extract the error
-   *                 message.
+   * @param operation      The name of the operation from the native API interface
+   *                       that was attempted but failed.
+   * @param fallible       The {@link G2Fallible} from which to extract the error
+   *                       message.
    * @param includeDetails <code>true</code> to include the details of the failure
-   *                       failure in the resultant message, and <code>false</code>
+   *                       failure in the resultant message, and
+   *                       <code>false</code>
    *                       to exclude them (usually to avoid logging sensitive
    *                       information).
    */
-  public static void logError(String      operation,
-                              G2Fallible  fallible,
-                              boolean     includeDetails)
-  {
+  public static void logError(String operation,
+      G2Fallible fallible,
+      boolean includeDetails) {
     String message = formatError(operation, fallible, includeDetails);
     System.err.println(message);
   }
@@ -455,11 +448,13 @@ public class LoggingUtilities {
   /**
    * Convert a throwable to a {@link Long} value so we don't keep a reference
    * to what could be a complex exception object.
+   * 
    * @param t The throwable to convert.
    * @return The long hash representation to identify the throwable instance.
    */
   private static Long throwableToLong(Throwable t) {
-    if (t == null) return null;
+    if (t == null)
+      return null;
     if (t.getClass() == RuntimeException.class && t.getCause() != null) {
       t = t.getCause();
     }
@@ -476,15 +471,19 @@ public class LoggingUtilities {
    * Checks if the specified {@link Throwable} is the last logged exception
    * or if the class of specified {@link Throwable} is {@link RuntimeException}
    * and it has a {@linkplain Throwable#getCause()} then if the cause is the
-   * last logged exception.  This is handy for telling if the exception has already been logged by a
+   * last logged exception. This is handy for telling if the exception has already
+   * been logged by a
    * deeper level of the stack trace.
+   * 
    * @param t The {@link Throwable} to check.
    * @return <code>true</code> if it is the last logged exception, otherwise
    *         <code>false</code>.
    */
   public static boolean isLastLoggedException(Throwable t) {
-    if (t == null) return false;
-    if (LAST_LOGGED_EXCEPTION.get() == null) return false;
+    if (t == null)
+      return false;
+    if (LAST_LOGGED_EXCEPTION.get() == null)
+      return false;
     long value = throwableToLong(t);
     return (LAST_LOGGED_EXCEPTION.get() == value);
   }
@@ -502,19 +501,20 @@ public class LoggingUtilities {
 
   /**
    * Sets the last logged exception and rethrows the specified exception.
+   * 
    * @param t The {@link Throwable} describing the exception.
    * @throws T To rethrow the specified exception.
    * @param <T> The type of the specified exception which is then thrown.
    */
   public static <T extends Throwable> void setLastLoggedAndThrow(T t)
-    throws T
-  {
+      throws T {
     setLastLoggedException(t);
     throw t;
   }
 
   /**
-   * Conditionally logs to stderr the specified {@link Throwable} is <b>not</b> the {@linkplain
+   * Conditionally logs to stderr the specified {@link Throwable} is <b>not</b>
+   * the {@linkplain
    * #isLastLoggedException(Throwable) last logged exception} and then rethrows
    * it.
    *
@@ -524,8 +524,7 @@ public class LoggingUtilities {
    * @param <T> The type of the specified exception which is then thrown.
    */
   public static <T extends Throwable> T logOnceAndThrow(T t)
-    throws T
-  {
+      throws T {
     if (!isLastLoggedException(t)) {
       t.printStackTrace();
     }

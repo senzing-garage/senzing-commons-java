@@ -28,11 +28,13 @@ import static com.senzing.cmdline.ExtendedTestOption.*;
 public class CommandLineUtilitiesTest {
   /**
    * Converts the specified array to a diagnostic {@link String}.
+   * 
    * @param array The array to convert to a {@link String}.
    * @return A diagnostic {@link String} describing the specified array.
    */
   private static String arrayToString(String[] array) {
-    if (array == null) return "null";
+    if (array == null)
+      return "null";
     JsonArrayBuilder jab = Json.createArrayBuilder();
     for (int index = 0; index < array.length; index++) {
       jab.add(array[index]);
@@ -49,7 +51,7 @@ public class CommandLineUtilitiesTest {
   public List<Arguments> getShiftArgParameters() {
     List<Arguments> result = new LinkedList<>();
 
-    String[] initial = {"A", "B", "C"};
+    String[] initial = { "A", "B", "C" };
     result.add(arguments(initial, 0, initial, null));
 
     String[] shifted = { "B", "C" };
@@ -58,7 +60,7 @@ public class CommandLineUtilitiesTest {
     shifted = new String[] { "C" };
     result.add(arguments(initial, 2, shifted, null));
 
-    shifted = new String[] { };
+    shifted = new String[] {};
     result.add(arguments(initial, 3, shifted, null));
 
     result.add(arguments(initial, 4, null, TooFewArgumentsException.class));
@@ -72,10 +74,9 @@ public class CommandLineUtilitiesTest {
   @MethodSource("getShiftArgParameters")
   @SuppressWarnings("unchecked")
   public void shiftArgumentsTest(String[] initialArray,
-                                 int      shiftCount,
-                                 String[] expectedShift,
-                                 Class    exceptionType)
-  {
+      int shiftCount,
+      String[] expectedShift,
+      Class exceptionType) {
     StringBuilder sb = new StringBuilder();
     sb.append("initialArray=[ ").append(arrayToString(initialArray))
         .append(" ], shiftCount=[ ").append(shiftCount)
@@ -90,14 +91,14 @@ public class CommandLineUtilitiesTest {
       // check if we succeeded unexpectedly
       if (expectedShift == null) {
         fail("Expected a failure, but succeeded: shifted=[ "
-             + arrayToString(shifted) + " ], " + testInfo);
+            + arrayToString(shifted) + " ], " + testInfo);
       }
 
       // check if length is expected
       assertEquals(expectedShift.length, shifted.length,
           "Length of the shifted array (" + shifted.length
-                + ") is not the expected length (" + expectedShift.length
-                + "): shifted=[ " + arrayToString(shifted) + " ], " + testInfo);
+              + ") is not the expected length (" + expectedShift.length
+              + "): shifted=[ " + arrayToString(shifted) + " ], " + testInfo);
 
       // check if the elements in the array are as expected
       for (int index = 0; index < shifted.length; index++) {
@@ -117,7 +118,7 @@ public class CommandLineUtilitiesTest {
       } else if (exceptionType != null) {
         if (!exceptionType.isAssignableFrom(e.getClass())) {
           fail("Shift failed with unexpected exception type: "
-                   + testInfo, e);
+              + testInfo, e);
         }
 
       } else {
@@ -135,7 +136,7 @@ public class CommandLineUtilitiesTest {
     // basic option value add
     Map<CommandLineOption, CommandLineValue> optionMap = new LinkedHashMap<>();
     CommandLineValue value = new CommandLineValue(
-        COMMAND_LINE, PORT, PORT.getCommandLineFlag(), 9080, List.of("9080") );
+        COMMAND_LINE, PORT, PORT.getCommandLineFlag(), 9080, List.of("9080"));
     result.add(arguments(optionMap, value, null));
 
     // adding a duplicated value
@@ -146,81 +147,81 @@ public class CommandLineUtilitiesTest {
     // adding a default conflict (should not conflict)
     optionMap = new LinkedHashMap<>();
     value = new CommandLineValue(COMMAND_LINE,
-                                 HELP,
-                                 HELP.getCommandLineFlag(),
-                                 null,
-                                 Collections.emptyList());
+        HELP,
+        HELP.getCommandLineFlag(),
+        null,
+        Collections.emptyList());
 
     optionMap.put(value.getOption(), value);
     value = new CommandLineValue(DEFAULT,
-                                 VERBOSE,
-                                 false,
-                                 List.of("false"));
+        VERBOSE,
+        false,
+        List.of("false"));
     result.add(arguments(optionMap, value, null));
 
     // add conflicting values
     optionMap = new LinkedHashMap<>();
     value = new CommandLineValue(COMMAND_LINE,
-                                 PORT,
-                                 PORT.getCommandLineFlag(),
-                                 9080,
-                                 List.of("9080"));
+        PORT,
+        PORT.getCommandLineFlag(),
+        9080,
+        List.of("9080"));
 
     optionMap.put(value.getOption(), value);
     value = new CommandLineValue(COMMAND_LINE,
-                                 VERSION,
-                                 VERSION.getCommandLineFlag(),
-                                 null,
-                                 Collections.emptyList());
+        VERSION,
+        VERSION.getCommandLineFlag(),
+        null,
+        Collections.emptyList());
     result.add(arguments(optionMap, value, ConflictingOptionsException.class));
 
     // add conflicting values with extended option classes
     optionMap = new LinkedHashMap<>();
     value = new CommandLineValue(COMMAND_LINE,
-                                 VERSION,
-                                 VERSION.getCommandLineFlag(),
-                                 null,
-                                 Collections.emptyList());
+        VERSION,
+        VERSION.getCommandLineFlag(),
+        null,
+        Collections.emptyList());
 
     optionMap.put(value.getOption(), value);
     value = new CommandLineValue(COMMAND_LINE,
-                                 DATABASE_TABLE,
-                                 DATABASE_TABLE.getCommandLineFlag(),
-                                 "SOME_TABLE",
-                                 List.of("SOME_TABLE"));
+        DATABASE_TABLE,
+        DATABASE_TABLE.getCommandLineFlag(),
+        "SOME_TABLE",
+        List.of("SOME_TABLE"));
     result.add(arguments(optionMap, value, ConflictingOptionsException.class));
 
     // add conflicting values with extended option classes
     optionMap = new LinkedHashMap<>();
     value = new CommandLineValue(COMMAND_LINE,
-                                 DATABASE_TABLE,
-                                 DATABASE_TABLE.getCommandLineFlag(),
-                                 "SOME_TABLE",
-                                 List.of("SOME_TABLE"));
+        DATABASE_TABLE,
+        DATABASE_TABLE.getCommandLineFlag(),
+        "SOME_TABLE",
+        List.of("SOME_TABLE"));
 
     optionMap.put(value.getOption(), value);
     value = new CommandLineValue(COMMAND_LINE,
-                                 VERSION,
-                                 VERSION.getCommandLineFlag(),
-                                 null,
-                                 Collections.emptyList());
+        VERSION,
+        VERSION.getCommandLineFlag(),
+        null,
+        Collections.emptyList());
 
     result.add(arguments(optionMap, value, ConflictingOptionsException.class));
 
     // adding an option and an extended option
     optionMap = new LinkedHashMap<>();
     value = new CommandLineValue(COMMAND_LINE,
-                                 PORT,
-                                 PORT.getCommandLineFlag(),
-                                 9080,
-                                 List.of("9080"));
+        PORT,
+        PORT.getCommandLineFlag(),
+        9080,
+        List.of("9080"));
 
     optionMap.put(value.getOption(), value);
     value = new CommandLineValue(COMMAND_LINE,
-                                 DATABASE_TABLE,
-                                 DATABASE_TABLE.getCommandLineFlag(),
-                                 "SOME_TABLE",
-                                 List.of("SOME_TABLE"));
+        DATABASE_TABLE,
+        DATABASE_TABLE.getCommandLineFlag(),
+        "SOME_TABLE",
+        List.of("SOME_TABLE"));
     result.add(arguments(optionMap, value, null));
 
     return result;
@@ -230,10 +231,9 @@ public class CommandLineUtilitiesTest {
   @MethodSource("getPutValueParameters")
   @SuppressWarnings("unchecked")
   public void putValueTest(
-      Map<CommandLineOption, CommandLineValue>  optionMap,
-      CommandLineValue                          value,
-      Class                                     exceptionType)
-  {
+      Map<CommandLineOption, CommandLineValue> optionMap,
+      CommandLineValue value,
+      Class exceptionType) {
     StringBuilder sb = new StringBuilder();
     sb.append("optionMap=[ ").append(optionMap)
         .append(" ], commandLineValue=[ ").append(value)
@@ -246,23 +246,23 @@ public class CommandLineUtilitiesTest {
       putValue(optionMap, value);
       if (exceptionType != null) {
         fail("Calling putMap() succeeded when it should have failed: "
-             + testInfo);
+            + testInfo);
       }
 
       assertTrue(optionMap.containsKey(value.getOption()),
-                 "Option map does not contain option after putValue()");
+          "Option map does not contain option after putValue()");
 
       CommandLineValue contained = optionMap.get(value.getOption());
       assertEquals(value.getOption(), contained.getOption(),
-                   "Unpexected option for value after putValue()");
+          "Unexpected option for value after putValue()");
       assertEquals(value.getSource(), contained.getSource(),
           "Unexpected source for value after putValue()");
       assertEquals(value.getSpecifier(), contained.getSpecifier(),
-                   "Unexpected specifier for value after putValue()");
+          "Unexpected specifier for value after putValue()");
       assertEquals(value.getProcessedValue(), contained.getProcessedValue(),
-                   "Unexpected processed value after putValue()");
+          "Unexpected processed value after putValue()");
       assertEquals(value.getParameters(), contained.getParameters(),
-                   "Unexpected parameters for value after putValue()");
+          "Unexpected parameters for value after putValue()");
 
     } catch (Exception e) {
       if (exceptionType == null) {
@@ -270,7 +270,7 @@ public class CommandLineUtilitiesTest {
       }
       if (!exceptionType.isAssignableFrom(e.getClass())) {
         fail("Calling putMap() failed with unexpected exception type ("
-             + e.getClass().getName() + "): " + testInfo, e);
+            + e.getClass().getName() + "): " + testInfo, e);
       }
     }
   }
@@ -288,7 +288,7 @@ public class CommandLineUtilitiesTest {
         result.add(arguments(TestOption.class, synonymFlag, option));
       }
     }
-    for (ExtendedTestOption option: ExtendedTestOption.values()) {
+    for (ExtendedTestOption option : ExtendedTestOption.values()) {
       result.add(arguments(
           ExtendedTestOption.class, option.getCommandLineFlag(), option));
       for (String synonymFlag : option.getSynonymFlags()) {
@@ -304,13 +304,10 @@ public class CommandLineUtilitiesTest {
 
   @ParameterizedTest
   @MethodSource("getLookupParameters")
-  public static <T extends Enum<T> & CommandLineOption<T, B>,
-                 B extends Enum<B> & CommandLineOption<B, ?>>
-    void lookupTest(
-      Class<T>          optionClass,
-      String            flag,
-      CommandLineOption expectedValue)
-  {
+  public static <T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> void lookupTest(
+      Class<T> optionClass,
+      String flag,
+      CommandLineOption expectedValue) {
 
     StringBuilder sb = new StringBuilder();
     sb.append("flag=[ ").append(flag)
@@ -322,8 +319,8 @@ public class CommandLineUtilitiesTest {
       CommandLineOption option = (CommandLineOption) lookup(optionClass, flag);
 
       assertEquals(expectedValue, option,
-                   "Lookup returned an unexpected value for flag: "
-                    + testInfo);
+          "Lookup returned an unexpected value for flag: "
+              + testInfo);
 
     } catch (Exception e) {
       fail("Unexpected exception during lookup(): " + testInfo, e);
@@ -342,149 +339,148 @@ public class CommandLineUtilitiesTest {
 
     // try a basic --help option map
     optionMap = Map.of(HELP, new CommandLineValue(COMMAND_LINE,
-                                                  HELP,
-                                                  HELP.getCommandLineFlag(),
-                                                  null,
-                                                  Collections.emptyList()));
+        HELP,
+        HELP.getCommandLineFlag(),
+        null,
+        Collections.emptyList()));
     result.add(arguments(TestOption.class, optionMap, null, null));
     result.add(arguments(ExtendedTestOption.class, optionMap, null, null));
 
     // try a basic --version option map
     optionMap = Map.of(VERSION, new CommandLineValue(COMMAND_LINE,
-                                                     VERSION,
-                                                     VERSION.getCommandLineFlag(),
-                                                    null,
-                                                     Collections.emptyList()));
+        VERSION,
+        VERSION.getCommandLineFlag(),
+        null,
+        Collections.emptyList()));
     result.add(arguments(TestOption.class, optionMap, null, null));
     result.add(arguments(ExtendedTestOption.class, optionMap, null, null));
 
-
     // try a key/value mismatch
     optionMap = Map.of(HELP, new CommandLineValue(COMMAND_LINE,
-                                                  VERSION,
-                                                  VERSION.getCommandLineFlag(),
-                                                  null,
-                                                  Collections.emptyList()));
+        VERSION,
+        VERSION.getCommandLineFlag(),
+        null,
+        Collections.emptyList()));
     result.add(arguments(TestOption.class,
-                         optionMap,
-                         null,
-                         IllegalArgumentException.class));
+        optionMap,
+        null,
+        IllegalArgumentException.class));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         null,
-                         IllegalArgumentException.class));
+        optionMap,
+        null,
+        IllegalArgumentException.class));
 
     // validating an option with unrelated CommandLineOption types
     optionMap = Map.of(PORT,
-                       new CommandLineValue(COMMAND_LINE,
-                                            PORT,
-                                            PORT.getCommandLineFlag(),
-                                            9080,
-                                            List.of("9080")),
-                       OtherTestOption.INPUT,
-                       new CommandLineValue(
-                           COMMAND_LINE,
-                           OtherTestOption.INPUT,
-                           OtherTestOption.INPUT.getCommandLineFlag(),
-                           new File("some-file.txt"),
-                           List.of("some-file.txt")));
+        new CommandLineValue(COMMAND_LINE,
+            PORT,
+            PORT.getCommandLineFlag(),
+            9080,
+            List.of("9080")),
+        OtherTestOption.INPUT,
+        new CommandLineValue(
+            COMMAND_LINE,
+            OtherTestOption.INPUT,
+            OtherTestOption.INPUT.getCommandLineFlag(),
+            new File("some-file.txt"),
+            List.of("some-file.txt")));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         null,
-                         IllegalArgumentException.class));
+        optionMap,
+        null,
+        IllegalArgumentException.class));
 
     // check for missing primary options
     optionMap = Map.of(URL,
-                       new CommandLineValue(COMMAND_LINE,
-                                            URL,
-                                            URL.getCommandLineFlag(),
-                                            "localhost:9080",
-                                            List.of("localhost:9080")));
+        new CommandLineValue(COMMAND_LINE,
+            URL,
+            URL.getCommandLineFlag(),
+            "localhost:9080",
+            List.of("localhost:9080")));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         null,
-                         NoPrimaryOptionException.class));
+        optionMap,
+        null,
+        NoPrimaryOptionException.class));
 
     // check for deprecation warnings via command-line
     optionMap = Map.of(CONFIG,
-                       new CommandLineValue(COMMAND_LINE,
-                                            CONFIG,
-                                            CONFIG.getCommandLineFlag(),
-                                            new File("test.conf"),
-                                            List.of("test.conf")),
-                       URL,
-                       new CommandLineValue(COMMAND_LINE,
-                                            URL,
-                                            URL.getCommandLineFlag(),
-                                            "localhost:1234",
-                                            List.of("localhost:1234")));
+        new CommandLineValue(COMMAND_LINE,
+            CONFIG,
+            CONFIG.getCommandLineFlag(),
+            new File("test.conf"),
+            List.of("test.conf")),
+        URL,
+        new CommandLineValue(COMMAND_LINE,
+            URL,
+            URL.getCommandLineFlag(),
+            "localhost:1234",
+            List.of("localhost:1234")));
 
     result.add(arguments(TestOption.class,
-                         optionMap,
-                         List.of(
-                             new DeprecatedOptionWarning(
-                                 COMMAND_LINE,
-                                 URL,
-                                 URL.getCommandLineFlag())),
-                         null));
+        optionMap,
+        List.of(
+            new DeprecatedOptionWarning(
+                COMMAND_LINE,
+                URL,
+                URL.getCommandLineFlag())),
+        null));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         List.of(
-                             new DeprecatedOptionWarning(
-                                 COMMAND_LINE,
-                                 URL,
-                                 URL.getCommandLineFlag())),
-                         null));
+        optionMap,
+        List.of(
+            new DeprecatedOptionWarning(
+                COMMAND_LINE,
+                URL,
+                URL.getCommandLineFlag())),
+        null));
 
     // check for deprecation warnings via environment
     optionMap = Map.of(CONFIG,
-                       new CommandLineValue(COMMAND_LINE,
-                                            CONFIG,
-                                            CONFIG.getCommandLineFlag(),
-                                            new File("test.conf"),
-                                            List.of("test.conf")),
-                       URL,
-                       new CommandLineValue(ENVIRONMENT,
-                                            URL,
-                                            URL.getEnvironmentVariable(),
-                                            "localhost:1234",
-                                            List.of("localhost:1234")));
+        new CommandLineValue(COMMAND_LINE,
+            CONFIG,
+            CONFIG.getCommandLineFlag(),
+            new File("test.conf"),
+            List.of("test.conf")),
+        URL,
+        new CommandLineValue(ENVIRONMENT,
+            URL,
+            URL.getEnvironmentVariable(),
+            "localhost:1234",
+            List.of("localhost:1234")));
 
     result.add(arguments(TestOption.class,
-                         optionMap,
-                         List.of(
-                             new DeprecatedOptionWarning(
-                                 ENVIRONMENT,
-                                 URL,
-                                 URL.getEnvironmentVariable())),
-                         null));
+        optionMap,
+        List.of(
+            new DeprecatedOptionWarning(
+                ENVIRONMENT,
+                URL,
+                URL.getEnvironmentVariable())),
+        null));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         List.of(
-                             new DeprecatedOptionWarning(
-                                 ENVIRONMENT,
-                                 URL,
-                                 URL.getEnvironmentVariable())),
-                         null));
+        optionMap,
+        List.of(
+            new DeprecatedOptionWarning(
+                ENVIRONMENT,
+                URL,
+                URL.getEnvironmentVariable())),
+        null));
 
     // check for NO deprecation warnings when via default value
     optionMap = Map.of(CONFIG,
-                       new CommandLineValue(COMMAND_LINE,
-                                            CONFIG,
-                                            CONFIG.getCommandLineFlag(),
-                                            new File("test.conf"),
-                                            List.of("test.conf")),
-                       URL,
-                       new CommandLineValue(DEFAULT,
-                                            URL,
-                                            null,
-                                            URL.getDefaultParameters().get(0),
-                                            URL.getDefaultParameters()));
+        new CommandLineValue(COMMAND_LINE,
+            CONFIG,
+            CONFIG.getCommandLineFlag(),
+            new File("test.conf"),
+            List.of("test.conf")),
+        URL,
+        new CommandLineValue(DEFAULT,
+            URL,
+            null,
+            URL.getDefaultParameters().get(0),
+            URL.getDefaultParameters()));
 
     result.add(arguments(TestOption.class, optionMap, null, null));
     result.add(arguments(ExtendedTestOption.class, optionMap, null, null));
@@ -492,65 +488,65 @@ public class CommandLineUtilitiesTest {
     // try a conflicting option map
     optionMap = Map.of(
         HELP, new CommandLineValue(COMMAND_LINE,
-                                   HELP,
-                                   HELP.getCommandLineFlag(),
-                                   null,
-                                   Collections.emptyList()),
+            HELP,
+            HELP.getCommandLineFlag(),
+            null,
+            Collections.emptyList()),
         VERSION, new CommandLineValue(COMMAND_LINE,
-                                      VERSION,
-                                      VERSION.getCommandLineFlag(),
-                                      null,
-                                      Collections.emptyList()));
+            VERSION,
+            VERSION.getCommandLineFlag(),
+            null,
+            Collections.emptyList()));
 
     result.add(arguments(TestOption.class,
-                         optionMap,
-                         null,
-                         ConflictingOptionsException.class));
+        optionMap,
+        null,
+        ConflictingOptionsException.class));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         null,
-                         ConflictingOptionsException.class));
+        optionMap,
+        null,
+        ConflictingOptionsException.class));
 
     // add conflicting values with extended option classes
     optionMap = Map.of(
         VERSION,
         new CommandLineValue(COMMAND_LINE,
-                             VERSION,
-                             VERSION.getCommandLineFlag(),
-                             null,
-                             Collections.emptyList()),
+            VERSION,
+            VERSION.getCommandLineFlag(),
+            null,
+            Collections.emptyList()),
         DATABASE_TABLE,
         new CommandLineValue(COMMAND_LINE,
-                             DATABASE_TABLE,
-                             DATABASE_TABLE.getCommandLineFlag(),
-                             "SOME_TABLE",
-                             List.of("SOME_TABLE")));
+            DATABASE_TABLE,
+            DATABASE_TABLE.getCommandLineFlag(),
+            "SOME_TABLE",
+            List.of("SOME_TABLE")));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         null,
-                         ConflictingOptionsException.class));
+        optionMap,
+        null,
+        ConflictingOptionsException.class));
 
     // add conflicting values with extended option classes
     optionMap = Map.of(
         DATABASE_TABLE,
         new CommandLineValue(COMMAND_LINE,
-                             DATABASE_TABLE,
-                             DATABASE_TABLE.getCommandLineFlag(),
-                             "SOME_TABLE",
-                             List.of("SOME_TABLE")),
+            DATABASE_TABLE,
+            DATABASE_TABLE.getCommandLineFlag(),
+            "SOME_TABLE",
+            List.of("SOME_TABLE")),
         VERSION,
         new CommandLineValue(COMMAND_LINE,
-                             VERSION,
-                             VERSION.getCommandLineFlag(),
-                             null,
-                             Collections.emptyList()));
+            VERSION,
+            VERSION.getCommandLineFlag(),
+            null,
+            Collections.emptyList()));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         null,
-                         ConflictingOptionsException.class));
+        optionMap,
+        null,
+        ConflictingOptionsException.class));
 
     // add options with missing dependencies (PORT without INTERFACE)
     // NOTE: normally interface would have a default value, but we are
@@ -558,63 +554,60 @@ public class CommandLineUtilitiesTest {
     optionMap = Map.of(
         CONFIG,
         new CommandLineValue(COMMAND_LINE,
-                             CONFIG,
-                             "test.conf",
-                             List.of("test.conf")),
+            CONFIG,
+            "test.conf",
+            List.of("test.conf")),
         PORT,
         new CommandLineValue(COMMAND_LINE,
-                             PORT,
-                             PORT.getCommandLineFlag(),
-                             9080,
-                             List.of("9080")));
+            PORT,
+            PORT.getCommandLineFlag(),
+            9080,
+            List.of("9080")));
 
     result.add(arguments(TestOption.class,
-                         optionMap,
-                         null,
-                         MissingDependenciesException.class));
+        optionMap,
+        null,
+        MissingDependenciesException.class));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         null,
-                         MissingDependenciesException.class));
+        optionMap,
+        null,
+        MissingDependenciesException.class));
 
     // add options with missing dependencies (INTERFACE without PORT)
     optionMap = Map.of(
         CONFIG,
         new CommandLineValue(COMMAND_LINE,
-                             CONFIG,
-                             "test.conf",
-                             List.of("test.conf")),
+            CONFIG,
+            "test.conf",
+            List.of("test.conf")),
         INTERFACE,
         new CommandLineValue(COMMAND_LINE,
-                             INTERFACE,
-                             INTERFACE.getCommandLineFlag(),
-                             "localhost",
-                             List.of("localhost")));
+            INTERFACE,
+            INTERFACE.getCommandLineFlag(),
+            "localhost",
+            List.of("localhost")));
 
     result.add(arguments(TestOption.class,
-                         optionMap,
-                         null,
-                         MissingDependenciesException.class));
+        optionMap,
+        null,
+        MissingDependenciesException.class));
 
     result.add(arguments(ExtendedTestOption.class,
-                         optionMap,
-                         null,
-                         MissingDependenciesException.class));
+        optionMap,
+        null,
+        MissingDependenciesException.class));
 
     return result;
   }
 
   @ParameterizedTest
   @MethodSource("getValidateOptionsParameters")
-  public static <T extends Enum<T> & CommandLineOption<T, B>,
-                 B extends Enum<B> & CommandLineOption<B, ?>>
-    void validateOptionsTest(
-      Class<T>                                  optionClass,
-      Map<CommandLineOption, CommandLineValue>  optionMap,
-      List<DeprecatedOptionWarning>             deprecatedWarnings,
-      Class<?>                                  exceptionType)
-  {
+  public static <T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> void validateOptionsTest(
+      Class<T> optionClass,
+      Map<CommandLineOption, CommandLineValue> optionMap,
+      List<DeprecatedOptionWarning> deprecatedWarnings,
+      Class<?> exceptionType) {
 
     StringBuilder sb = new StringBuilder();
     sb.append("optionClass=[ ").append(optionClass)
@@ -626,18 +619,17 @@ public class CommandLineUtilitiesTest {
     String testInfo = sb.toString();
 
     try {
-      List<DeprecatedOptionWarning> deprecations
-          = validateOptions(optionClass, optionMap);
+      List<DeprecatedOptionWarning> deprecations = validateOptions(optionClass, optionMap);
 
-      // ceck if an exception was expected
+      // check if an exception was expected
       if (exceptionType != null) {
         fail("Successful option validation when a failure was expected: "
-             + testInfo);
+            + testInfo);
       }
 
       assertEquals(deprecatedWarnings, deprecations,
-                   "Unexpected deprecation warning results: "
-                       + testInfo);
+          "Unexpected deprecation warning results: "
+              + testInfo);
 
     } catch (Exception e) {
       // check if no exception was expected
@@ -649,7 +641,7 @@ public class CommandLineUtilitiesTest {
       // check if the wrong exception was thrown
       if (!exceptionType.isAssignableFrom(e.getClass())) {
         fail("Failed option validation with unexpected exception type ("
-                 + e.getClass().getName() + "): " + testInfo, e);
+            + e.getClass().getName() + "): " + testInfo, e);
       }
     }
   }
@@ -662,301 +654,299 @@ public class CommandLineUtilitiesTest {
     List emptyList = List.of();
 
     Map<CommandLineOption, CommandLineValue> defaultMap = Map.of(
-      VERBOSE,
-      new CommandLineValue(
-          DEFAULT, VERBOSE, false, List.of("false")),
-      IGNORE_ENV,
-      new CommandLineValue(
-          DEFAULT, IGNORE_ENV, false, List.of("false")),
-      INTERFACE,
-      new CommandLineValue(
-          DEFAULT, INTERFACE, InetAddress.getLoopbackAddress(),
-          List.of("localhost")),
-      URL,
-      new CommandLineValue(DEFAULT,
-                           URL,
-                           "localhost/127.0.0.1:9080",
-                           List.of("localhost:9080")));
+        VERBOSE,
+        new CommandLineValue(
+            DEFAULT, VERBOSE, false, List.of("false")),
+        IGNORE_ENV,
+        new CommandLineValue(
+            DEFAULT, IGNORE_ENV, false, List.of("false")),
+        INTERFACE,
+        new CommandLineValue(
+            DEFAULT, INTERFACE, InetAddress.getLoopbackAddress(),
+            List.of("localhost")),
+        URL,
+        new CommandLineValue(DEFAULT,
+            URL,
+            "localhost/127.0.0.1:9080",
+            List.of("localhost:9080")));
 
-    Object[][] ignoreVariants
-        = { {null, null}, {true, null}, {null, IGNORE_ENV} };
+    Object[][] ignoreVariants = { { null, null }, { true, null }, { null, IGNORE_ENV } };
 
-    for (Object[] ignoreOpts: ignoreVariants) {
+    for (Object[] ignoreOpts : ignoreVariants) {
       String[] args = { "--help" };
-      Map<CommandLineOption, CommandLineValue> expectedResult
-          = new LinkedHashMap<>(defaultMap);
+      Map<CommandLineOption, CommandLineValue> expectedResult = new LinkedHashMap<>(defaultMap);
       expectedResult.put(HELP,
-                         new CommandLineValue(COMMAND_LINE,
-                                              HELP,
-                                              "--help",
-                                              Boolean.TRUE,
-                                              List.of()));
+          new CommandLineValue(COMMAND_LINE,
+              HELP,
+              "--help",
+              Boolean.TRUE,
+              List.of()));
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           expectedResult,
-                           emptyList,
-                           null));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          expectedResult,
+          emptyList,
+          null));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           expectedResult,
-                           emptyList,
-                           null));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          expectedResult,
+          emptyList,
+          null));
 
       args = new String[] { "-help" };
 
       expectedResult = new LinkedHashMap<>(defaultMap);
       expectedResult.put(HELP,
-                         new CommandLineValue(COMMAND_LINE,
-                                              HELP,
-                                              "-help",
-                                              Boolean.TRUE,
-                                              List.of()));
+          new CommandLineValue(COMMAND_LINE,
+              HELP,
+              "-help",
+              Boolean.TRUE,
+              List.of()));
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           expectedResult,
-                           emptyList,
-                           null));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          expectedResult,
+          emptyList,
+          null));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           expectedResult,
-                           emptyList,
-                           null));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          expectedResult,
+          emptyList,
+          null));
 
       args = new String[] { "--help", "--version" };
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           ConflictingOptionsException.class));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          ConflictingOptionsException.class));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           ConflictingOptionsException.class));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          ConflictingOptionsException.class));
 
       args = new String[] { "-help", "-version" };
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           ConflictingOptionsException.class));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          ConflictingOptionsException.class));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           ConflictingOptionsException.class));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          ConflictingOptionsException.class));
 
       args = new String[] { "--port", "9080", "--interface", "localhost" };
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           NoPrimaryOptionException.class));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          NoPrimaryOptionException.class));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           NoPrimaryOptionException.class));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          NoPrimaryOptionException.class));
 
       args = new String[] { "--port", "9080", "5080", "--interface", "localhost" };
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           BadOptionParameterCountException.class));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          BadOptionParameterCountException.class));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           BadOptionParameterCountException.class));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          BadOptionParameterCountException.class));
 
       args = new String[] { "--port", "9080", "--interface" };
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           BadOptionParameterCountException.class));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          BadOptionParameterCountException.class));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           BadOptionParameterCountException.class));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          BadOptionParameterCountException.class));
 
-      args = new String[] {"--config", "test.conf", "--url", "localhost:9080"};
+      args = new String[] { "--config", "test.conf", "--url", "localhost:9080" };
 
       expectedResult = new LinkedHashMap<>(defaultMap);
       expectedResult.put(
           CONFIG,
           new CommandLineValue(COMMAND_LINE,
-                               CONFIG,
-                               "--config",
-                               new File("test.conf"),
-                               List.of("test.conf")));
+              CONFIG,
+              "--config",
+              new File("test.conf"),
+              List.of("test.conf")));
       expectedResult.put(
           URL,
           new CommandLineValue(COMMAND_LINE,
-                               URL,
-                               "--url",
-                               "localhost/127.0.0.1:9080",
-                               List.of("localhost:9080")));
+              URL,
+              "--url",
+              "localhost/127.0.0.1:9080",
+              List.of("localhost:9080")));
 
       List<DeprecatedOptionWarning> expectedWarnings = List.of(
-              new DeprecatedOptionWarning(COMMAND_LINE, URL, "--url"));
+          new DeprecatedOptionWarning(COMMAND_LINE, URL, "--url"));
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           expectedResult,
-                           expectedWarnings,
-                           null));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          expectedResult,
+          expectedWarnings,
+          null));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           expectedResult,
-                           expectedWarnings,
-                           null));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          expectedResult,
+          expectedWarnings,
+          null));
 
       args = new String[] {
           "--config", "test.conf", "--interface", "localhost" };
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           MissingDependenciesException.class));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          MissingDependenciesException.class));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           MissingDependenciesException.class));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          MissingDependenciesException.class));
 
       args = new String[] { "--config", "test.conf", "--url", "localhost:AB12" };
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           BadOptionParametersException.class));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          BadOptionParametersException.class));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           BadOptionParametersException.class));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          BadOptionParametersException.class));
 
       args = new String[] { "--config", "test1.conf", "-config", "test2.conf" };
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           RepeatedOptionException.class));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          RepeatedOptionException.class));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           RepeatedOptionException.class));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          RepeatedOptionException.class));
 
       args = new String[] { "--config", "test.conf", "--input", "input.json" };
 
       result.add(arguments(TestOption.class,
-                           args,
-                           TestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           UnrecognizedOptionException.class));
+          args,
+          TestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          UnrecognizedOptionException.class));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           null,
-                           emptyList,
-                           UnrecognizedOptionException.class));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          null,
+          emptyList,
+          UnrecognizedOptionException.class));
 
       args = new String[] { "--config", "test.conf", "--table", "RECORDS" };
 
@@ -964,26 +954,26 @@ public class CommandLineUtilitiesTest {
       expectedResult.put(
           CONFIG,
           new CommandLineValue(COMMAND_LINE,
-                               CONFIG,
-                               "--config",
-                               new File("test.conf"),
-                               List.of("test.conf")));
+              CONFIG,
+              "--config",
+              new File("test.conf"),
+              List.of("test.conf")));
       expectedResult.put(
           DATABASE_TABLE,
           new CommandLineValue(COMMAND_LINE,
-                               DATABASE_TABLE,
-                               "--table",
-                               "RECORDS",
-                               List.of("RECORDS")));
+              DATABASE_TABLE,
+              "--table",
+              "RECORDS",
+              List.of("RECORDS")));
 
       result.add(arguments(ExtendedTestOption.class,
-                           args,
-                           ExtendedTestOption.PARAMETER_PROCESSOR,
-                           ignoreOpts[0],
-                           ignoreOpts[1],
-                           expectedResult,
-                           emptyList,
-                           null));
+          args,
+          ExtendedTestOption.PARAMETER_PROCESSOR,
+          ignoreOpts[0],
+          ignoreOpts[1],
+          expectedResult,
+          emptyList,
+          null));
     }
 
     return result;
@@ -991,18 +981,15 @@ public class CommandLineUtilitiesTest {
 
   @ParameterizedTest
   @MethodSource("getParseCommandLineParameters")
-  public <T extends Enum<T> & CommandLineOption<T, B>,
-      B extends Enum<B> & CommandLineOption<B, ?>>
-    void parseCommandLineTest(
-      Class<T>                                  optionClass,
-      String[]                                  args,
-      ParameterProcessor                        processor,
-      Boolean                                   ignoreEnv,
-      CommandLineOption                         ignoreEnvOption,
-      Map<CommandLineOption, CommandLineValue>  expectedResult,
-      List<DeprecatedOptionWarning>             expectedWarnings,
-      Class<?>                                  expectedException)
-  {
+  public <T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> void parseCommandLineTest(
+      Class<T> optionClass,
+      String[] args,
+      ParameterProcessor processor,
+      Boolean ignoreEnv,
+      CommandLineOption ignoreEnvOption,
+      Map<CommandLineOption, CommandLineValue> expectedResult,
+      List<DeprecatedOptionWarning> expectedWarnings,
+      Class<?> expectedException) {
     StringBuilder sb = new StringBuilder();
     sb.append("optionClass=[ ").append(optionClass)
         .append(" ], args=[ ").append(arrayToString(args))
@@ -1012,7 +999,7 @@ public class CommandLineUtilitiesTest {
         .append(" ], expectedResult=[ ").append(expectedResult)
         .append(" ], expectedWarnings=[ ").append(expectedWarnings)
         .append(" ], expectedException=[ ").append(
-          (expectedException == null) ? "NONE" : expectedException.getName())
+            (expectedException == null) ? "NONE" : expectedException.getName())
         .append(" ]");
 
     String testInfo = sb.toString();
@@ -1022,7 +1009,7 @@ public class CommandLineUtilitiesTest {
       if (ignoreEnv != null && ignoreEnvOption != null) {
         throw new IllegalStateException(
             "INVALID TEST.  Cannot specify both 'ignoreEnv' and "
-            + "'ignoreEnvOption': " + testInfo);
+                + "'ignoreEnvOption': " + testInfo);
       }
 
       // declare the result
@@ -1044,15 +1031,15 @@ public class CommandLineUtilitiesTest {
       // check if an exception was expected
       if (expectedException != null) {
         fail("the top command-line parse when a failure was expected: "
-                 + testInfo);
+            + testInfo);
       }
 
       assertEquals(expectedResult, map,
-                   "Unexpected command-line parse results: "
-                       + testInfo);
+          "Unexpected command-line parse results: "
+              + testInfo);
 
       assertEquals(expectedWarnings, list,
-                   "Unexpected deprecation warnings: " + testInfo);
+          "Unexpected deprecation warnings: " + testInfo);
 
     } catch (Exception e) {
       // check if no exception was expected
@@ -1064,7 +1051,7 @@ public class CommandLineUtilitiesTest {
       // check if the wrong exception was thrown
       if (!expectedException.isAssignableFrom(e.getClass())) {
         fail("Failed command-line parse with unexpected exception "
-                 + "type (" + e.getClass().getName() + "): " + testInfo, e);
+            + "type (" + e.getClass().getName() + "): " + testInfo, e);
       }
     }
   }
@@ -1088,9 +1075,9 @@ public class CommandLineUtilitiesTest {
             List.of("localhost")),
         URL,
         new CommandLineValue(DEFAULT,
-                             URL,
-                             "localhost/127.0.0.1:9080",
-                             List.of("localhost:9080")));
+            URL,
+            "localhost/127.0.0.1:9080",
+            List.of("localhost:9080")));
 
     Map<CommandLineOption, Object> processedDefaults = Map.of(
         VERBOSE, false,
@@ -1098,54 +1085,52 @@ public class CommandLineUtilitiesTest {
         INTERFACE, InetAddress.getLoopbackAddress(),
         URL, "localhost/127.0.0.1:9080");
 
-    Map<CommandLineOption, CommandLineValue> optionValues
-        = new LinkedHashMap<>(defaultMap);
+    Map<CommandLineOption, CommandLineValue> optionValues = new LinkedHashMap<>(defaultMap);
     optionValues.put(HELP,
-                     new CommandLineValue(COMMAND_LINE,
-                                          HELP,
-                                          "--help",
-                                          Boolean.TRUE,
-                                          List.of()));
+        new CommandLineValue(COMMAND_LINE,
+            HELP,
+            "--help",
+            Boolean.TRUE,
+            List.of()));
 
-    Map<CommandLineOption, Object> expectedResult
-        = new LinkedHashMap<>(processedDefaults);
+    Map<CommandLineOption, Object> expectedResult = new LinkedHashMap<>(processedDefaults);
     expectedResult.put(HELP, true);
 
     JsonObject expectedJson = JsonUtilities.parseJsonObject(
         "{\"VERBOSE\": "
-        + "{\"value\": \"false\", \"source\": \"DEFAULT\"},"
-        + "\"IGNORE_ENV\": "
             + "{\"value\": \"false\", \"source\": \"DEFAULT\"},"
-        + "\"INTERFACE\": "
+            + "\"IGNORE_ENV\": "
+            + "{\"value\": \"false\", \"source\": \"DEFAULT\"},"
+            + "\"INTERFACE\": "
             + "{\"value\": \"localhost\", \"source\": \"DEFAULT\"},"
-        + "\"URL\": "
+            + "\"URL\": "
             + "{\"value\": \"localhost:9080\", \"source\": \"DEFAULT\"},"
-        + "\"HELP\": "
+            + "\"HELP\": "
             + "{\"values\": [], \"source\": "
             + "\"COMMAND_LINE\", \"via\": \"--help\"}}");
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         null,
-                         false));
+        expectedResult,
+        null,
+        false));
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         expectedJson,
-                         false));
+        expectedResult,
+        expectedJson,
+        false));
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         expectedJson,
-                         true));
+        expectedResult,
+        expectedJson,
+        true));
 
     optionValues = new LinkedHashMap<>(defaultMap);
     optionValues.put(HELP,
-                     new CommandLineValue(COMMAND_LINE,
-                                          HELP,
-                                          "-help",
-                                          Boolean.TRUE,
-                                          List.of()));
+        new CommandLineValue(COMMAND_LINE,
+            HELP,
+            "-help",
+            Boolean.TRUE,
+            List.of()));
 
     expectedJson = JsonUtilities.parseJsonObject(
         "{\"VERBOSE\": "
@@ -1161,42 +1146,42 @@ public class CommandLineUtilitiesTest {
             + "\"COMMAND_LINE\", \"via\": \"-help\"}}");
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         null,
-                         false));
+        expectedResult,
+        null,
+        false));
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         expectedJson,
-                         false));
+        expectedResult,
+        expectedJson,
+        false));
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         expectedJson,
-                         true));
+        expectedResult,
+        expectedJson,
+        true));
 
     optionValues = new LinkedHashMap<>(defaultMap);
     optionValues.put(
         CONFIG,
         new CommandLineValue(COMMAND_LINE,
-                             CONFIG,
-                             "--config",
-                             new File("test.conf"),
-                             List.of("test.conf")));
+            CONFIG,
+            "--config",
+            new File("test.conf"),
+            List.of("test.conf")));
     optionValues.put(
         URL,
         new CommandLineValue(COMMAND_LINE,
-                             URL,
-                             "--url",
-                             "localhost/127.0.0.1:9080",
-                             List.of("localhost:9080")));
+            URL,
+            "--url",
+            "localhost/127.0.0.1:9080",
+            List.of("localhost:9080")));
     optionValues.put(
         PASSWORD,
         new CommandLineValue(ENVIRONMENT,
-                             PASSWORD,
-                             "SENZING_TEST_PASSWORD",
-                             "secret",
-                             List.of("secret")));
+            PASSWORD,
+            "SENZING_TEST_PASSWORD",
+            "secret",
+            List.of("secret")));
 
     expectedResult = new LinkedHashMap<>(processedDefaults);
     expectedResult.put(CONFIG, new File("test.conf"));
@@ -1224,35 +1209,35 @@ public class CommandLineUtilitiesTest {
             + "\"via\": \"SENZING_TEST_PASSWORD\"}}");
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         null,
-                         false));
+        expectedResult,
+        null,
+        false));
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         expectedJson,
-                         false));
+        expectedResult,
+        expectedJson,
+        false));
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         expectedJson,
-                         true));
+        expectedResult,
+        expectedJson,
+        true));
 
     optionValues = new LinkedHashMap<>(defaultMap);
     optionValues.put(
         CONFIG,
         new CommandLineValue(COMMAND_LINE,
-                             CONFIG,
-                             "--config",
-                             new File("test.conf"),
-                             List.of("test.conf")));
+            CONFIG,
+            "--config",
+            new File("test.conf"),
+            List.of("test.conf")));
     optionValues.put(
         DATABASE_TABLE,
         new CommandLineValue(COMMAND_LINE,
-                             DATABASE_TABLE,
-                             "--table",
-                             "RECORDS",
-                             List.of("RECORDS")));
+            DATABASE_TABLE,
+            "--table",
+            "RECORDS",
+            List.of("RECORDS")));
 
     expectedResult = new LinkedHashMap<>(processedDefaults);
     expectedResult.put(CONFIG, new File("test.conf"));
@@ -1275,19 +1260,19 @@ public class CommandLineUtilitiesTest {
             + "\"COMMAND_LINE\", \"via\": \"--table\"}}");
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         null,
-                         false));
+        expectedResult,
+        null,
+        false));
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         expectedJson,
-                         false));
+        expectedResult,
+        expectedJson,
+        false));
 
     result.add(arguments(optionValues,
-                         expectedResult,
-                         expectedJson,
-                         true));
+        expectedResult,
+        expectedJson,
+        true));
 
     return result;
   }
@@ -1295,11 +1280,10 @@ public class CommandLineUtilitiesTest {
   @ParameterizedTest
   @MethodSource("getProcessCommandLineParameters")
   public void processCommandLineTest(
-      Map<CommandLineOption, CommandLineValue>  optionValues,
-      Map<CommandLineOption, Object>            expectedResult,
-      JsonObject                                expectedJson,
-      boolean                                   expectText)
-  {
+      Map<CommandLineOption, CommandLineValue> optionValues,
+      Map<CommandLineOption, Object> expectedResult,
+      JsonObject expectedJson,
+      boolean expectText) {
     StringBuilder sb = new StringBuilder();
     sb.append("optionValues=[ ").append(optionValues)
         .append(" ], expectedResult=[ ").append(expectedResult)
@@ -1310,9 +1294,9 @@ public class CommandLineUtilitiesTest {
     String testInfo = sb.toString();
 
     try {
-      Map<CommandLineOption, Object>  resultMap   = new LinkedHashMap<>();
-      String                          resultJson  = null;
-      JsonObjectBuilder               resultJob   = Json.createObjectBuilder();
+      Map<CommandLineOption, Object> resultMap = new LinkedHashMap<>();
+      String resultJson = null;
+      JsonObjectBuilder resultJob = Json.createObjectBuilder();
 
       if (expectedJson == null) {
         processCommandLine(optionValues, resultMap);
@@ -1327,19 +1311,19 @@ public class CommandLineUtilitiesTest {
       }
 
       assertEquals(expectedResult, resultMap,
-                   "Unexpected command-line processing results: "
-                       + testInfo);
+          "Unexpected command-line processing results: "
+              + testInfo);
 
       if (expectedJson != null) {
         JsonObject jsonObject = resultJob.build();
         assertEquals(expectedJson, jsonObject,
-                     "Unexpected JSON object result: " + testInfo);
+            "Unexpected JSON object result: " + testInfo);
 
         if (expectText) {
           jsonObject = JsonUtilities.parseJsonObject(resultJson);
 
           assertEquals(expectedJson, jsonObject,
-                       "Unexpected JSON text result: " + testInfo);
+              "Unexpected JSON text result: " + testInfo);
         }
       }
 
@@ -1362,12 +1346,11 @@ public class CommandLineUtilitiesTest {
 
   @ParameterizedTest
   @MethodSource("getSensitiveTestParameters")
-  public <T extends CommandLineOption> void sensitiveTest(T       option,
-                                                          boolean sensitive)
-  {
+  public <T extends CommandLineOption> void sensitiveTest(T option,
+      boolean sensitive) {
     try {
       assertEquals(sensitive, option.isSensitive(),
-                   "Option sensitivity not as expected.");
+          "Option sensitivity not as expected.");
 
     } catch (Exception e) {
       e.printStackTrace();

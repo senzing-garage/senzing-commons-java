@@ -57,7 +57,7 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
    * @throws IOException If a failure occurs.
    */
   @Override
-  public void close() throws IOException  {
+  public void close() throws IOException {
     this.in.close();
   }
 
@@ -108,7 +108,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
       this.readChunk();
     }
     return (this.currentChunk == null)
-        ? -1 : this.currentChunk.read(buffer, offset, length);
+        ? -1
+        : this.currentChunk.read(buffer, offset, length);
   }
 
   /**
@@ -145,22 +146,19 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
   }
 
   /**
-   * Reads the next chunkm, discarding the current chunk if any.
+   * Reads the next chunk, discarding the current chunk if any.
    */
   private boolean readChunk() throws IOException {
     this.currentChunk = null;
     StringBuilder sb = new StringBuilder();
     boolean cr = false;
-    for (int readByte = this.in.read();
-         readByte >= 0;
-         readByte = this.in.read())
-    {
+    for (int readByte = this.in.read(); readByte >= 0; readByte = this.in.read()) {
       // if we have a carriage return then look for a line-feed
       if (cr) {
         if (readByte != ((int) '\n')) {
           throw new IOException(
               "Bad chunked encoding.  Encountered CR without subsequent LF: "
-              + sb.toString());
+                  + sb.toString());
         }
 
         // we should have the chunk size so break here
@@ -218,12 +216,12 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
     if (trailerByte < 0) {
       throw new IOException(
           "Bad chunked encoding.  EOF prior to trailing CR following chunk: "
-          + Integer.toString(readCount, 16).toUpperCase());
+              + Integer.toString(readCount, 16).toUpperCase());
     }
     if (trailerByte != '\r') {
       throw new IOException(
           "Bad chunked encoding.  Expected trailing CR following chunk ("
-          + Integer.toString(readCount, 16).toUpperCase()
+              + Integer.toString(readCount, 16).toUpperCase()
               + "), but got code point: " + trailerByte);
     }
     trailerByte = this.in.read();
@@ -241,7 +239,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
 
     // create the next chunk stream
     this.currentChunk = (chunkBytes == null)
-        ? null : new ByteArrayInputStream(chunkBytes);
+        ? null
+        : new ByteArrayInputStream(chunkBytes);
     return (this.currentChunk != null);
   }
 }
