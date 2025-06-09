@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.4] - 2025-06-09
+
+### Changed in 3.3.4
+
+- Updated dependencies to newer versions:
+  - Upgraded `commons-configuration2` from version `2.11.0` to `2.12.0`
+  - Upgraded `junit-jupiter` from version `5.12.2` to `5.13.1`
+
 ## [3.3.3] - 2025-04-16
 
 ### Changed in 3.3.3
