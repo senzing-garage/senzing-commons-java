@@ -29,7 +29,7 @@ public class WorkerThreadPool {
   private boolean closed;
 
   /**
-   * The {@link AccessToken} indicating if this instance is paused.  This is
+   * The {@link AccessToken} indicating if this instance is paused. This is
    * <code>null</code> if not paused.
    */
   private AccessToken pauseToken;
@@ -39,8 +39,7 @@ public class WorkerThreadPool {
    *
    * @param size The number of threads to create in the pool.
    */
-  public WorkerThreadPool(int size)
-  {
+  public WorkerThreadPool(int size) {
     this(DEFAULT_BASE_NAME, size);
   }
 
@@ -51,18 +50,17 @@ public class WorkerThreadPool {
    * @param baseName The base name to use as a prefix when naming the
    *                 worker threads in the pool.
    *
-   * @param size The number of worker threads to create.
+   * @param size     The number of worker threads to create.
    */
-  public WorkerThreadPool(String baseName, int size)
-  {
+  public WorkerThreadPool(String baseName, int size) {
     if (size < 1) {
       throw new IllegalArgumentException(
           "The thread-pool size must be a positive number.  size=[ " + size
-          + " ]");
+              + " ]");
     }
-    this.available    = new LinkedList<>();
-    this.allThreads   = new LinkedList<>();
-    this.closed       = false;
+    this.available = new LinkedList<>();
+    this.allThreads = new LinkedList<>();
+    this.closed = false;
 
     // if baseName ends with "-" then strip it off since we will add it back
     if (baseName.endsWith("-")) {
@@ -90,7 +88,7 @@ public class WorkerThreadPool {
   }
 
   /**
-   * Checks if this pool has been closed.  Once closed, the pool can no longer
+   * Checks if this pool has been closed. Once closed, the pool can no longer
    * be used to execute any further tasks.
    *
    * @return <code>true</code> if closed and <code>false</code> if not.
@@ -107,24 +105,24 @@ public class WorkerThreadPool {
    * @param join Whether or not to join against each thread and wait for each
    *             thread to complete.
    */
-  public void close(boolean join)
-  {
+  public void close(boolean join) {
     // mark this pool as closed and notify
     synchronized (this.available) {
-      if (this.closed) return;
+      if (this.closed)
+        return;
       this.closed = true;
       this.available.notifyAll();
     }
 
     // mark all the threads complete
-    for (WorkerThread thread: this.allThreads) {
+    for (WorkerThread thread : this.allThreads) {
       thread.markComplete();
     }
 
     // check if we are joining
     if (join) {
       // loop through the threads and join
-      for (WorkerThread thread: this.allThreads) {
+      for (WorkerThread thread : this.allThreads) {
         try {
           // join against this thread
           thread.join();
@@ -150,15 +148,14 @@ public class WorkerThreadPool {
    * @param <E> The type of the exception thrown by the worker thread if a
    *            failure occurs.
    */
-  public <T, E extends Exception> T execute(Task<T, E> task) throws E
-  {
+  public <T, E extends Exception> T execute(Task<T, E> task) throws E {
     WorkerThread thread = null;
     synchronized (this.available) {
       // check if already closed
       if (this.isClosed()) {
         throw new IllegalStateException(
             "This WorkerThreadPool has already been marked as closed and the "
-            + "threads have been shutdown.");
+                + "threads have been shutdown.");
       }
 
       // wait for an available worker thread
@@ -204,7 +201,8 @@ public class WorkerThreadPool {
   /**
    * Checks if this {@link WorkerThreadPool} has been paused.
    *
-   * @return <code>true</code> if this instance has paused, otherwise <code>false</code>
+   * @return <code>true</code> if this instance has paused, otherwise
+   *         <code>false</code>
    */
   public boolean isPaused() {
     return (this.pauseToken != null);
@@ -213,7 +211,7 @@ public class WorkerThreadPool {
   /**
    * Pauses access to this {@link WorkerThreadPool} by preventing others from
    * obtaining a thread until the {@link #resume(AccessToken)} method is called
-   * (which should occur in a "finally" block typically).  If there are
+   * (which should occur in a "finally" block typically). If there are
    * outstanding workers executing tasks on threads then this method waits until
    * they are complete.
    *
@@ -224,7 +222,8 @@ public class WorkerThreadPool {
   public AccessToken pause() {
     synchronized (this.available) {
       // check if already paused
-      if (this.isPaused()) return null;
+      if (this.isPaused())
+        return null;
 
       // mark this instance as paused
       this.pauseToken = new AccessToken();
@@ -246,7 +245,7 @@ public class WorkerThreadPool {
 
   /**
    * Unpauses the pool and allows tasks to be executed on the available
-   * threads if the specified {@link AccessToken} is valid.  If the specified
+   * threads if the specified {@link AccessToken} is valid. If the specified
    * parameter is <code>null</code> then this method does nothing and if it is the
    * wrong {@link AccessToken} then an {@link IllegalArgumentException} is
    * thrown.
@@ -258,15 +257,16 @@ public class WorkerThreadPool {
    * @return <code>true</code> if the instance was unpaused, otherwise
    *         <code>false</code>.
    *
-   * @throws IllegalStateException If this instance is <b>not</b> in a paused
-   *                               state and the specified parameter is not
-   *                               <code>null</code>.
+   * @throws IllegalStateException    If this instance is <b>not</b> in a paused
+   *                                  state and the specified parameter is not
+   *                                  <code>null</code>.
    *
    * @throws IllegalArgumentException If the specified parameter is not the
    *                                  correct {@link AccessToken}.
    */
   public boolean resume(AccessToken accessToken) {
-    if (accessToken == null) return false;
+    if (accessToken == null)
+      return false;
     synchronized (this.available) {
       if (accessToken != null && this.pauseToken == null) {
         throw new IllegalStateException(
@@ -275,7 +275,7 @@ public class WorkerThreadPool {
       }
       if (accessToken != null && this.pauseToken != accessToken) {
         throw new IllegalArgumentException(
-            "The specifeid access token is not valid for unpausing this "
+            "The specified access token is not valid for unpausing this "
                 + "WorkerThreadPool instance.");
       }
       // resume
@@ -384,8 +384,7 @@ public class WorkerThreadPool {
      */
     @SuppressWarnings("unchecked")
     private synchronized <T, E extends Exception> T execute(Task<T, E> task)
-        throws E
-    {
+        throws E {
       try {
         if (this.isBusy()) {
           throw new IllegalStateException("Already busy with another task.");
@@ -435,8 +434,7 @@ public class WorkerThreadPool {
      * Implement the run method to wait for the next task and execute it.
      * This continues until this thread is marked complete.
      */
-    public void run()
-    {
+    public void run() {
       synchronized (this) {
         // loop while not complete
         while (!this.isComplete()) {

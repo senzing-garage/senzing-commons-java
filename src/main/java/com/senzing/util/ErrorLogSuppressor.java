@@ -27,7 +27,7 @@ public class ErrorLogSuppressor {
    */
   public enum State {
     /**
-     * Logging of these errors is currently being suppresed.
+     * Logging of these errors is currently being suppressed.
      */
     SUPPRESSED,
 
@@ -53,19 +53,20 @@ public class ErrorLogSuppressor {
     private State state;
 
     /**
-     * The suppressed count if currently suppressing or just reactived.
+     * The suppressed count if currently suppressing or just reactivated.
      */
     private int suppressedCount;
 
     /**
      * Constructs with the specified {@link State} and suppressed count.
-     * @param state The {@link State} of the error suppressor.
+     * 
+     * @param state           The {@link State} of the error suppressor.
      * @param suppressedCount The number of errors that have been suppressed
      *                        so far if suppressing.
      */
     public Result(State state, int suppressedCount) {
-      this.state            = state;
-      this.suppressedCount  = suppressedCount;
+      this.state = state;
+      this.suppressedCount = suppressedCount;
     }
 
     /**
@@ -92,11 +93,13 @@ public class ErrorLogSuppressor {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
       Result result = (Result) o;
       return (this.getSuppressedCount() == result.getSuppressedCount()
-              && this.getState() == result.getState());
+          && this.getState() == result.getState());
     }
 
     @Override
@@ -170,24 +173,24 @@ public class ErrorLogSuppressor {
    */
   public ErrorLogSuppressor() {
     this(DEFAULT_ERROR_LIMIT,
-         DEFAULT_TIME_WINDOW,
-         DEFAULT_SUPPRESS_DURATION);
+        DEFAULT_TIME_WINDOW,
+        DEFAULT_SUPPRESS_DURATION);
   }
 
   /**
    * Constructs with the specified parameters.
    *
-   * @param errorLimit The maximum number of errors that can occur within the
-   *                   time window before triggering supression.
-   * @param timeWindow The length of the time window in milliseconds.
+   * @param errorLimit       The maximum number of errors that can occur within
+   *                         the
+   *                         time window before triggering suppression.
+   * @param timeWindow       The length of the time window in milliseconds.
    * @param suppressDuration How long to suppress errors if the number of
    *                         errors exceeds the limit within the specified
    *                         time window.
    */
-  public ErrorLogSuppressor(int  errorLimit,
-                            long timeWindow,
-                            long suppressDuration)
-  {
+  public ErrorLogSuppressor(int errorLimit,
+      long timeWindow,
+      long suppressDuration) {
     if (errorLimit <= 0) {
       throw new IllegalArgumentException(
           "Error limit must be a positive number: " + errorLimit);
@@ -200,11 +203,11 @@ public class ErrorLogSuppressor {
       throw new IllegalArgumentException(
           "Suppress duration must be a positive number: " + suppressDuration);
     }
-    this.errorLimit       = errorLimit;
-    this.timeWindow       = timeWindow;
+    this.errorLimit = errorLimit;
+    this.timeWindow = timeWindow;
     this.suppressDuration = suppressDuration;
-    this.nanoWindow       = this.timeWindow * 1000000L;
-    this.nanoDuration     = this.suppressDuration * 1000000L;
+    this.nanoWindow = this.timeWindow * 1000000L;
+    this.nanoDuration = this.suppressDuration * 1000000L;
   }
 
   /**
@@ -282,9 +285,9 @@ public class ErrorLogSuppressor {
    * @return The result of handling the error.
    */
   public synchronized Result updateOnError() {
-    long  now = System.nanoTime();
+    long now = System.nanoTime();
     State state = null;
-    int   count = 0;
+    int count = 0;
 
     // increment the total error count
     this.errorCount++;
@@ -295,10 +298,10 @@ public class ErrorLogSuppressor {
         // suppression is over, set state for reactivation
         count = this.suppressedCount;
         state = State.REACTIVATED;
-        this.lastReportTime   = now;
-        this.suppressedCount  = 0;
-        this.suppressing      = false;
-        this.periodCount      = 1;
+        this.lastReportTime = now;
+        this.suppressedCount = 0;
+        this.suppressing = false;
+        this.periodCount = 1;
 
       } else {
         // suppression is continuing, increment the suppressed count
@@ -311,10 +314,10 @@ public class ErrorLogSuppressor {
 
     } else if ((now - this.lastReportTime) > this.nanoWindow) {
       // last error was before the time window, reset the period
-      this.periodCount      = 1;
-      this.suppressedCount  = 0;
-      this.lastReportTime   = now;
-      this.suppressing      = false;
+      this.periodCount = 1;
+      this.suppressedCount = 0;
+      this.lastReportTime = now;
+      this.suppressing = false;
       state = State.ACTIVE;
       count = 0;
 
@@ -325,17 +328,17 @@ public class ErrorLogSuppressor {
       // check if period count exceeds the limit
       if (this.periodCount > this.errorLimit) {
         // exceeded the limit so go into the suppression mode
-        this.suppressedCount  = 1;
-        this.lastReportTime   = now;
-        this.suppressing      = true;
+        this.suppressedCount = 1;
+        this.lastReportTime = now;
+        this.suppressing = true;
         state = State.SUPPRESSED;
         count = 1;
 
       } else {
         // not suppressed, just increment
         this.suppressedCount = 0;
-        this.lastReportTime  = now;
-        this.suppressing     = false;
+        this.lastReportTime = now;
+        this.suppressing = false;
         state = State.ACTIVE;
         count = 0;
       }

@@ -26,5 +26,8 @@ hs_err_pid*
 *.iml
 target
 
-# VScode files
-.vscode/
+# Visual Studio code
+.vscode/*
+!.vscode/cspell.json
+*.code-workspace
+.history

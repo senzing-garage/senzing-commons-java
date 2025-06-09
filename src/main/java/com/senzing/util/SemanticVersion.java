@@ -6,7 +6,7 @@ import java.util.*;
  * Represents a semantic version described as a {@link String} containing
  * integer numbers separated by decimal points (e.g.: "1.4.5").
  */
-public class SemanticVersion implements Comparable<SemanticVersion >{
+public class SemanticVersion implements Comparable<SemanticVersion> {
   /**
    * The {@link List} of version parts.
    */
@@ -27,14 +27,14 @@ public class SemanticVersion implements Comparable<SemanticVersion >{
    *
    * @param versionString The version string with which to construct.
    *
-   * @throws NullPointerException If the specified parameter is <code>null</code>.
+   * @throws NullPointerException     If the specified parameter is
+   *                                  <code>null</code>.
    *
    * @throws IllegalArgumentException If the specified parameter is not properly
-   *                                  formated.
+   *                                  formatted.
    */
   public SemanticVersion(String versionString)
-    throws NullPointerException, IllegalArgumentException
-  {
+      throws NullPointerException, IllegalArgumentException {
     Objects.requireNonNull(
         versionString, "Version string cannot be null");
 
@@ -56,23 +56,24 @@ public class SemanticVersion implements Comparable<SemanticVersion >{
       Iterator<Integer> iter = normalized.iterator();
       while (iter.hasNext()) {
         Integer part = iter.next();
-        if (!part.equals(0)) break;
+        if (!part.equals(0))
+          break;
         iter.remove();
       }
       Collections.reverse(normalized);
 
       // set the version strings
-      StringBuilder versionSB     = new StringBuilder();
-      String        prefix        = "";
-      for (Integer part: this.versionParts) {
+      StringBuilder versionSB = new StringBuilder();
+      String prefix = "";
+      for (Integer part : this.versionParts) {
         versionSB.append(prefix).append(part);
         prefix = ".";
       }
       this.versionString = versionSB.toString();
 
-      StringBuilder normalizedSB  = new StringBuilder();
+      StringBuilder normalizedSB = new StringBuilder();
       prefix = "";
-      for (Integer part: normalized) {
+      for (Integer part : normalized) {
         normalizedSB.append(prefix).append(part);
         prefix = ".";
       }
@@ -91,13 +92,17 @@ public class SemanticVersion implements Comparable<SemanticVersion >{
    *
    * @param object The object to compare with.
    *
-   * @return <code>true</code> if the objects are equal, otherwise <code>false</code>
+   * @return <code>true</code> if the objects are equal, otherwise
+   *         <code>false</code>
    */
   @Override
   public boolean equals(Object object) {
-    if (object == null) return false;
-    if (this == object) return true;
-    if (this.getClass() != object.getClass()) return false;
+    if (object == null)
+      return false;
+    if (this == object)
+      return true;
+    if (this.getClass() != object.getClass())
+      return false;
     SemanticVersion version = (SemanticVersion) object;
     return (this.compareTo(version) == 0);
   }
@@ -133,7 +138,8 @@ public class SemanticVersion implements Comparable<SemanticVersion >{
       int diff = part1 - part2;
 
       // if the diff is non-zero then return it
-      if (diff != 0) return diff;
+      if (diff != 0)
+        return diff;
     }
 
     // if we have exhausted all version parts without a difference then we have
@@ -142,7 +148,7 @@ public class SemanticVersion implements Comparable<SemanticVersion >{
   }
 
   /**
-   * Returns the version string for this instance.  This is equivalent to
+   * Returns the version string for this instance. This is equivalent to
    * calling {@link #toString(boolean)} with <code>false</code> as the parameter.
    *
    * @return The version string for this instance.
@@ -153,13 +159,13 @@ public class SemanticVersion implements Comparable<SemanticVersion >{
   }
 
   /**
-   * Returns a version string for this instance that is optionally nornmalized
+   * Returns a version string for this instance that is optionally normalized
    * to remove trailing zeroes.
    *
    * @param normalized <code>true</code> if trailing zeroes should be stripped,
    *                   otherwise <code>false</code>.
    *
-   * @return A {@link String} representation of this instnace that is optionally
+   * @return A {@link String} representation of this instance that is optionally
    *         normalized to remove trailing zeroes.
    */
   public String toString(boolean normalized) {
@@ -168,12 +174,13 @@ public class SemanticVersion implements Comparable<SemanticVersion >{
 
   /**
    * Provides a test main method.
+   * 
    * @param args The command-line arguments.
    */
   public static void main(String[] args) {
     if (args.length == 0) {
       System.err.println("USAGE: java " + SemanticVersion.class.getName()
-                         + " <version> [compare-version]*");
+          + " <version> [compare-version]*");
       System.exit(1);
     }
     SemanticVersion version = new SemanticVersion(args[0]);
@@ -184,12 +191,12 @@ public class SemanticVersion implements Comparable<SemanticVersion >{
       System.out.println();
       System.out.println(
           "VERSUS " + version2 + " (" + version2.toString(true)
-          + "): "
-          + "COMPARE (" + version.compareTo(version2) + ") "
-          + " / EQUALS (" + version.equals(version2) + ") "
-          + " / HASH (" + version2.hashCode() + ") "
-          + " / HASH-EQUALITY (" + (version.hashCode() == version2.hashCode())
-          + ")");
+              + "): "
+              + "COMPARE (" + version.compareTo(version2) + ") "
+              + " / EQUALS (" + version.equals(version2) + ") "
+              + " / HASH (" + version2.hashCode() + ") "
+              + " / HASH-EQUALITY (" + (version.hashCode() == version2.hashCode())
+              + ")");
     }
   }
 }
