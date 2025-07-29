@@ -5,6 +5,7 @@ package com.senzing.cmdline;
  * a specific {@link CommandLineSource}, {@link CommandLineOption} and
  * specifier.
  */
+@SuppressWarnings("rawtypes")
 public interface SpecifiedOption {
   /**
    * Gets the associated {@link CommandLineSource}.

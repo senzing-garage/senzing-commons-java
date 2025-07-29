@@ -12,6 +12,13 @@ import static com.senzing.io.IOUtilities.*;
  */
 public class ZipUtilities {
   /**
+   * Private default constructor.
+   */
+  private ZipUtilities() {
+    // do nothing
+  }
+  
+  /**
    * Compresses the specified byte array using the deflater zlib compression
    * algorithm.
    *

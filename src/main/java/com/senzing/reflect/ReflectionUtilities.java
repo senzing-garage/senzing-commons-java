@@ -14,6 +14,13 @@ import java.util.Objects;
  */
 public class ReflectionUtilities {
   /**
+   * Private default constructor.
+   */
+  private ReflectionUtilities() {
+    // do nothing
+  }
+
+  /**
    * An <b>unmodifiable</b> {@link Map} of primitive types to their
    * corresponding promoted object types.
    */

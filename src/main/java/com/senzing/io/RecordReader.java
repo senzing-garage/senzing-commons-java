@@ -21,8 +21,19 @@ public class RecordReader {
    * Represents the supported format for the records.
    */
   public enum Format {
+    /**
+     * JSON format (as in a JSON array of JSON objects).
+     */
     JSON("application/json", "JSON"),
+
+    /**
+     * JSON-Lines format (as in one JSON object per line).
+     */
     JSON_LINES("application/x-jsonlines", "JSON Lines"),
+
+    /**
+     * CSV format with a header line.
+     */
     CSV("text/csv", "CSV");
 
     /**
@@ -177,7 +188,7 @@ public class RecordReader {
   {
     this(null,
          reader,
-         Collections.singletonMap("", dataSource),
+         Collections.singletonMap(null, dataSource),
          null);
   }
 
@@ -199,7 +210,7 @@ public class RecordReader {
   {
     this(format,
          reader,
-         Collections.singletonMap("", dataSource),
+         Collections.singletonMap(null, dataSource),
          null);
   }
 
@@ -222,7 +233,7 @@ public class RecordReader {
   {
     this(null,
          reader,
-         Collections.singletonMap("", dataSource),
+         Collections.singletonMap(null, dataSource),
          sourceId);
   }
 
@@ -249,7 +260,7 @@ public class RecordReader {
   {
     this(format,
          reader,
-         Collections.singletonMap("", dataSource),
+         Collections.singletonMap(null, dataSource),
          sourceId);
   }
 
@@ -714,10 +725,10 @@ public class RecordReader {
     public CsvRecordProvider(Reader reader) {
       CSVFormat csvFormat = CSVFormat.Builder.create(CSVFormat.DEFAULT)
           .setHeader().setSkipHeaderRecord(true).setIgnoreEmptyLines(true)
-          .setTrim(true).setIgnoreSurroundingSpaces(true).build();
+          .setTrim(true).setIgnoreSurroundingSpaces(true).get();
 
       try {
-        this.parser = new CSVParser(reader, csvFormat);
+        this.parser = CSVParser.builder().setReader(reader).setFormat(csvFormat).get();
         Map<String, Integer> headerMap = this.parser.getHeaderMap();
         Set<String> headers = new HashSet<>();
         headerMap.keySet().forEach(h -> {
@@ -747,7 +758,7 @@ public class RecordReader {
           }
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         Map<String,Object> map = (Map) recordMap;
 
         JsonObject jsonObj = Json.createObjectBuilder(map).build();

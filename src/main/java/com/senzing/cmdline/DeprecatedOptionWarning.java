@@ -9,6 +9,7 @@ import java.util.Set;
  * Describes a deprecated option that was specified including an error message
  * to display.
  */
+@SuppressWarnings("rawtypes")
 public class DeprecatedOptionWarning implements SpecifiedOption {
   /**
    * The {@link CommandLineSource} for the deprecated option.

@@ -5,6 +5,7 @@ import java.util.Set;
 /**
  * Thrown when a command-line option is illegally specified more than once.
  */
+@SuppressWarnings("rawtypes")
 public class RepeatedOptionException extends CommandLineException {
   /**
    * The option that was repeated.

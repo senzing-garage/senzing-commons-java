@@ -12,7 +12,22 @@ import javax.json.*;
 
 import static javax.json.stream.JsonGenerator.PRETTY_PRINTING;
 
+/**
+ * Provides JSON utility methods.
+ */
 public class JsonUtilities {
+  /**
+   * The number of additional characters required to escape a basic
+   * control character (e.g.: backspace, tab, newline and other whitespace).
+   */
+  private static final int JSON_ESCAPE_BASIC_COUNT = 1;
+
+  /**
+   * The number of additional characters required to escape non-basic
+   * control characters (i.e.: those without shortcut escape sequences).
+   */
+  private static final int JSON_ESCAPE_CONTROL_COUNT = 6;
+
   /**
    * Pretty printing {@link JsonWriterFactory}.
    */
@@ -26,6 +41,75 @@ public class JsonUtilities {
     // do nothing
   }
 
+  /**
+   * Escapes the specified {@link String} into a JSON string with the
+   * the surrounding double quotes.  If the specified {@link String} is
+   * <code>null</code> then <code>"null"</code> is returned.
+   * 
+   * @param string The {@link String} to escape for JSON.
+   * 
+   * @return The quoted escaped {@link String} or <code>"null"</code>
+   *         if the specified parameter is <code>null</code>.
+   */
+  public static String jsonEscape(String string) {
+      if (string == null) {
+          return "null";
+      }
+      int escapeCount = 0;
+      for (int index = 0; index < string.length(); index++) {
+          char c = string.charAt(index);
+          escapeCount += switch (c) {
+              case '\b', '\f', '\n', '\r', '\t', '"', '\\':
+                  yield JSON_ESCAPE_BASIC_COUNT;
+              default:
+                  yield (c < ' ') ? JSON_ESCAPE_CONTROL_COUNT : 0;
+          };
+      }
+      if (escapeCount == 0) {
+          return "\"" + string + "\"";
+      }
+      StringBuilder sb = new StringBuilder(string.length() + escapeCount + 2);
+      sb.append('"');
+      for (int index = 0; index < string.length(); index++) {
+          char c = string.charAt(index);
+          switch (c) {
+              case '"', '\\':
+                  sb.append('\\').append(c);
+                  break;    
+              case '\b':
+                  sb.append("\\b");
+                  break;
+              case '\f':
+                  sb.append("\\f");
+                  break;
+              case '\n':
+                  sb.append("\\n");
+                  break;
+              case '\r':
+                  sb.append("\\r");
+                  break;
+              case '\t':
+                  sb.append("\\t");
+                  break;
+              default:
+                  if (c >= ' ') {
+                      sb.append(c);
+                  } else {
+                      sb.append("\\u00");
+                      String hex = Integer.toHexString(c);
+                      if (hex.length() == 1) {
+                          sb.append("0"); // one more zero if single-digit hex
+                      }
+                      sb.append(hex);
+                  }
+          }
+      }
+      sb.append('"');
+
+      // return the escaped string
+      return sb.toString();
+  }
+  
   /**
    * Gets a {@link String} value from the specified {@link JsonObject} using the
    * specified key. If the specified key is missing or has a null value then

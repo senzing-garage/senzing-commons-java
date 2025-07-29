@@ -7,6 +7,7 @@ import java.util.Objects;
  * Represents a value obtained from the command-line parser for a given
  * {@link CommandLineOption}.
  */
+@SuppressWarnings("rawtypes")
 public class CommandLineValue implements SpecifiedOption {
   /**
    * The option for this value.

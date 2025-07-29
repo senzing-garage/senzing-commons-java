@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -17,6 +16,7 @@ import java.util.Set;
  *            option type has no base and returns <code>null</code> from
  *            {@link #getBaseOptionType()}.
  */
+@SuppressWarnings("rawtypes")
 public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> {
   /**
    * Gets the base {@link CommandLineOption} type that this one extends. This
