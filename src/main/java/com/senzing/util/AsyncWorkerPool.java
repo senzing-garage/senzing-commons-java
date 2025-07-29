@@ -29,13 +29,24 @@ public class AsyncWorkerPool<T> {
 
   /**
    * A task to be executed.
+   * 
+   * @param <T> The return type for the task.
    */
   public interface Task<T> {
+    /**
+     * Executes the task and returns the result.
+     * 
+     * @return The result of the task.
+     * 
+     * @throws Exception If a failure occurs.
+     */
     T execute() throws Exception;
   }
 
   /**
    * The asynchronous result associated with a previously executed task.
+   * 
+   * @param <T> The type of the result returned.
    */
   public static class AsyncResult<T> {
     private T value;
@@ -131,7 +142,7 @@ public class AsyncWorkerPool<T> {
    * task.
    *
    * @param task The task to execute.
-   * @return The {@link AsyncResult} of the previous
+   * @return The {@link AsyncResult} of the previous execution if ready.
    */
   public AsyncResult<T> execute(Task<T> task) {
     synchronized (this.available) {

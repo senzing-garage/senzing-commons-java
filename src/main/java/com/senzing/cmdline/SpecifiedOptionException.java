@@ -5,6 +5,7 @@ package com.senzing.cmdline;
  * specified option.  Exceptions that extend this class implement the
  * {@link SpecifiedOption} interface.
  */
+@SuppressWarnings("rawtypes")
 public abstract class SpecifiedOptionException
     extends CommandLineException implements SpecifiedOption
 {

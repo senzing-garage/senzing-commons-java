@@ -25,7 +25,8 @@
     "Senzing",
     "stackoverflow",
     "STRFTIME",
-    "Unsynchronized"
+    "Unsynchronized",
+    "rawtypes"
   ],
   "ignorePaths": [
     ".git/**",

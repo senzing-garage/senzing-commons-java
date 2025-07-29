@@ -304,7 +304,7 @@ public class CommandLineUtilitiesTest {
 
   @ParameterizedTest
   @MethodSource("getLookupParameters")
-  public static <T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> void lookupTest(
+  public <T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> void lookupTest(
       Class<T> optionClass,
       String flag,
       CommandLineOption expectedValue) {
@@ -603,7 +603,8 @@ public class CommandLineUtilitiesTest {
 
   @ParameterizedTest
   @MethodSource("getValidateOptionsParameters")
-  public static <T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> void validateOptionsTest(
+  @SuppressWarnings("rawtypes")
+  public <T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> void validateOptionsTest(
       Class<T> optionClass,
       Map<CommandLineOption, CommandLineValue> optionMap,
       List<DeprecatedOptionWarning> deprecatedWarnings,

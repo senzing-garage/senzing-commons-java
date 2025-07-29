@@ -14,7 +14,7 @@ import static com.senzing.cmdline.CommandLineSource.*;
  * Utility functions for parsing command line arguments.
  *
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public class CommandLineUtilities {
   /**
    * The value to use in the JSON representation of the parsed command-line
@@ -259,47 +259,6 @@ public class CommandLineUtilities {
       }
     }
     return null;
-  }
-
-  /**
-   * Checks if a primary option is required.
-   *
-   * @param enumClass The enum class for the {@link CommandLineOption}
-   *                  implementation.
-   *
-   * @return <code>true</code> if a primary option is required, otherwise
-   *         <code>false</code>.
-   *
-   * @param <T> The enumerated type that implements {@link CommandLineOption}.
-   * @param <B> The base enumerated type that the command-line options extend,
-   *            <b>OR</b> the same as type <code>T</code> if the command-line
-   *            option type has no base and returns <code>null</code> from
-   *            {@link CommandLineOption#getBaseOptionType()}.
-   */
-  private static <T extends Enum<T> & CommandLineOption<T, B>,
-                  B extends Enum<B> & CommandLineOption<B, ?>>
-    boolean checkPrimaryRequired(Class<T> enumClass)
-  {
-    // check if we need a primary option
-    boolean primaryRequired = false;
-    EnumSet<T> enumSet = EnumSet.allOf(enumClass);
-    for (T enumVal : enumSet) {
-      if (enumVal.isPrimary()) {
-        return true;
-      }
-    }
-
-    // get the base type
-    Class baseType
-        = ((CommandLineOption) enumSet.iterator().next()).getBaseOptionType();
-
-    // check the base type
-    if (baseType != null && Enum.class.isAssignableFrom(baseType)) {
-      return checkPrimaryRequired(baseType);
-    }
-
-    // return false if we get here
-    return false;
   }
 
   /**
@@ -1727,6 +1686,10 @@ public class CommandLineUtilities {
     return null;
   }
 
+  /**
+   * Test main function.
+   * @param args The command-line arguments.
+   */
   public static void main(String[] args) {
     try {
       Class cls = CommandLineUtilities.class;

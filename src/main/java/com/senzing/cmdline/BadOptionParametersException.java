@@ -6,6 +6,7 @@ import java.util.List;
  * Thrown when the parameters specified for a {@link CommandLineOption} are not
  * valid.
  */
+@SuppressWarnings("rawtypes")
 public class BadOptionParametersException extends SpecifiedOptionException {
   /**
    * The parameters that were specified (if any).

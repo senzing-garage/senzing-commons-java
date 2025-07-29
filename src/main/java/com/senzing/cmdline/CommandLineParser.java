@@ -6,6 +6,7 @@ import java.util.Map;
 /**
  * Provides an interface for parsing the command line.
  */
+@SuppressWarnings("rawtypes")
 public interface CommandLineParser {
   /**
    * Implement this method to parse the command line arguments and produce a

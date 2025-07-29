@@ -2,13 +2,35 @@ package com.senzing.util;
 
 import java.lang.ThreadLocal;
 
+/**
+ * Defines a type of object used for in-process authentication.
+ * This allows for public methods to restrict access to callers that
+ * possess the token value.
+ */
 public final class AccessToken {
+  /**
+   * Default constructor.
+   */
   public AccessToken() {}
 
+  /**
+   * Overridden to enforce referential equality.
+   * 
+   * @param obj The reference to the object to compare with.
+   * 
+   * @return <code>true</code> if the specified parameter is referentially
+   *         equivalent to this object, otherwise <code>false</code>.
+   */
   public boolean equals(Object obj) {
     return (this == obj);
   }
 
+  /**
+   * Overridden to enforce the {@link System#identityHashCode(Object)}
+   * result for this instance.
+   * 
+   * @return The {@link System#identityHashCode(Object)} for this instance.
+   */
   public int hashCode() {
     return System.identityHashCode(this);
   }

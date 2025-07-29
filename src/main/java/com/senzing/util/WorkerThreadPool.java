@@ -294,6 +294,12 @@ public class WorkerThreadPool {
    *            failure occurs.
    */
   public interface Task<T, E extends Exception> {
+    /**
+     * Executes the task and returns the result.
+     * 
+     * @return Return the result.
+     * @throws E If a failure occurs.
+     */
     T execute() throws E;
   }
 
@@ -469,6 +475,11 @@ public class WorkerThreadPool {
     }
   }
 
+  /**
+   * Test main method.
+   * 
+   * @param args The command-line arguments.
+   */
   public static void main(String[] args) {
     WorkerThreadPool pool = new WorkerThreadPool(4);
     for (int index = 0; index < args.length; index++) {

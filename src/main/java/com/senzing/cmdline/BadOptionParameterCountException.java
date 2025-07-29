@@ -6,6 +6,7 @@ import java.util.List;
  * Thrown when there are not enough or too many command line parameters for the
  * {@link CommandLineOption}.
  */
+@SuppressWarnings("rawtypes")
 public class BadOptionParameterCountException extends SpecifiedOptionException
 {
   /**

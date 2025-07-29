@@ -10,6 +10,7 @@ import java.util.Set;
  * CommandLineOption#isPrimary()} primary} is required, but none has been
  * specified.
  */
+@SuppressWarnings("rawtypes")
 public class NoPrimaryOptionException extends CommandLineException {
   /**
    * The {@link Set} of {@link CommandLineOption} instances that represent the

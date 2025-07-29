@@ -2,6 +2,10 @@ package com.senzing.cmdline;
 
 import java.util.List;
 
+/**
+ * Interface for parsing command-line argument parameters.
+ */
+@SuppressWarnings("rawtypes")
 public interface ParameterProcessor {
   /**
    * Converts the specified command-line {@link String} parameters to a

@@ -1,7 +1,5 @@
 package com.senzing.util;
 
-import com.senzing.g2.engine.G2Fallible;
-
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -210,21 +208,6 @@ public class LoggingUtilities {
   }
 
   /**
-   * Produces a single or multi-line debug message with a consistent prefix
-   * and timestamp IF {@linkplain #isDebugLogging() debug logging} is turned on.
-   *
-   * @param lines The lines of text to log, which may be objects that will be
-   *              converted to text via {@link Object#toString()}.
-   * @deprecated Use {@link #logDebug(Object...)} instead.
-   * @see #logDebug(Object...)
-   */
-  public static void debugLog(String... lines) {
-    if (!isDebugLogging())
-      return;
-    log(System.out, STDOUT_MONITOR, "DEBUG", lines, null);
-  }
-
-  /**
    * Produces a single or multi-line log message with a consistent prefix
    * and timestamp using the specified {@link PrintStream}, {@link Object} to
    * synchronize on, {@link String} log type and lines of text to log.
@@ -355,94 +338,6 @@ public class LoggingUtilities {
     }
     pw.flush();
     return sw.toString();
-  }
-
-  /**
-   * Formats an error message from a {@link G2Fallible} instance, including
-   * the details (which may contain sensitive PII information) as part of
-   * the result.
-   *
-   * @param operation The name of the operation from the native API interface
-   *                  that was attempted but failed.
-   * @param fallible  The {@link G2Fallible} from which to extract the error
-   *                  message.
-   * @return The multi-line formatted log message.
-   */
-  public static String formatError(String operation, G2Fallible fallible) {
-    return formatError(operation, fallible, true);
-  }
-
-  /**
-   * Formats an error message from a {@link G2Fallible} instance, optionally
-   * including the details (which may contain sensitive PII information) as
-   * part of the result.
-   *
-   * @param operation      The name of the operation from the native API interface
-   *                       that was attempted but failed.
-   * @param fallible       The {@link G2Fallible} from which to extract the error
-   *                       message.
-   * @param includeDetails <code>true</code> to include the details of the failure
-   *                       failure in the resultant message, and
-   *                       <code>false</code>
-   *                       to exclude them (usually to avoid logging sensitive
-   *                       information).
-   * @return The multi-line formatted log message.
-   */
-  public static String formatError(String operation,
-      G2Fallible fallible,
-      boolean includeDetails) {
-    int errorCode = fallible.getLastExceptionCode();
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-
-    pw.println();
-    pw.println("Operation Failed : " + operation);
-    pw.println("Error Code       : " + errorCode);
-
-    if (includeDetails) {
-      String message = fallible.getLastException();
-      pw.println("Reason           : " + message);
-    }
-    pw.println();
-    pw.flush();
-    return sw.toString();
-  }
-
-  /**
-   * Logs an error message from a {@link G2Fallible} instance, including the
-   * details (which may contain sensitive PII information) as part of the
-   * result.
-   *
-   * @param operation The name of the operation from the native API interface
-   *                  that was attempted but failed.
-   * @param fallible  The {@link G2Fallible} from which to extract the error
-   *                  message.
-   */
-  public static void logError(String operation,
-      G2Fallible fallible) {
-    logError(operation, fallible, true);
-  }
-
-  /**
-   * Logs an error message from a {@link G2Fallible} instance, optionally
-   * including the details (which may contain sensitive PII information) as
-   * part of the result.
-   *
-   * @param operation      The name of the operation from the native API interface
-   *                       that was attempted but failed.
-   * @param fallible       The {@link G2Fallible} from which to extract the error
-   *                       message.
-   * @param includeDetails <code>true</code> to include the details of the failure
-   *                       failure in the resultant message, and
-   *                       <code>false</code>
-   *                       to exclude them (usually to avoid logging sensitive
-   *                       information).
-   */
-  public static void logError(String operation,
-      G2Fallible fallible,
-      boolean includeDetails) {
-    String message = formatError(operation, fallible, includeDetails);
-    System.err.println(message);
   }
 
   /**
