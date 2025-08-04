@@ -953,7 +953,7 @@ public class CommandLineUtilities {
     ignoreEnvironment
         = (ignoreEnvironment
           || (result.containsKey(ignoreEnvOption)
-              && (!Boolean.FALSE.equals(result.get(ignoreEnvOption)))));
+              && (!Boolean.FALSE.equals(result.get(ignoreEnvOption).getProcessedValue()))));
     if (!ignoreEnvironment) {
       try {
         processEnvironment(enumClass, processor, result);
