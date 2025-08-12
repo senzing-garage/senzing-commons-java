@@ -463,7 +463,7 @@ public class TemporaryDataCache {
           IOUtilities.close(this.currentCOS);
           IOUtilities.close(this.currentFOS);
 
-          debugLog("Completed file part: " + this.currentFile + " ("
+          logDebug("Completed file part: " + this.currentFile + " ("
                        + this.currentWriteCount + " bytes / "
                        + this.currentFile.length() + " compressed)");
 
@@ -539,7 +539,7 @@ public class TemporaryDataCache {
           // flag the file for deletion on exit
           this.currentFile.deleteOnExit();
 
-          debugLog("Beginning file part: " + this.currentFile);
+          logDebug("Beginning file part: " + this.currentFile);
 
         } catch (RuntimeException e) {
           owner.setFailure(e);
@@ -585,7 +585,7 @@ public class TemporaryDataCache {
               * Math.max(1, countLog10 - 1)));
 
           if ((this.currentWriteCount % logInterval) == 0) {
-            debugLog("Bytes written to file: " + this.currentFile + " ("
+            logDebug("Bytes written to file: " + this.currentFile + " ("
                          + this.currentWriteCount + " current part / "
                          + this.totalWriteCount + " total bytes)");
           }
@@ -888,7 +888,7 @@ public class TemporaryDataCache {
               }
               boolean truncated = (isr.read() >= 0);
 
-              debugLog("Reading file part " + this.currentFileIndex
+              logDebug("Reading file part " + this.currentFileIndex
                        + ": " + filePart,
                        (truncated ? "CONTENTS:" : "PREVIEW"),
                        "-------------------------------------",

@@ -127,7 +127,8 @@ public enum OtherTestOption
       case VERBOSE:
         return List.of("false");
       case OUTPUT:
-        return List.of(null);
+        String param = null;
+        return List.of(param);
       default:
         return null;
     }

@@ -218,6 +218,7 @@ public class LoggingUtilities {
    * @deprecated Use {@link #logDebug(Object...)} instead.
    * @see #logDebug(Object...)
    */
+  @Deprecated
   public static void debugLog(String... lines) {
     if (!isDebugLogging())
       return;

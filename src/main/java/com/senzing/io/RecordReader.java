@@ -712,12 +712,12 @@ public class RecordReader {
     private Long errorLineNumber = null;
 
     public CsvRecordProvider(Reader reader) {
-      CSVFormat csvFormat = CSVFormat.Builder.create(CSVFormat.DEFAULT)
+       CSVFormat csvFormat = CSVFormat.Builder.create(CSVFormat.DEFAULT)
           .setHeader().setSkipHeaderRecord(true).setIgnoreEmptyLines(true)
-          .setTrim(true).setIgnoreSurroundingSpaces(true).build();
+          .setTrim(true).setIgnoreSurroundingSpaces(true).get();
 
       try {
-        this.parser = new CSVParser(reader, csvFormat);
+        this.parser = CSVParser.builder().setReader(reader).setFormat(csvFormat).get();
         Map<String, Integer> headerMap = this.parser.getHeaderMap();
         Set<String> headers = new HashSet<>();
         headerMap.keySet().forEach(h -> {
@@ -747,7 +747,7 @@ public class RecordReader {
           }
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked", "rawtypes"})
         Map<String,Object> map = (Map) recordMap;
 
         JsonObject jsonObj = Json.createObjectBuilder(map).build();

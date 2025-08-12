@@ -1,16 +1,14 @@
 package com.senzing.cmdline;
 
-import com.sun.source.doctree.SeeTree;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
 import java.util.Set;
 
 /**
  * Thrown when a command-line argument is specified without the required
  * dependencies for that argument.
  */
+@SuppressWarnings("rawtypes")
 public class MissingDependenciesException extends SpecifiedOptionException {
   /**
    * Constructs with the specified parameters.
@@ -25,6 +23,7 @@ public class MissingDependenciesException extends SpecifiedOptionException {
    * @param specifiedOptions The {@link Set} of {@link CommandLineOption}
    *                         instances that were specified.
    */
+  @SuppressWarnings({"unchecked"})
   public MissingDependenciesException(CommandLineSource       source,
                                       CommandLineOption       option,
                                       String                  specifier,
@@ -33,7 +32,7 @@ public class MissingDependenciesException extends SpecifiedOptionException {
     super(source, option, specifier,
           buildErrorMessage(source, 
                             option, 
-                            option.getDependencies(),
+                            (Set<Set<CommandLineOption>>) option.getDependencies(),
                             specifier, 
                             specifiedOptions));
   }
@@ -63,7 +62,7 @@ public class MissingDependenciesException extends SpecifiedOptionException {
     super(source, option, specifier,
           buildErrorMessage(source, 
                             option, 
-                            dependencySets,
+                            (Set<Set<CommandLineOption>>) dependencySets,
                             specifier,
                             specifiedOptions));
   }
