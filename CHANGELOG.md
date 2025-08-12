@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.5] - 2025-08-12
+
+### Changed in 3.3.5
+
+- Switched from `nexus-staging-maven-plugin` to `central-publishing-maven-plugin`
+- Updated dependencies:
+  - Upgraded `commons-csv` from version `1.14.0` to `1.14.1`
+  - Updated `jackson-xxxx` dependencies from version `2.19.0` to `2.19.2`
+  - Updated `junit-jupiter` from version `5.13.1` to `5.13.4`
+  - Upgraded `maven-gpg-plugin` from version `3.2.7` to `3.2.8`
+
 ## [3.3.4] - 2025-06-09
 
 ### Changed in 3.3.4
