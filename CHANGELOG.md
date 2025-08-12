@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.0-beta.1.1] - 2025-08-12
 
-### Changed in 4.0.0-beta.1.1
+### Changed in 4.0.0-beta.1.2
 
 - First official V4 beta release
 - Upgraded to Java 17 code compatibility
