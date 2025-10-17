@@ -26,8 +26,7 @@ public class CommandLineUtilities {
      * The Regular Expression pattern for JSON arrays.
      */
     private static final Pattern JSON_ARRAY_PATTERN = Pattern.compile(
-            "\\s*\\[\\s*((\\\".*\\\"\\s*,\\s*)+"
-                    + "(\\\".*\\\")|(\\\".*\\\")?)\\s*\\]\\s*");
+            "\\s*\\[\\s*(?:\"[^\"]*\"\\s*(?:,\\s*\"[^\"]*\"\\s*)*)?\\]\\s*");
 
     /**
      * The JAR file name containing this class.
