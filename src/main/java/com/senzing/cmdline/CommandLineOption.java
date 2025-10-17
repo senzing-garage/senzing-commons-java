@@ -171,7 +171,9 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>, 
     for (Field field : fields) {
       // skip this one if not public and static
       if ((field.getModifiers() & PUBLIC_STATIC) == 0)
+      {
         continue;
+      }
       try {
         if (field.get(null) == this) {
           String fieldName = field.getName().toUpperCase();
