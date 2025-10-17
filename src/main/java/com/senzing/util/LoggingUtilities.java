@@ -283,8 +283,7 @@ public class LoggingUtilities {
 
   /**
    * Formats a single {@link StackTraceElement} in the same format as they would
-   * appear
-   * in an exception stack trace.
+   * appear in an exception stack trace with the prefixing and indentation.
    * 
    * @param elem The {@link StackTraceElement} to format.
    * 
@@ -294,11 +293,42 @@ public class LoggingUtilities {
   public static String formatStackTrace(StackTraceElement elem) {
     StringBuilder sb = new StringBuilder();
     sb.append("        at ");
+    return formatStackFrame(sb, elem).toString();
+  }
 
+  /**
+   * Formats a single {@link StackTraceElement} in the same format as they would
+   * appear in an exception stack trace sans the prefixing and indentation.
+   * 
+   * @param elem The {@link StackTraceElement} to format.
+   * 
+   * @return The formatted {@link String} describing the
+   *         {@link StackTraceElement}.
+   */
+  public static String formatStackFrame(StackTraceElement elem) {
+    StringBuilder sb = new StringBuilder();
+    return formatStackFrame(sb, elem).toString();
+  }
+
+  /**
+   * Formats a single {@link StackTraceElement} in the same format as they would
+   * appear in an exception stack trace sans the prefixing and indentation.
+   * 
+   * @param sb The optional {@link StringBuilder} to which the message will
+   *           be appended, or <code>null</code> if a new {@link StringBuilder}
+   *           should be created and returned.
+   * 
+   * @param elem The {@link StackTraceElement} to format.
+   * 
+   * @return The specified {@link StringBuilder} if not <code>null</code>,
+   *         otherwise the {@link StringBuilder} that was created.
+   */
+  public static StringBuilder formatStackFrame(StringBuilder     sb, 
+                                               StackTraceElement elem) {
     // handle a null element
     if (elem == null) {
       sb.append("[unknown: null]");
-      return sb.toString();
+      return sb;
     }
 
     String moduleName = elem.getModuleName();
@@ -320,7 +350,7 @@ public class LoggingUtilities {
     }
     sb.append(")");
 
-    return sb.toString();
+    return sb;
   }
 
   /**
