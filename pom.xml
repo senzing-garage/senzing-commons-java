@@ -58,6 +58,11 @@
       <artifactId>commons-configuration2</artifactId>
       <version>2.12.0</version>
     </dependency>
+    <dependency> <!-- forced transitive dependency due to CVE-2025-48924 -->
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.19.0</version>
+    </dependency>
     <dependency>
       <groupId>com.googlecode.juniversalchardet</groupId>
       <artifactId>juniversalchardet</artifactId>
@@ -71,7 +76,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.13.4</version>
+      <version>6.0.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -96,7 +101,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.14.0</version>
+        <version>3.14.1</version>
         <configuration>
           <compilerArgs>
             <arg>-Xlint:unchecked</arg>
@@ -107,7 +112,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
         <configuration>
           <systemPropertyVariables>
             <project.build.directory>${project.build.directory}</project.build.directory>
@@ -139,7 +144,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.11.2</version>
+        <version>3.12.0</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -166,7 +171,7 @@
       <plugin>
         <groupId>org.sonatype.central</groupId>
         <artifactId>central-publishing-maven-plugin</artifactId>
-        <version>0.8.0</version>
+        <version>0.9.0</version>
         <extensions>true</extensions>
         <configuration>
           <publishingServerId>central</publishingServerId>
