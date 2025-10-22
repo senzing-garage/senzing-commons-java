@@ -14,7 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - Use Prettier for Markdown formatting
   - Follow markdownlint rules:
     - Wrap bare URLs in angle brackets: `<https://example.com>`
-    - Surround lists with blank lines before and after
+    - Surround lists with empty lines before and after
     - Follow standard Markdown conventions
 
 ## Project Overview
@@ -88,6 +88,7 @@ The codebase is organized into functional packages under `com.senzing`:
 #### Command-Line Processing (`cmdline`)
 
 The command-line framework uses a builder pattern centered around:
+
 - `CommandLineParser`: Interface for parsing arguments into options
 - `CommandLineBuilder`: Fluent API for defining command-line options and constraints
 - `CommandLineOption`: Represents individual command-line options
@@ -98,6 +99,7 @@ Key pattern: Options are defined declaratively, then parsed into a Map<CommandLi
 #### Database Connection Pooling (`sql`)
 
 `ConnectionPool` provides sophisticated JDBC connection management:
+
 - Dynamic pool sizing (min/max bounds)
 - Connection lifecycle management (expire time, retire limit)
 - Proxy-based connection tracking using `PooledConnectionHandler`
@@ -112,6 +114,7 @@ Database-specific connectors (`PostgreSqlConnector`, `SQLiteConnector`) implemen
 #### Record Reading (`io`)
 
 `RecordReader` provides unified interface for reading structured records:
+
 - Auto-detection of format (JSON array, JSON-Lines, CSV) from first character
 - Format-specific providers: `JsonArrayRecordProvider`, `JsonLinesRecordProvider`, `CsvRecordProvider`
 - Data source mapping and source ID assignment
@@ -122,6 +125,7 @@ Pattern: RecordReader → RecordProvider (internal) → JsonObject output
 #### Utilities (`util`)
 
 Notable utilities:
+
 - `JsonUtilities`: JSON parsing and manipulation helpers
 - `WorkerThreadPool` / `AsyncWorkerPool`: Concurrent task execution
 - `Timers`: Performance timing with statistics
@@ -133,6 +137,7 @@ Notable utilities:
 ### Testing Configuration
 
 Tests use JUnit Jupiter 5 with parallel execution enabled:
+
 - Classes run concurrently (configured in pom.xml surefire plugin)
 - Methods within a class run in same thread
 - Dynamic parallelism factor (1x number of cores)
@@ -143,12 +148,14 @@ Tests use JUnit Jupiter 5 with parallel execution enabled:
 ### Java Version
 
 This project requires Java 17 (OpenJDK 17.0.x). The compiler is configured with:
+
 - `-Xlint:unchecked` for unchecked operation warnings
 - `-Xlint:deprecation` for deprecated API usage warnings
 
 ### Maven Dependencies
 
 Key runtime dependencies:
+
 - `javax.json` (org.glassfish): JSON processing
 - `commons-csv` (Apache): CSV parsing
 - `commons-configuration2` (Apache): Configuration management
@@ -156,12 +163,14 @@ Key runtime dependencies:
 - `icu4j` (IBM): Unicode and internationalization support
 
 Test dependencies:
+
 - JUnit Jupiter 5.13.4 for testing
 - SQLite JDBC for database tests
 
 ### Code Patterns
 
 **Connection Pool Usage**:
+
 ```java
 ConnectionPool pool = new ConnectionPool(connector, minSize, maxSize);
 Connection conn = null;
@@ -174,6 +183,7 @@ try {
 ```
 
 **RecordReader Usage**:
+
 ```java
 try (Reader reader = new FileReader(file)) {
     RecordReader recordReader = new RecordReader(reader);
@@ -186,6 +196,7 @@ try (Reader reader = new FileReader(file)) {
 ```
 
 **CommandLineBuilder Pattern**:
+
 ```java
 CommandLineBuilder builder = new CommandLineBuilder();
 builder.addOption("--verbose", Boolean.class)
