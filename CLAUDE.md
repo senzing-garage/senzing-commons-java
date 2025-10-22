@@ -2,6 +2,21 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Workflow Preferences
+
+**IMPORTANT**: When working in this repository:
+
+- **Do NOT modify source code files directly** - provide suggestions instead
+- **ONLY modify CLAUDE.md directly** when updating documentation
+- Always inform the user before making any changes to CLAUDE.md
+- Present code changes as recommendations that the user can review and apply
+- When editing CLAUDE.md, follow Markdown linting and formatting rules:
+  - Use Prettier for Markdown formatting
+  - Follow markdownlint rules:
+    - Wrap bare URLs in angle brackets: `<https://example.com>`
+    - Surround lists with blank lines before and after
+    - Follow standard Markdown conventions
+
 ## Project Overview
 
 Senzing Commons Java Library is a collection of reusable Java utilities, interfaces, and classes common to multiple Senzing projects. Originally refactored from senzing-api-server, this library provides foundational components for command-line parsing, database connection pooling, I/O operations, reflection utilities, and more.
@@ -182,8 +197,9 @@ Map<CommandLineOption, Object> options = builder.parseCommandLine(args);
 ### Release Process
 
 The project uses Maven Central for distribution:
-- Snapshot repository: https://s01.oss.sonatype.org/content/repositories/snapshots
-- Release repository: https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
+
+- Snapshot repository: <https://s01.oss.sonatype.org/content/repositories/snapshots>
+- Release repository: <https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/>
 - GPG signing enabled via `release` profile: `mvn clean deploy -P release`
 - Auto-publish configured via central-publishing-maven-plugin
 
