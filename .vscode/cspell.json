@@ -26,7 +26,13 @@
     "stackoverflow",
     "STRFTIME",
     "Unsynchronized",
-    "rawtypes"
+    "rawtypes",
+    "Dtest",
+    "apidocs",
+    "Xlint",
+    "javax",
+    "glassfish",
+    "juniversalchardet"
   ],
   "ignorePaths": [
     ".git/**",

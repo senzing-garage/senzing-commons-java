@@ -20,5 +20,6 @@ public interface CommandLineBuilder <T> {
    *
    * @throws Exception If a failure occurs.
    */
+  @SuppressWarnings("rawtypes")
   T build(Map<CommandLineOption, Object> options) throws Exception;
 }
