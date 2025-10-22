@@ -1,38 +1,36 @@
 {
-  // Version of the setting file.  Always 0.2
   "version": "0.2",
-  // language - current active spelling language
   "language": "en",
-  // words - list of words to be always considered correct
   "words": [
+    "apidocs",
     "baos",
     "CCLA",
     "cmdline",
     "CODEOWNER",
     "Dskip",
     "dsrc",
+    "Dtest",
+    "glassfish",
     "ICLA",
+    "ignorefile",
     "javabuilder",
     "javadocs",
     "javanature",
+    "javax",
     "jdbc",
     "jsonlines",
+    "juniversalchardet",
     "phoo",
     "PKCS",
     "PRNG",
     "pushback",
+    "rawtypes",
     "rethrowing",
     "Senzing",
     "stackoverflow",
     "STRFTIME",
     "Unsynchronized",
-    "rawtypes",
-    "Dtest",
-    "apidocs",
-    "Xlint",
-    "javax",
-    "glassfish",
-    "juniversalchardet"
+    "Xlint"
   ],
   "ignorePaths": [
     ".git/**",
