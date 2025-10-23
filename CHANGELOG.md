@@ -6,7 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.0-beta.1.1] - 2025-08-12
+## [4.0.0-beta.1.4] - 2025-10-22
+
+### Changed in 4.0.0-beta.1.4
+
+- Upgraded dependencies
+- Added methods to LoggingUtilities for StackTraceElement formatting
+- Cleaned up compile warnings
+- Linting and other minor fixes
+
+## [4.0.0-beta.1.2] - 2025-08-12
 
 ### Changed in 4.0.0-beta.1.2
 
@@ -17,6 +26,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded `sqlite-jdbc` since `getGeneratedKeys()` support was restored
 - Switched from `nexus-staging-maven-plugin` to `central-publishing-maven-plugin`
 
+## [3.3.7] - 2025-10-22
+
+### Changed in 3.3.7
+
+- Updated dependencies:
+  - Upgraded `junit-jupiter` from version `5.13.4` to `5.14.0`
+  - Added direct dependency to `commons-lang3` version `3.19.0` to override transitive dependency to version `3.17.0` from `commons-configuration2` due to `CVE-2025-48924`
+  - Upgraded `maven-compiler-plugin` from version `3.14.0` to `3.14.1`
+  - Upgraded `maven-surefire-plugin` from version `3.5.3` to `3.5.4`
+  - Upgraded `maven-javadoc-plugin` from version `3.11.2` to `3.12.0`
+  - Upgraded `central-publishing-maven-plugin` from version `0.8.0` to `0.9.0`
+
+## [3.3.6] - 2025-08-12
+
+### Changed in 3.3.6
+
+- Eliminated compile warnings
+- Updated dependencies:
+  - Upgraded `sqlite-jdbc` from version `3.42.0.1` to `3.50.3.0` since
+    `getGeneratedKeys()` support was restored
+  
 ## [3.3.5] - 2025-08-12
 
 ### Changed in 3.3.5
