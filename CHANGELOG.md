@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed in 3.3.7
 
 - Updated dependencies:
-  - Upgraded `junit-jupiter` from version `5.13.4` to `6.0.0`
+  - Upgraded `junit-jupiter` from version `5.13.4` to `5.14.0`
   - Added direct dependency to `commons-lang3` version `3.19.0` to override transitive dependency to version `3.17.0` from `commons-configuration2` due to `CVE-2025-48924`
   - Upgraded `maven-compiler-plugin` from version `3.14.0` to `3.14.1`
   - Upgraded `maven-surefire-plugin` from version `3.5.3` to `3.5.4`
