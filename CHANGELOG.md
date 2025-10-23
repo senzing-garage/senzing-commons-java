@@ -31,8 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed in 3.3.7
 
 - Updated dependencies:
-  - Upgraded `sqlite-jdbc` from version `3.42.0.1` to `3.50.3.0` since
-    `getGeneratedKeys()` support was restored
+  - Upgraded `junit-jupiter` from version `5.13.4` to `6.0.0`
+  - Added direct dependency to `commons-lang3` version `3.19.0` to override transitive dependency to version `3.17.0` from `commons-configuration2` due to `CVE-2025-48924`
+  - Upgraded `maven-compiler-plugin` from version `3.14.0` to `3.14.1`
+  - Upgraded `maven-surefire-plugin` from version `3.5.3` to `3.5.4`
+  - Upgraded `maven-javadoc-plugin` from version `3.11.2` to `3.12.0`
+  - Upgraded `central-publishing-maven-plugin` from version `0.8.0` to `0.9.0`
 
 ## [3.3.6] - 2025-08-12
 
