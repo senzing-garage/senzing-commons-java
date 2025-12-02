@@ -14,8 +14,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import javax.json.*;
@@ -45,17 +45,17 @@ public class JsonUtilities {
             Collections.singletonMap(PRETTY_PRINTING, true));
 
     /**
-     * The standard date-time pattern to use for dates.  The value is 
+     * The standard date-time pattern to use for dates. The value is
      * <code>{@value}</code>.
      */
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     /**
-     * The {@link DateTimeFormatter} to use for dates.  The format is given
+     * The {@link DateTimeFormatter} to use for dates. The format is given
      * by {@link #DATE_TIME_PATTERN} using the {@link Locale#UK} locale.
      */
     public static final DateTimeFormatter DATE_TIME_FORMATTER 
-        = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, Locale.UK);
+        = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, Locale.UK).withZone(ZoneOffset.UTC);
 
     /**
      * Private constructor since this class only has static methods.
@@ -200,7 +200,7 @@ public class JsonUtilities {
     /**
      * Gets a String value from the specified {@link JsonArray} using the
      * specified index. If the specified {@link JsonArray} is <code>null</code>
-     * or the value at the specified index is <code>null</code> then the 
+     * or the value at the specified index is <code>null</code> then the
      * the specified default value is returned, otherwise the {@link String}
      * value is returned. <b>NOTE:</b> This function will convert any
      * non-string value that is found to a {@link String} representation.
@@ -225,7 +225,7 @@ public class JsonUtilities {
     /**
      * Gets an {@link Instant} value from the specified {@link JsonArray} using
      * the specified index. If the specified key is missing or has a null value
-     * then <code>null</code> is returned, otherwise the {@link String} value 
+     * then <code>null</code> is returned, otherwise the {@link String} value
      * is obtained and parsed via {@link #DATE_TIME_FORMATTER}.
      *
      * @param obj The {@link JsonObject} to get the value from.
@@ -244,7 +244,7 @@ public class JsonUtilities {
      * the specified key. If the specified key is missing or has a null value
      * then the specified default value is returned, otherwise the {@link String}
      * value is obtained and parsed via {@link #DATE_TIME_FORMATTER}.
-
+     * 
      * @param obj          The {@link JsonObject} to get the value from.
      *
      * @param key          The non-null {@link String} key for the value.
@@ -254,15 +254,21 @@ public class JsonUtilities {
      *
      * @return The {@link Instant} value for the key, or <code>null</code> if
      *         the JSON value is <code>null</code> or missing.
+     * 
+     * @throws DateTimeParseException If the date is not properly formatted.
      */
     public static Instant getInstant(JsonObject obj,
-            String key,
-            Instant defaultValue) 
+                                     String     key,
+                                     Instant    defaultValue)
+        throws DateTimeParseException 
     {
         if (obj == null) {
             return defaultValue;
         }
         if (!obj.containsKey(key)) {
+            return defaultValue;
+        }
+        if (obj.isNull(key)) {
             return defaultValue;
         }
         String text = obj.getString(key);
@@ -272,7 +278,7 @@ public class JsonUtilities {
     /**
      * Gets an {@link Date} value from the specified {@link JsonObject} using
      * the specified key. If the specified key is missing or has a null value
-     * then <code>null</code> is returned, otherwise the {@link String} value 
+     * then <code>null</code> is returned, otherwise the {@link String} value
      * is obtained and parsed via {@link #DATE_TIME_FORMATTER}.
      *
      * @param obj The {@link JsonObject} to get the value from.
@@ -291,7 +297,7 @@ public class JsonUtilities {
      * the specified key. If the specified key is missing or has a null value
      * then the specified default value is returned, otherwise the {@link String}
      * value is obtained and parsed via {@link #DATE_TIME_FORMATTER}.
-
+     * 
      * @param obj          The {@link JsonObject} to get the value from.
      *
      * @param key          The non-null {@link String} key for the value.
@@ -304,8 +310,7 @@ public class JsonUtilities {
      */
     public static Date getDate(JsonObject obj,
             String key,
-            Date defaultValue) 
-    {
+            Date defaultValue) {
         Instant instant = getInstant(obj, key);
         if (instant == null) {
             return defaultValue;
@@ -316,10 +321,10 @@ public class JsonUtilities {
     /**
      * Gets an {@link Instant} value from the specified {@link JsonObject} using
      * the specified key. If the specified key is missing or has a null value
-     * then <code>null</code> is returned, otherwise the {@link String} value 
+     * then <code>null</code> is returned, otherwise the {@link String} value
      * is obtained and parsed via {@link #DATE_TIME_FORMATTER}.
      *
-     * @param arr The {@link JsonArray} to get the value from.
+     * @param arr   The {@link JsonArray} to get the value from.
      *
      * @param index The array index for the value.
      * 
@@ -336,18 +341,20 @@ public class JsonUtilities {
      * then the specified default value is returned, otherwise the {@link String}
      * value is obtained and parsed via {@link #DATE_TIME_FORMATTER}.
      *
-     * @param arr The {@link JsonArray} to get the value from.
+     * @param arr          The {@link JsonArray} to get the value from.
      *
-     * @param index The array index for the value.
+     * @param index        The array index for the value.
      *
      * @param defaultValue The value to return if the key is missing or its
      *                     value is <code>null</code>.
      *
      * @return The {@link Instant} value for the key, or <code>null</code> if
      *         the JSON value is <code>null</code> or missing.
+     * 
+     * @throws DateTimeParseException If the date is not properly formatted.
      */
-    public static Instant getInstant(JsonArray arr, int index, Instant defaultValue) 
-    {
+    public static Instant getInstant(JsonArray arr, int index, Instant defaultValue)
+            throws DateTimeParseException {
         if (arr == null) {
             return defaultValue;
         }
@@ -361,7 +368,7 @@ public class JsonUtilities {
                 break;
             default:
                 throw new IllegalArgumentException(
-                    "Unexpected value at index (" + index + "): " + val);
+                        "Unexpected value at index (" + index + "): " + val);
         }
         return Instant.from(DATE_TIME_FORMATTER.parse(text));
     }
@@ -369,10 +376,10 @@ public class JsonUtilities {
     /**
      * Gets an {@link Date} value from the specified {@link JsonObject} using
      * the specified key. If the specified key is missing or has a null value
-     * then <code>null</code> is returned, otherwise the {@link String} value 
+     * then <code>null</code> is returned, otherwise the {@link String} value
      * is obtained and parsed via {@link #DATE_TIME_FORMATTER}.
      *
-     * @param arr The {@link JsonArray} to get the value from.
+     * @param arr   The {@link JsonArray} to get the value from.
      *
      * @param index The array index for the value.
      *
@@ -388,10 +395,10 @@ public class JsonUtilities {
      * the specified key. If the specified key is missing or has a null value
      * then the specified default value is returned, otherwise the {@link String}
      * value is obtained and parsed via {@link #DATE_TIME_FORMATTER}.
-
-     * @param arr The {@link JsonArray} to get the value from.
+     * 
+     * @param arr          The {@link JsonArray} to get the value from.
      *
-     * @param index The array index for the value.
+     * @param index        The array index for the value.
      *
      * @param defaultValue The value to return if the key is missing or its
      *                     value is <code>null</code>.
@@ -399,8 +406,7 @@ public class JsonUtilities {
      * @return The {@link Date} value for the key, or <code>null</code> if
      *         the JSON value is <code>null</code> or missing.
      */
-    public static Date getDate(JsonArray arr, int index, Date defaultValue)
-    {
+    public static Date getDate(JsonArray arr, int index, Date defaultValue) {
         Instant instant = getInstant(arr, index);
         if (instant == null) {
             return defaultValue;
@@ -1613,10 +1619,9 @@ public class JsonUtilities {
      *
      * @return The {@link JsonObjectBuilder} that was specified.
      */
-    public static JsonObjectBuilder add(JsonObjectBuilder   job,
-                                        String              key,
-                                        TemporalAccessor    val) 
-    {
+    public static JsonObjectBuilder add(JsonObjectBuilder job,
+            String key,
+            TemporalAccessor val) {
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1894,9 +1899,8 @@ public class JsonUtilities {
      *
      * @return The {@link JsonObjectBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder    jab,
-                                       TemporalAccessor    val) 
-    {
+    public static JsonArrayBuilder add(JsonArrayBuilder jab,
+            TemporalAccessor val) {
         if (val == null) {
             jab.addNull();
         } else {
@@ -1904,7 +1908,6 @@ public class JsonUtilities {
         }
         return jab;
     }
-
 
     /**
      * Adds the specified value to the specified {@link
@@ -1924,36 +1927,37 @@ public class JsonUtilities {
         if (val == null) {
             jab.addNull();
         } else if (val instanceof JsonObjectBuilder) {
-            add(jab,(JsonObjectBuilder) val);
+            add(jab, (JsonObjectBuilder) val);
         } else if (val instanceof JsonArrayBuilder) {
-            add(jab,(JsonArrayBuilder) val);
+            add(jab, (JsonArrayBuilder) val);
         } else if (val instanceof JsonValue) {
-            add(jab,(JsonValue) val);
+            add(jab, (JsonValue) val);
         } else if (val instanceof String) {
-            add(jab,(String) val);
+            add(jab, (String) val);
         } else if (val instanceof Integer) {
-            add(jab,(Integer) val);
+            add(jab, (Integer) val);
         } else if (val instanceof Long) {
-            add(jab,(Long) val);
+            add(jab, (Long) val);
         } else if (val instanceof Double) {
-            add(jab,(Double) val);
+            add(jab, (Double) val);
         } else if (val instanceof Float) {
-            add(jab,(Float) val);
+            add(jab, (Float) val);
         } else if (val instanceof BigInteger) {
-            add(jab,(BigInteger) val);
+            add(jab, (BigInteger) val);
         } else if (val instanceof BigDecimal) {
-            add(jab,(BigDecimal) val);
+            add(jab, (BigDecimal) val);
         } else if (val instanceof Boolean) {
-            add(jab,(Boolean) val);
+            add(jab, (Boolean) val);
         } else if (val instanceof Date) {
-            add(jab,(Date) val);
+            add(jab, (Date) val);
         } else if (val instanceof TemporalAccessor) {
-            add(jab,(TemporalAccessor) val);
+            add(jab, (TemporalAccessor) val);
         } else {
-            add(jab,val.toString());
+            add(jab, val.toString());
         }
         return jab;
     }
+
     /**
      * Parses JSON text as a {@link JsonValue}. If the specified text is not
      * formatted as a JSON then an exception will be thrown.
@@ -2056,57 +2060,57 @@ public class JsonUtilities {
      *
      * @return The normalized version of the {@link JsonValue}.
      */
-  @SuppressWarnings({"unchecked", "rawtypes"})
-  public static Object normalizeJsonValue(JsonValue jsonValue) {
-    if (jsonValue == null)
-      return null;
-    switch (jsonValue.getValueType()) {
-      case NULL: {
-        return null;
-      }
-      case TRUE: {
-        return Boolean.TRUE;
-      }
-      case FALSE: {
-        return Boolean.FALSE;
-      }
-      case NUMBER: {
-        JsonNumber jsonNumber = (JsonNumber) jsonValue;
-        if (jsonNumber.isIntegral()) {
-          return (Long) jsonNumber.longValue();
-        } else {
-          return (Double) jsonNumber.doubleValue();
-        }
-      }
-      case STRING: {
-        JsonString jsonString = (JsonString) jsonValue;
-        return jsonString.getString();
-      }
-      case ARRAY: {
-        JsonArray jsonArray = (JsonArray) jsonValue;
-        int count = jsonArray.size();
-        ArrayList result = new ArrayList(count);
-        for (JsonValue jv : jsonArray) {
-          result.add(normalizeJsonValue(jv));
-        }
-        return result;
-      }
-      case OBJECT: {
-        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
-        JsonObject jsonObject = (JsonObject) jsonValue;
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static Object normalizeJsonValue(JsonValue jsonValue) {
+        if (jsonValue == null)
+            return null;
+        switch (jsonValue.getValueType()) {
+            case NULL: {
+                return null;
+            }
+            case TRUE: {
+                return Boolean.TRUE;
+            }
+            case FALSE: {
+                return Boolean.FALSE;
+            }
+            case NUMBER: {
+                JsonNumber jsonNumber = (JsonNumber) jsonValue;
+                if (jsonNumber.isIntegral()) {
+                    return (Long) jsonNumber.longValue();
+                } else {
+                    return (Double) jsonNumber.doubleValue();
+                }
+            }
+            case STRING: {
+                JsonString jsonString = (JsonString) jsonValue;
+                return jsonString.getString();
+            }
+            case ARRAY: {
+                JsonArray jsonArray = (JsonArray) jsonValue;
+                int count = jsonArray.size();
+                ArrayList result = new ArrayList(count);
+                for (JsonValue jv : jsonArray) {
+                    result.add(normalizeJsonValue(jv));
+                }
+                return result;
+            }
+            case OBJECT: {
+                LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+                JsonObject jsonObject = (JsonObject) jsonValue;
 
-        for (Map.Entry entry : jsonObject.entrySet()) {
-          String key = (String) entry.getKey();
-          Object value = normalizeJsonValue((JsonValue) entry.getValue());
-          result.put(key, value);
+                for (Map.Entry entry : jsonObject.entrySet()) {
+                    String key = (String) entry.getKey();
+                    Object value = normalizeJsonValue((JsonValue) entry.getValue());
+                    result.put(key, value);
+                }
+                return result;
+            }
+            default:
+                throw new IllegalStateException(
+                        "Unrecognized JsonValue.ValueType: " + jsonValue.getValueType());
         }
-        return result;
-      }
-      default:
-        throw new IllegalStateException(
-            "Unrecognized JsonValue.ValueType: " + jsonValue.getValueType());
     }
-  }
 
     /**
      * Adds a property to the specified {@link JsonObjectBuilder} with the
@@ -2130,7 +2134,7 @@ public class JsonUtilities {
      *
      * @return The specified {@link JsonObjectBuilder}.
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static JsonObjectBuilder addProperty(JsonObjectBuilder builder,
             String property,
             Object value) {
@@ -2239,62 +2243,57 @@ public class JsonUtilities {
             }
             Class<?> paramTypes[] = method.getParameterTypes();
             if ((paramTypes.length == 3 && paramTypes[2] == returnType)
-                || (paramTypes.length == 2 
-                    && JsonValue.class.isAssignableFrom(returnType)))
-            {
+                    || (paramTypes.length == 2
+                            && JsonValue.class.isAssignableFrom(returnType))) {
                 // check if an object getter
-                if (paramTypes[0].equals(JsonObject.class) 
-                    && paramTypes[1].equals(String.class)) 
-                {
+                if (paramTypes[0].equals(JsonObject.class)
+                        && paramTypes[1].equals(String.class)) {
                     objTypeMethods.put(returnType, method);
-                
+
                 } else if (paramTypes[0].equals(JsonArray.class)
-                           && paramTypes[1].equals(Integer.TYPE)) 
-                {
+                        && paramTypes[1].equals(Integer.TYPE)) {
                     arrTypeMethods.put(returnType, method);
                 }
             }
         }
-        
+
         OBJECT_TYPE_METHODS = Collections.unmodifiableMap(objTypeMethods);
         ARRAY_TYPE_METHODS = Collections.unmodifiableMap(arrTypeMethods);
-    }   
+    }
 
     /**
-     * Gets the value from the specified {@link JsonObject} as an instance 
+     * Gets the value from the specified {@link JsonObject} as an instance
      * of the specified type.
      * 
-     * @param <T> The type of object to retrieve.
-     * @param obj The {@link JsonObject} from which to get the value.
-     * @param key The non-null {@link String} key for the property.
+     * @param <T>  The type of object to retrieve.
+     * @param obj  The {@link JsonObject} from which to get the value.
+     * @param key  The non-null {@link String} key for the property.
      * @param type The type of object expected.
      * @return The value that was retrieved, or <code>null</code> if
      *         the value is not present.
      */
-    public static <T> T getValue(Class<T>   type,
-                                 JsonObject obj, 
-                                 String     key)
-    {
+    public static <T> T getValue(Class<T> type,
+            JsonObject obj,
+            String key) {
         return getValue(type, obj, key, null);
     }
 
     /**
-     * Gets the value from the specified {@link JsonObject} as an instance 
+     * Gets the value from the specified {@link JsonObject} as an instance
      * of the specified type.
      * 
-     * @param <T> The type of object to retrieve.
-     * @param obj The {@link JsonObject} from which to get the value.
-     * @param key The non-null {@link String} key for the property.
-     * @param type The type of object expected.
+     * @param <T>          The type of object to retrieve.
+     * @param obj          The {@link JsonObject} from which to get the value.
+     * @param key          The non-null {@link String} key for the property.
+     * @param type         The type of object expected.
      * @param defaultValue The default value to return if the value is not present.
      * @return The value that was retrieved, or the specified default value if
      *         the value is not present.
      */
-    public static <T> T getValue(Class<T>   type,
-                                 JsonObject obj, 
-                                 String     key,
-                                 T          defaultValue)
-    {
+    public static <T> T getValue(Class<T> type,
+            JsonObject obj,
+            String key,
+            T defaultValue) {
         // check if the source object is null
         if (obj == null) {
             return defaultValue;
@@ -2310,42 +2309,39 @@ public class JsonUtilities {
     }
 
     /**
-     * Gets the value from the specified {@link JsonArray} as an instance 
+     * Gets the value from the specified {@link JsonArray} as an instance
      * of the specified type.
      * 
-     * @param <T> The type of object to retrieve.
-     * @param arr The {@link JsonArray} from which to get the value.
+     * @param <T>   The type of object to retrieve.
+     * @param arr   The {@link JsonArray} from which to get the value.
      * @param index The index for the property.
-     * @param type The type of object expected.
+     * @param type  The type of object expected.
      * @return The value that was retrieved, or <code>null</code> if
      *         the value is not present.
      */
-    public static <T> T getValue(Class<T>   type,
-                                 JsonArray  arr, 
-                                 int        index)
-    {
+    public static <T> T getValue(Class<T> type,
+            JsonArray arr,
+            int index) {
         // get from the array
         return getValue(type, arr, index, null);
     }
 
-
     /**
-     * Gets the value from the specified {@link JsonArray} as an instance 
+     * Gets the value from the specified {@link JsonArray} as an instance
      * of the specified type.
      * 
-     * @param <T> The type of object to retrieve.
-     * @param arr The {@link JsonArray} from which to get the value.
-     * @param index The index for the property.
-     * @param type The type of object expected.
+     * @param <T>          The type of object to retrieve.
+     * @param arr          The {@link JsonArray} from which to get the value.
+     * @param index        The index for the property.
+     * @param type         The type of object expected.
      * @param defaultValue The default value to return if the value is not present.
      * @return The value that was retrieved, or the specified default value if
      *         the value is not present.
      */
-    public static <T> T getValue(Class<T>   type,
-                                 JsonArray  arr, 
-                                 int        index,
-                                 T          defaultValue)
-    {
+    public static <T> T getValue(Class<T> type,
+            JsonArray arr,
+            int index,
+            T defaultValue) {
         // check if the source array is null
         if (arr == null) {
             return defaultValue;
@@ -2359,32 +2355,32 @@ public class JsonUtilities {
      * Gets the value from the specified {@link JsonArray} or {@link JsonObject}
      * as an instance of the specified type.
      * 
-     * @param <T> The type of object to retrieve.
-     * @param type The type of object expected.
-     * @param methodMap The {@link Map} of types to {@link Method} instances.
-     * @param source The {@link JsonValue} from which to get the value.
-     * @param locator The non-null locator for the property.
+     * @param <T>          The type of object to retrieve.
+     * @param type         The type of object expected.
+     * @param methodMap    The {@link Map} of types to {@link Method} instances.
+     * @param source       The {@link JsonValue} from which to get the value.
+     * @param locator      The non-null locator for the property.
      * @param defaultValue The default value to return if the value is not present.
      * @return The value that was retrieved, or the specified default value if
      *         the value is not present.
      */
     @SuppressWarnings("unchecked")
-    private static <T> T getValue(Class<T>              type,
-                                  Map<Class<?>, Method> methodMap,
-                                  JsonValue             source,
-                                  Object                locator,
-                                  T                     defaultValue)
-    {
+    private static <T> T getValue(Class<T> type,
+            Map<Class<?>, Method> methodMap,
+            JsonValue source,
+            Object locator,
+            T defaultValue) {
         try {
             // get the return type
             Class<?> returnType = (type.isPrimitive())
-                ? ReflectionUtilities.getPromotedType(type) : type;
+                    ? ReflectionUtilities.getPromotedType(type)
+                    : type;
 
             // check if we have a direct method for handling it
             Method method = methodMap.get(returnType);
             if (method != null) {
                 if (method.getParameterTypes().length == 3) {
-                    return (T) method.invoke(null, source, locator, defaultValue);                
+                    return (T) method.invoke(null, source, locator, defaultValue);
                 } else if (method.getParameterTypes().length == 2) {
                     T result = (T) method.invoke(null, source, locator);
                     return (result == null) ? defaultValue : result;
@@ -2396,8 +2392,7 @@ public class JsonUtilities {
                 Method fromMethod = type.getMethod("from", Instant.class);
                 int modifiers = fromMethod.getModifiers();
                 if ((returnType.isAssignableFrom(fromMethod.getReturnType())
-                    && Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers)))
-                {
+                        && Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers))) {
                     method = methodMap.get(Instant.class);
                     Instant instant = (Instant) method.invoke(null, source, locator, null);
                     if (instant == null) {
@@ -2405,7 +2400,7 @@ public class JsonUtilities {
                     }
                     return (T) fromMethod.invoke(null, instant);
                 }
-            }  catch (NoSuchMethodException ignore) {
+            } catch (NoSuchMethodException ignore) {
                 // ignore the exception
             }
 
@@ -2414,8 +2409,7 @@ public class JsonUtilities {
                 Method parseMethod = type.getMethod("parse", String.class);
                 int modifiers = parseMethod.getModifiers();
                 if (returnType.isAssignableFrom(parseMethod.getReturnType())
-                    && Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers))
-                {
+                        && Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers)) {
                     method = methodMap.get(String.class);
                     String text = (String) method.invoke(source, locator, null);
                     if (text == null) {
@@ -2423,11 +2417,11 @@ public class JsonUtilities {
                     }
                     return (T) parseMethod.invoke(null, text);
                 }
-            }  catch (NoSuchMethodException ignore) {
+            } catch (NoSuchMethodException ignore) {
                 // ignore the exception
             }
 
-            // otherwise 
+            // otherwise
             return null;
 
         } catch (IllegalAccessException e) {
@@ -2464,7 +2458,7 @@ public class JsonUtilities {
      *
      * @return The specified {@link JsonObjectBuilder}.
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static JsonArrayBuilder addElement(JsonArrayBuilder builder,
             Object value) {
         if (value == null) {

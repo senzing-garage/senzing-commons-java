@@ -110,7 +110,7 @@ public class TextUtilities {
         }
 
         // determine the count
-        return PRNG.nextInt(maxCount - minCount) + minCount;
+        return (maxCount == minCount) ? minCount : PRNG.nextInt(maxCount - minCount) + minCount;
     }
 
     /**
@@ -183,6 +183,8 @@ public class TextUtilities {
      * @param count The number of characters to generate.
      *
      * @return The generated text.
+     * 
+     * @throws IllegalArgumentException If the specified count is negative.
      */
     public static String randomAlphanumericText(int count) {
         return randomText(count, ALPHANUMERIC_CHARS);
@@ -210,6 +212,10 @@ public class TextUtilities {
      * characters and a count of the number of desired characters.
      */
     private static String randomText(int count, List<Character> allowedChars) {
+        if (count < 0) {
+            throw new IllegalArgumentException(
+                "The specified count cannot be negative: " + count);
+        }
         StringBuilder sb = new StringBuilder();
         int max = allowedChars.size();
         for (int index = 0; index < count; index++) {

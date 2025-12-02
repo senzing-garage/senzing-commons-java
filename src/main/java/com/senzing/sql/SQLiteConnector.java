@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
+// NOTE: these imports require that we make SQLite JDBC driver a 
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteOpenMode;
 
@@ -21,10 +22,11 @@ public class SQLiteConnector implements Connector {
     private static final Properties SQLITE_CONFIG_PROPERTIES;
     static {
         SQLiteConfig config = new SQLiteConfig();
-        // NOTE: We want to use SQLite in multi-thread mode since we use a connection 
-        // pool and therefore we do not use a Connection object (or PreparedStatement) in
-        // more than one thread at any given time.  To do this at run-time we need to set
-        // SQLiteOpenMode.NOMUTEX (see: https://sqlite.org/threadsafe.html)
+        // NOTE: We want to use SQLite in multi-thread mode since this is typically used
+        // with a connection pool and therefore we do not use a Connection object (or 
+        // PreparedStatement) in more than one thread at any given time.  To do this at
+        // run-time we need to set SQLiteOpenMode.NOMUTEX.
+        // see: https://sqlite.org/threadsafe.html
         config.setOpenMode(SQLiteOpenMode.NOMUTEX);
         SQLITE_CONFIG_PROPERTIES = config.toProperties();
     }
@@ -139,6 +141,14 @@ public class SQLiteConnector implements Connector {
      * After establishing the {@link Connection} this {@link Connector} will
      * initialize it with the <code>PRAGMA</code> features defined by the
      * {@link #getPragmaFeatureStatements()}.
+     * 
+     * <p>
+     * <b>WARNING:</b> The returned {@link Connection} should <b>NOT</b> be
+     * used <b>concurrently</b> in multiple threads, but it is safe to use it
+     * in a {@link ConnectionPool} where one thread can access it at a time.
+     * This takes advantage of SQLite's <a href="https://sqlite.org/threadsafe.html">
+     * "multi-threaded"</a> mode for improved performance via the runtime
+     * setting {@link SQLiteOpenMode#NOMUTEX}.
      *
      * @return The newly established and initialized {@link Connection}.
      * @throws SQLException If a JDBC failure occurs.

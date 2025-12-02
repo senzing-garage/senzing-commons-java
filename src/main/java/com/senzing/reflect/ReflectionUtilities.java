@@ -455,6 +455,8 @@ public class ReflectionUtilities {
      * @param restrictedMethods The zero or more {@link Method} instances
      *                          that are to be restricted.
      * 
+     * @return The restricted proxy of the specified target object.
+     * 
      * @throws NullPointerException If the specified target object or any of
      *                              the specified {@link Method} instances is
      *                              <code>null</code>.
@@ -488,6 +490,8 @@ public class ReflectionUtilities {
      * @param targetObject The target object to execute methods against.
      * @param restrictedMethods The zero or more {@link Method} instances
      *                          that are to be restricted.
+     * 
+     * @return The restricted proxy of the specified target object.
      * 
      * @throws NullPointerException If the specified target object or any of
      *                              the specified {@link Method} instances is
