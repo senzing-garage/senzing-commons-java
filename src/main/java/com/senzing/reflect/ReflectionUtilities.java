@@ -547,8 +547,8 @@ public class ReflectionUtilities {
         Set<Class<?>> interfaceSet = new LinkedHashSet<>();
         for (Class<?> c = targetObject.getClass(); c != null; c = c.getSuperclass()) {
             interfaces = c.getInterfaces();
-            for (Class<?> iface : interfaces) {
-                interfaceSet.add(iface);
+            for (Class<?> i : interfaces) {
+                interfaceSet.add(i);
             }
         }
         if (interfaceSet.size() == 0) {
