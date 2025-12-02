@@ -21,6 +21,10 @@ public class SQLiteConnector implements Connector {
     private static final Properties SQLITE_CONFIG_PROPERTIES;
     static {
         SQLiteConfig config = new SQLiteConfig();
+        // NOTE: We want to use SQLite in multi-thread mode since we use a connection 
+        // pool and therefore we do not use a Connection object (or PreparedStatement) in
+        // more than one thread at any given time.  To do this at run-time we need to set
+        // SQLiteOpenMode.NOMUTEX (see: https://sqlite.org/threadsafe.html)
         config.setOpenMode(SQLiteOpenMode.NOMUTEX);
         SQLITE_CONFIG_PROPERTIES = config.toProperties();
     }
@@ -38,11 +42,11 @@ public class SQLiteConnector implements Connector {
      * </ol>
      */
     public static final List<String> DEFAULT_PRAGMA_FEATURES_LIST = List.of(
-            "PRAGMA foreign_keys = ON;",
-            "PRAGMA journal_mode = WAL;",
-            "PRAGMA synchronous = 1;",
-            "PRAGMA secure_delete = 0;",
-            "PRAGMA automatic_index = 0;");
+            "PRAGMA foreign_keys = ON;",    // enable foreign keys
+            "PRAGMA journal_mode = WAL;",   // use journal to recover in case of failure
+            "PRAGMA synchronous = 1;",      // normal data durability since we use journal
+            "PRAGMA secure_delete = 0;",    // we don't need secure deletion
+            "PRAGMA automatic_index = 0;"); // don't create temporary indexes
 
     /**
      * Creates a temporary file and traps any {@link IOException}, rethrowing it
