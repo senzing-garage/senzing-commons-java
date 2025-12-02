@@ -4,7 +4,7 @@
   <groupId>com.senzing</groupId>
   <artifactId>senzing-commons</artifactId>
   <packaging>jar</packaging>
-  <version>4.0.0-beta.1.4</version>
+  <version>4.0.0-beta.1.5</version>
   <name>Senzing Commons</name>
   <description>Utility classes and functions common to multiple Senzing projects.</description>
   <url>http://github.com/senzing-garage/senzing-commons-java</url>
@@ -73,7 +73,6 @@
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.50.3.0</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   <properties>
