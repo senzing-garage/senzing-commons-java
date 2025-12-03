@@ -27,6 +27,7 @@
     "jdbc",
     "jsonlines",
     "juniversalchardet",
+    "NOMUTEX",
     "phoo",
     "pushback",
     "rawtypes",
