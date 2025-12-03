@@ -3132,7 +3132,7 @@ public class JsonUtilitiesTest {
     public List<Arguments> provideToJsonObjectParams() {
         List<Arguments> result = new LinkedList<>();
 
-        Map<String, Object> map1 = new LinkedHashMap();
+        Map<String, Object> map1 = new LinkedHashMap<>();
         map1.put("text", "ABC");
         map1.put("none", null);
         map1.put("int", 10);

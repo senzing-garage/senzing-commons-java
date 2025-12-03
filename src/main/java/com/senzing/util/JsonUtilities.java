@@ -170,11 +170,14 @@ public class JsonUtilities {
      */
     public static String getString(JsonObject obj,
             String key,
-            String defaultValue) {
-        if (obj == null)
+            String defaultValue) 
+    {
+        if (obj == null) {
             return defaultValue;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return defaultValue;
+        }
         JsonValue jsonValue = obj.get(key);
         return valueAsString(jsonValue, defaultValue);
     }
@@ -216,8 +219,9 @@ public class JsonUtilities {
      *         default value if the JSON value is <code>null</code>.
      */
     public static String getString(JsonArray arr, int index, String defaultValue) {
-        if (arr == null)
+        if (arr == null) {
             return defaultValue;
+        }
         JsonValue jsonValue = arr.get(index);
         return valueAsString(jsonValue, defaultValue);
     }
@@ -308,9 +312,10 @@ public class JsonUtilities {
      * @return The {@link Date} value for the key, or <code>null</code> if
      *         the JSON value is <code>null</code> or missing.
      */
-    public static Date getDate(JsonObject obj,
-            String key,
-            Date defaultValue) {
+    public static Date getDate(JsonObject   obj,
+                               String       key,
+                               Date         defaultValue) 
+    {
         Instant instant = getInstant(obj, key);
         if (instant == null) {
             return defaultValue;
@@ -354,7 +359,8 @@ public class JsonUtilities {
      * @throws DateTimeParseException If the date is not properly formatted.
      */
     public static Instant getInstant(JsonArray arr, int index, Instant defaultValue)
-            throws DateTimeParseException {
+            throws DateTimeParseException 
+    {
         if (arr == null) {
             return defaultValue;
         }
@@ -437,8 +443,9 @@ public class JsonUtilities {
      *         default value if <code>null</code>.
      */
     private static String valueAsString(JsonValue jsonValue, String defaultValue) {
-        if (jsonValue == null)
+        if (jsonValue == null) {
             return defaultValue;
+        }
         switch (jsonValue.getValueType()) {
             case STRING:
                 return ((JsonString) jsonValue).getString();
@@ -468,10 +475,12 @@ public class JsonUtilities {
      *         if not found or if the value is null.
      */
     public static JsonArray getJsonArray(JsonObject obj, String key) {
-        if (obj == null)
+        if (obj == null) {
             return null;
-        if (!obj.containsKey(key) || obj.isNull(key))
+        }
+        if (!obj.containsKey(key) || obj.isNull(key)) {
             return null;
+        }
         return obj.getJsonArray(key);
     }
 
@@ -488,10 +497,12 @@ public class JsonUtilities {
      *         if not found or if the value is null.
      */
     public static JsonArray getJsonArray(JsonArray arr, int index) {
-        if (arr == null)
+        if (arr == null) {
             return null;
-        if (arr.isNull(index))
+        }
+        if (arr.isNull(index)) {
             return null;
+        }
         return arr.getJsonArray(index);
     }
 
@@ -536,13 +547,16 @@ public class JsonUtilities {
      *         the array or the specified default value if the associated key is
      *         missing or its value is null.
      */
-    public static List<String> getStrings(JsonObject obj,
-            String key,
-            List<String> defaultValue) {
-        if (obj == null)
+    public static List<String> getStrings(JsonObject    obj,
+                                          String        key,
+                                          List<String>  defaultValue) 
+    {
+        if (obj == null) {
             return defaultValue;
-        if (!obj.containsKey(key) || obj.isNull(key))
+        }
+        if (!obj.containsKey(key) || obj.isNull(key)) {
             return defaultValue;
+        }
         return Collections.unmodifiableList(
                 obj.getJsonArray(key).getValuesAs(JsonUtilities::valueAsString));
     }
@@ -588,13 +602,16 @@ public class JsonUtilities {
      *         the array at the specified position or the specified default value
      *         if the JSON value at the specified position is null.
      */
-    public static List<String> getStrings(JsonArray arr,
-            int index,
-            List<String> defaultValue) {
-        if (arr == null)
+    public static List<String> getStrings(JsonArray     arr,
+                                          int           index,
+                                          List<String>  defaultValue) 
+    {
+        if (arr == null) {
             return defaultValue;
-        if (arr.isNull(index))
+        }
+        if (arr.isNull(index)) {
             return defaultValue;
+        }
         return Collections.unmodifiableList(
                 arr.getJsonArray(index).getValuesAs(JsonUtilities::valueAsString));
     }
@@ -633,12 +650,15 @@ public class JsonUtilities {
      *         value if the JSON value is <code>null</code> or missing.
      */
     public static Integer getInteger(JsonObject obj,
-            String key,
-            Integer defaultValue) {
-        if (obj == null)
+                                     String     key,
+                                     Integer    defaultValue) 
+    {
+        if (obj == null) {
             return defaultValue;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return defaultValue;
+        }
 
         if (obj.isNull(key)) {
             return defaultValue;
@@ -681,11 +701,13 @@ public class JsonUtilities {
      *         specified default value if the JSON value at the array position
      *         is null.
      */
-    public static Integer getInteger(JsonArray arr,
-            int index,
-            Integer defaultValue) {
-        if (arr == null)
+    public static Integer getInteger(JsonArray  arr,
+                                     int        index,
+                                     Integer    defaultValue) 
+    {
+        if (arr == null) {
             return defaultValue;
+        }
         if (arr.isNull(index)) {
             return defaultValue;
         } else {
@@ -726,13 +748,16 @@ public class JsonUtilities {
      * @return The {@link Long} value for the key, or the specified default
      *         value if the JSON value is <code>null</code> or missing.
      */
-    public static Long getLong(JsonObject obj,
-            String key,
-            Long defaultValue) {
-        if (obj == null)
+    public static Long getLong(JsonObject   obj,
+                               String       key,
+                               Long         defaultValue) 
+    {
+        if (obj == null) {
             return defaultValue;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return defaultValue;
+        }
         if (obj.isNull(key)) {
             return defaultValue;
         } else {
@@ -775,11 +800,13 @@ public class JsonUtilities {
      *         index, or the specified default value if the JSON value at the
      *         array position is null.
      */
-    public static Long getLong(JsonArray arr,
-            int index,
-            Long defaultValue) {
-        if (arr == null)
+    public static Long getLong(JsonArray    arr,
+                               int          index,
+                               Long         defaultValue) 
+    {
+        if (arr == null) {
             return defaultValue;
+        }
         if (arr.isNull(index)) {
             return defaultValue;
         } else {
@@ -820,13 +847,16 @@ public class JsonUtilities {
      * @return The {@link BigInteger} value for the key, or the specified default
      *         value if the JSON value is <code>null</code> or missing.
      */
-    public static BigInteger getBigInteger(JsonObject obj,
-            String key,
-            BigInteger defaultValue) {
-        if (obj == null)
+    public static BigInteger getBigInteger(JsonObject   obj,
+                                           String       key,
+                                           BigInteger   defaultValue) 
+    {
+        if (obj == null) {
             return defaultValue;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return defaultValue;
+        }
         if (obj.isNull(key)) {
             return defaultValue;
         } else {
@@ -869,11 +899,13 @@ public class JsonUtilities {
      *         specified index, or the specified default value if the JSON value
      *         at the array position is null.
      */
-    public static BigInteger getBigInteger(JsonArray arr,
-            int index,
-            BigInteger defaultValue) {
-        if (arr == null)
+    public static BigInteger getBigInteger(JsonArray    arr,
+                                           int          index,
+                                           BigInteger   defaultValue) 
+    {
+        if (arr == null) {
             return defaultValue;
+        }
         if (arr.isNull(index)) {
             return defaultValue;
         } else {
@@ -915,12 +947,15 @@ public class JsonUtilities {
      *         value if the JSON value is <code>null</code> or missing.
      */
     public static Float getFloat(JsonObject obj,
-            String key,
-            Float defaultValue) {
-        if (obj == null)
+                                 String     key,
+                                 Float      defaultValue) 
+    {
+        if (obj == null) {
             return defaultValue;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return defaultValue;
+        }
         if (obj.isNull(key)) {
             return defaultValue;
         } else {
@@ -964,8 +999,9 @@ public class JsonUtilities {
      *         array position is null.
      */
     public static Float getFloat(JsonArray arr, int index, Float defaultValue) {
-        if (arr == null)
+        if (arr == null) {
             return defaultValue;
+        }
         if (arr.isNull(index)) {
             return defaultValue;
         } else {
@@ -1006,13 +1042,16 @@ public class JsonUtilities {
      * @return The {@link Double} value for the key, or the specified default
      *         value if the JSON value is <code>null</code> or missing.
      */
-    public static Double getDouble(JsonObject obj,
-            String key,
-            Double defaultValue) {
-        if (obj == null)
+    public static Double getDouble(JsonObject   obj,
+                                   String       key,
+                                   Double       defaultValue) 
+    {
+        if (obj == null) {
             return defaultValue;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return defaultValue;
+        }
         if (obj.isNull(key)) {
             return defaultValue;
         } else {
@@ -1098,13 +1137,16 @@ public class JsonUtilities {
      * @return The {@link BigDecimal} value for the key, or the specified default
      *         value if the JSON value is <code>null</code> or missing.
      */
-    public static BigDecimal getBigDecimal(JsonObject obj,
-            String key,
-            BigDecimal defaultValue) {
-        if (obj == null)
+    public static BigDecimal getBigDecimal(JsonObject   obj,
+                                           String       key,
+                                           BigDecimal   defaultValue) 
+    {
+        if (obj == null) {
             return defaultValue;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return defaultValue;
+        }
         if (obj.isNull(key)) {
             return defaultValue;
         } else {
@@ -1147,11 +1189,13 @@ public class JsonUtilities {
      *         specified index, or the specified default value if the JSON value
      *         at the array position is null.
      */
-    public static BigDecimal getBigDecimal(JsonArray arr,
-            int index,
-            BigDecimal defaultValue) {
-        if (arr == null)
+    public static BigDecimal getBigDecimal(JsonArray    arr,
+                                           int          index,
+                                           BigDecimal   defaultValue) 
+    {
+        if (arr == null) {
             return defaultValue;
+        }
         if (arr.isNull(index)) {
             return defaultValue;
         } else {
@@ -1193,12 +1237,15 @@ public class JsonUtilities {
      *         value if the JSON value is <code>null</code> or missing.
      */
     public static Boolean getBoolean(JsonObject obj,
-            String key,
-            Boolean defaultValue) {
-        if (obj == null)
+                                     String     key,
+                                     Boolean    defaultValue) 
+    {
+        if (obj == null) {
             return defaultValue;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return defaultValue;
+        }
         if (obj.isNull(key)) {
             return defaultValue;
         } else {
@@ -1241,11 +1288,13 @@ public class JsonUtilities {
      *         specified index, or the specified default value if the JSON value
      *         at the array position is null.
      */
-    public static Boolean getBoolean(JsonArray arr,
-            int index,
-            Boolean defaultValue) {
-        if (arr == null)
+    public static Boolean getBoolean(JsonArray  arr,
+                                     int        index,
+                                     Boolean    defaultValue) 
+    {
+        if (arr == null) {
             return defaultValue;
+        }
         if (arr.isNull(index)) {
             return defaultValue;
         } else {
@@ -1266,10 +1315,12 @@ public class JsonUtilities {
      *         not found.
      */
     public static JsonValue getJsonValue(JsonObject obj, String key) {
-        if (obj == null)
+        if (obj == null) {
             return null;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return null;
+        }
         return obj.getValue("/" + key);
     }
 
@@ -1286,10 +1337,12 @@ public class JsonUtilities {
      *         not found.
      */
     public static JsonObject getJsonObject(JsonObject obj, String key) {
-        if (obj == null)
+        if (obj == null) {
             return null;
-        if (!obj.containsKey(key))
+        }
+        if (!obj.containsKey(key)) {
             return null;
+        }
         if (obj.isNull(key)) {
             return null;
         } else {
@@ -1312,8 +1365,9 @@ public class JsonUtilities {
      *         position is <code>null</code>.
      */
     public static JsonObject getJsonObject(JsonArray arr, int index) {
-        if (arr == null)
+        if (arr == null) {
             return null;
+        }
         if (arr.isNull(index)) {
             return null;
         } else {
@@ -1335,9 +1389,12 @@ public class JsonUtilities {
      *
      * @return The first {@link JsonObjectBuilder} that was specified.
      */
-    public static JsonObjectBuilder add(JsonObjectBuilder job,
-            String key,
-            JsonObjectBuilder val) {
+    public static JsonObjectBuilder add(JsonObjectBuilder   job,
+                                        String              key,
+                                        JsonObjectBuilder   val) 
+    {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1360,9 +1417,12 @@ public class JsonUtilities {
      *
      * @return The {@link JsonObjectBuilder} that was specified.
      */
-    public static JsonObjectBuilder add(JsonObjectBuilder job,
-            String key,
-            JsonArrayBuilder val) {
+    public static JsonObjectBuilder add(JsonObjectBuilder   job,
+                                        String              key,
+                                        JsonArrayBuilder    val) 
+    {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1385,9 +1445,12 @@ public class JsonUtilities {
      *
      * @return The {@link JsonObjectBuilder} that was specified.
      */
-    public static JsonObjectBuilder add(JsonObjectBuilder job,
-            String key,
-            JsonValue val) {
+    public static JsonObjectBuilder add(JsonObjectBuilder   job,
+                                        String              key,
+                                        JsonValue           val) 
+    {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1411,6 +1474,8 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonObjectBuilder add(JsonObjectBuilder job, String key, String val) {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1434,6 +1499,8 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonObjectBuilder add(JsonObjectBuilder job, String key, Integer val) {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1457,6 +1524,8 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonObjectBuilder add(JsonObjectBuilder job, String key, Long val) {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1480,6 +1549,8 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonObjectBuilder add(JsonObjectBuilder job, String key, Double val) {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1503,6 +1574,8 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonObjectBuilder add(JsonObjectBuilder job, String key, Float val) {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1526,6 +1599,8 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonObjectBuilder add(JsonObjectBuilder job, String key, BigInteger val) {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1549,6 +1624,8 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonObjectBuilder add(JsonObjectBuilder job, String key, BigDecimal val) {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1572,6 +1649,8 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonObjectBuilder add(JsonObjectBuilder job, String key, Boolean val) {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1596,6 +1675,8 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonObjectBuilder add(JsonObjectBuilder job, String key, Date val) {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1619,9 +1700,12 @@ public class JsonUtilities {
      *
      * @return The {@link JsonObjectBuilder} that was specified.
      */
-    public static JsonObjectBuilder add(JsonObjectBuilder job,
-            String key,
-            TemporalAccessor val) {
+    public static JsonObjectBuilder add(JsonObjectBuilder   job,
+                                        String              key,
+                                        TemporalAccessor    val) 
+    {
+        Objects.requireNonNull(job, "The builder cannot be null");
+        Objects.requireNonNull(key, "The key cannot be null");
         if (val == null) {
             job.addNull(key);
         } else {
@@ -1636,20 +1720,22 @@ public class JsonUtilities {
      * {@link JsonArrayBuilder#addNull()} is used, otherwise
      * {@link JsonArrayBuilder#add(JsonObjectBuilder)} is used.
      *
-     * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+     * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
      *
      * @param val The {@link JsonObjectBuilder} value, or <code>null</code>.
      *
      * @return The {@link JsonArrayBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder job,
-            JsonObjectBuilder val) {
+    public static JsonArrayBuilder add(JsonArrayBuilder     jab,
+                                       JsonObjectBuilder    val) 
+    {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
-            job.addNull();
+            jab.addNull();
         } else {
-            job.add(val);
+            jab.add(val);
         }
-        return job;
+        return jab;
     }
 
     /**
@@ -1658,20 +1744,22 @@ public class JsonUtilities {
      * {@link JsonArrayBuilder#addNull()} is used, otherwise
      * {@link JsonArrayBuilder#add(JsonArrayBuilder)} is used.
      *
-     * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+     * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
      *
      * @param val The {@link JsonArrayBuilder} value, or <code>null</code>.
      *
      * @return The first {@link JsonArrayBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder job,
-            JsonArrayBuilder val) {
+    public static JsonArrayBuilder add(JsonArrayBuilder jab,
+                                       JsonArrayBuilder val) 
+    {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
-            job.addNull();
+            jab.addNull();
         } else {
-            job.add(val);
+            jab.add(val);
         }
-        return job;
+        return jab;
     }
 
     /**
@@ -1680,20 +1768,22 @@ public class JsonUtilities {
      * {@link JsonArrayBuilder#addNull()} is used, otherwise
      * {@link JsonArrayBuilder#add(JsonValue)} is used.
      *
-     * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+     * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
      *
      * @param val The {@link JsonValue} value, or <code>null</code>.
      *
      * @return The {@link JsonArrayBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder job,
-            JsonValue val) {
+    public static JsonArrayBuilder add(JsonArrayBuilder jab,
+                                       JsonValue        val) 
+    {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
-            job.addNull();
+            jab.addNull();
         } else {
-            job.add(val);
+            jab.add(val);
         }
-        return job;
+        return jab;
     }
 
     /**
@@ -1702,19 +1792,20 @@ public class JsonUtilities {
      * {@link JsonArrayBuilder#addNull()} is used, otherwise
      * {@link JsonArrayBuilder#add(String)} is used.
      *
-     * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+     * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
      *
      * @param val The {@link String} value, or <code>null</code>.
      *
      * @return The {@link JsonArrayBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder job, String val) {
+    public static JsonArrayBuilder add(JsonArrayBuilder jab, String val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
-            job.addNull();
+            jab.addNull();
         } else {
-            job.add(val);
+            jab.add(val);
         }
-        return job;
+        return jab;
     }
 
     /**
@@ -1723,19 +1814,20 @@ public class JsonUtilities {
      * {@link JsonArrayBuilder#addNull()} is used, otherwise
      * {@link JsonArrayBuilder#add(int)} is used.
      *
-     * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+     * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
      *
      * @param val The {@link Integer} value, or <code>null</code>.
      *
      * @return The {@link JsonArrayBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder job, Integer val) {
+    public static JsonArrayBuilder add(JsonArrayBuilder jab, Integer val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
-            job.addNull();
+            jab.addNull();
         } else {
-            job.add(val);
+            jab.add(val);
         }
-        return job;
+        return jab;
     }
 
     /**
@@ -1744,19 +1836,20 @@ public class JsonUtilities {
      * {@link JsonArrayBuilder#addNull()} is used, otherwise
      * {@link JsonArrayBuilder#add(long)} is used.
      *
-     * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+     * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
      *
      * @param val The {@link Long} value, or <code>null</code>.
      *
      * @return The {@link JsonArrayBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder job, Long val) {
+    public static JsonArrayBuilder add(JsonArrayBuilder jab, Long val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
-            job.addNull();
+            jab.addNull();
         } else {
-            job.add(val);
+            jab.add(val);
         }
-        return job;
+        return jab;
     }
 
     /**
@@ -1765,19 +1858,20 @@ public class JsonUtilities {
      * {@link JsonArrayBuilder#addNull()} is used, otherwise
      * {@link JsonArrayBuilder#add(double)} is used.
      *
-     * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+     * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
      *
      * @param val The {@link Double} value, or <code>null</code>.
      *
      * @return The {@link JsonArrayBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder job, Double val) {
+    public static JsonArrayBuilder add(JsonArrayBuilder jab, Double val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
-            job.addNull();
+            jab.addNull();
         } else {
-            job.add(val);
+            jab.add(val);
         }
-        return job;
+        return jab;
     }
 
     /**
@@ -1786,19 +1880,20 @@ public class JsonUtilities {
      * {@link JsonArrayBuilder#addNull()} is used, otherwise
      * {@link JsonArrayBuilder#add(double)} is used.
      *
-     * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+     * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
      *
      * @param val The {@link Float} value, or <code>null</code>.
      *
      * @return The {@link JsonArrayBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder job, Float val) {
+    public static JsonArrayBuilder add(JsonArrayBuilder jab, Float val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
-            job.addNull();
+            jab.addNull();
         } else {
-            job.add(val.doubleValue());
+            jab.add(val.doubleValue());
         }
-        return job;
+        return jab;
     }
 
     /**
@@ -1807,19 +1902,20 @@ public class JsonUtilities {
      * {@link JsonArrayBuilder#addNull()} is used, otherwise
      * {@link JsonArrayBuilder#add(BigInteger)} is used.
      *
-     * @param job The {@link JsonArrayBuilder} to add the key/value pair to.
+     * @param jab The {@link JsonArrayBuilder} to add the key/value pair to.
      *
      * @param val The {@link BigInteger} value, or <code>null</code>.
      *
      * @return The {@link JsonArrayBuilder} that was specified.
      */
-    public static JsonArrayBuilder add(JsonArrayBuilder job, BigInteger val) {
+    public static JsonArrayBuilder add(JsonArrayBuilder jab, BigInteger val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
-            job.addNull();
+            jab.addNull();
         } else {
-            job.add(val);
+            jab.add(val);
         }
-        return job;
+        return jab;
     }
 
     /**
@@ -1835,6 +1931,7 @@ public class JsonUtilities {
      * @return The {@link JsonArrayBuilder} that was specified.
      */
     public static JsonArrayBuilder add(JsonArrayBuilder jab, BigDecimal val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
             jab.addNull();
         } else {
@@ -1856,6 +1953,7 @@ public class JsonUtilities {
      * @return The {@link JsonArrayBuilder} that was specified.
      */
     public static JsonArrayBuilder add(JsonArrayBuilder jab, Boolean val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
             jab.addNull();
         } else {
@@ -1878,6 +1976,7 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonArrayBuilder add(JsonArrayBuilder jab, Date val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
             jab.addNull();
         } else {
@@ -1900,7 +1999,9 @@ public class JsonUtilities {
      * @return The {@link JsonObjectBuilder} that was specified.
      */
     public static JsonArrayBuilder add(JsonArrayBuilder jab,
-            TemporalAccessor val) {
+                                       TemporalAccessor val) 
+    {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
             jab.addNull();
         } else {
@@ -1924,6 +2025,7 @@ public class JsonUtilities {
      * @return The {@link JsonArrayBuilder} that was specified.
      */
     public static JsonArrayBuilder add(JsonArrayBuilder jab, Object val) {
+        Objects.requireNonNull(jab, "The builder cannot be null");
         if (val == null) {
             jab.addNull();
         } else if (val instanceof JsonObjectBuilder) {
@@ -1967,11 +2069,13 @@ public class JsonUtilities {
      * @return The parsed {@link JsonValue}.
      */
     public static JsonValue parseValue(String jsonText) {
-        if (jsonText == null)
+        if (jsonText == null) {
             return null;
+        }
         StringReader sr = new StringReader(jsonText);
-        JsonReader jsonReader = Json.createReader(sr);
-        return jsonReader.readValue();
+        try (JsonReader jsonReader = Json.createReader(sr)) {
+            return jsonReader.readValue();
+        }
     }
 
     /**
@@ -1983,11 +2087,13 @@ public class JsonUtilities {
      * @return The parsed {@link JsonObject}.
      */
     public static JsonObject parseJsonObject(String jsonText) {
-        if (jsonText == null)
+        if (jsonText == null) {
             return null;
+        }
         StringReader sr = new StringReader(jsonText);
-        JsonReader jsonReader = Json.createReader(sr);
-        return jsonReader.readObject();
+        try (JsonReader jsonReader = Json.createReader(sr)) {
+            return jsonReader.readObject();
+        }
     }
 
     /**
@@ -1999,11 +2105,13 @@ public class JsonUtilities {
      * @return The parsed {@link JsonArray}.
      */
     public static JsonArray parseJsonArray(String jsonText) {
-        if (jsonText == null)
+        if (jsonText == null) {
             return null;
+        }
         StringReader sr = new StringReader(jsonText);
-        JsonReader jsonReader = Json.createReader(sr);
-        return jsonReader.readArray();
+        try (JsonReader jsonReader = Json.createReader(sr)) {
+            return jsonReader.readArray();
+        }
     }
 
     /**
@@ -2017,14 +2125,16 @@ public class JsonUtilities {
      * @see #normalizeJsonValue(JsonValue)
      */
     public static Object normalizeJsonText(String jsonText) {
-        if (jsonText == null)
+        if (jsonText == null) {
             return null;
+        }
         jsonText = jsonText.trim();
         JsonValue jsonValue = null;
         if ((jsonText.indexOf("{") == 0) || (jsonText.indexOf("[") == 0)) {
             StringReader sr = new StringReader(jsonText);
-            JsonReader jsonReader = Json.createReader(sr);
-            jsonValue = jsonReader.read();
+            try (JsonReader jsonReader = Json.createReader(sr)) {
+                jsonValue = jsonReader.read();
+            }
         } else if (jsonText.equals("true")) {
             jsonValue = JsonValue.TRUE;
         } else if (jsonText.equals("false")) {
@@ -2034,9 +2144,10 @@ public class JsonUtilities {
         } else {
             String harnessText = "{\"value\": " + jsonText + "}";
             StringReader sr = new StringReader(harnessText);
-            JsonReader jsonReader = Json.createReader(sr);
-            JsonObject jsonObject = jsonReader.readObject();
-            jsonValue = jsonObject.getValue("/value");
+            try (JsonReader jsonReader = Json.createReader(sr)) {
+                JsonObject jsonObject = jsonReader.readObject();
+                jsonValue = jsonObject.getValue("/value");
+            }
         }
         return normalizeJsonValue(jsonValue);
     }
@@ -2062,8 +2173,9 @@ public class JsonUtilities {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static Object normalizeJsonValue(JsonValue jsonValue) {
-        if (jsonValue == null)
+        if (jsonValue == null) {
             return null;
+        }
         switch (jsonValue.getValueType()) {
             case NULL: {
                 return null;
@@ -2135,9 +2247,10 @@ public class JsonUtilities {
      * @return The specified {@link JsonObjectBuilder}.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static JsonObjectBuilder addProperty(JsonObjectBuilder builder,
-            String property,
-            Object value) {
+    public static JsonObjectBuilder addProperty(JsonObjectBuilder   builder,
+                                                String              property,
+                                                Object              value) 
+    {
         if (value == null) {
             builder.addNull(property);
         } else if (value instanceof JsonObjectBuilder) {
@@ -2272,9 +2385,10 @@ public class JsonUtilities {
      * @return The value that was retrieved, or <code>null</code> if
      *         the value is not present.
      */
-    public static <T> T getValue(Class<T> type,
-            JsonObject obj,
-            String key) {
+    public static <T> T getValue(Class<T>   type,
+                                 JsonObject obj,
+                                 String     key) 
+    {
         return getValue(type, obj, key, null);
     }
 
@@ -2290,10 +2404,11 @@ public class JsonUtilities {
      * @return The value that was retrieved, or the specified default value if
      *         the value is not present.
      */
-    public static <T> T getValue(Class<T> type,
-            JsonObject obj,
-            String key,
-            T defaultValue) {
+    public static <T> T getValue(Class<T>   type,
+                                 JsonObject obj,
+                                 String     key,
+                                 T          defaultValue) 
+    {
         // check if the source object is null
         if (obj == null) {
             return defaultValue;
@@ -2319,9 +2434,10 @@ public class JsonUtilities {
      * @return The value that was retrieved, or <code>null</code> if
      *         the value is not present.
      */
-    public static <T> T getValue(Class<T> type,
-            JsonArray arr,
-            int index) {
+    public static <T> T getValue(Class<T>   type,
+                                 JsonArray  arr,
+                                 int        index) 
+    {
         // get from the array
         return getValue(type, arr, index, null);
     }
@@ -2338,10 +2454,11 @@ public class JsonUtilities {
      * @return The value that was retrieved, or the specified default value if
      *         the value is not present.
      */
-    public static <T> T getValue(Class<T> type,
-            JsonArray arr,
-            int index,
-            T defaultValue) {
+    public static <T> T getValue(Class<T>   type,
+                                 JsonArray  arr,
+                                 int        index,
+                                 T          defaultValue) 
+    {
         // check if the source array is null
         if (arr == null) {
             return defaultValue;
@@ -2365,11 +2482,12 @@ public class JsonUtilities {
      *         the value is not present.
      */
     @SuppressWarnings("unchecked")
-    private static <T> T getValue(Class<T> type,
-            Map<Class<?>, Method> methodMap,
-            JsonValue source,
-            Object locator,
-            T defaultValue) {
+    private static <T> T getValue(Class<T>              type,
+                                  Map<Class<?>, Method> methodMap,
+                                  JsonValue             source,
+                                  Object                locator,
+                                  T                     defaultValue) 
+    {
         try {
             // get the return type
             Class<?> returnType = (type.isPrimitive())
@@ -2459,8 +2577,9 @@ public class JsonUtilities {
      * @return The specified {@link JsonObjectBuilder}.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static JsonArrayBuilder addElement(JsonArrayBuilder builder,
-            Object value) {
+    public static JsonArrayBuilder addElement(JsonArrayBuilder  builder,
+                                              Object            value) 
+    {
         if (value == null) {
             builder.addNull();
         } else if (value instanceof JsonObjectBuilder) {
@@ -2571,9 +2690,10 @@ public class JsonUtilities {
      *
      */
     public static JsonObject toJsonObject(String property1,
-            Object value1,
-            String property2,
-            Object value2) {
+                                          Object value1,
+                                          String property2,
+                                          Object value2) 
+    {
         return toJsonObject(property1,
                 value1,
                 property2,
@@ -2602,11 +2722,12 @@ public class JsonUtilities {
      * @return The created {@link JsonObject}.
      */
     public static JsonObject toJsonObject(String property1,
-            Object value1,
-            String property2,
-            Object value2,
-            String property3,
-            Object value3) {
+                                          Object value1,
+                                          String property2,
+                                          Object value2,
+                                          String property3,
+                                          Object value3) 
+    {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         if (property1 != null) {
             addProperty(builder, property1, value1);
@@ -2654,8 +2775,9 @@ public class JsonUtilities {
      *         <code>null</code>.
      */
     public static JsonObject toJsonObject(Map<String, ?> map) {
-        if (map == null)
+        if (map == null) {
             return null;
+        }
         return toJsonObjectBuilder(map).build();
     }
 
@@ -2677,8 +2799,9 @@ public class JsonUtilities {
      *         <code>null</code>.
      */
     public static JsonObjectBuilder toJsonObjectBuilder(Map<String, ?> map) {
-        if (map == null)
+        if (map == null) {
             return null;
+        }
         JsonObjectBuilder builder = Json.createObjectBuilder();
         map.forEach((key, value) -> {
             addProperty(builder, key, value);
@@ -2725,8 +2848,9 @@ public class JsonUtilities {
      *         <code>null</code>.
      */
     public static JsonArray toJsonArray(Collection<?> collection) {
-        if (collection == null)
+        if (collection == null) {
             return null;
+        }
         return toJsonArrayBuilder(collection).build();
     }
 
@@ -2769,8 +2893,9 @@ public class JsonUtilities {
      *         Collection} is <code>null</code>.
      */
     public static JsonArrayBuilder toJsonArrayBuilder(Collection<?> collection) {
-        if (collection == null)
+        if (collection == null) {
             return null;
+        }
         JsonArrayBuilder builder = Json.createArrayBuilder();
         collection.forEach((value) -> {
             addElement(builder, value);
@@ -2815,8 +2940,9 @@ public class JsonUtilities {
      *
      * @param <T> The type of the writer to which the write the {@link JsonValue}.
      */
-    public static <T extends Writer> T toJsonText(T writer,
-            JsonObjectBuilder builder) {
+    public static <T extends Writer> T toJsonText(T                 writer,
+                                                  JsonObjectBuilder builder) 
+    {
         return JsonUtilities.toJsonText(writer, builder, false);
     }
 
@@ -2843,8 +2969,9 @@ public class JsonUtilities {
      *
      * @param <T> The type of the writer to which the write the {@link JsonValue}.
      */
-    public static <T extends Writer> T toJsonText(T writer,
-            JsonArrayBuilder builder) {
+    public static <T extends Writer> T toJsonText(T                 writer,
+                                                  JsonArrayBuilder  builder) 
+    {
         return JsonUtilities.toJsonText(writer, builder, false);
     }
 
@@ -2873,9 +3000,10 @@ public class JsonUtilities {
      *
      * @param <T> The type of the writer to which the write the {@link JsonValue}.
      */
-    public static <T extends Writer> T toJsonText(T writer,
-            JsonValue jsonValue,
-            boolean prettyPrint) {
+    public static <T extends Writer> T toJsonText(T         writer,
+                                                  JsonValue jsonValue,
+                                                  boolean   prettyPrint) 
+    {
         Objects.requireNonNull(writer, "Writer cannot be null");
 
         JsonWriter jsonWriter = (prettyPrint)
@@ -2918,9 +3046,10 @@ public class JsonUtilities {
      *
      * @param <T> The type of the writer to which the write the {@link JsonValue}.
      */
-    public static <T extends Writer> T toJsonText(T writer,
-            JsonObjectBuilder builder,
-            boolean prettyPrint) {
+    public static <T extends Writer> T toJsonText(T                 writer,
+                                                  JsonObjectBuilder builder,
+                                                  boolean           prettyPrint) 
+    {
         Objects.requireNonNull(writer, "Writer cannot be null");
 
         JsonWriter jsonWriter = (prettyPrint)
@@ -2943,8 +3072,9 @@ public class JsonUtilities {
      *
      * @return The specified {@link JsonObjectBuilder} converted to a JSON string.
      */
-    public static String toJsonText(JsonObjectBuilder builder,
-            boolean prettyPrint) {
+    public static String toJsonText(JsonObjectBuilder   builder,
+                                    boolean             prettyPrint) 
+    {
         return JsonUtilities.toJsonText(
                 new StringWriter(), builder, prettyPrint).toString();
     }
@@ -2962,9 +3092,10 @@ public class JsonUtilities {
      *
      * @param <T> The type of the writer to which the write the {@link JsonValue}.
      */
-    public static <T extends Writer> T toJsonText(T writer,
-            JsonArrayBuilder builder,
-            boolean prettyPrint) {
+    public static <T extends Writer> T toJsonText(T                 writer,
+                                                  JsonArrayBuilder  builder,
+                                                  boolean           prettyPrint) 
+    {
         Objects.requireNonNull(writer, "Writer cannot be null");
 
         JsonWriter jsonWriter = (prettyPrint)
@@ -2987,8 +3118,9 @@ public class JsonUtilities {
      *
      * @return The specified {@link JsonArrayBuilder} converted to a JSON string.
      */
-    public static String toJsonText(JsonArrayBuilder builder,
-            boolean prettyPrint) {
+    public static String toJsonText(JsonArrayBuilder    builder,
+                                    boolean             prettyPrint) 
+    {
         return JsonUtilities.toJsonText(
                 new StringWriter(), builder, prettyPrint).toString();
     }
@@ -3001,6 +3133,8 @@ public class JsonUtilities {
      * @return The {@link JsonObject} constructed from the file.
      */
     public static JsonObject iniToJson(File iniFile) {
+        Objects.requireNonNull(
+            iniFile, "The ini file cannot be null");
         try {
             INIConfiguration ini = new INIConfiguration();
 

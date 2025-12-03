@@ -90,17 +90,6 @@ public class ReflectionUtilities {
 
         /**
          * Constructs with the specified target object on which to invoke the
-         * methods. The constructed instance will synchronize on the proxy object
-         * that is passed to {@link #invoke(Object, Method, Object[]))}.
-         *
-         * @param target The target object to invoke the methods on.
-         */
-        public SynchronizedHandler(Object target) {
-            this(target, null);
-        }
-
-        /**
-         * Constructs with the specified target object on which to invoke the
          * methods and the specified object to synchronize on, or <code>null</code> if
          * the constructed instance should synchronize on the proxy object that is
          * passed to {@link #invoke(Object, Method, Object[]))}.
@@ -155,7 +144,7 @@ public class ReflectionUtilities {
      *         or <code>null</code> if the specified type does not have a
      *         corresponding primitive type.
      */
-    public static Class getPrimitiveType(Class promotedType) {
+    public static Class<?> getPrimitiveType(Class<?> promotedType) {
         return PRIMITIVE_TYPE_MAP.get(promotedType);
     }
 
@@ -171,7 +160,7 @@ public class ReflectionUtilities {
      *         or <code>null</code> if the specified type does not have a
      *         corresponding primitive type.
      */
-    public static Class getPromotedType(Class primitiveType) {
+    public static Class<?> getPromotedType(Class<?> primitiveType) {
         return PROMOTED_TYPE_MAP.get(primitiveType);
     }
 
@@ -193,7 +182,7 @@ public class ReflectionUtilities {
      *                                  <code>null</code>.
      * @throws IllegalArgumentException If an illegal numeric type is specified.
      */
-    public static Number convertPrimitiveNumber(Number value, Class numType) {
+    public static Number convertPrimitiveNumber(Number value, Class<?> numType) {
         // verify the target number type is valid
         Objects.requireNonNull(numType, "Number type cannot be null");
 
@@ -250,7 +239,8 @@ public class ReflectionUtilities {
      *            specified interface &lt;I&gt;
      */
     public static <I, T extends I> I synchronizedProxy(Class<I> proxyInterface,
-            T targetObject) {
+                                                       T targetObject) 
+    {
         return synchronizedProxy(proxyInterface, targetObject, null);
     }
 
@@ -292,7 +282,7 @@ public class ReflectionUtilities {
                             + "targetObjectClass=[ " + targetObject.getClass().getName() + " ]");
         }
         ClassLoader classLoader = targetObject.getClass().getClassLoader();
-        Class[] interfaces = { proxyInterface };
+        Class<?>[] interfaces = { proxyInterface };
         SynchronizedHandler handler = new SynchronizedHandler(targetObject,
                 monitor);
 
@@ -314,10 +304,12 @@ public class ReflectionUtilities {
         private Object targetObject = null;
 
         /**
-         * Constructs with the specified 
+         * Constructs with the specified parameters.
+         * @param targetObject The target object to restrict.
+         * @param restrictedMethods The {@link Set} of {@link Method} instances
+         *                          to restrict.
          */
-        private RestrictedHandler(Object targetObject, Set<Method> restrictedMethods) 
-        {
+        private RestrictedHandler(Object targetObject, Set<Method> restrictedMethods) {
             this.targetObject       = targetObject;
             this.restrictedMethods  = Collections.unmodifiableSet(restrictedMethods);
         }

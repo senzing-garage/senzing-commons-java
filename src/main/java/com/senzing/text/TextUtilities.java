@@ -110,7 +110,8 @@ public class TextUtilities {
         }
 
         // determine the count
-        return (maxCount == minCount) ? minCount : PRNG.nextInt(maxCount - minCount) + minCount;
+        return (maxCount == minCount) ? minCount 
+            : PRNG.nextInt(maxCount - minCount + 1) + minCount;
     }
 
     /**
