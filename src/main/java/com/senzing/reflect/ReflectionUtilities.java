@@ -319,7 +319,7 @@ public class ReflectionUtilities {
         private RestrictedHandler(Object targetObject, Set<Method> restrictedMethods) 
         {
             this.targetObject       = targetObject;
-            this.restrictedMethods  = restrictedMethods;
+            this.restrictedMethods  = Collections.unmodifiableSet(restrictedMethods);
         }
 
         /**
@@ -570,7 +570,6 @@ public class ReflectionUtilities {
             // add the method to the set
             methodSet.add(method);
         }
-        methodSet = Collections.unmodifiableSet(methodSet);
         
         // create restricted handler
         RestrictedHandler handler = new RestrictedHandler(targetObject, methodSet);
