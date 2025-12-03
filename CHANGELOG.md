@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0-beta.1.5] - 2025-12-02
+
+### Changed in 4.0.0-beta.1.5
+
+- Upgraded dependencies
+- Added methods to TextUtilities for ranged size of random text generation
+- Added date-handling methods to JsonUtilities using standard JSON date strings
+- Modified SQLiteConnector to use NOMUTEX open mode to achieve multi-threaded usage,
+  allowing multiple connections to access the same file so long as no connection is
+  used concurrently in multiple threads.
+
 ## [4.0.0-beta.1.4] - 2025-10-22
 
 ### Changed in 4.0.0-beta.1.4
