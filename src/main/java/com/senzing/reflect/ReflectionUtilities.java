@@ -315,8 +315,9 @@ public class ReflectionUtilities {
         }
 
         /**
-         * Implemented to invoke the method on the {@link SzEnvironment}
-         * from the associated {@link SzGrpcServer}.
+         * Implemented to invoke the method on the underlying target object,
+         * disallowing access to restricted methods by throwing {@link 
+         * UnsupportedOperationException} in those cases.
          * <p>
          * {@inheritDoc}
          */
@@ -502,7 +503,9 @@ public class ReflectionUtilities {
         // check the target object
         Objects.requireNonNull(targetObject, 
                        "The target object cannot be null");
-
+        Objects.requireNonNull(classLoader,
+                                "The class loader cannot be null");
+        
         // check the methods
         for (Method method : restrictedMethods) {
             // ensure the method is not null

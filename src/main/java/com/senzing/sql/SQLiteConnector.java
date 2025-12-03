@@ -143,12 +143,19 @@ public class SQLiteConnector implements Connector {
      * {@link #getPragmaFeatureStatements()}.
      * 
      * <p>
-     * <b>WARNING:</b> The returned {@link Connection} should <b>NOT</b> be
-     * used <b>concurrently</b> in multiple threads, but it is safe to use it
-     * in a {@link ConnectionPool} where one thread can access it at a time.
-     * This takes advantage of SQLite's <a href="https://sqlite.org/threadsafe.html">
-     * "multi-threaded"</a> mode for improved performance via the runtime
-     * setting {@link SQLiteOpenMode#NOMUTEX}.
+     * <b>WARNING:</b> The returned {@link Connection} is appropriate to use
+     * in a {@link ConnectionPool} with {@link Connection}'s being acquired 
+     * from the pool for use by a single thread at any given time and then 
+     * returned to the pool (via {@link Connection#close()}) when a unit of
+     * work is complete.  The returned {@link Connection} should <b>NOT</b> 
+     * be used <b>concurrently</b> in multiple threads.  This is what SQLite
+     * documentation refers to as <a href="https://sqlite.org/threadsafe.html"
+     * >"multi-threaded"</a> mode which provides improved performance via the
+     * runtime setting {@link SQLiteOpenMode#NOMUTEX} so long as {@link
+     * Connection} objects are only used by a single thread at any given time.
+     * In this mode, SQLite will ensure operations (especially database writes)
+     * are thread-safe at the driver level with multiple active {@link Connection} 
+     * instances to the same database being leveraged in different threads.
      *
      * @return The newly established and initialized {@link Connection}.
      * @throws SQLException If a JDBC failure occurs.

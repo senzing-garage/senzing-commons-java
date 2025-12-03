@@ -3730,21 +3730,49 @@ public class JsonUtilitiesTest {
         return job.build();
     }
 
+    /**
+     * Provides the following parameters:
+     * <ol>
+     *   <li>A {@link JsonObject} with a propery that has a
+     *       date-formatted string value (or a null or exceptional
+     *       value).
+     *   <li>The propery key that should be tried for
+     *       retrieval as a date.
+     *   <li>The expected value to get back as an {@link Instant},
+     *       or <code>null</code>
+     *   <li>The type of exception to expect, or <code>null</code> if
+     *       no exception is expected.
+     * </ol>
+     * 
+     * @return The {@link List} of {@link Argumebts} as described above.
+     */
     public List<Arguments> getJsonDateObjectParameters() {
         List<Arguments> result = new LinkedList<>();
         long offset = 0;
         Instant instant = Instant.now();
         for (int index = 0; index < 10; index++) {
+            // get a distinct instant in time
             instant = instant.minus(offset, ChronoUnit.MINUTES);
             offset = (offset + 10) * (index + 1);
 
+            // format the instant as a JSON date
             String text = JsonUtilities.DATE_TIME_FORMATTER.format(instant);
+
+            // parse it back to account for precision loss due to JSON date format
             instant = Instant.from(JsonUtilities.DATE_TIME_FORMATTER.parse(text));
+
+            // generate a distinct property key
             String key = TextUtilities.randomAlphabeticText(3, 8);
+
+            // add a test case that should successfully obtain a date value
             result.add(Arguments.of(createObject(key, text), key, instant, null));
         }
+
+        // add a test case that will result in a null date value
         result.add(Arguments.of(
             createObject("phoo", null), "phoo", null, null));
+
+        // add a test case that will fail to parse
         result.add(Arguments.of(
             createObject("foo", "bar"), "foo", null, DateTimeParseException.class));
         return result;
@@ -3766,9 +3794,9 @@ public class JsonUtilitiesTest {
             assertEquals(expected, instant, "Instant value for key (" + key
                 + ") is not as expected: " + JsonUtilities.toJsonText(obj));
 
-            String missingKey = (expected == null) ? key : key + "-missing";
+            String nullResultKey = (expected == null) ? key : key + "-missing";
             Instant now = Instant.now();
-            instant = JsonUtilities.getInstant(obj, missingKey, now);
+            instant = JsonUtilities.getInstant(obj, nullResultKey, now);
             assertEquals(now, instant, "Defaulted instant value is not as expected: "
                 + JsonUtilities.toJsonText(obj));
             
@@ -3823,32 +3851,64 @@ public class JsonUtilitiesTest {
                 }
             } else {
                 if (value != null) {
-                    jab.add(index, value);
+                    jab.add(value);
                 } else {
-                    jab.addNull(index);
+                    jab.addNull();
                 }
             }
         }
         return jab.build();
     }
 
+    /**
+     * Provides the following parameters:
+     * <ol>
+     *   <li>A {@link JsonArray} of at least 4 elements, one of which
+     *       being a date-formatted string (or a null or exceptional
+     *       value).
+     *   <li>The index of the array element that should be tried for
+     *       retrieval as a date.
+     *   <li>The expected value to get back as an {@link Instant},
+     *       or <code>null</code>
+     *   <li>The type of exception to expect, or <code>null</code> if
+     *       no exception is expected.
+     * </ol>
+     * 
+     * @return The {@link List} of {@link Argumebts} as described above.
+     */
     public List<Arguments> getJsonDateArrayParameters() {
         List<Arguments> result = new LinkedList<>();
         long offset = 0;
         Instant instant = Instant.now();
         for (int index = 0; index < 10; index++) {
+            // get a distinct instant in tme
             instant = instant.minus(offset, ChronoUnit.MINUTES);
             offset = (offset + 10) * (index + 1);
 
+            // format as a date string
             String text = JsonUtilities.DATE_TIME_FORMATTER.format(instant);
+
+            // parse it back as an instant to account for lot precision
+            // from the JSON date formatting
             instant = Instant.from(JsonUtilities.DATE_TIME_FORMATTER.parse(text));
+
+            // pick an array index between 2 and 4
             int arrayIndex = (index % 3) + 2;
-            result.add(Arguments.of(createArray(arrayIndex, text), arrayIndex, instant, null));
+
+            // add a case that should work with varying array indexes and 
+            // date values
+            result.add(Arguments.of(
+                createArray(arrayIndex, text), arrayIndex, instant, null));
         }
+        // add a case that will result in a null value
         result.add(Arguments.of(
             createArray(2, null), 2, null, null));
+
+        // add a case that will NOT parse as a date
         result.add(Arguments.of(
             createArray(3, "bar"), 3, null, DateTimeParseException.class));
+
+        // return the result
         return result;
     }
 
