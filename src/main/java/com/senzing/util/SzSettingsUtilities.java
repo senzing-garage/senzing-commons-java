@@ -1,4 +1,7 @@
+package com.senzing.util;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 
@@ -6,6 +9,9 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
+/**
+ * Provides utilities for working with Senzing environment settings.
+ */
 public class SzSettingsUtilities {
     /**
      * The <b>unmodifiable</b> {@link Set} of legal prefixes for URI
@@ -13,7 +19,14 @@ public class SzSettingsUtilities {
      */
     public static final Set<String> DATABASE_URI_PREFIXES = Set.of(
         "sqlite3://", "postgresql://", "mysql://", "db2://", "oci://", "mssql://");
-         
+    
+    /**
+     * Private default constructor.
+     */
+    private SzSettingsUtilities() {
+        // do nothing
+    }
+
     /**
      * Checks if the specified text appears to be a database URI
      * for the Senzing repository.
@@ -213,37 +226,42 @@ public class SzSettingsUtilities {
                                                        String   licenseBase64,
                                                        File     licenseFile)
     {
-        Objects.requireNonNull(uri, "The specified URI cannot be null");
-        if (!startsWithDatabaseUriPrefix(uri)) {
-            throw new IllegalArgumentException(
-                "The specified database URI does not appear legal: " + uri);
-        }
-        if (licenseBase64 != null && licenseFile != null) {
-            throw new IllegalArgumentException(
-                "Cannot specify both the license file and the base-64-encoded license");
-        }
+        try {
+            Objects.requireNonNull(uri, "The specified URI cannot be null");
+            if (!startsWithDatabaseUriPrefix(uri)) {
+                throw new IllegalArgumentException(
+                    "The specified database URI does not appear legal: " + uri);
+            }
+            if (licenseBase64 != null && licenseFile != null) {
+                throw new IllegalArgumentException(
+                    "Cannot specify both the license file and the base-64-encoded license");
+            }
 
-        JsonObjectBuilder mainBuilder = Json.createObjectBuilder();
-        JsonObjectBuilder pipelineBuilder = Json.createObjectBuilder();
-        JsonObjectBuilder sqlBuilder = Json.createObjectBuilder();
-        
-        SzInstallLocations locations = SzInstallLocations.findLocations();
-        
-        pipelineBuilder.add("SUPPORTPATH", locations.getSupportDirectory().getCanonicalPath());
-        pipelineBuilder.add("CONFIGPATH", locations.getConfigDirectory().getCanonicalPath());
-        pipelineBuilder.add("RESOURCEPATH", locations.getResourceDirectory().getCanonicalPath());
-        if (licenseBase64 != null) {
-            pipelineBuilder.add("LICENSESTRINGBASE64", licenseBase64);
-        } else if (licenseFile != null) {
-            pipelineBuilder.add("LICENSEFILE", licenseFile.getCanonicalPath());
+            JsonObjectBuilder mainBuilder = Json.createObjectBuilder();
+            JsonObjectBuilder pipelineBuilder = Json.createObjectBuilder();
+            JsonObjectBuilder sqlBuilder = Json.createObjectBuilder();
+            
+            SzInstallLocations locations = SzInstallLocations.findLocations();
+            
+            pipelineBuilder.add("SUPPORTPATH", locations.getSupportDirectory().getCanonicalPath());
+            pipelineBuilder.add("CONFIGPATH", locations.getConfigDirectory().getCanonicalPath());
+            pipelineBuilder.add("RESOURCEPATH", locations.getResourceDirectory().getCanonicalPath());
+            if (licenseBase64 != null) {
+                pipelineBuilder.add("LICENSESTRINGBASE64", licenseBase64);
+            } else if (licenseFile != null) {
+                pipelineBuilder.add("LICENSEFILE", licenseFile.getCanonicalPath());
+            }
+            mainBuilder.add("PIPELINE", pipelineBuilder);
+            sqlBuilder.add("CONNECTION", uri);
+            mainBuilder.add("SQL", sqlBuilder);
+
+            JsonObject jsonObject = mainBuilder.build();
+
+            return JsonUtilities.toJsonText(jsonObject);
+        } catch (IOException e) {
+            throw new IllegalStateException(
+                "Should not fail in getting canonical path from install locations files.", e);
         }
-        mainBuilder.add("PIPELINE", pipelineBuilder);
-        sqlBuilder.add("CONNECTION", uri);
-        mainBuilder.add("SQL", sqlBuilder);
-
-        JsonObject jsonObject = mainBuilder.build();
-
-        return JsonUtilities.toJsonText(jsonObject);
     }
 
 }
