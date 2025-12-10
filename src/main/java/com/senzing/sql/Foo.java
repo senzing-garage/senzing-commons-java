@@ -15,7 +15,7 @@ import org.sqlite.SQLiteOpenMode;
  * Provides a simple {@link Connector} implementation for SQLite that provides
  * some sensible default settings on the {@link Connection} after opening it.
  */
-public class SQLiteConnector implements Connector {
+public class SqliteConnector implements Connector {
     /**
      * Setup the {@link SQLiteConfig} for multi-threaded access.
      */
@@ -95,7 +95,7 @@ public class SQLiteConnector implements Connector {
      * Default constructor using a temporary file that will be deleted upon
      * exit of the executable.
      */
-    public SQLiteConnector() {
+    public SqliteConnector() {
         this(createTempFile());
     }
 
@@ -108,7 +108,7 @@ public class SQLiteConnector implements Connector {
      * @throws IllegalArgumentException If the specified file path describes a
      *                                  path to an existing directory.
      */
-    public SQLiteConnector(String filePath) {
+    public SqliteConnector(String filePath) {
         this(newFile(filePath));
     }
 
@@ -118,7 +118,7 @@ public class SQLiteConnector implements Connector {
      *
      * @param sqliteFile The {@link File} for the SQLite database file.
      */
-    public SQLiteConnector(File sqliteFile) {
+    public SqliteConnector(File sqliteFile) {
         Objects.requireNonNull(
                 sqliteFile, "The specified file cannot be null");
         this.sqliteFile = sqliteFile;
