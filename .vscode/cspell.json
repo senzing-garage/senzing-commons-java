@@ -12,6 +12,8 @@
     "Dskip",
     "dsrc",
     "Dtest",
+    "DYLD",
+    "dylib",
     "glassfish",
     "ICLA",
     "ignorefile",
@@ -36,6 +38,8 @@
     "stackoverflow",
     "STRFTIME",
     "SUPPORTPATH",
+    "senzingsdk",
+    "szcore",
     "Unsynchronized",
     "Xlint"
   ],
