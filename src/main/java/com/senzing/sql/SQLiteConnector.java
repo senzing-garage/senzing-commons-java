@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -11,11 +12,23 @@ import java.util.Properties;
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteOpenMode;
 
+import static com.senzing.sql.Connector.formatConnectionProperties;
+
 /**
  * Provides a simple {@link Connector} implementation for SQLite that provides
  * some sensible default settings on the {@link Connection} after opening it.
  */
 public class SQLiteConnector implements Connector {
+    /**
+     * The mode query parameter value for an in-memory database.
+     */
+    private static final String MEMORY_MODE = "memory";
+
+    /**
+     * The query parameter to control the mode.
+     */
+    private static final String MODE_KEY = "mode";
+
     /**
      * Setup the {@link SQLiteConfig} for multi-threaded access.
      */
@@ -73,9 +86,17 @@ public class SQLiteConnector implements Connector {
      * the {@link File} object to use.
      *
      * @param filePath The non-null file path.
+     * @param connProperties The {@link Map} of {@link String} key to {@link String} 
+     *                       values for the connection properties, or <code>null</code>
+     *                       if none.
      * @return The {@link File} object for the specified file path.
      */
-    private static File newFile(String filePath) {
+    private static File newFile(String filePath, Map<String, String> connProperties) 
+    {
+        if (connProperties != null && MEMORY_MODE.equals(connProperties.get(MODE_KEY))) {
+            return (filePath == null) ? null : new File(filePath);
+        }
+
         Objects.requireNonNull(
                 filePath, "The specified file path cannot be null");
         File file = new File(filePath);
@@ -92,6 +113,11 @@ public class SQLiteConnector implements Connector {
     private File sqliteFile = null;
 
     /**
+     * The connection properties for the SQLite connection.
+     */
+    private Map<String, String> connProperties;
+
+    /**
      * Default constructor using a temporary file that will be deleted upon
      * exit of the executable.
      */
@@ -103,25 +129,65 @@ public class SQLiteConnector implements Connector {
      * Constructs with the specified file name.
      * 
      * @param filePath The file path for the SQLite file.
+     * 
      * @throws NullPointerException     If the specified file path is
      *                                  <code>null</code>.
      * @throws IllegalArgumentException If the specified file path describes a
      *                                  path to an existing directory.
      */
     public SQLiteConnector(String filePath) {
-        this(newFile(filePath));
+        this(newFile(filePath, null));
     }
 
     /**
      * Constructs with the specified {@link File} to use for the SQLite database
      * file.
      *
-     * @param sqliteFile The {@link File} for the SQLite database file.
+     * @param file The {@link File} for the SQLite database file.
+     * 
+     * @throws NullPointerException     If the specified file path is <code>null</code>
+     *                                  when not using in-memory mode.
+     * @throws IllegalArgumentException If the specified file path describes a
+     *                                  path to an existing directory.
      */
-    public SQLiteConnector(File sqliteFile) {
-        Objects.requireNonNull(
-                sqliteFile, "The specified file cannot be null");
-        this.sqliteFile = sqliteFile;
+    public SQLiteConnector(File file) {
+        this(file, null);
+    }
+
+    /**
+     * Constructs with the specified file name and connection properties.
+     * 
+     * @param filePath The file path for the SQLite file.
+     * @param connProperties The {@link Map} of {@link String} keys to 
+     *                       {@link String} values for the connection properties.
+     * @throws NullPointerException     If the specified file path is <code>null</code>
+     *                                  when not using in-memory mode.
+     * @throws IllegalArgumentException If the specified file path describes a
+     *                                  path to an existing directory.
+     */
+    public SQLiteConnector(String filePath, Map<String, String> connProperties) {
+        this(newFile(filePath, connProperties), connProperties);
+    }
+
+    /**
+     * Constructs with the specified {@link File} and connection properties.
+     * 
+     * @param file The {@link File} for the SQLite database file.
+     * @param connProperties The {@link Map} of {@link String} keys to 
+     *                       {@link String} values for the connection properties.
+     * @throws NullPointerException     If the specified file path is <code>null</code>
+     *                                  when not using in-memory mode.
+     * @throws IllegalArgumentException If the specified file path describes a
+     *                                  path to an existing directory.
+     */
+    public SQLiteConnector(File file, Map<String, String> connProperties) {
+        if (connProperties == null || !MEMORY_MODE.equals(connProperties.get(MODE_KEY))) 
+        {
+            Objects.requireNonNull(
+                    file, "The specified file cannot be null");
+        }
+        this.sqliteFile = file;
+        this.connProperties = connProperties;
     }
 
     /**
@@ -162,7 +228,13 @@ public class SQLiteConnector implements Connector {
      */
     @Override
     public Connection openConnection() throws SQLException {
-        String jdbcUrl = "jdbc:sqlite:" + this.sqliteFile.getPath();
+        boolean memoryMode = this.connProperties != null 
+            && "memory".equals(this.connProperties.get("mode"));
+
+        String jdbcUrl = "jdbc:sqlite:" 
+            + (memoryMode && this.sqliteFile != null ? "file:" : "")
+            + (this.sqliteFile == null ? ":memory:" : this.sqliteFile.getPath())
+            + formatConnectionProperties(this.connProperties);
 
         Connection conn = null;
 
