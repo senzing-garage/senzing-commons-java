@@ -86,11 +86,14 @@ public class SQLiteConnector implements Connector {
      * the {@link File} object to use.
      *
      * @param filePath The non-null file path.
+     * @param connProperties The {@link Map} of {@link String} key to {@link String} 
+     *                       values for the connection properties, or <code>null</code>
+     *                       if none.
      * @return The {@link File} object for the specified file path.
      */
-    private static File newFile(String filePath, Map<String, String> queryOptions) 
+    private static File newFile(String filePath, Map<String, String> connProperties) 
     {
-        if (queryOptions != null && MEMORY_MODE.equals(queryOptions.get(MODE_KEY))) {
+        if (connProperties != null && MEMORY_MODE.equals(connProperties.get(MODE_KEY))) {
             return (filePath == null) ? null : new File(filePath);
         }
 
@@ -178,8 +181,11 @@ public class SQLiteConnector implements Connector {
      *                                  path to an existing directory.
      */
     public SQLiteConnector(File file, Map<String, String> connProperties) {
-        Objects.requireNonNull(
-                file, "The specified file cannot be null");
+        if (connProperties == null || !MEMORY_MODE.equals(connProperties.get(MODE_KEY))) 
+        {
+            Objects.requireNonNull(
+                    file, "The specified file cannot be null");
+        }
         this.sqliteFile = file;
         this.connProperties = connProperties;
     }
@@ -226,8 +232,8 @@ public class SQLiteConnector implements Connector {
             && "memory".equals(this.connProperties.get("mode"));
 
         String jdbcUrl = "jdbc:sqlite:" 
-            + (memoryMode ? "file:" : "")
-            + this.sqliteFile.getPath()
+            + (memoryMode && this.sqliteFile != null ? "file:" : "")
+            + (this.sqliteFile == null ? ":memory:" : this.sqliteFile.getPath())
             + formatConnectionProperties(this.connProperties);
 
         Connection conn = null;
