@@ -12,7 +12,7 @@ import static com.senzing.util.OperatingSystemFamily.RUNTIME_OS_FAMILY;
  * Describes the directories on disk used to find the Senzing product
  * installation and the support directories.
  */
-class SzInstallLocations {
+public class SzInstallLocations {
     /**
      * The installation location.
      */
