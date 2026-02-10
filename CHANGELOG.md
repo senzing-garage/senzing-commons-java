@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0-beta.2.1] - 2026-01-29
+
+### Changed in 4.0.0-beta.2.1
+
+- Changed `AsyncWorkerPool` to clear busy state in finally block to
+  safeguard against deadlocks on `close()`.
+- Added thread-specific override of debug logging in `LoggingUtilities`
+- Fixed potential deadlock in `ConnectionPool` and `PooledConnectionHandler`
+  by making the error handling of failed connections more robust.
+- Fixed error handling in `PostgreSqlConnector` to prevent leaking of
+  database connections.
+
+## [4.0.0-beta.2.0] - 2026-01-22
+
+### Changed in 4.0.0-beta.2.0
+
+- Made the `com.senzing.util.SzInstallLocations` class public
+- Minor dependency version bumps
+
 ## [4.0.0-beta.1.6] - 2025-12-11
 
 ### Changed in 4.0.0-beta.1.6
