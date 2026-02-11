@@ -317,13 +317,13 @@ public class AsyncWorkerPool<T> {
      * Implement the run method to wait for the next task and execute it.
      * This continues until this thread is marked complete.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void run()
     {
       AsyncWorkerPool pool = AsyncWorkerPool.this;
 
       // loop while not complete
-      while (!this.isComplete() && !pool.isClosed()) {
+      while (this.isBusy() || (!this.isComplete() && !pool.isClosed())) {
         // get the next task to perform
         Task<T> task = null;
         synchronized (this) {
@@ -348,14 +348,15 @@ public class AsyncWorkerPool<T> {
           } catch (Exception e) {
             // record any failure for the task
             result = new AsyncResult<>(null, e);
-          }
 
-          // update worker fields to clear the task and store the result
-          synchronized (this) {
-            this.currentTask = null;
-            this.previousResult = result;
-            // make sure to notify when done
-            this.notifyAll();
+          } finally {
+            // update worker fields to clear the task and store the result
+            synchronized (this) {
+              this.currentTask = null;
+              this.previousResult = result;
+              // make sure to notify when done
+              this.notifyAll();
+            }
           }
         }
 
