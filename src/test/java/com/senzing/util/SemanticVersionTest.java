@@ -67,6 +67,10 @@ public class SemanticVersionTest {
     result.add(arguments("2.0.0-alpha.1", "2.0.0-beta.1", false, null));
     result.add(arguments("2.0.0-rc.1", "2.0.0", false, null));
 
+    // invalid pre-release position tests
+    result.add(arguments("alpha.1.2.3", "1.0", null, illegalArg));
+    result.add(arguments("1.0.alpha.beta.2", "1.0", null, illegalArg));
+
     return result;
   }
   @ParameterizedTest
@@ -168,6 +172,10 @@ public class SemanticVersionTest {
     result.add(arguments("1.0.0-alpha", "1.0.0-alpha", null));
     result.add(arguments("3.1.0-RC.1", "3.1.0-rc.1", null));
 
+    // invalid pre-release position tests
+    result.add(arguments("alpha.1.2.3", null, illegalArg));
+    result.add(arguments("1.0.alpha.beta.2", null, illegalArg));
+
     return result;
   }
 
@@ -242,6 +250,10 @@ public class SemanticVersionTest {
     result.add(arguments("2.0.0-alpha", "2.0.0", -1, null));
     result.add(arguments("1.0.0-rc.1", "2.0.0-alpha.1", -1, null));
     result.add(arguments("2.0.0-beta.1", "2.0.0-beta.1", 0, null));
+
+    // invalid pre-release position tests
+    result.add(arguments("alpha.1.2.3", "1.0", null, illegalArg));
+    result.add(arguments("1.0.alpha.beta.2", "1.0", null, illegalArg));
 
     return result;
   }

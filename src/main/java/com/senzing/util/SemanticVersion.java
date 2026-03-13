@@ -75,16 +75,35 @@ public class SemanticVersion implements Comparable<SemanticVersion> {
         try {
             String[] tokens = versionString.split("[-.]");
             this.versionParts = new ArrayList<>(tokens.length);
+            boolean hasSuffix = false;
             for (String token : tokens) {
                 switch (token.toLowerCase()) {
                     case "alpha":
-                        this.versionParts.add(ALPHA_VALUE);
-                        break;
                     case "beta":
-                        this.versionParts.add(BETA_VALUE);
-                        break;
                     case "rc":
-                        this.versionParts.add(RC_VALUE);
+                        if (hasSuffix) {
+                            throw new IllegalArgumentException(
+                                    "Multiple pre-release suffixes are not "
+                                    + "allowed: " + versionString);
+                        }
+                        if (this.versionParts.isEmpty()) {
+                            throw new IllegalArgumentException(
+                                    "Pre-release suffix must follow at least "
+                                    + "one numeric version part: "
+                                    + versionString);
+                        }
+                        hasSuffix = true;
+                        switch (token.toLowerCase()) {
+                            case "alpha":
+                                this.versionParts.add(ALPHA_VALUE);
+                                break;
+                            case "beta":
+                                this.versionParts.add(BETA_VALUE);
+                                break;
+                            case "rc":
+                                this.versionParts.add(RC_VALUE);
+                                break;
+                        }
                         break;
                     default:
                         int part = Integer.parseInt(token);
@@ -192,8 +211,8 @@ public class SemanticVersion implements Comparable<SemanticVersion> {
             Integer part1 = iter1.hasNext() ? iter1.next() : 0;
             Integer part2 = iter2.hasNext() ? iter2.next() : 0;
 
-            // get the diff between the parts
-            int diff = part1 - part2;
+            // compare the parts
+            int diff = Integer.compare(part1, part2);
 
             // if the diff is non-zero then return it
             if (diff != 0)
