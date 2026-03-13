@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0-beta.3.0] - 2026-03-12
+
+### Changed in 4.0.0-beta.3.0
+
+- Added `SzUtilities.bootstrapSettings()` method to build bootstrap JSON
+  settings for Senzing environment initialization without requiring a
+  database URI, enabling access to `SzProduct` functionality.
+- Added null-checks to existing `SzUtilities.basicSettingsFromDatabaseUri()`
+  overloads to fail fast on null URI parameters.
+- Fixed trailing comma in JSON example in `SzUtilities` javadoc.
+- Added pre-release suffix support to `SemanticVersion` for parsing and
+  comparing versions with `-alpha`, `-beta`, and `-rc` suffixes (e.g.:
+  `"2.0.0-alpha.2.0"`, `"2.0.0-beta.3.2"`, `"2.0.0-rc.2.1"`).
+  Pre-release suffixes are normalized to lowercase.
+
 ## [4.0.0-beta.2.1] - 2026-01-29
 
 ### Changed in 4.0.0-beta.2.1

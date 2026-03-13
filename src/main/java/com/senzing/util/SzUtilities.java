@@ -61,6 +61,75 @@ public class SzUtilities {
     }
 
     /**
+     * Builds bootstrap JSON settings for the Senzing environment
+     * initialization.  Bootstrap settings will allow access to the
+     * <code>SzProduct</code> functionality since that functionality
+     * does not require a database.
+     * <p>
+     * Settings will be of the form:
+     * <pre>
+     *      {
+     *          "PIPELINE": {
+     *              "SUPPORTPATH": "...",
+     *              "CONFIGPATH": "...",
+     *              "RESOURCEPATH": "..."
+     *          }
+     *      }
+     * </pre>
+     * <p>
+     * <b>NOTE:</b>
+     * This will attempt to find the Senzing installation directories on the
+     * system using Java system properties, environment variables and defaults
+     * for the operating system with the following order of precedence:
+     * <ul>
+     *  <li><code>SUPPORTPATH</code>: 
+     *      <ol>
+     *          <li><code>senzing.support.dir</code> System Property</li>
+     *          <li><code>SENZING_SUPPORT_DIR</code> Environment Variable</li>
+     *          <li><code>[senzing-path]/data</code> (see <code>[senzing-path]</code> below)</li>
+     *      </ol>
+     *  </li>
+     *  <li><code>CONFIGPATH</code>: 
+     *      <ol>
+     *          <li><code>senzing.config.dir</code> System Property</li>
+     *          <li><code>SENZING_CONFIG_DIR</code> Environment Variable</li>
+     *          <li>Linux Only: <code>/etc/opt/senzing</code> (if the directory exists)<li>
+     *          <li><code>[senzing-path]/etc</code> (see <code>[senzing-path]</code> below)</li>
+     *      </ol>
+     *  </li>
+     *  <li><code>RESOURCEPATH</code>: 
+     *      <ol>
+     *          <li><code>senzing.resource.dir</code> System Property</li>
+     *          <li><code>SENZING_RESOURCE_DIR</code> Environment Variable</li>
+     *          <li><code>[senzing-path]/resources</code> (see <code>[senzing-path]</code> below)</li>
+     *      </ol>
+     *  </li>
+     *  <li><code>[senzing-path]</code>:
+     *      <ol>
+     *          <li><code>senzing.path</code> System Property</li>
+     *          <li><code>SENZING_PATH</code> Environment Variable</li>
+     *          <li>The default directory directory for the operating system:
+     *              <ul>
+     *                  <li>Linux: <code>/opt/senzing</code></li>
+     *                  <li>macOS: <code>$HOME/senzing</code></li>
+     *                  <li>Windows: <code>%UserProfile%\senzing</code>
+     *              </ul>
+     *          </li>
+     *      </ol>
+     *  </li>
+     * </ul>
+     * 
+     * @return The bootstrap Senzing settings created using {@link 
+     *         SzInstallLocations}.
+     * 
+     * @throws IllegalStateException If the Senzing installation cannot be found.
+     */
+    public static String bootstrapSettings() throws IllegalStateException
+    {
+        return basicSettingsFromDatabaseUri(null, null, null);
+    }
+
+    /**
      * Builds basic JSON settings for the Senzing environment initialization
      * from the specified database URI for the Senzing repository.
      * <p>
@@ -71,7 +140,7 @@ public class SzUtilities {
      *              "SUPPORTPATH": "...",
      *              "CONFIGPATH": "...",
      *              "RESOURCEPATH": "..."
-     *          }
+     *          },
      *          "SQL": {
      *              "CONNECTION": "your-database-uri"
      *          }
@@ -132,6 +201,7 @@ public class SzUtilities {
     public static String basicSettingsFromDatabaseUri(String uri) 
         throws IllegalArgumentException, IllegalStateException
     {
+        Objects.requireNonNull(uri, "The database URI cannot be null");
         return basicSettingsFromDatabaseUri(uri, null, null);
     }
 
@@ -148,7 +218,7 @@ public class SzUtilities {
      *              "CONFIGPATH": "...",
      *              "RESOURCEPATH": "...",
      *              "LICENSESTRINGBASE64": "..."
-     *          }
+     *          },
      *          "SQL": {
      *              "CONNECTION": "your-database-uri"
      *          }
@@ -173,6 +243,7 @@ public class SzUtilities {
                                                       String    licenseBase64)
         throws IllegalArgumentException, IllegalStateException
     {
+        Objects.requireNonNull(uri, "The database URI cannot be null");
         return basicSettingsFromDatabaseUri(uri, licenseBase64, null);
     }
 
@@ -189,7 +260,7 @@ public class SzUtilities {
      *              "CONFIGPATH": "...",
      *              "RESOURCEPATH": "...",
      *              "LICENSEFILE": "..."
-     *          }
+     *          },
      *          "SQL": {
      *              "CONNECTION": "your-database-uri"
      *          }
@@ -213,6 +284,7 @@ public class SzUtilities {
                                                       File      licenseFile)
         throws IllegalArgumentException, IllegalStateException
     {
+        Objects.requireNonNull(uri, "The database URI cannot be null");
         return basicSettingsFromDatabaseUri(uri, null, licenseFile);
     }
     
@@ -243,10 +315,12 @@ public class SzUtilities {
                                                        File     licenseFile)
     {
         try {
-            Objects.requireNonNull(uri, "The specified URI cannot be null");
-            if (!startsWithDatabaseUriPrefix(uri)) {
-                throw new IllegalArgumentException(
-                    "The specified database URI does not appear legal: " + uri);
+            if (uri != null) {
+                if (!startsWithDatabaseUriPrefix(uri)) {
+                    throw new IllegalArgumentException(
+                        "The specified database URI does not appear to be legal: " 
+                        + uri);
+                }
             }
             if (licenseBase64 != null && licenseFile != null) {
                 throw new IllegalArgumentException(
@@ -255,7 +329,8 @@ public class SzUtilities {
 
             JsonObjectBuilder mainBuilder = Json.createObjectBuilder();
             JsonObjectBuilder pipelineBuilder = Json.createObjectBuilder();
-            JsonObjectBuilder sqlBuilder = Json.createObjectBuilder();
+            JsonObjectBuilder sqlBuilder = (uri == null) ? null
+                                                         : Json.createObjectBuilder();
             
             SzInstallLocations locations = SzInstallLocations.findLocations();
             
@@ -268,9 +343,10 @@ public class SzUtilities {
                 pipelineBuilder.add("LICENSEFILE", licenseFile.getCanonicalPath());
             }
             mainBuilder.add("PIPELINE", pipelineBuilder);
-            sqlBuilder.add("CONNECTION", uri);
-            mainBuilder.add("SQL", sqlBuilder);
-
+            if (sqlBuilder != null) {
+                sqlBuilder.add("CONNECTION", uri);
+                mainBuilder.add("SQL", sqlBuilder);
+            }
             JsonObject jsonObject = mainBuilder.build();
 
             return JsonUtilities.toJsonText(jsonObject);
