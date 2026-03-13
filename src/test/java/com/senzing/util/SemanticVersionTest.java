@@ -59,8 +59,21 @@ public class SemanticVersionTest {
     result.add(arguments("1.0", null, null, nullPointer));
     result.add(arguments("1.-1.0", "2.1.0", null, illegalArg));
 
+    // pre-release equality tests
+    result.add(arguments("2.0.0-alpha.2.0", "2.0.0-alpha.2.0", true, null));
+    result.add(arguments("2.0.0-alpha.2", "2.0.0-alpha.2.0", true, null));
+    result.add(arguments("2.0.0-beta.3.2", "2.0.0-beta.3.2", true, null));
+    result.add(arguments("2.0.0-rc.1", "2.0.0-rc.1", true, null));
+    result.add(arguments("2.0.0-alpha.1", "2.0.0-beta.1", false, null));
+    result.add(arguments("2.0.0-rc.1", "2.0.0", false, null));
+
+    // invalid pre-release position tests
+    result.add(arguments("alpha.1.2.3", "1.0", null, illegalArg));
+    result.add(arguments("1.0.alpha.beta.2", "1.0", null, illegalArg));
+
     return result;
   }
+
   @ParameterizedTest
   @MethodSource("provideEqualParams")
   @SuppressWarnings("unchecked")
@@ -153,6 +166,17 @@ public class SemanticVersionTest {
     result.add(arguments(null,  null, nullPointer));
     result.add(arguments("1.-1.0", null, illegalArg));
 
+    // pre-release toString tests
+    result.add(arguments("2.0.0-alpha.2.0", "2.0.0-alpha.2.0", null));
+    result.add(arguments("2.0.0-beta.3.2", "2.0.0-beta.3.2", null));
+    result.add(arguments("2.0.0-rc.2.1", "2.0.0-rc.2.1", null));
+    result.add(arguments("1.0.0-alpha", "1.0.0-alpha", null));
+    result.add(arguments("3.1.0-RC.1", "3.1.0-rc.1", null));
+
+    // invalid pre-release position tests
+    result.add(arguments("alpha.1.2.3", null, illegalArg));
+    result.add(arguments("1.0.alpha.beta.2", null, illegalArg));
+
     return result;
   }
 
@@ -217,6 +241,20 @@ public class SemanticVersionTest {
     result.add(arguments(null, "1.0", null, nullPointer));
     result.add(arguments("1.0", null, null, nullPointer));
     result.add(arguments("1.-1.0", "2.1.0", null, illegalArg));
+
+    // pre-release ordering tests
+    result.add(arguments("2.0.0-alpha.2.0", "2.0.0-beta.3.2", -1, null));
+    result.add(arguments("2.0.0-beta.3.2", "2.0.0-rc.2.1", -1, null));
+    result.add(arguments("2.0.0-rc.2.1", "2.0.0", -1, null));
+    result.add(arguments("2.0.0-alpha.1", "2.0.0-alpha.2", -1, null));
+    result.add(arguments("2.0.0-rc.1", "2.0.0-rc.2", -1, null));
+    result.add(arguments("2.0.0-alpha", "2.0.0", -1, null));
+    result.add(arguments("1.0.0-rc.1", "2.0.0-alpha.1", -1, null));
+    result.add(arguments("2.0.0-beta.1", "2.0.0-beta.1", 0, null));
+
+    // invalid pre-release position tests
+    result.add(arguments("alpha.1.2.3", "1.0", null, illegalArg));
+    result.add(arguments("1.0.alpha.beta.2", "1.0", null, illegalArg));
 
     return result;
   }
