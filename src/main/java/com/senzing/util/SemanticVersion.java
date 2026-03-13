@@ -77,7 +77,8 @@ public class SemanticVersion implements Comparable<SemanticVersion> {
             this.versionParts = new ArrayList<>(tokens.length);
             boolean hasSuffix = false;
             for (String token : tokens) {
-                switch (token.toLowerCase()) {
+                String lowerToken = token.toLowerCase();
+                switch (lowerToken) {
                     case "alpha":
                     case "beta":
                     case "rc":
@@ -93,17 +94,10 @@ public class SemanticVersion implements Comparable<SemanticVersion> {
                                     + versionString);
                         }
                         hasSuffix = true;
-                        switch (token.toLowerCase()) {
-                            case "alpha":
-                                this.versionParts.add(ALPHA_VALUE);
-                                break;
-                            case "beta":
-                                this.versionParts.add(BETA_VALUE);
-                                break;
-                            case "rc":
-                                this.versionParts.add(RC_VALUE);
-                                break;
-                        }
+                        this.versionParts.add(
+                            lowerToken.equals("alpha") ? ALPHA_VALUE
+                            : lowerToken.equals("beta") ? BETA_VALUE
+                            : RC_VALUE);
                         break;
                     default:
                         int part = Integer.parseInt(token);

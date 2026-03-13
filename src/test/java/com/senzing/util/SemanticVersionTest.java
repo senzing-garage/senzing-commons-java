@@ -73,6 +73,7 @@ public class SemanticVersionTest {
 
     return result;
   }
+
   @ParameterizedTest
   @MethodSource("provideEqualParams")
   @SuppressWarnings("unchecked")
