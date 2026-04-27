@@ -17,9 +17,36 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     - Surround lists with empty lines before and after
     - Follow standard Markdown conventions
 
+## FAQ MCP Server
+
+This project ships a local FAQ MCP server registered in `.mcp.json` under the
+name `senzing-commons-faq`. Source: `.claude/faq_server.py`; content:
+`.claude/faqs/<category>/<topic>.md`.
+
+**Use it BEFORE making design assumptions or troubleshooting.** Specifically:
+
+- Before changing build, test, or release configuration (`pom.xml`, surefire,
+  GPG, `release` profile), call `search_faqs` for relevant topics.
+- Before modifying public APIs in `cmdline`, `io`, `sql`, `util`, etc., search
+  for any documented invariants or rationale.
+- When a build, test, or dependency issue surfaces, search the
+  `troubleshooting` category first.
+- When unsure what is documented, call `get_faq_categories` to enumerate
+  categories and titles.
+
+**After resolving a non-obvious issue**, ask the user whether to capture the
+solution as a new FAQ under `.claude/faqs/<category>/<topic>.md`. The
+filename (dashes → spaces) becomes the searchable title. Restart the session
+so the server re-indexes.
+
+FAQs are pulled on demand, so detail is cheap there. Keep CLAUDE.md lean and
+push operational/troubleshooting depth into FAQ files.
+
 ## Project Overview
 
 Senzing Commons Java Library is a collection of reusable Java utilities, interfaces, and classes common to multiple Senzing projects. Originally refactored from senzing-api-server, this library provides foundational components for command-line parsing, database connection pooling, I/O operations, reflection utilities, and more.
+
+The current version is `4.0.0-beta.3.0` (a beta line — see `CHANGELOG.md` for the per-release history).
 
 ## Build and Test Commands
 
@@ -80,7 +107,7 @@ The codebase is organized into functional packages under `com.senzing`:
 - **`reflect`**: Reflection utilities for property manipulation and runtime introspection
 - **`sql`**: Database connection management including ConnectionPool, Connector implementations (PostgreSQL, SQLite), and transaction isolation
 - **`text`**: Text processing utilities
-- **`util`**: General utilities including JSON, ZIP, collections, timers, worker pools, and semantic versioning
+- **`util`**: General utilities including JSON, ZIP, collections, timers, worker pools, semantic versioning, and Senzing-environment helpers (`SzUtilities`, `SzInstallLocations`)
 - **`naming`**: Naming conventions and utilities
 
 ### Key Architectural Components
@@ -129,14 +156,16 @@ Notable utilities:
 - `JsonUtilities`: JSON parsing and manipulation helpers
 - `WorkerThreadPool` / `AsyncWorkerPool`: Concurrent task execution
 - `Timers`: Performance timing with statistics
-- `SemanticVersion`: Version comparison following semantic versioning
+- `SemanticVersion`: Version comparison following semantic versioning; supports pre-release suffixes (`-alpha`, `-beta`, `-rc`), normalized to lowercase
 - `AccessToken`: Thread-safe access control
 - `ErrorLogSuppressor`: Rate-limiting for error messages
 - `ZipUtilities`: Archive operations
+- `SzUtilities`: Builds JSON settings for Senzing environment initialization (`bootstrapSettings()` for `SzProduct`-only access without a database URI; `basicSettingsFromDatabaseUri()` for full settings)
+- `SzInstallLocations`: Locates a Senzing installation on disk
 
 ### Testing Configuration
 
-Tests use JUnit Jupiter 5 with parallel execution enabled:
+Tests use JUnit Jupiter 6 with parallel execution enabled:
 
 - Classes run concurrently (configured in pom.xml surefire plugin)
 - Methods within a class run in same thread
@@ -145,9 +174,9 @@ Tests use JUnit Jupiter 5 with parallel execution enabled:
 
 ## Development Notes
 
-### Java Version
+### Java and Maven Versions
 
-This project requires Java 17 (OpenJDK 17.0.x). The compiler is configured with:
+This project requires Java 17 (the Maven compiler is set to `<release>17</release>`) and Apache Maven 3.8.5 or later. The compiler is configured with:
 
 - `-Xlint:unchecked` for unchecked operation warnings
 - `-Xlint:deprecation` for deprecated API usage warnings
@@ -164,7 +193,7 @@ Key runtime dependencies:
 
 Test dependencies:
 
-- JUnit Jupiter 5.13.4 for testing
+- JUnit Jupiter 6.0.3 for testing
 - SQLite JDBC for database tests
 
 ### Code Patterns

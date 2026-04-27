@@ -1,3 +1,16 @@
 {
-  "includeCoAuthoredBy": false
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(uv --version)",
+      "Bash(timeout 15 uv run --script .claude/faq_server.py)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(uv run *)",
+      "Bash(uv run --with mcp python -c ' *)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "senzing-commons-faq"
+  ],
+  "enableAllProjectMcpServers": true
 }
