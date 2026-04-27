@@ -14,9 +14,11 @@ import static com.senzing.util.ErrorLogSuppressor.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class ErrorLogSuppressorTest {
+public class ErrorLogSuppressorTest
+{
   @Test
-  public void errorLogSuppressorTest() {
+  public void errorLogSuppressorTest()
+  {
     try {
       Result result = null;
       ErrorLogSuppressor suppressor = new ErrorLogSuppressor(5,
@@ -105,7 +107,8 @@ public class ErrorLogSuppressorTest {
   }
 
   @Test
-  public void badErrorLogLimitTest() {
+  public void badErrorLogLimitTest()
+  {
     try {
       try {
         ErrorLogSuppressor s = new ErrorLogSuppressor(-10,
@@ -133,7 +136,8 @@ public class ErrorLogSuppressorTest {
   }
 
   @Test
-  public void badErrorTimeWindowTest() {
+  public void badErrorTimeWindowTest()
+  {
     try {
       try {
         ErrorLogSuppressor s = new ErrorLogSuppressor(10,
@@ -161,7 +165,8 @@ public class ErrorLogSuppressorTest {
   }
 
   @Test
-  public void badSuppressDurationTest() {
+  public void badSuppressDurationTest()
+  {
     try {
       try {
         ErrorLogSuppressor s = new ErrorLogSuppressor(10,

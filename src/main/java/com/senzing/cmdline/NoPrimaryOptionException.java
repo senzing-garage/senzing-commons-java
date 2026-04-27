@@ -11,7 +11,8 @@ import java.util.Set;
  * specified.
  */
 @SuppressWarnings("rawtypes")
-public class NoPrimaryOptionException extends CommandLineException {
+public class NoPrimaryOptionException extends CommandLineException
+{
   /**
    * The {@link Set} of {@link CommandLineOption} instances that represent the
    * primary options.
@@ -28,9 +29,9 @@ public class NoPrimaryOptionException extends CommandLineException {
    * @throws NullPointerException If the specified {@link Set} is
    *                              <code>null</code>.
    *
-   * @throws IllegalArgumentException If the specified {@link Set} is empty
-   *                                  or contains a {@link CommandLineOption}
-   *                                  that is not a {@linkplain
+   * @throws IllegalArgumentException If the specified {@link Set} is empty or
+   *                                  contains a {@link CommandLineOption} that
+   *                                  is not a {@linkplain
    *                                  CommandLineOption#isPrimary() primary}.
    */
   public NoPrimaryOptionException(Set<CommandLineOption> primaryOptions)
@@ -45,7 +46,8 @@ public class NoPrimaryOptionException extends CommandLineException {
    *
    * @param message The message for the exception.
    */
-  public NoPrimaryOptionException(String message) {
+  public NoPrimaryOptionException(String message)
+  {
     super(message);
   }
 
@@ -54,15 +56,17 @@ public class NoPrimaryOptionException extends CommandLineException {
    * instances representing the primary options that could be specified.
    *
    * @return The <b>unmodifiable</b> {@link Set} of {@link CommandLineOption}
-   *         instances representing the primary options that could be specified.
+   *             instances representing the primary options that could be
+   *             specified.
    */
-  public Set<CommandLineOption> getPrimaryOptions() {
+  public Set<CommandLineOption> getPrimaryOptions()
+  {
     return this.primaryOptions;
   }
 
   /**
-   * Builds the error message describing the need to specify at least one
-   * of the specified {@link Set} of options.
+   * Builds the error message describing the need to specify at least one of the
+   * specified {@link Set} of options.
    *
    * @param primaryOptions The {@link Set} of {@link CommandLineOption}
    *                       instances identifying the primary options.
@@ -72,9 +76,9 @@ public class NoPrimaryOptionException extends CommandLineException {
    * @throws NullPointerException If the specified {@link Set} is
    *                              <code>null</code>.
    *
-   * @throws IllegalArgumentException If the specified {@link Set} is empty
-   *                                  or contains a {@link CommandLineOption}
-   *                                  that is not a {@linkplain
+   * @throws IllegalArgumentException If the specified {@link Set} is empty or
+   *                                  contains a {@link CommandLineOption} that
+   *                                  is not a {@linkplain
    *                                  CommandLineOption#isPrimary() primary}.
    */
   public static String buildErrorMessage(Set<CommandLineOption> primaryOptions)

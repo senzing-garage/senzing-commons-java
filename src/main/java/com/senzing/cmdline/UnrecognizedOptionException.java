@@ -3,7 +3,8 @@ package com.senzing.cmdline;
 /**
  * Thrown when a command-line argument is specified that is not recognized.
  */
-public class UnrecognizedOptionException extends CommandLineException {
+public class UnrecognizedOptionException extends CommandLineException
+{
   /**
    * The unrecognized option.
    */
@@ -14,7 +15,8 @@ public class UnrecognizedOptionException extends CommandLineException {
    *
    * @param option The option that was not recognized.
    */
-  public UnrecognizedOptionException(String option) {
+  public UnrecognizedOptionException(String option)
+  {
     super();
     this.option = option;
   }
@@ -25,7 +27,8 @@ public class UnrecognizedOptionException extends CommandLineException {
    * @param option The option that was not recognized.
    * @param message The message for the exception.
    */
-  public UnrecognizedOptionException(String option, String message) {
+  public UnrecognizedOptionException(String option, String message)
+  {
     super(message);
     this.option = option;
   }
@@ -35,7 +38,8 @@ public class UnrecognizedOptionException extends CommandLineException {
    *
    * @return The option that was not recognized.
    */
-  public String getOption() {
+  public String getOption()
+  {
     return this.option;
   }
 }

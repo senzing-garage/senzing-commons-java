@@ -22,8 +22,10 @@ import static com.senzing.io.IOUtilities.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class IOUtilitiesTest {
-  public List<Arguments> getReadAsciiLineParams() {
+public class IOUtilitiesTest
+{
+  public List<Arguments> getReadAsciiLineParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     try {
@@ -99,7 +101,8 @@ public class IOUtilitiesTest {
     close(null);
   }
 
-  public List<Arguments> getReadTextFileAsStringParams() {
+  public List<Arguments> getReadTextFileAsStringParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     result.add(arguments(
@@ -173,7 +176,8 @@ public class IOUtilitiesTest {
     }
   }
 
-  private String getTextBlock(boolean includeNonLatin) {
+  private String getTextBlock(boolean includeNonLatin)
+  {
     List<String> result = new LinkedList<>();
 
     String[] names = {
@@ -210,7 +214,8 @@ public class IOUtilitiesTest {
     return sw.toString();
   }
 
-  public List<Arguments> getDetectCharacterEncodingParams() {
+  public List<Arguments> getDetectCharacterEncodingParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     String text = getTextBlock(false);
@@ -232,7 +237,8 @@ public class IOUtilitiesTest {
     return result;
   }
 
-  public List<Arguments> getBOMSkippingReaderParams() {
+  public List<Arguments> getBOMSkippingReaderParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     String text = getTextBlock(false);
@@ -290,7 +296,8 @@ public class IOUtilitiesTest {
 
   @MethodSource("getBOMSkippingReaderParams")
   @ParameterizedTest
-  public void bomSkippingReaderTest(String text, String encoding) {
+  public void bomSkippingReaderTest(String text, String encoding)
+  {
     try {
       File file = File.createTempFile("test-", ".txt");
       File bomFile = File.createTempFile("test-", ".txt");
@@ -411,7 +418,8 @@ public class IOUtilitiesTest {
     }
   }
 
-  private static int checkBOM(byte[] bytes) {
+  private static int checkBOM(byte[] bytes)
+  {
     if (bytes[0] == ((byte) 0xFF) && bytes[1] == ((byte) 0xFE)) return 2;
     if (bytes[0] == ((byte) 0xFE) && bytes[1] == ((byte) 0xFF)) return 2;
     if (bytes[0] == 0 && bytes[1] == 0
@@ -422,7 +430,8 @@ public class IOUtilitiesTest {
     return 0;
   }
 
-  private static String bytesToHex(byte[] bytes) {
+  private static String bytesToHex(byte[] bytes)
+  {
     StringBuilder sb = new StringBuilder();
     for (byte b: bytes) {
       String hex = Integer.toString((b & 0xFF), 16);
@@ -433,7 +442,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void createDirectoryIfMissingTest() {
+  public void createDirectoryIfMissingTest()
+  {
     try {
       File newDirectory
           = new File("TestDirectory-" + System.currentTimeMillis());
@@ -467,7 +477,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void createDirectoryIfMissingOnFileTest() {
+  public void createDirectoryIfMissingOnFileTest()
+  {
     File tempFile = null;
     try {
       tempFile = File.createTempFile("test-", ".txt");
@@ -491,7 +502,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void recursiveDeleteDirectoryTest() {
+  public void recursiveDeleteDirectoryTest()
+  {
     try {
       File tmpDir = new File(System.getProperty("java.io.tmpdir"));
 
@@ -543,7 +555,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void checkFilesDifferSameTest() {
+  public void checkFilesDifferSameTest()
+  {
     try {
       File file1 = File.createTempFile("test-", ".txt");
       File file2 = File.createTempFile("test-", ".txt");
@@ -592,7 +605,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void checkFilesDifferDifferentTest() {
+  public void checkFilesDifferDifferentTest()
+  {
     try {
       File file1 = File.createTempFile("test-", ".txt");
       File file2 = File.createTempFile("test-", ".txt");
@@ -629,7 +643,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void checkFilesDifferEdgeTest() {
+  public void checkFilesDifferEdgeTest()
+  {
     try {
       File file1 = File.createTempFile("test-", ".txt");
       File file2 = File.createTempFile("test-", ".txt");
@@ -666,7 +681,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void touchFileTest() {
+  public void touchFileTest()
+  {
     try {
       File tmpDir = new File(System.getProperty("java.io.tmpdir"));
 
@@ -706,76 +722,96 @@ public class IOUtilitiesTest {
 
   }
 
-  protected static class TestInputStream extends ByteArrayInputStream {
+  protected static class TestInputStream extends ByteArrayInputStream
+  {
     private boolean closed = false;
-    public boolean isClosed() {
+    public boolean isClosed()
+    {
       return this.closed;
     }
 
     @Override
-    public void close() throws IOException {
+    public void close()
+        throws IOException
+    {
       this.closed = true;
       super.close();
     }
 
-    public TestInputStream(byte[] data) {
+    public TestInputStream(byte[] data)
+    {
       super(data);
     }
   }
 
-  protected static class TestOutputStream extends ByteArrayOutputStream {
+  protected static class TestOutputStream extends ByteArrayOutputStream
+  {
     private boolean closed = false;
-    public boolean isClosed() {
+    public boolean isClosed()
+    {
       return this.closed;
     }
 
     @Override
-    public void close() throws IOException {
+    public void close()
+        throws IOException
+    {
       this.closed = true;
       super.close();
     }
 
-    public TestOutputStream(int initialCapacity) {
+    public TestOutputStream(int initialCapacity)
+    {
       super(initialCapacity);
     }
   }
 
-  protected static class TestReader extends StringReader {
+  protected static class TestReader extends StringReader
+  {
     private boolean closed = false;
-    public boolean isClosed() {
+    public boolean isClosed()
+    {
       return this.closed;
     }
 
     @Override
-    public void close() {
+    public void close()
+    {
       this.closed = true;
       super.close();
     }
 
-    public TestReader(String text) {
+    public TestReader(String text)
+    {
       super(text);
     }
   }
 
-  protected static class TestWriter extends StringWriter {
+  protected static class TestWriter extends StringWriter
+  {
     private boolean closed = false;
-    public boolean isClosed() {
+    public boolean isClosed()
+    {
       return this.closed;
     }
 
     @Override
-    public void close() throws IOException {
+    public void close()
+        throws IOException
+    {
       this.closed = true;
       super.close();
     }
 
-    public TestWriter(int initialCapacity) {
+    public TestWriter(int initialCapacity)
+    {
       super(initialCapacity);
     }
   }
 
   @Test
-  public void nonClosingInputStreamTest() {
+  public void nonClosingInputStreamTest()
+  {
     try {
       byte[] data = new byte[10];
       TestInputStream tis = new TestInputStream(data);
@@ -792,7 +828,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void nonClosingOutputStreamTest() {
+  public void nonClosingOutputStreamTest()
+  {
     try {
       TestOutputStream tos = new TestOutputStream(100);
       OutputStream os = nonClosingWrapper(tos);
@@ -808,7 +845,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void nonClosingReaderTest() {
+  public void nonClosingReaderTest()
+  {
     try {
       TestReader tr = new TestReader("This is some data");
       Reader r = nonClosingWrapper(tr);
@@ -824,7 +862,8 @@ public class IOUtilitiesTest {
   }
 
   @Test
-  public void nonClosingWriterTest() {
+  public void nonClosingWriterTest()
+  {
     try {
       TestWriter tw = new TestWriter(100);
       Writer w = nonClosingWrapper(tw);

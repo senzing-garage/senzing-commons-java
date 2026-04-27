@@ -23,157 +23,192 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 @SuppressWarnings("unchecked")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class PropertyReflectorTest {
-  protected static class Address {
+public class PropertyReflectorTest
+{
+  protected static class Address
+  {
     private String street;
     private String city;
     private String state;
     private String zip;
 
-    public Address(String street, String city, String state, String zip) {
+    public Address(String street, String city, String state, String zip)
+    {
       this.street = street;
       this.city = city;
       this.state = state;
       this.zip = zip;
     }
 
-    public String getStreet() {
+    public String getStreet()
+    {
       return this.street;
     }
 
-    public String getCity() {
+    public String getCity()
+    {
       return this.city;
     }
 
-    public String getState() {
+    public String getState()
+    {
       return this.state;
     }
 
-    public String getZip() {
+    public String getZip()
+    {
       return this.zip;
     }
 
-    public String toString() {
+    public String toString()
+    {
       return this.getStreet() + "; " + this.getCity() + ", "
           + this.getState() + " " + this.getZip();
     }
   }
 
-  protected static class Person {
+  protected static class Person
+  {
     private String name;
     private List<Address> addresses;
     private Person spouse;
 
-    public Person(String name) {
+    public Person(String name)
+    {
       this.name = name;
       this.addresses = new LinkedList<>();
       this.spouse = null;
     }
 
-    public String getName() {
+    public String getName()
+    {
       return this.name;
     }
 
-    public List<Address> getAddresses() {
+    public List<Address> getAddresses()
+    {
       return Collections.unmodifiableList(this.addresses);
     }
 
-    public void addAddress(Address address) {
+    public void addAddress(Address address)
+    {
       this.addresses.add(address);
     }
 
-    public Person getSpouse() {
+    public Person getSpouse()
+    {
       return this.spouse;
     }
 
-    public void setSpouse(Person spouse) {
+    public void setSpouse(Person spouse)
+    {
       this.spouse = spouse;
     }
 
-    public String toString() {
+    public String toString()
+    {
       return this.getName();
     }
   }
 
-  protected interface Shape {
+  protected interface Shape
+  {
     double getPerimeter();
 
     double getArea();
   }
 
-  protected interface Polygon extends Shape {
+  protected interface Polygon extends Shape
+  {
     int getSideCount();
   }
 
-  protected static class Rectangle implements Polygon {
+  protected static class Rectangle implements Polygon
+  {
     private double width;
     private double length;
 
-    public Rectangle(double width, double length) {
+    public Rectangle(double width, double length)
+    {
       this.width = width;
       this.length = length;
     }
 
-    public int getSideCount() {
+    public int getSideCount()
+    {
       return 4;
     }
 
-    public double getWidth() {
+    public double getWidth()
+    {
       return this.width;
     }
 
-    public double getLength() {
+    public double getLength()
+    {
       return this.length;
     }
 
-    public void setWidth(double width) {
+    public void setWidth(double width)
+    {
       this.width = width;
     }
 
-    public void setLength(double length) {
+    public void setLength(double length)
+    {
       this.length = length;
     }
 
-    public double getArea() {
+    public double getArea()
+    {
       return this.getWidth() * this.getLength();
     }
 
-    public double getPerimeter() {
+    public double getPerimeter()
+    {
       return ((2 * this.getWidth()) + (2 * this.getLength()));
     }
 
-    public String toString() {
+    public String toString()
+    {
       return "Rectangle: " + this.getWidth() + " x " + this.getLength();
     }
   }
 
-  protected static class Square extends Rectangle {
+  protected static class Square extends Rectangle
+  {
     private static boolean shapeNameUpper = false;
 
-    public Square(double length) {
+    public Square(double length)
+    {
       super(length, length);
     }
 
-    public int getSideCount() {
+    public int getSideCount()
+    {
       return 4;
     }
 
-    public void setWidth(double width) {
+    public void setWidth(double width)
+    {
       this.setSide(width);
     }
 
-    public void setLength(double length) {
+    public void setLength(double length)
+    {
       this.setSide(length);
     }
 
     // should not be a property
-    protected void setSide(double side) {
+    protected void setSide(double side)
+    {
       super.setWidth(side);
       super.setLength(side);
     }
 
     // should not be a property
-    public static String getShapeName() {
+    public static String getShapeName()
+    {
       if (shapeNameUpper) {
         return "SQUARE";
       } else {
@@ -182,48 +217,59 @@ public class PropertyReflectorTest {
     }
 
     // should not be a property
-    public static void setShapeNameUpperCase(boolean upperCase) {
+    public static void setShapeNameUpperCase(boolean upperCase)
+    {
       shapeNameUpper = upperCase;
     }
 
-    public String toString() {
+    public String toString()
+    {
       return "Square: " + this.getWidth() + " x " + this.getLength();
     }
   }
 
-  protected static class Circle implements Shape {
+  protected static class Circle implements Shape
+  {
     private double radius;
 
-    public Circle(double radius) {
+    public Circle(double radius)
+    {
       this.radius = radius;
     }
 
-    public double getArea() {
+    public double getArea()
+    {
       return Math.PI * (this.getRadius() * this.getRadius());
     }
 
-    public double getPerimeter() {
+    public double getPerimeter()
+    {
       return this.getCircumference();
     }
 
-    public double getRadius() {
+    public double getRadius()
+    {
       return this.radius;
     }
 
-    public void setRadius(double radius) {
+    public void setRadius(double radius)
+    {
       this.radius = radius;
     }
 
-    protected double getCircumference() {
+    protected double getCircumference()
+    {
       return this.getRadius() * 2.0 * Math.PI;
     }
 
-    public String toString() {
+    public String toString()
+    {
       return "Circle: " + this.getRadius();
     }
   }
 
-  public List<Arguments> getPropertiesTestParameters() {
+  public List<Arguments> getPropertiesTestParameters()
+  {
     List<Arguments> result = new LinkedList<>();
     result.add(arguments(Shape.class, Set.of("area", "perimeter"), Set.of()));
 
@@ -252,7 +298,8 @@ public class PropertyReflectorTest {
   @MethodSource("getPropertiesTestParameters")
   public void testProperties(Class<?> cls,
       Set<String> expectedGetters,
-      Set<String> expectedSetters) {
+      Set<String> expectedSetters)
+  {
     try {
       PropertyReflector<?> propRef = PropertyReflector.getInstance(cls);
       Map<String, Method> getters = propRef.getAccessors();
@@ -290,7 +337,8 @@ public class PropertyReflectorTest {
     }
   }
 
-  public List<Arguments> getGetPropertyValueTestParameters() {
+  public List<Arguments> getGetPropertyValueTestParameters()
+  {
     List<Arguments> result = new LinkedList<>();
 
     Rectangle rectangle = newRectangle();
@@ -318,7 +366,8 @@ public class PropertyReflectorTest {
       Object target,
       String propertyKey,
       Object expectedValue,
-      Class expectedFailure) {
+      Class expectedFailure)
+  {
     try {
       Object result = propertyReflector.getPropertyValue(target, propertyKey);
 
@@ -354,11 +403,13 @@ public class PropertyReflectorTest {
     }
   }
 
-  private Rectangle newRectangle() {
+  private Rectangle newRectangle()
+  {
     return new Rectangle(10.0, 20.0);
   }
 
-  public List<Arguments> getSetPropertyValueTestParameters() {
+  public List<Arguments> getSetPropertyValueTestParameters()
+  {
     List<Arguments> result = new LinkedList<>();
 
     Rectangle rectangle = new Rectangle(10.0, 20.0);
@@ -395,7 +446,8 @@ public class PropertyReflectorTest {
       Object target,
       String propertyKey,
       Object propertyValue,
-      Class expectedFailure) {
+      Class expectedFailure)
+  {
     try {
       propertyReflector.setPropertyValue(target, propertyKey, propertyValue);
 
@@ -412,19 +464,12 @@ public class PropertyReflectorTest {
       Object result = propertyReflector.getPropertyValue(target, propertyKey);
 
       /*
-       * // COMMENT THIS OUT SINCE WE ARE NOT DOING NUMERIC CONVERSIONS SINCE THEY
-       * // DON'T ALWAYS MAKE SENSE DUE TO PRECISION LOSS
-       * //
-       * // make sure the result is correct
-       * if (propertyValue != null
-       * && result != null
-       * && propertyValue instanceof Number
-       * && result instanceof Number
-       * && getPrimitiveType(propertyValue.getClass()) != null)
-       * {
-       * result = convertPrimitiveNumber((Number) result,
-       * propertyValue.getClass());
-       * }
+       * // COMMENT THIS OUT SINCE WE ARE NOT DOING NUMERIC CONVERSIONS SINCE
+       * THEY // DON'T ALWAYS MAKE SENSE DUE TO PRECISION LOSS // // make sure
+       * the result is correct if (propertyValue != null && result != null &&
+       * propertyValue instanceof Number && result instanceof Number &&
+       * getPrimitiveType(propertyValue.getClass()) != null) { result =
+       * convertPrimitiveNumber((Number) result, propertyValue.getClass()); }
        */
 
       assertEquals(propertyValue, result,
@@ -456,7 +501,8 @@ public class PropertyReflectorTest {
     }
   }
 
-  public List<Arguments> getToJsonObjectParameters() {
+  public List<Arguments> getToJsonObjectParameters()
+  {
     List<Arguments> result = new LinkedList<>();
 
     result.add(arguments(null, null, NullPointerException.class));
@@ -528,7 +574,8 @@ public class PropertyReflectorTest {
   @MethodSource("getToJsonObjectParameters")
   public void toJsonObjectTest(Object object,
       JsonObject expectedResult,
-      Class expectedFailure) {
+      Class expectedFailure)
+  {
     try {
       JsonObject result = PropertyReflector.toJsonObject(object);
 

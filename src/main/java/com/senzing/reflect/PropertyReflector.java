@@ -20,7 +20,8 @@ import static com.senzing.reflect.ReflectionUtilities.*;
  * @param <T> The type for which the property reflector will obtain the
  *            properties and operate on.
  */
-public class PropertyReflector<T> {
+public class PropertyReflector<T>
+{
   /**
    * The {@link Map} of {@link Class} objects to their respective
    * {@link PropertyReflector} instances.
@@ -49,7 +50,8 @@ public class PropertyReflector<T> {
    * @param <T> The type for the property reflector instance.
    * @return The {@link PropertyReflector} for the specified {@link Class}.
    */
-  public static synchronized <T> PropertyReflector<T> getInstance(Class<T> cls) {
+  public static synchronized <T> PropertyReflector<T> getInstance(Class<T> cls)
+  {
     @SuppressWarnings("unchecked")
     PropertyReflector<T> result = REFLECTOR_INSTANCES.get(cls);
     if (result == null) {
@@ -60,30 +62,28 @@ public class PropertyReflector<T> {
   }
 
   /**
-   * Constructs with the specified class and uses reflection (introspection)
-   * to obtain the accessor and mutator property names and methods.
+   * Constructs with the specified class and uses reflection (introspection) to
+   * obtain the accessor and mutator property names and methods.
    *
    * @param cls The {@link Class} the class to introspect.
    */
-  protected PropertyReflector(Class<T> cls) {
+  protected PropertyReflector(Class<T> cls)
+  {
     this.accessors = new LinkedHashMap<>();
     this.mutators = new LinkedHashMap<>();
 
     Method[] methods = cls.getMethods();
     for (Method method : methods) {
       // check if the declaring class is java.lang.Object and skip if so
-      if (method.getDeclaringClass() == Object.class)
-        continue;
+      if (method.getDeclaringClass() == Object.class) continue;
 
       int modifiers = method.getModifiers();
 
       // ignore static methods
-      if (Modifier.isStatic(modifiers))
-        continue;
+      if (Modifier.isStatic(modifiers)) continue;
 
       // ignore non-public methods
-      if (!Modifier.isPublic(modifiers))
-        continue;
+      if (!Modifier.isPublic(modifiers)) continue;
 
       String name = method.getName();
       // check if we have a standard getter
@@ -92,8 +92,7 @@ public class PropertyReflector<T> {
           && method.getParameterCount() == 0
           && method.getReturnType() != void.class) {
         String key = name.substring(3, 4).toLowerCase();
-        if (name.length() > 4)
-          key += name.substring(4);
+        if (name.length() > 4) key += name.substring(4);
         accessors.put(key, method);
         continue;
       }
@@ -104,8 +103,7 @@ public class PropertyReflector<T> {
           && (method.getReturnType() == Boolean.class
               || method.getReturnType() == boolean.class)) {
         String key = name.substring(2, 3).toLowerCase();
-        if (name.length() > 3)
-          key += name.substring(3);
+        if (name.length() > 3) key += name.substring(3);
         accessors.put(key, method);
         continue;
       }
@@ -115,8 +113,7 @@ public class PropertyReflector<T> {
           && method.getParameterCount() == 1
           && method.getReturnType() == void.class) {
         String key = name.substring(3, 4).toLowerCase();
-        if (name.length() > 4)
-          key += name.substring(4);
+        if (name.length() > 4) key += name.substring(4);
         List<Method> methodList = mutators.get(key);
         if (methodList == null) {
           methodList = new LinkedList<>();
@@ -133,13 +130,14 @@ public class PropertyReflector<T> {
   }
 
   /**
-   * Provides the {@link Map} of {@link String} property names to the
-   * accessor {@link Method} values for that respective property.
+   * Provides the {@link Map} of {@link String} property names to the accessor
+   * {@link Method} values for that respective property.
    *
-   * @return The {@link Map} of {@link String} property names too the
-   *         accessor {@link Method} values for that respective property.
+   * @return The {@link Map} of {@link String} property names too the accessor
+   *             {@link Method} values for that respective property.
    */
-  public Map<String, Method> getAccessors() {
+  public Map<String, Method> getAccessors()
+  {
     return this.accessors;
   }
 
@@ -149,10 +147,11 @@ public class PropertyReflector<T> {
    * respective property.
    *
    * @return The {@link Map} of {@link String} property names to the
-   *         <b>unmodifiable</b> {@link List} of mutator {@link Method} values
-   *         for that respective property.
+   *             <b>unmodifiable</b> {@link List} of mutator {@link Method}
+   *             values for that respective property.
    */
-  public Map<String, List<Method>> getMutators() {
+  public Map<String, List<Method>> getMutators()
+  {
     return this.mutators;
   }
 
@@ -164,13 +163,14 @@ public class PropertyReflector<T> {
    * @param propertyKey The property key for the property being requested.
    *
    * @return The property value for the specified property key from the
-   *         specified target object.
+   *             specified target object.
    *
    * @throws IllegalArgumentException If the property key is not recognized.
    *
    */
   public Object getPropertyValue(T target, String propertyKey)
-      throws IllegalArgumentException {
+      throws IllegalArgumentException
+  {
     Map<String, Method> accessorMap = this.getAccessors();
     Method method = accessorMap.get(propertyKey);
     if (method == null) {
@@ -203,8 +203,11 @@ public class PropertyReflector<T> {
    * @throws IllegalArgumentException If the property key is not recognized.
    */
   @SuppressWarnings("unchecked")
-  public void setPropertyValue(T target, String propertyKey, Object propertyValue)
-      throws IllegalArgumentException {
+  public void setPropertyValue(T      target,
+                               String propertyKey,
+                               Object propertyValue)
+      throws IllegalArgumentException
+  {
     Map<String, List<Method>> mutatorMap = this.getMutators();
     List<Method> methods = mutatorMap.get(propertyKey);
     boolean invoked = false;
@@ -228,8 +231,7 @@ public class PropertyReflector<T> {
       invoked = findAndInvokeMutator(
           methods, Class::isPrimitive, target, null);
 
-      if (invoked)
-        return;
+      if (invoked) return;
 
       // if we get here then no method was found
       throw new NullPointerException(
@@ -244,8 +246,7 @@ public class PropertyReflector<T> {
     invoked = findAndInvokeMutator(
         methods, (argType -> argType == valueType), target, propertyValue);
 
-    if (invoked)
-      return;
+    if (invoked) return;
 
     // now check for a corresponding primitive mutator if a promoted type
     Class primType = getPrimitiveType(valueType);
@@ -253,8 +254,7 @@ public class PropertyReflector<T> {
     if (primType != null && primType != valueType) {
       invoked = findAndInvokeMutator(
           methods, (argType -> argType == primType), target, propertyValue);
-      if (invoked)
-        return;
+      if (invoked) return;
     }
 
     // check if we have an assignable-from method
@@ -264,54 +264,39 @@ public class PropertyReflector<T> {
         target,
         propertyValue);
 
-    if (invoked)
-      return;
+    if (invoked) return;
 
     /*
-     * // COMMENT THIS OUT FOR NOW -- IT DOES NOT NECESSARILY MAKE SENSE TO CONVERT
-     * // FLOAT TO DOUBLE OR VICE-VERSA (OR SHORT TO INT OR LONG)
-     * //
-     * // finally, check if we have an instance of java.lang.Number or the
-     * // primitive equivalent
-     * if (primType != null) {
-     * // get the corresponding promoted type from the primitive type
-     * Class promotedType = getPromotedType(primType);
+     * // COMMENT THIS OUT FOR NOW -- IT DOES NOT NECESSARILY MAKE SENSE TO
+     * CONVERT // FLOAT TO DOUBLE OR VICE-VERSA (OR SHORT TO INT OR LONG) // //
+     * finally, check if we have an instance of java.lang.Number or the //
+     * primitive equivalent if (primType != null) { // get the corresponding
+     * promoted type from the primitive type Class promotedType =
+     * getPromotedType(primType);
      * 
-     * // check if the promoted type extends java.lang.Number
-     * if (Number.class.isAssignableFrom(promotedType)) {
-     * // get the value as a Number
-     * Number numberValue = (Number) propertyValue;
+     * // check if the promoted type extends java.lang.Number if
+     * (Number.class.isAssignableFrom(promotedType)) { // get the value as a
+     * Number Number numberValue = (Number) propertyValue;
      * 
-     * // iterate over the methods
-     * for (Method method : methods) {
-     * // get the argument type
-     * Class argType = method.getParameterTypes()[0];
+     * // iterate over the methods for (Method method : methods) { // get the
+     * argument type Class argType = method.getParameterTypes()[0];
      * 
-     * // check if the argument type is primitive and if so then promote it
-     * if (argType.isPrimitive()) {
-     * argType = getPromotedType(argType);
-     * }
+     * // check if the argument type is primitive and if so then promote it if
+     * (argType.isPrimitive()) { argType = getPromotedType(argType); }
      * 
-     * // test the argument type if a primitive number
-     * if (!Number.class.isAssignableFrom(argType)) continue;
-     * if (getPrimitiveType(argType) == null) continue;
+     * // test the argument type if a primitive number if
+     * (!Number.class.isAssignableFrom(argType)) continue; if
+     * (getPrimitiveType(argType) == null) continue;
      * 
-     * // convert the value to the primitive number type
-     * Object convertedValue = convertPrimitiveNumber(numberValue, argType);
+     * // convert the value to the primitive number type Object convertedValue =
+     * convertPrimitiveNumber(numberValue, argType);
      * 
-     * try {
-     * // invoke the method
-     * method.invoke(target, convertedValue);
+     * try { // invoke the method method.invoke(target, convertedValue);
      * 
-     * // return here since invoked
-     * return;
+     * // return here since invoked return;
      * 
-     * } catch (InvocationTargetException | IllegalAccessException e) {
-     * throw new RuntimeException(e);
-     * }
-     * }
-     * }
-     * }
+     * } catch (InvocationTargetException | IllegalAccessException e) { throw
+     * new RuntimeException(e); } } } }
      */
 
     // if we get here then no suitable mutator was found
@@ -330,34 +315,34 @@ public class PropertyReflector<T> {
   /**
    * Finds the first {@link Method} satisfying the specified {@link Predicate}
    * and invokes it on the specified target {@link Object} with the specified
-   * property value as a parameter. This method returns <code>true</code> if
-   * a method was found and it was invoked, and <code>false</code> if no method
+   * property value as a parameter. This method returns <code>true</code> if a
+   * method was found and it was invoked, and <code>false</code> if no method
    * was found.
    *
    * @param methods       The {@link List} of {@link Method} instances to search
-   *                      for
-   *                      one whose first argument type satisfies the specified
-   *                      predicate.
+   *                      for one whose first argument type satisfies the
+   *                      specified predicate.
    * @param predicate     The {@link Predicate} that tests the type of the first
    *                      argument to each {@link Method}.
-   * @param target        The target object on which to invoke the {@link Method}.
+   * @param target        The target object on which to invoke the {@link
+   *                      Method}.
    * @param propertyValue The property value to pass as a parameter.
    *
    * @return <code>true</code> if the {@link Method} was found and invoked, and
-   *         <code>false</code> if no {@link Method} was found to satisfy the
-   *         {@link Predicate}.
+   *                           <code>false</code> if no {@link Method} was found
+   *                           to satisfy the {@link Predicate}.
    */
   private static boolean findAndInvokeMutator(List<Method> methods,
       Predicate<Class> predicate,
       Object target,
-      Object propertyValue) {
+      Object propertyValue)
+  {
     for (Method method : methods) {
       // get the argument type
       Class argType = method.getParameterTypes()[0];
 
       // test the argument type against the predicate, skip if it fails
-      if (!predicate.test(argType))
-        continue;
+      if (!predicate.test(argType)) continue;
 
       try {
         // invoke the method
@@ -386,7 +371,8 @@ public class PropertyReflector<T> {
    *                              <code>null</code>.
    */
   public static JsonObject toJsonObject(Object object)
-      throws NullPointerException {
+      throws NullPointerException
+  {
     Objects.requireNonNull("The specified object cannot be null");
     JsonObjectBuilder job = Json.createObjectBuilder();
     return buildJsonObject(job, object).build();
@@ -394,8 +380,8 @@ public class PropertyReflector<T> {
 
   /**
    * Adds the accessible properties of the specified {@link Object} to the
-   * specified {@link JsonObjectBuilder} with their respective property names
-   * as property keys.
+   * specified {@link JsonObjectBuilder} with their respective property names as
+   * property keys.
    *
    * @param builder The non-null {@link JsonObjectBuilder} to which to add the
    *                properties.
@@ -407,7 +393,8 @@ public class PropertyReflector<T> {
    */
   public static JsonObjectBuilder buildJsonObject(JsonObjectBuilder builder,
       Object object)
-      throws NullPointerException {
+      throws NullPointerException
+  {
     Objects.requireNonNull(
         builder, "The specified JsonObjectBuilder cannot be null");
     Objects.requireNonNull(
@@ -419,8 +406,8 @@ public class PropertyReflector<T> {
 
   /**
    * Adds the accessible properties of the specified {@link Object} to the
-   * specified {@link JsonObjectBuilder} with their respective property names
-   * as property keys.
+   * specified {@link JsonObjectBuilder} with their respective property names as
+   * property keys.
    *
    * @param visited The {@link IdentityHashMap} used to detect circular
    *                references.
@@ -436,7 +423,8 @@ public class PropertyReflector<T> {
   private static JsonObjectBuilder buildJsonObject(IdentityHashMap visited,
       JsonObjectBuilder builder,
       Object object)
-      throws NullPointerException {
+      throws NullPointerException
+  {
     if (visited.containsKey(object)) {
       throw new IllegalStateException(
           "Circular reference detected for object: " + object);
@@ -560,8 +548,8 @@ public class PropertyReflector<T> {
   }
 
   /**
-   * Internal method to add values to a {@link JsonArrayBuilder} when building
-   * a {@link JsonObject}.
+   * Internal method to add values to a {@link JsonArrayBuilder} when building a
+   * {@link JsonObject}.
    *
    * @param visited The {@link IdentityHashMap} used to detect circular
    *                references.
@@ -572,7 +560,8 @@ public class PropertyReflector<T> {
   @SuppressWarnings("unchecked")
   private static JsonArrayBuilder addToJsonArray(IdentityHashMap visited,
       JsonArrayBuilder builder,
-      Object value) {
+      Object value)
+  {
     // check for null
     if (value == null) {
       builder.addNull();
@@ -676,10 +665,10 @@ public class PropertyReflector<T> {
    *
    */
   @SuppressWarnings("unchecked")
-  private static Map<String, ?> getObjectMap(Object object) {
+  private static Map<String, ?> getObjectMap(Object object)
+  {
     // check if we have a map
-    if (!(object instanceof Map))
-      return null;
+    if (!(object instanceof Map)) return null;
     Map<String, ?> map = (Map<String, ?>) object;
     for (Object key : map.keySet()) {
       if (!(key instanceof String)) {

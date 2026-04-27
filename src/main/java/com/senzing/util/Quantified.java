@@ -5,17 +5,20 @@ import java.util.Map;
 /**
  * Interface used to describe a statistic.
  */
-public interface Quantified {
+public interface Quantified
+{
   /**
    * Describes a statistic that is
    */
-  interface Statistic {
+  interface Statistic
+  {
     /**
      * Gets the descriptive name of the statistic.
      *
      * @return The descriptive name of the statistic.
      */
-    default String getName() {
+    default String getName()
+    {
       Class c = this.getClass();
       Class enclosing = c.getEnclosingClass();
       if (enclosing != null) {
@@ -26,8 +29,8 @@ public interface Quantified {
     }
 
     /**
-     * Gets the unit of measure for this statistic.  This is the unit that
-     * the {@link Number} value that has been measured.
+     * Gets the unit of measure for this statistic. This is the unit that the
+     * {@link Number} value that has been measured.
      *
      * @return The unit of measure for this statistic.
      */

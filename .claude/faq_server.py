@@ -149,15 +149,21 @@ _load_faqs()
 mcp = FastMCP(
     "senzing-commons-faq",
     instructions=(
-        "Senzing Commons Java FAQ server. Consult these tools BEFORE making "
-        "design decisions, modifying public APIs, changing build/release "
-        "configuration, or troubleshooting build, test, connection-pool, "
-        "record-reader, command-line, JSON, or release/GPG issues. The FAQs "
-        "capture project conventions and operational knowledge that cannot "
-        "be discovered by reading code alone — including the rule that source "
-        "code edits must be presented as suggestions rather than applied "
-        "directly. If FAQ search returns no useful results, TELL THE USER "
-        "and recommend adding a FAQ after the issue is resolved."
+        "Senzing Commons Java FAQ server. Consult these tools BEFORE: "
+        "(a) generating or modifying Java code in this repo — search "
+        "`java formatting` or read `.claude/java-coding-standards.md` so "
+        "new code follows the project's brace style, 80-char line limit, "
+        "javadoc reflow, and parameter-alignment rules from the start "
+        "rather than being reformatted afterward; "
+        "(b) making design decisions, modifying public APIs, or changing "
+        "build/release configuration; "
+        "(c) troubleshooting build, test, connection-pool, record-reader, "
+        "command-line, JSON, or release/GPG issues. The FAQs capture "
+        "project conventions and operational knowledge that cannot be "
+        "discovered by reading code alone — including the rule that "
+        "source code edits must be presented as suggestions rather than "
+        "applied directly. If FAQ search returns no useful results, TELL "
+        "THE USER and recommend adding a FAQ after the issue is resolved."
     ),
 )
 

@@ -6,38 +6,42 @@ import java.util.*;
  * Provides utility functions for working with collections.
  */
 @SuppressWarnings("unchecked")
-public class CollectionUtilities {
+public class CollectionUtilities
+{
   /**
    * Private default constructor.
    */
-  private CollectionUtilities() {
+  private CollectionUtilities()
+  {
     //
   }
 
   /**
-   * Returns a recursively unmodifiable view of the specified {@link List}.
-   * The behavior of this recursion depends on the values of the specified
+   * Returns a recursively unmodifiable view of the specified {@link List}. The
+   * behavior of this recursion depends on the values of the specified
    * {@link List}:
    * <ul>
    * <li>{@link Set} - Uses {@link Collections#unmodifiableSet(Set)}
-   * to make the {@link Set} unmodifiable, but does not recurse further
-   * because the elements of a {@link Set} cannot be modified in place.
+   * to make the {@link Set} unmodifiable, but does not recurse further because
+   * the elements of a {@link Set} cannot be modified in place.
    * </li>
    * <li>{@link List} - Recursively calls {@link
-   * #recursivelyUnmodifiableList(List)} on the {@link List} value to
-   * make it unmodifiable.
+   * #recursivelyUnmodifiableList(List)} on the {@link List} value to make it
+   * unmodifiable.
    * </li>
    * <li>{@link Map} - Calls {@link #recursivelyUnmodifiableMap(Map)} on the
    * {@link Map} value to make it unmodifiable.
    * </li>
-   * <li>All other values (including <code>null</code> values) are left as-is</li>
+   * <li>All other values (including <code>null</code> values) are left
+   * as-is</li>
    * </ul>
    *
    * @param list The {@link List} to make recursively unmodifiable.
    * @return The recursively unmodifiable view of the specified {@link List}.
    * @param <T> The type of element in the specified {@link List}.
    */
-  public static <T> List<T> recursivelyUnmodifiableList(List<T> list) {
+  public static <T> List<T> recursivelyUnmodifiableList(List<T> list)
+  {
     ListIterator<T> iter = list.listIterator();
     while (iter.hasNext()) {
       T elem = iter.next();
@@ -53,22 +57,23 @@ public class CollectionUtilities {
   }
 
   /**
-   * Returns a recursively unmodifiable view of the specified {@link Map}.
-   * The keys of the {@link Map} are left unmodifiable, but the behavior of this
+   * Returns a recursively unmodifiable view of the specified {@link Map}. The
+   * keys of the {@link Map} are left unmodifiable, but the behavior of this
    * recursion depends on the values of the specified {@link Map}:
    * <ul>
    * <li>{@link Set} - Uses {@link Collections#unmodifiableSet(Set)}
-   * to make the {@link Set} unmodifiable, but does not recurse further
-   * because the elements of a {@link Set} cannot be modified in place.
+   * to make the {@link Set} unmodifiable, but does not recurse further because
+   * the elements of a {@link Set} cannot be modified in place.
    * </li>
    * <li>{@link List} - Calls {@link #recursivelyUnmodifiableList(List)} on
    * the {@link List} value to make it unmodifiable.
    * </li>
    * <li>{@link Map} - Recursively calls {@link
-   * #recursivelyUnmodifiableMap(Map)} on the {@link Map} value to make
-   * it unmodifiable.
+   * #recursivelyUnmodifiableMap(Map)} on the {@link Map} value to make it
+   * unmodifiable.
    * </li>
-   * <li>All other values (including <code>null</code> values) are left as-is</li>
+   * <li>All other values (including <code>null</code> values) are left
+   * as-is</li>
    * </ul>
    *
    * @param map The {@link Map} to make recursively unmodifiable.
@@ -76,7 +81,8 @@ public class CollectionUtilities {
    * @param <K> The type of keys in the specified {@link Map}.
    * @param <V> The type of values in the specified {@link Map}.
    */
-  public static <K, V> Map<K, V> recursivelyUnmodifiableMap(Map<K, V> map) {
+  public static <K, V> Map<K, V> recursivelyUnmodifiableMap(Map<K, V> map)
+  {
     Iterator<Map.Entry<K, V>> iter = map.entrySet().iterator();
     while (iter.hasNext()) {
       Map.Entry<K, V> entry = iter.next();
@@ -103,7 +109,8 @@ public class CollectionUtilities {
    * @return The {@link Set} of elements.
    * @param <T> The type of elements for the {@link List}.
    */
-  public static <T> List<T> list(T... elements) {
+  public static <T> List<T> list(T... elements)
+  {
     List<T> list = new ArrayList<>(elements.length);
     for (T element : elements) {
       list.add(element);
@@ -120,7 +127,8 @@ public class CollectionUtilities {
    * @return The {@link Set} of elements.
    * @param <T> The type of elements for the {@link Set}.
    */
-  public static <T> Set<T> set(T... elements) {
+  public static <T> Set<T> set(T... elements)
+  {
     Set<T> set = new LinkedHashSet<>();
     for (T element : elements) {
       set.add(element);

@@ -10,19 +10,20 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Provides a basic registry for objects of a specific type.  This class acts
- * as a simplified version of {@link javax.naming.Context} that is dedicated to
+ * Provides a basic registry for objects of a specific type. This class acts as
+ * a simplified version of {@link javax.naming.Context} that is dedicated to
  * instances of a specific class and confined to a single process in-memory
- * lookup.  Unbinding of previously bound objects is only allowed if the caller
+ * lookup. Unbinding of previously bound objects is only allowed if the caller
  * uses the {@link AccessToken} returned when the original binding was created
  * to authorize the unbinding.
  *
  * @param <T> The type of object provided by the registry instance.
  */
-public class Registry<T> {
+public class Registry<T>
+{
   /**
-   * The {@link Map} of {@link String} keys to the bound objects of the
-   * provided type.
+   * The {@link Map} of {@link String} keys to the bound objects of the provided
+   * type.
    */
   private Map<String, T> bindingMap;
 
@@ -42,7 +43,8 @@ public class Registry<T> {
    * Default constructor.  Constructing with this constructor creates an
    * instance that will not allow <code>null</code> references in bindings.
    */
-  public Registry() {
+  public Registry()
+  {
     this(false);
   }
 
@@ -51,10 +53,11 @@ public class Registry<T> {
    * bound in the registry.
    *
    * @param allowNull <code>true</code> if bindings in this registry may exist
-   *                  to <code>null</code> references, and <code>false</code>
-   *                  if bindings must be to non-null objects.
+   *                  to <code>null</code> references, and <code>false</code> if
+   *                  bindings must be to non-null objects.
    */
-  public Registry(boolean allowNull) {
+  public Registry(boolean allowNull)
+  {
     this.bindingMap = new LinkedHashMap<>();
     this.tokenMap   = new LinkedHashMap<>();
     this.allowNull  = allowNull;
@@ -68,16 +71,17 @@ public class Registry<T> {
    * <code>null</code> reference.
    *
    * @return <code>true</code> if <code>null</code> bindings are allowed,
-   *         otherwise <code>false</code>
+   *                           otherwise <code>false</code>
    */
-  public boolean isAllowingNull() {
+  public boolean isAllowingNull()
+  {
     return this.allowNull;
   }
 
   /**
-   * Binds the specified object to the specified name in the registry.  If
-   * an object is already bound to the specified name then an {@link
-   * NameAlreadyBoundException} is thrown.  If the specified name is
+   * Binds the specified object to the specified name in the registry. If an
+   * object is already bound to the specified name then an {@link
+   * NameAlreadyBoundException} is thrown. If the specified name is
    * <code>null</code> then a {@link NullPointerException} is thrown.  If
    * <code>null</code> bindings {@linkplain #isAllowingNull() are not allowed}
    * by this registry and the specified object is <code>null</code> then a
@@ -90,15 +94,15 @@ public class Registry<T> {
    *               <code>null</code>.
    *
    * @return The {@link AccessToken} that the caller can use to {@linkplain
-   *         #unbind(String, AccessToken) unbind} the name from the object.
+   *             #unbind(String, AccessToken) unbind} the name from the object.
    *
    * @throws NullPointerException If the specified name is <code>null</code> or
    *                              if <code>null</code> bindings {@linkplain
    *                              #isAllowingNull() are not allowed} and the
    *                              specified object is <code>null</code>.
    *
-   * @throws NameAlreadyBoundException If the specified name is already bound
-   *                                   to an object.
+   * @throws NameAlreadyBoundException If the specified name is already bound to
+   *                                   an object.
    */
   public synchronized AccessToken bind(String name, T object)
       throws NameAlreadyBoundException, NullPointerException
@@ -119,10 +123,9 @@ public class Registry<T> {
 
   /**
    * Looks up the object bound to the specified name and returns a reference to
-   * it.  If no object is bound to the specified name then a {@link
-   * NameNotFoundException} is thrown.  This may return <code>null</code> if
-   * the registry {@linkplain #isAllowingNull() allows} <code>null</code>
-   * bindings.
+   * it. If no object is bound to the specified name then a {@link
+   * NameNotFoundException} is thrown. This may return <code>null</code> if the
+   * registry {@linkplain #isAllowingNull() allows} <code>null</code> bindings.
    *
    * @param name The name for which the bound object should be returned.
    *
@@ -150,7 +153,7 @@ public class Registry<T> {
    * @param name The name to check.
    *
    * @return <code>true</code> if the specified name is bound, otherwise
-   *         <code>false</code>.
+   *                           <code>false</code>.
    *
    * @throws NullPointerException If the specified name is <code>null</code>.
    */
@@ -174,9 +177,9 @@ public class Registry<T> {
    *                              <code>null</code>.
    * @throws NameNotFoundException If the specified name is not bound to any
    *                               object.
-   * @throws NoPermissionException If the specified name is recognized, but
-   *                               the specified {@link AccessToken} is not
-   *                               the one associated with the specified name.
+   * @throws NoPermissionException If the specified name is recognized, but the
+   *                               specified {@link AccessToken} is not the one
+   *                               associated with the specified name.
    */
   public synchronized void unbind(String name, AccessToken token)
       throws NullPointerException, NameNotFoundException, NoPermissionException

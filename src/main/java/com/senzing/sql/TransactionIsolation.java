@@ -9,7 +9,8 @@ import static java.sql.Connection.*;
  * Enumerates the various transaction isolation levels including their
  * corresponding JDBC integer constants.
  */
-public enum TransactionIsolation {
+public enum TransactionIsolation
+{
   /**
    * Corresponds to {@link Connection#TRANSACTION_READ_UNCOMMITTED}.
    */
@@ -38,7 +39,9 @@ public enum TransactionIsolation {
    *             isolation level.
    * @throws SQLException If a failure occurs.
    */
-  public void applyTo(Connection conn) throws SQLException {
+  public void applyTo(Connection conn)
+      throws SQLException
+  {
     int intValue = this.getIntegerValue();
     if (conn.getTransactionIsolation() != intValue) {
       conn.setTransactionIsolation(intValue);
@@ -55,7 +58,8 @@ public enum TransactionIsolation {
    *
    * @return The integer value representation from {@link Connection}.
    */
-  public int getIntegerValue() {
+  public int getIntegerValue()
+  {
     return this.intValue;
   }
 
@@ -64,7 +68,8 @@ public enum TransactionIsolation {
    *
    * @param intValue The integer value representation.
    */
-  TransactionIsolation(int intValue) {
+  TransactionIsolation(int intValue)
+  {
     this.intValue = intValue;
   }
 }

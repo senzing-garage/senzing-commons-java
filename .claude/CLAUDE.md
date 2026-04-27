@@ -246,3 +246,70 @@ The project uses Maven Central for distribution:
 ### Main Branch
 
 The main branch for pull requests is `main`.
+
+## Java Coding Standards
+
+**IMPORTANT — apply when generating or modifying Java code:** All Java
+code (new and existing) in this repository must conform to the formatting
+rules in `.claude/java-coding-standards.md`. Apply these rules **from
+the start** — do not write code first and reformat afterward. When in
+doubt about a specific case (parameter alignment, method continuation,
+ternary tier, javadoc reflow), read the full standards document or
+search the FAQ:
+`mcp__senzing-commons-faq__search_faqs(query="java formatting")`.
+
+### Quick reference
+
+- **80-character line limit** (enforced by checkstyle via `-Pcheckstyle`).
+  Lines beyond 80 chars must be wrapped.
+- **Allman braces** for class/interface/enum/method/constructor
+  definitions (opening `{` on its own line, left-aligned with the
+  declaration).
+- **Same-line braces** for control flow: `if`/`else`/`for`/`while`/
+  `do`/`try`/`catch`/`finally`/`switch`/`synchronized`, lambdas, array
+  initializers, static init blocks.
+- **Multi-line conditions**: when an `if`/`catch`/etc. condition wraps
+  to multiple lines, the opening brace goes on its own line (Allman) to
+  visually separate condition from body.
+- **Method parameters** (priority order): single line if it fits;
+  otherwise paren-aligned with types/names columnized; otherwise
+  next-line double-indented.
+- **`throws` clauses** go on their own line, single-indented.
+- **Continuation indentation**: 8 spaces (double indent).
+- **Operators on continuation lines**: break **before** `+`, `&&`, `||`,
+  `?`, `:`, `.` (the operator starts the continuation line).
+- **Short-circuit `if`**: `if (cond) statement;` on one line is preferred
+  (Tier 1) when it fits; otherwise add braces.
+- **Javadoc**: reflow prose and `@param`/`@return`/`@throws` to fill
+  lines near 80 chars; do not leave 1-3 orphan words on a line.
+- **CSOFF/CSON**: only for deliberately aligned multi-line output
+  (column-formatted diagnostics, ASCII art, SQL DDL with aligned
+  clauses) — never a general escape hatch.
+
+### Verification
+
+Run checkstyle: `mvn -Pcheckstyle validate` (must report `BUILD SUCCESS`
+before opening a PR).
+
+### Bulk formatting scripts
+
+Five scripts in `.claude/scripts/` (run from project root) automate
+common reformat passes — useful when reformatting existing files but
+**not a substitute** for writing compliant code in the first place:
+
+- `python3 .claude/scripts/fix_allman_braces.py` — brace placement.
+- `python3 .claude/scripts/fix_javadoc_reflow.py` — javadoc prose
+  reflow.
+- `python3 .claude/scripts/fix_javadoc_inline_tags.py` — javadoc
+  reflow for paragraphs containing `{@link}`/`<code>` (cases the
+  base reflow script skips).
+- `python3 .claude/scripts/fix_javadoc_tags.py` — `@param`/`@return`/
+  `@throws` description reflow.
+- `python3 .claude/scripts/fix_need_braces.py` — collapses
+  short-circuit `if`/`else` to single-line (Tier 1) when it fits,
+  else adds braces (Tier 2).
+
+VSCode formatter config (`.vscode/java-formatter.xml`) handles Allman
+for methods/types and same-line for control flow but cannot fully
+enforce all rules. The `building/java-formatting-standards` FAQ
+summarizes day-to-day usage.

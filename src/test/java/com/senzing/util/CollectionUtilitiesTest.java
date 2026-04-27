@@ -15,10 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class CollectionUtilitiesTest {
+public class CollectionUtilitiesTest
+{
   @Test
   @SuppressWarnings("unchecked")
-  public void recursivelyUnmodifiableListTest() {
+  public void recursivelyUnmodifiableListTest()
+  {
     try {
       List list = new LinkedList();
       list.add(new LinkedList());
@@ -42,7 +44,8 @@ public class CollectionUtilitiesTest {
 
   @Test
   @SuppressWarnings("unchecked")
-  public void recursivelyUnmodifiableMapTest() {
+  public void recursivelyUnmodifiableMapTest()
+  {
     try {
       Map map = new HashMap();
       map.put("List", new LinkedList());
@@ -64,7 +67,8 @@ public class CollectionUtilitiesTest {
   }
 
   @Test
-  public void listTest() {
+  public void listTest()
+  {
     try {
       List<String> list = list("A", "B", "C");
 
@@ -77,7 +81,8 @@ public class CollectionUtilitiesTest {
   }
 
   @Test
-  public void setTest() {
+  public void setTest()
+  {
     try {
       Set<String> set = set("A", "B", "C");
 

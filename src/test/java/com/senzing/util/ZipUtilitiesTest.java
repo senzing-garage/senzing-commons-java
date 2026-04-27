@@ -19,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class ZipUtilitiesTest {
+public class ZipUtilitiesTest
+{
   private static final SecureRandom PRNG = new SecureRandom();
 
   private static final String[] SENTENCES = {
@@ -35,7 +36,9 @@ public class ZipUtilitiesTest {
       "Aenean at eros diam. Donec sodales feugiat elit sed dapibus. Fusce iaculis quis tortor tincidunt dignissim. Cras vestibulum nibh non mi vulputate condimentum. Sed quis ornare sapien.",
   };
 
-  private static File tempDirectory() throws IOException {
+  private static File tempDirectory()
+      throws IOException
+  {
     File tempFile = File.createTempFile("zip-", "-dirname");
     String dirPath = tempFile.getPath();
     dirPath = dirPath.substring(0, dirPath.length() - 4);
@@ -45,7 +48,9 @@ public class ZipUtilitiesTest {
     return directory;
   }
 
-  private static File createTextFile(File file) throws IOException {
+  private static File createTextFile(File file)
+      throws IOException
+  {
     int fileSize = 100000 + PRNG.nextInt(100000);
     int writeCount = 0;
     try (FileOutputStream   fos = new FileOutputStream(file);
@@ -73,7 +78,9 @@ public class ZipUtilitiesTest {
     return file;
   }
 
-  private static File createDirectoryWithFiles() throws IOException {
+  private static File createDirectoryWithFiles()
+      throws IOException
+  {
     File directory = tempDirectory();
 
     for (int index = 0; index < 100; index++) {
@@ -86,7 +93,8 @@ public class ZipUtilitiesTest {
   }
 
   @Test
-  public void zipDirectoryToFileTest() {
+  public void zipDirectoryToFileTest()
+  {
     File dir = null;
     File targetFile = null;
     File targetDir = null;
@@ -187,7 +195,8 @@ public class ZipUtilitiesTest {
   }
 
   @Test
-  public void zipFileToFileTest() {
+  public void zipFileToFileTest()
+  {
     File file = null;
     File targetFile = null;
     File targetDir = null;

@@ -22,36 +22,40 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
 import com.senzing.sql.DatabaseType;
-import com.senzing.sql.SQLiteConnector;
 
 /**
- * Provides utilities for working with Senzing environment settings
- * and repositories.
+ * Provides utilities for working with Senzing environment settings and
+ * repositories.
  */
-public class SzUtilities {
+public class SzUtilities
+{
     /**
-     * The <b>unmodifiable</b> {@link Set} of legal prefixes for URI
-     * prefixes for the database URI's for the Senzing repository.
+     * The <b>unmodifiable</b> {@link Set} of legal prefixes for URI prefixes
+     * for the database URI's for the Senzing repository.
      */
     public static final Set<String> DATABASE_URI_PREFIXES = Set.of(
-        "sqlite3://", "postgresql://", "mysql://", "db2://", "oci://", "mssql://");
+        "sqlite3://", "postgresql://", "mysql://", "db2://", "oci://",
+        "mssql://");
     
     /**
      * Private default constructor.
      */
-    private SzUtilities() {
+    private SzUtilities()
+    {
         // do nothing
     }
 
     /**
-     * Checks if the specified text appears to be a database URI
-     * for the Senzing repository.
+     * Checks if the specified text appears to be a database URI for the Senzing
+     * repository.
      * 
      * @param text The text to check.
-     * @return <code>true</code> if the specified text starts with a legal database
-     *         URI prefix, otherwise <code>false</code>.
+     * @return <code>true</code> if the specified text starts with a legal
+     *                           database URI prefix, otherwise
+     *                           <code>false</code>.
      */
-    public static boolean startsWithDatabaseUriPrefix(String text) {
+    public static boolean startsWithDatabaseUriPrefix(String text)
+    {
         for (String prefix : DATABASE_URI_PREFIXES) {
             if (text.startsWith(prefix)) {
                 return true;
@@ -86,22 +90,26 @@ public class SzUtilities {
      *      <ol>
      *          <li><code>senzing.support.dir</code> System Property</li>
      *          <li><code>SENZING_SUPPORT_DIR</code> Environment Variable</li>
-     *          <li><code>[senzing-path]/data</code> (see <code>[senzing-path]</code> below)</li>
+     *          <li><code>[senzing-path]/data</code>
+     *              (see <code>[senzing-path]</code> below)</li>
      *      </ol>
      *  </li>
      *  <li><code>CONFIGPATH</code>:
      *      <ol>
      *          <li><code>senzing.config.dir</code> System Property</li>
      *          <li><code>SENZING_CONFIG_DIR</code> Environment Variable</li>
-     *          <li>Linux Only: <code>/etc/opt/senzing</code> (if the directory exists)</li>
-     *          <li><code>[senzing-path]/etc</code> (see <code>[senzing-path]</code> below)</li>
+     *          <li>Linux Only: <code>/etc/opt/senzing</code>
+     *              (if the directory exists)</li>
+     *          <li><code>[senzing-path]/etc</code>
+     *              (see <code>[senzing-path]</code> below)</li>
      *      </ol>
      *  </li>
      *  <li><code>RESOURCEPATH</code>:
      *      <ol>
      *          <li><code>senzing.resource.dir</code> System Property</li>
      *          <li><code>SENZING_RESOURCE_DIR</code> Environment Variable</li>
-     *          <li><code>[senzing-path]/resources</code> (see <code>[senzing-path]</code> below)</li>
+     *          <li><code>[senzing-path]/resources</code>
+     *              (see <code>[senzing-path]</code> below)</li>
      *      </ol>
      *  </li>
      *  <li><code>[senzing-path]</code>:
@@ -119,10 +127,11 @@ public class SzUtilities {
      *  </li>
      * </ul>
      * 
-     * @return The bootstrap Senzing settings created using {@link 
-     *         SzInstallLocations}.
+     * @return The bootstrap Senzing settings created using {@link
+     *             SzInstallLocations}.
      * 
-     * @throws IllegalStateException If the Senzing installation cannot be found.
+     * @throws IllegalStateException If the Senzing installation cannot be
+     *                               found.
      */
     public static String bootstrapSettings() throws IllegalStateException
     {
@@ -156,22 +165,26 @@ public class SzUtilities {
      *      <ol>
      *          <li><code>senzing.support.dir</code> System Property</li>
      *          <li><code>SENZING_SUPPORT_DIR</code> Environment Variable</li>
-     *          <li><code>[senzing-path]/data</code> (see <code>[senzing-path]</code> below)</li>
+     *          <li><code>[senzing-path]/data</code>
+     *              (see <code>[senzing-path]</code> below)</li>
      *      </ol>
      *  </li>
      *  <li><code>CONFIGPATH</code>:
      *      <ol>
      *          <li><code>senzing.config.dir</code> System Property</li>
      *          <li><code>SENZING_CONFIG_DIR</code> Environment Variable</li>
-     *          <li>Linux Only: <code>/etc/opt/senzing</code> (if the directory exists)</li>
-     *          <li><code>[senzing-path]/etc</code> (see <code>[senzing-path]</code> below)</li>
+     *          <li>Linux Only: <code>/etc/opt/senzing</code>
+     *              (if the directory exists)</li>
+     *          <li><code>[senzing-path]/etc</code>
+     *              (see <code>[senzing-path]</code> below)</li>
      *      </ol>
      *  </li>
      *  <li><code>RESOURCEPATH</code>:
      *      <ol>
      *          <li><code>senzing.resource.dir</code> System Property</li>
      *          <li><code>SENZING_RESOURCE_DIR</code> Environment Variable</li>
-     *          <li><code>[senzing-path]/resources</code> (see <code>[senzing-path]</code> below)</li>
+     *          <li><code>[senzing-path]/resources</code>
+     *              (see <code>[senzing-path]</code> below)</li>
      *      </ol>
      *  </li>
      *  <li><code>[senzing-path]</code>:
@@ -191,14 +204,16 @@ public class SzUtilities {
      * 
      * @param uri The database URI to use for the settings.
      * 
-     * @return The basic Senzing settings created from the specified database URI.
-     * 
+     * @return The basic Senzing settings created from the specified database
+     *             URI.
+     *
      * @throws NullPointerException If the specified URI is <code>null</code>.
      * @throws IllegalArgumentException If the specified URI does not begin with
      *                                  a legal prefix for a Senzing repository.
-     * @throws IllegalStateException If the Senzing installation cannot be found.
+     * @throws IllegalStateException If the Senzing installation cannot be
+     *                               found.
      */
-    public static String basicSettingsFromDatabaseUri(String uri) 
+    public static String basicSettingsFromDatabaseUri(String uri)
         throws IllegalArgumentException, IllegalStateException
     {
         Objects.requireNonNull(uri, "The database URI cannot be null");
@@ -206,11 +221,12 @@ public class SzUtilities {
     }
 
     /**
-     * Equivalent to {@link #basicSettingsFromDatabaseUri(String)} with the additional 
-     * parameter to specify the Base-64 Senzing License {@link String}.  This will produce
-     * the settings in the same way as {@link #basicSettingsFromDatabaseUri(String)}, 
-     * except that if the specified Base-64 Senzing license is <b>not</b> <code>null</code>
-     * then it will add the <code>LICENSESTRINGBASE64</code> property as follows:
+     * Equivalent to {@link #basicSettingsFromDatabaseUri(String)} with the
+     * additional parameter to specify the Base-64 Senzing License
+     * {@link String}.  This will produce the settings in the same way as
+     * {@link #basicSettingsFromDatabaseUri(String)}, except that if the
+     * specified Base-64 Senzing license is <b>not</b> <code>null</code> then it
+     * will add the <code>LICENSESTRINGBASE64</code> property as follows:
      * <pre>
      *      {
      *          "PIPELINE": {
@@ -228,16 +244,17 @@ public class SzUtilities {
      * @param uri The database URI to use for the settings.
      * 
      * @param licenseBase64 The optional base-64 encoded Senzing license string,
-     *                      or <code>null</code> if <code>LICENSESTRINGBASE64</code>
-     *                      is to be excluded.
+     *                      or <code>null</code> if
+     *                      <code>LICENSESTRINGBASE64</code> is to be excluded.
      * 
-     * @return The basic Senzing settings created from the specified database URI
-     *         and base-64 encoded license string.
-     * 
+     * @return The basic Senzing settings created from the specified database
+     *             URI and base-64 encoded license string.
+     *
      * @throws NullPointerException If the specified URI is <code>null</code>.
      * @throws IllegalArgumentException If the specified URI does not begin with
      *                                  a legal prefix for a Senzing repository.
-     * @throws IllegalStateException If the Senzing installation cannot be found.
+     * @throws IllegalStateException If the Senzing installation cannot be
+     *                               found.
      */
     public static String basicSettingsFromDatabaseUri(String    uri,
                                                       String    licenseBase64)
@@ -248,11 +265,12 @@ public class SzUtilities {
     }
 
     /**
-     * Equivalent to {@link #basicSettingsFromDatabaseUri(String)} with the additional 
-     * parameter to specify the Senzing license file.  This will produce the settings in
-     * the same way as {@link #basicSettingsFromDatabaseUri(String)}, except that if the
-     * specified Senzing license file is <b>not</b> <code>null</code> then it will add 
-     * the <code>LICENSEFILE</code> property as follows:
+     * Equivalent to {@link #basicSettingsFromDatabaseUri(String)} with the
+     * additional parameter to specify the Senzing license file.  This will
+     * produce the settings in the same way as
+     * {@link #basicSettingsFromDatabaseUri(String)}, except that if the
+     * specified Senzing license file is <b>not</b> <code>null</code> then it
+     * will add the <code>LICENSEFILE</code> property as follows:
      * <pre>
      *      {
      *          "PIPELINE": {
@@ -269,16 +287,18 @@ public class SzUtilities {
      * 
      * @param uri The database URI to use for the settings.
      * 
-     * @param licenseFile The optional Senzing license file, or <code>null</code> if
-     *                    <code>LICENSEFILE</code> is to be excluded.
+     * @param licenseFile The optional Senzing license file, or
+     *                    <code>null</code> if <code>LICENSEFILE</code> is to be
+     *                    excluded.
      * 
-     * @return The basic Senzing settings created from the specified database URI
-     *         and base-64 encoded license string.
-     * 
+     * @return The basic Senzing settings created from the specified database
+     *             URI and base-64 encoded license string.
+     *
      * @throws NullPointerException If the specified URI is <code>null</code>.
      * @throws IllegalArgumentException If the specified URI does not begin with
      *                                  a legal prefix for a Senzing repository.
-     * @throws IllegalStateException If the Senzing installation cannot be found.
+     * @throws IllegalStateException If the Senzing installation cannot be
+     *                               found.
      */
     public static String basicSettingsFromDatabaseUri(String    uri,
                                                       File      licenseFile)
@@ -296,21 +316,23 @@ public class SzUtilities {
      * @param uri The database URI to use for the settings.
      * 
      * @param licenseBase64 The optional base-64 encoded Senzing license string,
-     *                      or <code>null</code> if <code>LICENSESTRINGBASE64</code>
-     *                      is to be excluded.
+     *                      or <code>null</code> if
+     *                      <code>LICENSESTRINGBASE64</code> is to be excluded.
      * 
-     * @param licenseFile The optional Senzing license file, or <code>null</code> if
-     *                    <code>LICENSEFILE</code> is to be excluded.
+     * @param licenseFile The optional Senzing license file, or
+     *                    <code>null</code> if <code>LICENSEFILE</code> is to be
+     *                    excluded.
      * 
-     * @return The basic Senzing settings created from the specified database URI
-     *         and base-64 encoded license string, or bootstrap settings if the
-     *         URI is <code>null</code>.
+     * @return The basic Senzing settings created from the specified database
+     *             URI and base-64 encoded license string, or bootstrap settings
+     *             if the URI is <code>null</code>.
      *
-     * @throws IllegalArgumentException If the specified URI is non-null and does
-     *                                  not begin with a legal prefix for a
+     * @throws IllegalArgumentException If the specified URI is non-null and
+     *                                  does not begin with a legal prefix for a
      *                                  Senzing repository, or if both a license
      *                                  file and base-64 license are specified.
-     * @throws IllegalStateException If the Senzing installation cannot be found.
+     * @throws IllegalStateException If the Senzing installation cannot be
+     *                               found.
      */
     private static String basicSettingsFromDatabaseUri(String   uri,
                                                        String   licenseBase64,
@@ -320,29 +342,35 @@ public class SzUtilities {
             if (uri != null) {
                 if (!startsWithDatabaseUriPrefix(uri)) {
                     throw new IllegalArgumentException(
-                        "The specified database URI does not appear to be legal: " 
+                        "The specified database URI does not appear to be"
+                        + " legal: "
                         + uri);
                 }
             }
             if (licenseBase64 != null && licenseFile != null) {
                 throw new IllegalArgumentException(
-                    "Cannot specify both the license file and the base-64-encoded license");
+                    "Cannot specify both the license file and the "
+                    + "base-64-encoded license");
             }
 
             JsonObjectBuilder mainBuilder = Json.createObjectBuilder();
             JsonObjectBuilder pipelineBuilder = Json.createObjectBuilder();
-            JsonObjectBuilder sqlBuilder = (uri == null) ? null
-                                                         : Json.createObjectBuilder();
+            JsonObjectBuilder sqlBuilder
+                = (uri == null) ? null : Json.createObjectBuilder();
             
             SzInstallLocations locations = SzInstallLocations.findLocations();
             
-            pipelineBuilder.add("SUPPORTPATH", locations.getSupportDirectory().getCanonicalPath());
-            pipelineBuilder.add("CONFIGPATH", locations.getConfigDirectory().getCanonicalPath());
-            pipelineBuilder.add("RESOURCEPATH", locations.getResourceDirectory().getCanonicalPath());
+            pipelineBuilder.add("SUPPORTPATH",
+                locations.getSupportDirectory().getCanonicalPath());
+            pipelineBuilder.add("CONFIGPATH",
+                locations.getConfigDirectory().getCanonicalPath());
+            pipelineBuilder.add("RESOURCEPATH",
+                locations.getResourceDirectory().getCanonicalPath());
             if (licenseBase64 != null) {
                 pipelineBuilder.add("LICENSESTRINGBASE64", licenseBase64);
             } else if (licenseFile != null) {
-                pipelineBuilder.add("LICENSEFILE", licenseFile.getCanonicalPath());
+                pipelineBuilder.add("LICENSEFILE",
+                    licenseFile.getCanonicalPath());
             }
             mainBuilder.add("PIPELINE", pipelineBuilder);
             if (sqlBuilder != null) {
@@ -354,24 +382,26 @@ public class SzUtilities {
             return JsonUtilities.toJsonText(jsonObject);
         } catch (IOException e) {
             throw new IllegalStateException(
-                "Should not fail in getting canonical path from install locations files.", e);
+                "Should not fail in getting canonical path from install "
+                + "locations files.", e);
         }
     }
 
     /**
-     * Ensures the Senzing schema is setup on the SQLite database accessible
-     * via the specified {@link Connection}.  This method will attempt
-     * to find the SQLite schema file at the following path: 
+     * Ensures the Senzing schema is setup on the SQLite database accessible via
+     * the specified {@link Connection}. This method will attempt to find the
+     * SQLite schema file at the following path:
      * <code>[resource-path]/schema/szcore-schema-sqlite-create.sql</code>
      * directory.
      * <p>
-     * The <code>[resource-path]</code> from the Senzing installation is 
-     * located using Java system properties, environment variables and
-     * defaults for the operating system with the following order of precedence:
+     * The <code>[resource-path]</code> from the Senzing installation is located
+     * using Java system properties, environment variables and defaults for the
+     * operating system with the following order of precedence:
      * <ol>
      *     <li><code>senzing.resource.dir</code> System Property</li>
      *     <li><code>SENZING_RESOURCE_DIR</code> Environment Variable</li>
-     *     <li><code>[senzing-path]/resources</code> (see <code>[senzing-path]</code> below)</li>
+     *     <li><code>[senzing-path]/resources</code>
+     *         (see <code>[senzing-path]</code> below)</li>
      * </ol>
      * Where <code>[senzing-path]</code> is determined as:
      * <ol>
@@ -386,9 +416,10 @@ public class SzUtilities {
      *     </li>
      * </ol>
      * <p>
-     * <b>NOTE:</b> On Linux operating systems the <code>resources/schema</code>
-     * files are only present if you have installed the <code>senzingsdk-setup</code>
-     * package.  They are not available with the <code>senzingsdk-runtime</code>.
+     * <b>NOTE:</b> On Linux operating systems the
+     * <code>resources/schema</code> files are only present if you have
+     * installed the <code>senzingsdk-setup</code> package.  They are not
+     * available with the <code>senzingsdk-runtime</code>.
      * 
      * <p>
      * <b>ALSO NOTE:</b> If this method determines that the Senzing SQLite 
@@ -397,8 +428,9 @@ public class SzUtilities {
      * 
      * @param conn The non-null {@link Connection} to a SQLite database.
      * 
-     * @return <code>true</code> if the schema was created, or <code>false</code>
-     *         if the schema was detected and no changes were made.
+     * @return <code>true</code> if the schema was created, or
+     *                           <code>false</code> if the schema was detected
+     *                           and no changes were made.
      * 
      * @throws SQLException If a JDBC failure occurs.
      * 
@@ -410,19 +442,20 @@ public class SzUtilities {
      * 
      * @throws IllegalStateException If the schema file cannot be found.
      */
-    public static boolean ensureSenzingSQLiteSchema(Connection conn) 
+    public static boolean ensureSenzingSQLiteSchema(Connection conn)
         throws SQLException, IllegalStateException
     {
         Objects.requireNonNull(conn, "The connection cannot be null");
         DatabaseType type = DatabaseType.detect(conn);
         if (type != DatabaseType.SQLITE) {
             throw new IllegalArgumentException(
-                "The specified Connection is not a SQLite connection: " 
+                "The specified Connection is not a SQLite connection: "
                 + type);
         }
 
         // first find the file
-        SzInstallLocations installLocations = SzInstallLocations.findLocations();
+        SzInstallLocations installLocations
+            = SzInstallLocations.findLocations();
         
         // get the resource directory
         File resourceDir = installLocations.getResourceDirectory();
@@ -470,16 +503,20 @@ public class SzUtilities {
                 // check if this is a CREATE TABLE statement
                 if (sql.toUpperCase().startsWith("CREATE TABLE ")) {
                     // get the suffix and find the table name
-                    String suffix = sql.substring("CREATE TABLE ".length()).trim();
+                    String suffix
+                        = sql.substring("CREATE TABLE ".length()).trim();
                     int space = suffix.indexOf(" ");
                     if (space < 0) {
                         throw new IllegalStateException(
-                            "Failed to parse schema file at line (" + lineNumber + "): "
+                            "Failed to parse schema file at line ("
+                            + lineNumber + "): "
                             + sql);
                     }
-                    String tableName = suffix.substring(0, space).toUpperCase();
+                    String tableName
+                        = suffix.substring(0, space).toUpperCase();
 
-                    // if the table already exists then cowardly refuse to proceed
+                    // if the table already exists then
+                    // cowardly refuse to proceed
                     if (knownTables.contains(tableName)) {
                         return false;
                     }

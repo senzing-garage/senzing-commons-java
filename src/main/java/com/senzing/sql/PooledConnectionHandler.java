@@ -13,12 +13,13 @@ import java.io.StringWriter;
 import java.io.PrintWriter;
 
 /**
- * Provides an {@link InvocationHandler} that prevents the returning the
- * backing JDBC {@link Connection} and ensures closing of the proxied
+ * Provides an {@link InvocationHandler} that prevents the returning the backing
+ * JDBC {@link Connection} and ensures closing of the proxied
  * {@link Connection} does not actually close the backing JDBC {@link
  * Connection}, but releases it back to the {@link ConnectionPool}.
  */
-class PooledConnectionHandler implements InvocationHandler {
+class PooledConnectionHandler implements InvocationHandler
+{
     /**
      * Constant for converting between nanoseconds and milliseconds.
      */
@@ -81,7 +82,8 @@ class PooledConnectionHandler implements InvocationHandler {
      * @param backingConnection The backing {@link Connection}.
      */
     PooledConnectionHandler(ConnectionPool pool,
-            Connection backingConnection) {
+            Connection backingConnection)
+    {
         Class[] interfaces = { Connection.class };
 
         this.createdTimeNanos = System.nanoTime();
@@ -100,12 +102,13 @@ class PooledConnectionHandler implements InvocationHandler {
      * from the {@link Connection} that might provide a way to return the
      * backing {@link Connection}.
      *
-     * @param parentHandler The {@link PooledConnectionHandler} that is the parent
-     *                      for this one.
+     * @param parentHandler The {@link PooledConnectionHandler} that is the
+     *                      parent for this one.
      * @param backingObject The backing JDBC {@link Object} for this handler.
      */
     private PooledConnectionHandler(PooledConnectionHandler parentHandler,
-            Object backingObject) {
+            Object backingObject)
+    {
         Class[] interfaces = { Connection.class };
 
         this.createdTimeNanos = System.nanoTime();
@@ -123,7 +126,8 @@ class PooledConnectionHandler implements InvocationHandler {
      *
      * @return The backing {@link ConnectionPool} for this instance.
      */
-    ConnectionPool getPool() {
+    ConnectionPool getPool()
+    {
         return this.pool;
     }
 
@@ -132,9 +136,10 @@ class PooledConnectionHandler implements InvocationHandler {
      * instance was constructed.
      *
      * @return The proxied {@link Connection} that was created when this
-     *         instance was constructed.
+     *             instance was constructed.
      */
-    Connection getProxiedConnection() {
+    Connection getProxiedConnection()
+    {
         return this.proxiedConnection;
     }
 
@@ -166,7 +171,7 @@ class PooledConnectionHandler implements InvocationHandler {
      * {@link Connection}, but it is not yet closed, it returns the time so far.
      *
      * @return The {@link Connection} lease time if known, otherwise
-     *         <code>null</code>.
+     *             <code>null</code>.
      */
     synchronized Long getLeaseTime() {
         // check if closing has been recorded
@@ -198,7 +203,8 @@ class PooledConnectionHandler implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args)
-            throws Throwable {
+            throws Throwable
+    {
         // initialize the result
         Object result = null;
 
@@ -211,10 +217,10 @@ class PooledConnectionHandler implements InvocationHandler {
             switch (methodName) {
                 case "close":
                     // check if already closed
-                    if (!open)
-                        return null;
+                    if (!open) return null;
 
-                    // release the connection back to the pool -- noop if already released
+                    // release the connection back to the
+                    // pool -- noop if already released
                     this.pool.release(this.proxiedConnection);
                     
                     // update the state
@@ -260,7 +266,8 @@ class PooledConnectionHandler implements InvocationHandler {
         if (returnType.isInterface()
                 && "java.sql".equals(returnType.getPackageName())) {
             // create a sub-handler to handle the proxying the result
-            InvocationHandler subHandler = new PooledConnectionHandler(this, result);
+            InvocationHandler subHandler
+                = new PooledConnectionHandler(this, result);
 
             // create the array of interfaces to proxy
             Class[] interfaces = { method.getReturnType() };
@@ -277,11 +284,14 @@ class PooledConnectionHandler implements InvocationHandler {
     /**
      * Gets diagnostic info for the
      */
-    public String getDiagnosticInfo() {
-        long duration = (System.nanoTime() - this.createdTimeNanos) / ONE_MILLION;
+    public String getDiagnosticInfo()
+    {
+        long duration
+            = (System.nanoTime() - this.createdTimeNanos) / ONE_MILLION;
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
 
+        // CSOFF
         pw.println("-----------------------------------------------------------");
         pw.println("LEASE DURATION: " + duration + " nanoseconds");
         pw.println();
@@ -289,7 +299,9 @@ class PooledConnectionHandler implements InvocationHandler {
         pw.println(LoggingUtilities.formatStackTrace(this.stackTrace));
         pw.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         pw.println("LEASE-HOLDER CURRENT STACK TRACE: ");
-        pw.println(LoggingUtilities.formatStackTrace(this.thread.getStackTrace()));
+        pw.println(LoggingUtilities.formatStackTrace(
+                this.thread.getStackTrace()));
+        // CSON
         return sw.toString();
     }
 }

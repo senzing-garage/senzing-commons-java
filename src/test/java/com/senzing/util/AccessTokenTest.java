@@ -15,9 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class AccessTokenTest {
+public class AccessTokenTest
+{
   @Test
-  public void getThreadAccessTokenTest() {
+  public void getThreadAccessTokenTest()
+  {
     try {
       Map<Long, AccessToken>  accessTokenMap  = new LinkedHashMap<>();
       Set<Long>               failureSet      = new LinkedHashSet<>();
@@ -69,7 +71,8 @@ public class AccessTokenTest {
   }
 
   @Test
-  public void claimThreadAccessTokenTest() {
+  public void claimThreadAccessTokenTest()
+  {
     try {
       Set<AccessToken>        tokenSet        = new LinkedHashSet<>();
       Map<Long, AccessToken>  accessTokenMap  = new LinkedHashMap<>();

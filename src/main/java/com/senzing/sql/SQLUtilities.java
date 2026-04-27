@@ -8,17 +8,20 @@ import java.util.TimeZone;
 /**
  * Utilities for using the JDBC API to work with SQL databases.
  */
-public class SQLUtilities {
+public class SQLUtilities
+{
     /**
-     * A {@link Calendar} that can be used for retrieving timestamps
-     * from the database.
+     * A {@link Calendar} that can be used for retrieving timestamps from the
+     * database.
      */
-    public static final Calendar UTC_CALENDAR = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    public static final Calendar UTC_CALENDAR
+        = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
     /**
      * Private constructor.
      */
-    private SQLUtilities() {
+    private SQLUtilities()
+    {
         // do nothing
     }
 
@@ -32,15 +35,18 @@ public class SQLUtilities {
      * @param conn The {@link Connection} to roll back, or <code>null</code> if
      *             the connection has not yet been obtained.
      */
-    public static void rollback(Connection conn) {
-        if (conn == null)
-            return;
+    public static void rollback(Connection conn)
+    {
+        if (conn == null) return;
         try {
             conn.rollback();
         } catch (SQLException e) {
             System.err.println();
+            // CSOFF
             System.err.println("***************************************************");
-            System.err.println("Exception caught when rolling back transaction:");
+            // CSON
+            System.err.println(
+                "Exception caught when rolling back transaction:");
             e.printStackTrace();
         }
     }
@@ -58,7 +64,8 @@ public class SQLUtilities {
      * @param conn The {@link Connection} to close.
      * @return Always returns <code>null</code>.
      */
-    public static Connection close(Connection conn) {
+    public static Connection close(Connection conn)
+    {
         // check if null
         if (conn == null) {
             return null;
@@ -97,12 +104,11 @@ public class SQLUtilities {
      * @param stmt The {@link Statement} to close.
      * @return Always returns <code>null</code>.
      */
-    public static Statement close(Statement stmt) {
-        if (stmt == null)
-            return null;
+    public static Statement close(Statement stmt)
+    {
+        if (stmt == null) return null;
         try {
-            if (stmt.isClosed())
-                return null;
+            if (stmt.isClosed()) return null;
             stmt.close();
         } catch (Exception e) {
             // ignore
@@ -111,10 +117,10 @@ public class SQLUtilities {
     }
 
     /**
-     * Closes the specified {@link PreparedStatement} catches and ignores
-     * any {@link Exception} and returns <code>null</code> for
-     * easy semantics in closing JDBC prepared statements. If the specified
-     * parameter is <code>null</code> then this method does nothing.
+     * Closes the specified {@link PreparedStatement} catches and ignores any
+     * {@link Exception} and returns <code>null</code> for easy semantics in
+     * closing JDBC prepared statements. If the specified parameter is
+     * <code>null</code> then this method does nothing.
      *
      * <pre>
      * ps = SQLUtilities.close(ps);
@@ -123,12 +129,11 @@ public class SQLUtilities {
      * @param ps The {@link PreparedStatement} to close.
      * @return Always returns <code>null</code>.
      */
-    public static PreparedStatement close(PreparedStatement ps) {
-        if (ps == null)
-            return null;
+    public static PreparedStatement close(PreparedStatement ps)
+    {
+        if (ps == null) return null;
         try {
-            if (ps.isClosed())
-                return null;
+            if (ps.isClosed()) return null;
             ps.close();
         } catch (Exception e) {
             // ignore
@@ -137,10 +142,10 @@ public class SQLUtilities {
     }
 
     /**
-     * Closes the specified {@link CallableStatement} catches and ignores
-     * any {@link Exception} and returns <code>null</code> for
-     * easy semantics in closing JDBC callable statements. If the specified
-     * parameter is <code>null</code> then this method does nothing.
+     * Closes the specified {@link CallableStatement} catches and ignores any
+     * {@link Exception} and returns <code>null</code> for easy semantics in
+     * closing JDBC callable statements. If the specified parameter is
+     * <code>null</code> then this method does nothing.
      *
      * <pre>
      * cs = SQLUtilities.close(cs);
@@ -149,12 +154,11 @@ public class SQLUtilities {
      * @param cs The {@link CallableStatement} to close.
      * @return Always returns <code>null</code>.
      */
-    public static CallableStatement close(CallableStatement cs) {
-        if (cs == null)
-            return null;
+    public static CallableStatement close(CallableStatement cs)
+    {
+        if (cs == null) return null;
         try {
-            if (cs.isClosed())
-                return null;
+            if (cs.isClosed()) return null;
             cs.close();
         } catch (Exception e) {
             // ignore
@@ -175,12 +179,11 @@ public class SQLUtilities {
      * @param rs The {@link ResultSet} to close.
      * @return Always returns <code>null</code>.
      */
-    public static ResultSet close(ResultSet rs) {
-        if (rs == null)
-            return null;
+    public static ResultSet close(ResultSet rs)
+    {
+        if (rs == null) return null;
         try {
-            if (rs.isClosed())
-                return null;
+            if (rs.isClosed()) return null;
             rs.close();
         } catch (Exception e) {
             // ignore
@@ -189,320 +192,322 @@ public class SQLUtilities {
     }
 
     /**
-     * Gets the {@link BigDecimal} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link BigDecimal} value from the specified {@link ResultSet} at
+     * the specified column index. If the value {@linkplain ResultSet#wasNull()
+     * was null} then <code>null</code> is returned, otherwise the value
+     * obtained is returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link BigDecimal} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static BigDecimal getBigDecimal(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         BigDecimal result = rs.getBigDecimal(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Boolean} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Boolean} value from the specified {@link ResultSet} at
+     * the specified column index. If the value {@linkplain ResultSet#wasNull()
+     * was null} then <code>null</code> is returned, otherwise the value
+     * obtained is returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Boolean} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Boolean getBoolean(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         boolean result = rs.getBoolean(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Byte} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Byte} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Byte} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Byte getByte(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         byte result = rs.getByte(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Date} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Date} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Date} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Date getDate(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         Date result = rs.getDate(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Date} value from the specified {@link ResultSet}
-     * at the specified column index using the specified {@link Calendar}.
-     * If the value {@linkplain ResultSet#wasNull() was null} then
+     * Gets the {@link Date} value from the specified {@link ResultSet} at the
+     * specified column index using the specified {@link Calendar}. If the value
+     * {@linkplain ResultSet#wasNull() was null} then
      * <code>null</code> is returned, otherwise the value obtained is returned.
      *
      * @param rs       The {@link ResultSet} to get the value from.
      * @param index    The column index for the value.
-     * @param calendar The {@link Calendar} to use for creating the {@link Date}.
+     * @param calendar The {@link Calendar} to use for creating the {@link
+     *                 Date}.
      *
      * @return The {@link Date} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Date getDate(ResultSet rs, int index, Calendar calendar)
-            throws SQLException {
+            throws SQLException
+    {
         Date result = rs.getDate(index, calendar);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Double} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Double} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Double} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Double getDouble(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         double result = rs.getDouble(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Float} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Float} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Float} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Float getFloat(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         float result = rs.getFloat(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Integer} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Integer} value from the specified {@link ResultSet} at
+     * the specified column index. If the value {@linkplain ResultSet#wasNull()
+     * was null} then <code>null</code> is returned, otherwise the value
+     * obtained is returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Integer} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Integer getInt(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         int result = rs.getInt(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Long} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Long} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Long} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Long getLong(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         long result = rs.getLong(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Short} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Short} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Short} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Short getShort(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         short result = rs.getShort(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link String} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link String} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link String} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static String getString(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         String result = rs.getString(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Time} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Time} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Time} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Time getTime(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         Time result = rs.getTime(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Time} value from the specified {@link ResultSet}
-     * at the specified column index using the specified {@link Calendar}. If
-     * the value {@linkplain ResultSet#wasNull() was null} then <code>null</code>
-     * is returned, otherwise the value obtained is returned.
+     * Gets the {@link Time} value from the specified {@link ResultSet} at the
+     * specified column index using the specified {@link Calendar}. If the value
+     * {@linkplain ResultSet#wasNull() was null} then <code>null</code> is
+     * returned, otherwise the value obtained is returned.
      *
      * @param rs       The {@link ResultSet} to get the value from.
      * @param index    The column index for the value.
-     * @param calendar The {@link Calendar} to use for creating the {@link Time}.
+     * @param calendar The {@link Calendar} to use for creating the {@link
+     *                 Time}.
      *
      * @return The {@link Time} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Time getTime(ResultSet rs, int index, Calendar calendar)
-            throws SQLException {
+            throws SQLException
+    {
         Time result = rs.getTime(index, calendar);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Timestamp} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Timestamp} value from the specified {@link ResultSet} at
+     * the specified column index. If the value {@linkplain ResultSet#wasNull()
+     * was null} then <code>null</code> is returned, otherwise the value
+     * obtained is returned.
      *
      * @param rs    The {@link ResultSet} to get the value from.
      * @param index The column index for the value.
      *
      * @return The {@link Timestamp} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Timestamp getTimestamp(ResultSet rs, int index)
-            throws SQLException {
+            throws SQLException
+    {
         Timestamp result = rs.getTimestamp(index);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Timestamp} value from the specified {@link ResultSet}
-     * at the specified column index using the specified {@link Calendar}. If
-     * the value {@linkplain ResultSet#wasNull() was null} then <code>null</code>
-     * is returned, otherwise the value obtained is returned.
+     * Gets the {@link Timestamp} value from the specified {@link ResultSet} at
+     * the specified column index using the specified {@link Calendar}. If the
+     * value {@linkplain ResultSet#wasNull() was null} then <code>null</code> is
+     * returned, otherwise the value obtained is returned.
      *
      * @param rs       The {@link ResultSet} to get the value from.
      * @param index    The column index for the value.
@@ -510,335 +515,341 @@ public class SQLUtilities {
      *                 Timestamp}.
      *
      * @return The {@link Timestamp} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Timestamp getTimestamp(ResultSet rs,
             int index,
             Calendar calendar)
-            throws SQLException {
+            throws SQLException
+    {
         Timestamp result = rs.getTimestamp(index, calendar);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link BigDecimal} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link BigDecimal} value from the specified {@link ResultSet} at
+     * the specified column index. If the value {@linkplain ResultSet#wasNull()
+     * was null} then <code>null</code> is returned, otherwise the value
+     * obtained is returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link BigDecimal} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static BigDecimal getBigDecimal(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         BigDecimal result = rs.getBigDecimal(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Boolean} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Boolean} value from the specified {@link ResultSet} at
+     * the specified column index. If the value {@linkplain ResultSet#wasNull()
+     * was null} then <code>null</code> is returned, otherwise the value
+     * obtained is returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Boolean} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Boolean getBoolean(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         boolean result = rs.getBoolean(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Byte} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Byte} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Byte} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Byte getByte(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         byte result = rs.getByte(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Date} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Date} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Date} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Date getDate(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         Date result = rs.getDate(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Date} value from the specified {@link ResultSet}
-     * at the specified column index using the specified {@link Calendar}.
-     * If the value {@linkplain ResultSet#wasNull() was null} then
+     * Gets the {@link Date} value from the specified {@link ResultSet} at the
+     * specified column index using the specified {@link Calendar}. If the value
+     * {@linkplain ResultSet#wasNull() was null} then
      * <code>null</code> is returned, otherwise the value obtained is returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
-     * @param calendar   The {@link Calendar} to use for creating the {@link Date}.
+     * @param calendar   The {@link Calendar} to use for creating the {@link
+     *                   Date}.
      *
      * @return The {@link Date} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
-    public static Date getDate(ResultSet rs, String columnName, Calendar calendar)
-            throws SQLException {
+    public static Date getDate(ResultSet rs,
+                               String    columnName,
+                               Calendar  calendar)
+            throws SQLException
+    {
         Date result = rs.getDate(columnName, calendar);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Double} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Double} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Double} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Double getDouble(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         double result = rs.getDouble(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Float} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Float} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Float} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Float getFloat(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         float result = rs.getFloat(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Integer} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Integer} value from the specified {@link ResultSet} at
+     * the specified column index. If the value {@linkplain ResultSet#wasNull()
+     * was null} then <code>null</code> is returned, otherwise the value
+     * obtained is returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Integer} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Integer getInt(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         int result = rs.getInt(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Long} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Long} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Long} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Long getLong(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         long result = rs.getLong(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Short} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Short} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Short} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Short getShort(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         short result = rs.getShort(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link String} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link String} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link String} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static String getString(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         String result = rs.getString(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Time} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Time} value from the specified {@link ResultSet} at the
+     * specified column index. If the value {@linkplain ResultSet#wasNull() was
+     * null} then <code>null</code> is returned, otherwise the value obtained is
+     * returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Time} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Time getTime(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         Time result = rs.getTime(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Time} value from the specified {@link ResultSet}
-     * at the specified column index using the specified {@link Calendar}. If
-     * the value {@linkplain ResultSet#wasNull() was null} then <code>null</code>
-     * is returned, otherwise the value obtained is returned.
+     * Gets the {@link Time} value from the specified {@link ResultSet} at the
+     * specified column index using the specified {@link Calendar}. If the value
+     * {@linkplain ResultSet#wasNull() was null} then <code>null</code> is
+     * returned, otherwise the value obtained is returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
-     * @param calendar   The {@link Calendar} to use for creating the {@link Time}.
+     * @param calendar   The {@link Calendar} to use for creating the {@link
+     *                   Time}.
      *
      * @return The {@link Time} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
-    public static Time getTime(ResultSet rs, String columnName, Calendar calendar)
-            throws SQLException {
+    public static Time getTime(ResultSet rs,
+                               String    columnName,
+                               Calendar  calendar)
+            throws SQLException
+    {
         Time result = rs.getTime(columnName, calendar);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Timestamp} value from the specified {@link ResultSet}
-     * at the specified column index. If the value {@linkplain
-     * ResultSet#wasNull() was null} then <code>null</code> is returned,
-     * otherwise the value obtained is returned.
+     * Gets the {@link Timestamp} value from the specified {@link ResultSet} at
+     * the specified column index. If the value {@linkplain ResultSet#wasNull()
+     * was null} then <code>null</code> is returned, otherwise the value
+     * obtained is returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
      *
      * @return The {@link Timestamp} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Timestamp getTimestamp(ResultSet rs, String columnName)
-            throws SQLException {
+            throws SQLException
+    {
         Timestamp result = rs.getTimestamp(columnName);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
     /**
-     * Gets the {@link Timestamp} value from the specified {@link ResultSet}
-     * at the specified column index using the specified {@link Calendar}. If
-     * the value {@linkplain ResultSet#wasNull() was null} then <code>null</code>
-     * is returned, otherwise the value obtained is returned.
+     * Gets the {@link Timestamp} value from the specified {@link ResultSet} at
+     * the specified column index using the specified {@link Calendar}. If the
+     * value {@linkplain ResultSet#wasNull() was null} then <code>null</code> is
+     * returned, otherwise the value obtained is returned.
      *
      * @param rs         The {@link ResultSet} to get the value from.
      * @param columnName The column name for the value.
@@ -846,17 +857,17 @@ public class SQLUtilities {
      *                   Timestamp}.
      *
      * @return The {@link Timestamp} value or <code>null</code> if the value
-     *         {@linkplain ResultSet#wasNull() was null}.
+     *             {@linkplain ResultSet#wasNull() was null}.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
     public static Timestamp getTimestamp(ResultSet rs,
             String columnName,
             Calendar calendar)
-            throws SQLException {
+            throws SQLException
+    {
         Timestamp result = rs.getTimestamp(columnName, calendar);
-        if (rs.wasNull())
-            return null;
+        if (rs.wasNull()) return null;
         return result;
     }
 
@@ -865,12 +876,14 @@ public class SQLUtilities {
      *
      * @param args The command-line arguments.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         try {
             for (String jdbcUrl : args) {
                 Connection conn = DriverManager.getConnection(jdbcUrl);
                 System.out.println(
-                        jdbcUrl + " : " + conn.getMetaData().getDatabaseProductName());
+                        jdbcUrl + " : "
+                                + conn.getMetaData().getDatabaseProductName());
             }
 
         } catch (Exception e) {

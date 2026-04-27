@@ -3,7 +3,8 @@ package com.senzing.cmdline;
 /**
  * Describes the source of a {@link CommandLineValue}.
  */
-public enum CommandLineSource {
+public enum CommandLineSource
+{
   /**
    * The value comes from the default value associated with the option.
    */

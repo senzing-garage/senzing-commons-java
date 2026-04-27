@@ -10,11 +10,13 @@ import static com.senzing.io.IOUtilities.*;
 /**
  * Utilities for working with ZIP files and ZIP-compressed data.
  */
-public class ZipUtilities {
+public class ZipUtilities
+{
   /**
    * Private default constructor.
    */
-  private ZipUtilities() {
+  private ZipUtilities()
+  {
     // do nothing
   }
   
@@ -25,7 +27,8 @@ public class ZipUtilities {
    * @param uncompressedData The byte array containing the uncompressed data.
    * @return The compressed byte array.
    */
-  public static byte[] zip(byte[] uncompressedData) {
+  public static byte[] zip(byte[] uncompressedData)
+  {
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       try (DeflaterOutputStream dos = new DeflaterOutputStream(baos)) {
@@ -46,7 +49,8 @@ public class ZipUtilities {
    * @param compressedData The byte array containing the compressed data.
    * @return The uncompressed byte array.
    */
-  public static byte[] unzip(byte[] compressedData) {
+  public static byte[] unzip(byte[] compressedData)
+  {
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       ByteArrayInputStream bais = new ByteArrayInputStream(compressedData);
@@ -74,7 +78,8 @@ public class ZipUtilities {
    * @param uncompressedData The byte array containing the uncompressed data.
    * @return The compressed data encoded as Base-64.
    */
-  public static String zip64(byte[] uncompressedData) {
+  public static String zip64(byte[] uncompressedData)
+  {
     try {
       byte[] data = zip(uncompressedData);
       return new String(Base64.getEncoder().encode(data), UTF_8);
@@ -93,20 +98,22 @@ public class ZipUtilities {
    *                             the compressed data.
    * @return The uncompressed byte array.
    */
-  public static byte[] unzip64(String compressedBase64Data) {
+  public static byte[] unzip64(String compressedBase64Data)
+  {
     byte[] compressedData = Base64.getDecoder().decode(compressedBase64Data);
     return unzip(compressedData);
   }
 
   /**
    * Compresses the specified text by converting it to UTF-8 bytes, compressing
-   * it with the deflater zlib compression algorithm and encoding the result
-   * in Base-64 encoding.
+   * it with the deflater zlib compression algorithm and encoding the result in
+   * Base-64 encoding.
    *
    * @param uncompressedText The byte array containing the uncompressed data.
    * @return The compressed byte array.
    */
-  public static String zipText64(String uncompressedText) {
+  public static String zipText64(String uncompressedText)
+  {
     try {
       return zip64(uncompressedText.getBytes(UTF_8));
     } catch (UnsupportedEncodingException e) {
@@ -123,10 +130,11 @@ public class ZipUtilities {
    *
    * @param compressedBase64Data The base-64 encoded {@link String} containing
    *                             the compressed data.
-   * @return The uncompressed text reconstructed from the bytes using the
-   *         UTF-8 encoding.
+   * @return The uncompressed text reconstructed from the bytes using the UTF-8
+   *             encoding.
    */
-  public static String unzipText64(String compressedBase64Data) {
+  public static String unzipText64(String compressedBase64Data)
+  {
     try {
       byte[] data = unzip64(compressedBase64Data);
       return new String(data, UTF_8);
@@ -142,7 +150,8 @@ public class ZipUtilities {
    * @param uncompressedData The byte array containing the uncompressed data.
    * @return The compressed byte array.
    */
-  public static byte[] gzip(byte[] uncompressedData) {
+  public static byte[] gzip(byte[] uncompressedData)
+  {
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       try (GZIPOutputStream gzos = new GZIPOutputStream(baos)) {
@@ -162,7 +171,8 @@ public class ZipUtilities {
    * @param compressedData The byte array containing the compressed data.
    * @return The uncompressed byte array.
    */
-  public static byte[] gunzip(byte[] compressedData) {
+  public static byte[] gunzip(byte[] compressedData)
+  {
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       ByteArrayInputStream bais = new ByteArrayInputStream(compressedData);
@@ -170,7 +180,8 @@ public class ZipUtilities {
       try (GZIPInputStream gzis = new GZIPInputStream(bais)) {
         for (int readCount = gzis.read(buffer);
              readCount >= 0;
-             readCount = gzis.read(buffer)) {
+             readCount = gzis.read(buffer))
+             {
           baos.write(buffer, 0, readCount);
         }
       }
@@ -189,7 +200,8 @@ public class ZipUtilities {
    * @param uncompressedData The byte array containing the uncompressed data.
    * @return The compressed data encoded as Base-64.
    */
-  public static String gzip64(byte[] uncompressedData) {
+  public static String gzip64(byte[] uncompressedData)
+  {
     try {
       byte[] data = gzip(uncompressedData);
       return new String(Base64.getEncoder().encode(data), UTF_8);
@@ -207,7 +219,8 @@ public class ZipUtilities {
    *                             the compressed data.
    * @return The uncompressed byte array.
    */
-  public static byte[] gunzip64(String compressedBase64Data) {
+  public static byte[] gunzip64(String compressedBase64Data)
+  {
     byte[] compressedData = Base64.getDecoder().decode(compressedBase64Data);
     return gunzip(compressedData);
   }
@@ -220,7 +233,8 @@ public class ZipUtilities {
    * @param uncompressedText The byte array containing the uncompressed data.
    * @return The compressed byte array.
    */
-  public static String gzipText64(String uncompressedText) {
+  public static String gzipText64(String uncompressedText)
+  {
     try {
       return gzip64(uncompressedText.getBytes(UTF_8));
     } catch (UnsupportedEncodingException e) {
@@ -236,10 +250,11 @@ public class ZipUtilities {
    *
    * @param compressedBase64Data The base-64 encoded {@link String} containing
    *                             the compressed data.
-   * @return The uncompressed text reconstructed from the bytes using the
-   *         UTF-8 encoding.
+   * @return The uncompressed text reconstructed from the bytes using the UTF-8
+   *             encoding.
    */
-  public static String gunzipText64(String compressedBase64Data) {
+  public static String gunzipText64(String compressedBase64Data)
+  {
     try {
       byte[] data = gunzip64(compressedBase64Data);
       return new String(data, UTF_8);
@@ -280,7 +295,8 @@ public class ZipUtilities {
    * @throws IOException If a failure occurs.
    */
   public static void zip(File directoryOrFile, ZipOutputStream targetZipStream)
-      throws IOException {
+      throws IOException
+  {
     String basePath = directoryOrFile.getParentFile().getPath();
     doZip(basePath, directoryOrFile, targetZipStream);
   }
@@ -330,8 +346,7 @@ public class ZipUtilities {
   }
 
   /**
-   * Unzips a ZIP archive and places in the contents in the specified
-   * directory.
+   * Unzips a ZIP archive and places in the contents in the specified directory.
    *
    * @param zipFile The ZIP file to extract.
    * @param targetDirectory The directory to extract the archive to.
@@ -349,8 +364,7 @@ public class ZipUtilities {
   }
 
   /**
-   * Unzips a ZIP archive and places in the contents in the specified
-   * directory.
+   * Unzips a ZIP archive and places in the contents in the specified directory.
    *
    * @param zipStream The ZIP file to extract.
    * @param targetDirectory The directory to extract the archive to.
@@ -392,7 +406,8 @@ public class ZipUtilities {
    *
    * @param args The command-line arguments.
    */
-  public static void main(String[] args) {
+  public static void main(String[] args)
+  {
     try {
       File source = null;
       File target = null;

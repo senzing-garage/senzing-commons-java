@@ -3,7 +3,8 @@ package com.senzing.util;
 /**
  * Identifies the various types of operating systems.
  */
-public enum OperatingSystemFamily {
+public enum OperatingSystemFamily
+{
   /**
    * Microsoft Windows operating systems.
    */
@@ -24,7 +25,8 @@ public enum OperatingSystemFamily {
    *
    * @return <code>true</code> if windows, otherwise <code>false</code>.
    */
-  public boolean isWindows() {
+  public boolean isWindows()
+  {
     return (this == WINDOWS);
   }
 
@@ -33,7 +35,8 @@ public enum OperatingSystemFamily {
    *
    * @return <code>true</code> if macOS, otherwise <code>false</code>.
    */
-  public boolean isMacOS() {
+  public boolean isMacOS()
+  {
     return (this == MAC_OS);
   }
 
@@ -42,7 +45,8 @@ public enum OperatingSystemFamily {
    *
    * @return <code>true</code> if Unix, otherwise <code>false</code>.
    */
-  public boolean isUnix() {
+  public boolean isUnix()
+  {
     return (this == UNIX);
   }
 

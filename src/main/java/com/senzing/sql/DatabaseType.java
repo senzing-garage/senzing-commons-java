@@ -12,7 +12,8 @@ import java.util.TimeZone;
 /**
  * Enumerates some of the common database types.
  */
-public enum DatabaseType {
+public enum DatabaseType
+{
   /**
    * The specific database type is unknown and the best we can do is handle
    * things as generic SQL.
@@ -45,19 +46,19 @@ public enum DatabaseType {
   DB2;
 
   /**
-   * Detects the {@link DatabaseType} from the specified {@link Connection}.
-   * If the specified {@link Connection} is <code>null</code> then
+   * Detects the {@link DatabaseType} from the specified {@link Connection}. If
+   * the specified {@link Connection} is <code>null</code> then
    * <code>null</code> is returned.  If the database {@linkplain
    * DatabaseMetaData#getDatabaseProductName() product name} for the {@link
    * Connection} is not recognized then {@link #GENERIC} is returned.
    *
-   * @param conn The JDBC {@link Connection} from which to detect the
-   *             {@link DatabaseType}.
+   * @param conn The JDBC {@link Connection} from which to detect the {@link
+   *             DatabaseType}.
    *
    * @return The {@link DatabaseType} for the specified {@link Connection} if
-   *         the product name is recognized, {@link #GENERIC} if the product
-   *         name is not recognized, or <code>null</code> if the specified
-   *         {@link Connection} is <code>null</code>.
+   *             the product name is recognized, {@link #GENERIC} if the product
+   *             name is not recognized, or <code>null</code> if the specified
+   *             {@link Connection} is <code>null</code>.
    *
    * @throws SQLException If a JDBC failure occurs.
    */
@@ -87,9 +88,10 @@ public enum DatabaseType {
    * PreparedStatement} for this database type.
    *
    * @return The SQL text for binding a {@link Timestamp} value to a {@link
-   *         PreparedStatement} for this database type.
+   *             PreparedStatement} for this database type.
    */
-  public String getTimestampBindingSQL() {
+  public String getTimestampBindingSQL()
+  {
     switch (this) {
       case SQLITE:
         return "(STRFTIME('%Y-%m-%d %H:%M:%f', ?))";
@@ -150,17 +152,16 @@ public enum DatabaseType {
   }
 
   /**
-   * Provides a generic way to format the equivalent of the SQL 
-   * "least" function for the database type.
+   * Provides a generic way to format the equivalent of the SQL "least" function
+   * for the database type.
    * 
    * @param first The first parameter to the LEAST function.
    * @param second The second parameter to the LEAST function.
-   * @param other The optional other parameters to the LEAST
-   *              function for variable length parameters.
-   * @return The formatted SQL "least" function for the respective
-   *         database. 
-   * @throws NullPointerException If either the first or second
-   *                              parameters is <code>null</code>.
+   * @param other The optional other parameters to the LEAST function for
+   *              variable length parameters.
+   * @return The formatted SQL "least" function for the respective database.
+   * @throws NullPointerException If either the first or second parameters is
+   *                              <code>null</code>.
    */
   public String sqlLeast(String first, String second, String... other) 
     throws NullPointerException
@@ -188,17 +189,16 @@ public enum DatabaseType {
   }
 
     /**
-   * Provides a generic way to format the equivalent of the SQL 
-   * "least" function for the database type.
+   * Provides a generic way to format the equivalent of the SQL "least" function
+   * for the database type.
    * 
    * @param first The first parameter to the LEAST function.
    * @param second The second parameter to the LEAST function.
-   * @param other The optional other parameters to the LEAST
-   *              function for variable length parameters.
-   * @return The formatted SQL "least" function for the respective
-   *         database. 
-   * @throws NullPointerException If either the first or second
-   *                              parameters is <code>null</code>.
+   * @param other The optional other parameters to the LEAST function for
+   *              variable length parameters.
+   * @return The formatted SQL "least" function for the respective database.
+   * @throws NullPointerException If either the first or second parameters is
+   *                              <code>null</code>.
    */
   public String sqlGreatest(String first, String second, String... other) 
     throws NullPointerException

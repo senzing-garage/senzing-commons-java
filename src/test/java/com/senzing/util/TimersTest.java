@@ -18,19 +18,23 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class TimersTest {
+public class TimersTest
+{
   @Test
-  public void testConstructEmpty() {
+  public void testConstructEmpty()
+  {
     Timers timers = new Timers();
   }
 
   @Test
-  public void testConstructWithNullArray() {
+  public void testConstructWithNullArray()
+  {
     Timers timers = new Timers(((String[]) null));
   }
 
   @Test
-  public void testConstructWithNull() {
+  public void testConstructWithNull()
+  {
     try {
       Timers timers = new Timers("Foo", null, "Bar");
       fail("Expected NullPointerException when constructing with null, but "
@@ -45,7 +49,8 @@ public class TimersTest {
   }
 
   @Test
-  public void testConstructWithDuplicates() {
+  public void testConstructWithDuplicates()
+  {
     try {
       Timers timers = new Timers("Foo", "Bar", "Foo", "Phoo");
       fail("Expected an IllegalArgumentException when constructing with "
@@ -61,7 +66,8 @@ public class TimersTest {
     }
   }
 
-  public List<Arguments> provideHasTimerParams() {
+  public List<Arguments> provideHasTimerParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     result.add(arguments(
@@ -81,7 +87,8 @@ public class TimersTest {
   public void hasTimerTest(Timers timer,
       String timerName,
       Boolean expectedResult,
-      Class expectedFailure) {
+      Class expectedFailure)
+  {
     String info = "  timer=[ " + timer
         + " ], timerName=[ " + timerName + " ], expectedResult=[ "
         + expectedResult + " ], expectedFailure=[ "
@@ -109,14 +116,16 @@ public class TimersTest {
     }
   }
 
-  public List<Arguments> providePauseParams() {
+  public List<Arguments> providePauseParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     return result;
   }
 
   @Test
-  public void elapsedTimeTest() {
+  public void elapsedTimeTest()
+  {
     long start = System.nanoTime();
     Timers timers = new Timers("foo");
     try {
@@ -138,7 +147,8 @@ public class TimersTest {
   }
 
   @Test
-  public void usageTest() {
+  public void usageTest()
+  {
     try {
       String[] timerNames = { "foo", "bar", "phoo", "foox" };
       long start = milliTime();
@@ -300,7 +310,8 @@ public class TimersTest {
   }
 
   @Test
-  public void usageTestAll() {
+  public void usageTestAll()
+  {
     try {
       String[] timerNames = { "foo", "bar", "phoo", "foox" };
       long start = milliTime();
@@ -415,7 +426,8 @@ public class TimersTest {
   }
 
   @Test
-  public void testDelayedStart() {
+  public void testDelayedStart()
+  {
     try {
       Set<String> timerSet = Set.of("foo", "bar", "phoo", "foox");
       Set<String> delayedSet = Set.of("phoo", "foox");
@@ -468,7 +480,8 @@ public class TimersTest {
   }
 
   @Test
-  public void testPausedTimings() {
+  public void testPausedTimings()
+  {
     try {
       String[] timerNames = { "foo", "bar", "phoo", "foox" };
       Set<String> pausedTimers = Set.of("foo", "bar");
@@ -504,7 +517,8 @@ public class TimersTest {
     }
   }
 
-  private long milliTime() {
+  private long milliTime()
+  {
     return System.nanoTime() / 1000000L;
   }
 }

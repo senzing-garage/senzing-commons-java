@@ -23,23 +23,28 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 @SuppressWarnings("unchecked")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class ReflectionUtilitiesTest {
-  protected interface TestInterface {
+public class ReflectionUtilitiesTest
+{
+  protected interface TestInterface
+  {
     void test();
   }
 
-  protected class TestClass implements TestInterface {
+  protected class TestClass implements TestInterface
+  {
     private Thread currentThread = null;
     private boolean failed = false;
     private final Object monitor = new Object();
 
-    public boolean isFailed() {
+    public boolean isFailed()
+    {
       synchronized (this.monitor) {
         return this.failed;
       }
     }
 
-    public void test() {
+    public void test()
+    {
       Thread thread = Thread.currentThread();
       try {
         // set the current thread if null
@@ -67,7 +72,8 @@ public class ReflectionUtilitiesTest {
   }
 
   @Test
-  public void testSynchronizedProxy() {
+  public void testSynchronizedProxy()
+  {
     try {
       handleTest(true, null);
 
@@ -78,7 +84,8 @@ public class ReflectionUtilitiesTest {
   }
 
   @Test
-  public void testSynchronizedWithMonitorProxy() {
+  public void testSynchronizedWithMonitorProxy()
+  {
     try {
       final Object monitor = new Object();
       handleTest(true, monitor);
@@ -90,7 +97,8 @@ public class ReflectionUtilitiesTest {
   }
 
   @Test
-  public void testUnsynchronizedAccess() {
+  public void testUnsynchronizedAccess()
+  {
     try {
       handleTest(false, null);
 
@@ -100,7 +108,9 @@ public class ReflectionUtilitiesTest {
     }
   }
 
-  private void handleTest(boolean sync, Object monitor) throws Exception {
+  private void handleTest(boolean sync, Object monitor)
+      throws Exception
+  {
     final TestClass     testObject = new TestClass();
     final TestInterface syncObject = (monitor == null)
         ? synchronizedProxy(TestInterface.class, testObject)
@@ -129,7 +139,8 @@ public class ReflectionUtilitiesTest {
     }
   }
 
-  public List<Arguments> getPrimitiveTypeTestParams() {
+  public List<Arguments> getPrimitiveTypeTestParams()
+  {
     List<Arguments> result = new LinkedList<>();
     result.add(arguments(byte.class, byte.class));
     result.add(arguments(short.class, short.class));
@@ -159,7 +170,8 @@ public class ReflectionUtilitiesTest {
     return result;
   }
 
-  public List<Arguments> getPromotedTypeTestParams() {
+  public List<Arguments> getPromotedTypeTestParams()
+  {
     List<Arguments> result = new LinkedList<>();
     result.add(arguments(Byte.class, Byte.class));
     result.add(arguments(Short.class, Short.class));
@@ -191,7 +203,8 @@ public class ReflectionUtilitiesTest {
 
   @ParameterizedTest
   @MethodSource("getPrimitiveTypeTestParams")
-  public void getPrimitiveTypeTest(Class paramType, Class expectedResult) {
+  public void getPrimitiveTypeTest(Class paramType, Class expectedResult)
+  {
     Class result = ReflectionUtilities.getPrimitiveType(paramType);
     assertEquals(expectedResult, result,
                  "Unexpected primitive type for " + paramType);
@@ -199,14 +212,16 @@ public class ReflectionUtilitiesTest {
 
   @ParameterizedTest
   @MethodSource("getPromotedTypeTestParams")
-  public void getPromotedTypeTest(Class paramType, Class expectedResult) {
+  public void getPromotedTypeTest(Class paramType, Class expectedResult)
+  {
     Class result = ReflectionUtilities.getPromotedType(paramType);
     assertEquals(expectedResult, result,
                  "Unexpected promoted type for " + paramType);
   }
 
 
-  public List<Arguments> getConvertPrimitiveParams() {
+  public List<Arguments> getConvertPrimitiveParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     short shortVal = (short) 10;

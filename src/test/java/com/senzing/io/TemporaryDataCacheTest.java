@@ -18,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class TemporaryDataCacheTest {
+public class TemporaryDataCacheTest
+{
   /**
    * The test file
    */
@@ -35,7 +36,9 @@ public class TemporaryDataCacheTest {
   private static final int TEST_FILE_COUNT = 4;
 
   @BeforeAll
-  public void setup() throws IOException {
+  public void setup()
+      throws IOException
+  {
     this.testFiles = new ArrayList<>(TEST_FILE_COUNT);
 
     char[] characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
@@ -66,19 +69,24 @@ public class TemporaryDataCacheTest {
   }
 
   @AfterAll
-  public void teardown() throws IOException {
+  public void teardown()
+      throws IOException
+  {
     for (File file: this.testFiles) {
       file.delete();
     }
   }
 
-  public List<File> getTestFiles() {
+  public List<File> getTestFiles()
+  {
     return this.testFiles;
   }
 
   @ParameterizedTest
   @MethodSource("getTestFiles")
-  public void verifyContentAccurate(File file) throws IOException {
+  public void verifyContentAccurate(File file)
+      throws IOException
+  {
     File tempFile = File.createTempFile("test-file-", ".dat");
     FileInputStream fis = new FileInputStream(file);
     try {
@@ -109,7 +117,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testCustomDirectory() throws IOException {
+  public void testCustomDirectory()
+      throws IOException
+  {
     File    tempFile      = File.createTempFile("TempDataCache-", ".dat");
     String  tempFileName  = tempFile.getName();
     int     length        = tempFileName.length();
@@ -163,7 +173,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testFilePrefix() throws IOException {
+  public void testFilePrefix()
+      throws IOException
+  {
     File    tempFile      = File.createTempFile("TempDataCache-", ".dat");
     String  tempFileName  = tempFile.getName();
     int     length        = tempFileName.length();
@@ -216,7 +228,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testConsuming() throws IOException {
+  public void testConsuming()
+      throws IOException
+  {
     File    tempFile      = File.createTempFile("TempDataCache-", ".dat");
     String  tempFileName  = tempFile.getName();
     int     length        = tempFileName.length();
@@ -281,7 +295,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testAppending() throws IOException {
+  public void testAppending()
+      throws IOException
+  {
     File inputFile = this.testFiles.get(this.testFiles.size() - 1);
     FileInputStream fis = new FileInputStream(inputFile);
     try {
@@ -350,7 +366,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testSplitAppending() throws IOException {
+  public void testSplitAppending()
+      throws IOException
+  {
     PipedInputStream  pis = new PipedInputStream();
     PipedOutputStream pos = new PipedOutputStream(pis);
 
@@ -392,7 +410,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testRepeatedRead() throws IOException {
+  public void testRepeatedRead()
+      throws IOException
+  {
     File inputFile = this.testFiles.get(0);
     int fileSize = (int) inputFile.length();
     FileInputStream fis = new FileInputStream(inputFile);
@@ -438,7 +458,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testRepeatedReadWithConsume() throws IOException {
+  public void testRepeatedReadWithConsume()
+      throws IOException
+  {
     File inputFile = this.testFiles.get(0);
     int fileSize = (int) inputFile.length();
     FileInputStream fis = new FileInputStream(inputFile);
@@ -482,7 +504,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testDeleted() throws IOException {
+  public void testDeleted()
+      throws IOException
+  {
     File  inputFile = this.testFiles.get(this.testFiles.size() - 1);
     int   fileSize  = (int) inputFile.length();
     FileInputStream fis = new FileInputStream(inputFile);

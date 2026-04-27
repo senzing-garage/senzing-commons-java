@@ -19,8 +19,10 @@ import static com.senzing.util.WorkerThreadPool.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class WorkerThreadPoolTest {
-  public List<Arguments> providePoolParams() {
+public class WorkerThreadPoolTest
+{
+  public List<Arguments> providePoolParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     result.add(arguments(((String) null)));
@@ -31,7 +33,8 @@ public class WorkerThreadPoolTest {
 
   @ParameterizedTest
   @MethodSource("providePoolParams")
-  public void testPool(String baseName) {
+  public void testPool(String baseName)
+  {
     WorkerThreadPool pool = null;
     final int POOL_SIZE = 10;
     try {

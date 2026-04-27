@@ -19,10 +19,12 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class SemanticVersionTest {
+public class SemanticVersionTest
+{
 
   @Test
-  public void testNullEquals() {
+  public void testNullEquals()
+  {
     SemanticVersion version = new SemanticVersion("1.0.0");
     boolean result = version.equals(null);
     assertEquals(false, result,
@@ -30,7 +32,8 @@ public class SemanticVersionTest {
   }
 
   @Test
-  public void testCrossTypeEquals() {
+  public void testCrossTypeEquals()
+  {
     SemanticVersion version = new SemanticVersion("1.0.0");
     boolean result = version.equals("1.0.0");
     assertEquals(false, result,
@@ -38,7 +41,8 @@ public class SemanticVersionTest {
                  + "unexpectedly true.");
   }
 
-  public List<Arguments> provideEqualParams() {
+  public List<Arguments> provideEqualParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     Class nullPointer = NullPointerException.class;
@@ -151,7 +155,8 @@ public class SemanticVersionTest {
     }
   }
 
-  public List<Arguments> provideToStringParams() {
+  public List<Arguments> provideToStringParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     Class nullPointer = NullPointerException.class;
@@ -215,7 +220,8 @@ public class SemanticVersionTest {
 
   }
 
-  public List<Arguments> provideCompareParams() {
+  public List<Arguments> provideCompareParams()
+  {
     List<Arguments> result = new LinkedList<>();
 
     Class nullPointer = NullPointerException.class;

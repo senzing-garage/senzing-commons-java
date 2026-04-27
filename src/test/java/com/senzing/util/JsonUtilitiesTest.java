@@ -30,9 +30,11 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 @SuppressWarnings("unchecked")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class JsonUtilitiesTest {
+public class JsonUtilitiesTest
+{
 
-    public List<Arguments> provideGetStringFromObjectParams() {
+    public List<Arguments> provideGetStringFromObjectParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
         job.add("givenName", "John");
@@ -78,7 +80,8 @@ public class JsonUtilitiesTest {
             String key,
             String defaultValue,
             String expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             String result = getString(jsonObject, key, defaultValue);
 
@@ -117,7 +120,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetStringFromArrayParams() {
+    public List<Arguments> provideGetStringFromArrayParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder jab = Json.createArrayBuilder();
         jab.add("John");
@@ -158,7 +162,8 @@ public class JsonUtilitiesTest {
             int index,
             String defaultValue,
             String expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             String result = getString(jsonArray, index, defaultValue);
 
@@ -197,7 +202,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetJsonArrayFromObjectParams() {
+    public List<Arguments> provideGetJsonArrayFromObjectParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder jab = Json.createArrayBuilder();
         jab.add(1).add(2).add(3);
@@ -232,7 +238,8 @@ public class JsonUtilitiesTest {
     public void getJsonArrayFromObjectTest(JsonObject jsonObject,
             String key,
             JsonArray expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             JsonArray result = getJsonArray(jsonObject, key);
 
@@ -261,7 +268,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetJsonArrayFromArrayParams() {
+    public List<Arguments> provideGetJsonArrayFromArrayParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder jab = Json.createArrayBuilder();
         jab.add(1).add(2).add(3);
@@ -293,7 +301,8 @@ public class JsonUtilitiesTest {
     public void getJsonArrayFromArrayTest(JsonArray jsonArray,
             int index,
             JsonArray expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             JsonArray result = getJsonArray(jsonArray, index);
 
@@ -322,7 +331,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetStringsFromObjectParams() {
+    public List<Arguments> provideGetStringsFromObjectParams()
+    {
         List<Arguments> result = new LinkedList<>();
         List<String> stringList = List.of("One", "Two", "Three");
         List<String> numList = List.of("1", "2", "3");
@@ -392,7 +402,8 @@ public class JsonUtilitiesTest {
             String key,
             List<String> defaultValue,
             List<String> expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             List<String> result = getStrings(jsonObject, key, defaultValue);
 
@@ -432,7 +443,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetStringsFromArrayParams() {
+    public List<Arguments> provideGetStringsFromArrayParams()
+    {
         List<Arguments> result = new LinkedList<>();
         List<String> stringList = List.of("One", "Two", "Three");
         List<String> numList = List.of("1", "2", "3");
@@ -496,7 +508,8 @@ public class JsonUtilitiesTest {
             int index,
             List<String> defaultValue,
             List<String> expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             List<String> result = getStrings(jsonArray, index, defaultValue);
 
@@ -536,7 +549,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetIntegerFromObjectParams() {
+    public List<Arguments> provideGetIntegerFromObjectParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
         job.add("text", "ABC");
@@ -592,7 +606,8 @@ public class JsonUtilitiesTest {
             String key,
             Integer defaultValue,
             Integer expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Integer result = getInteger(jsonObject, key, defaultValue);
 
@@ -631,7 +646,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetIntegerFromArrayParams() {
+    public List<Arguments> provideGetIntegerFromArrayParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
         builder.add("ABC"); // 0
@@ -684,7 +700,8 @@ public class JsonUtilitiesTest {
             int index,
             Integer defaultValue,
             Integer expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Integer result = getInteger(jsonArray, index, defaultValue);
 
@@ -723,7 +740,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetLongFromObjectParams() {
+    public List<Arguments> provideGetLongFromObjectParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -780,7 +798,8 @@ public class JsonUtilitiesTest {
             String key,
             Long defaultValue,
             Long expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Long result = getLong(jsonObject, key, defaultValue);
 
@@ -819,7 +838,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetLongFromArrayParams() {
+    public List<Arguments> provideGetLongFromArrayParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
@@ -873,7 +893,8 @@ public class JsonUtilitiesTest {
             int index,
             Long defaultValue,
             Long expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Long result = getLong(jsonArray, index, defaultValue);
 
@@ -912,7 +933,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetDoubleFromObjectParams() {
+    public List<Arguments> provideGetDoubleFromObjectParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -968,7 +990,8 @@ public class JsonUtilitiesTest {
             String key,
             Double defaultValue,
             Double expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Double result = getDouble(jsonObject, key, defaultValue);
 
@@ -1007,7 +1030,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetDoubleFromArrayParams() {
+    public List<Arguments> provideGetDoubleFromArrayParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
@@ -1060,7 +1084,8 @@ public class JsonUtilitiesTest {
             int index,
             Double defaultValue,
             Double expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Double result = getDouble(jsonArray, index, defaultValue);
 
@@ -1099,7 +1124,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetBigDecimalFromObjectParams() {
+    public List<Arguments> provideGetBigDecimalFromObjectParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -1164,7 +1190,8 @@ public class JsonUtilitiesTest {
             String key,
             BigDecimal defaultValue,
             BigDecimal expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             BigDecimal result = getBigDecimal(jsonObject, key, defaultValue);
 
@@ -1203,7 +1230,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetBigDecimalFromArrayParams() {
+    public List<Arguments> provideGetBigDecimalFromArrayParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
@@ -1265,7 +1293,8 @@ public class JsonUtilitiesTest {
             int index,
             BigDecimal defaultValue,
             BigDecimal expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             BigDecimal result = getBigDecimal(jsonArray, index, defaultValue);
 
@@ -1304,7 +1333,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetBigIntegerFromObjectParams() {
+    public List<Arguments> provideGetBigIntegerFromObjectParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -1366,7 +1396,8 @@ public class JsonUtilitiesTest {
             String key,
             BigInteger defaultValue,
             BigInteger expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             BigInteger result = getBigInteger(jsonObject, key, defaultValue);
 
@@ -1405,7 +1436,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetBigIntegerFromArrayParams() {
+    public List<Arguments> provideGetBigIntegerFromArrayParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
@@ -1464,7 +1496,8 @@ public class JsonUtilitiesTest {
             int index,
             BigInteger defaultValue,
             BigInteger expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             BigInteger result = getBigInteger(jsonArray, index, defaultValue);
 
@@ -1503,7 +1536,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetFloatFromObjectParams() {
+    public List<Arguments> provideGetFloatFromObjectParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -1559,7 +1593,8 @@ public class JsonUtilitiesTest {
             String key,
             Float defaultValue,
             Float expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Float result = getFloat(jsonObject, key, defaultValue);
 
@@ -1598,7 +1633,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetFloatFromArrayParams() {
+    public List<Arguments> provideGetFloatFromArrayParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
@@ -1651,7 +1687,8 @@ public class JsonUtilitiesTest {
             int index,
             Float defaultValue,
             Float expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Float result = getFloat(jsonArray, index, defaultValue);
 
@@ -1690,7 +1727,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetBooleanFromObjectParams() {
+    public List<Arguments> provideGetBooleanFromObjectParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -1746,7 +1784,8 @@ public class JsonUtilitiesTest {
             String key,
             Boolean defaultValue,
             Boolean expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Boolean result = getBoolean(jsonObject, key, defaultValue);
 
@@ -1785,7 +1824,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetBooleanFromArrayParams() {
+    public List<Arguments> provideGetBooleanFromArrayParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
@@ -1835,7 +1875,8 @@ public class JsonUtilitiesTest {
             int index,
             Boolean defaultValue,
             Boolean expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             Boolean result = getBoolean(jsonArray, index, defaultValue);
 
@@ -1874,7 +1915,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetJsonValueFromObjectParams() {
+    public List<Arguments> provideGetJsonValueFromObjectParams()
+    {
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -1919,7 +1961,8 @@ public class JsonUtilitiesTest {
     public void getJsonValueFromObjectTest(JsonObject jsonObject,
             String key,
             JsonValue expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             JsonValue result = getJsonValue(jsonObject, key);
 
@@ -1948,7 +1991,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetJsonObjectFromObjectParams() {
+    public List<Arguments> provideGetJsonObjectFromObjectParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
         JsonObjectBuilder job2 = Json.createObjectBuilder();
@@ -1993,7 +2037,8 @@ public class JsonUtilitiesTest {
     public void getJsonObjectFromObjectTest(JsonObject jsonObject,
             String key,
             JsonObject expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             JsonObject result = getJsonObject(jsonObject, key);
 
@@ -2022,7 +2067,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideGetJsonObjectFromArrayParams() {
+    public List<Arguments> provideGetJsonObjectFromArrayParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
         JsonObjectBuilder job2 = Json.createObjectBuilder();
@@ -2065,7 +2111,8 @@ public class JsonUtilitiesTest {
     public void getJsonObjectFromArrayTest(JsonArray jsonArray,
             int index,
             JsonObject expectedResult,
-            Class expectedFailure) {
+            Class expectedFailure)
+    {
         try {
             JsonObject result = getJsonObject(jsonArray, index);
 
@@ -2095,7 +2142,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addStringToObjectTest() {
+    public void addStringToObjectTest()
+    {
         JsonObject jsonObject = null;
         try {
             JsonObjectBuilder job = Json.createObjectBuilder();
@@ -2131,7 +2179,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addIntegerToObjectTest() {
+    public void addIntegerToObjectTest()
+    {
         JsonObject jsonObject = null;
         try {
             JsonObjectBuilder job = Json.createObjectBuilder();
@@ -2167,7 +2216,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addLongToObjectTest() {
+    public void addLongToObjectTest()
+    {
         JsonObject jsonObject = null;
         try {
             JsonObjectBuilder job = Json.createObjectBuilder();
@@ -2203,7 +2253,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addDoubleToObjectTest() {
+    public void addDoubleToObjectTest()
+    {
         JsonObject jsonObject = null;
         try {
             JsonObjectBuilder job = Json.createObjectBuilder();
@@ -2239,7 +2290,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addFloatToObjectTest() {
+    public void addFloatToObjectTest()
+    {
         JsonObject jsonObject = null;
         try {
             JsonObjectBuilder job = Json.createObjectBuilder();
@@ -2275,7 +2327,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addBigIntegerToObjectTest() {
+    public void addBigIntegerToObjectTest()
+    {
         JsonObject jsonObject = null;
         try {
             JsonObjectBuilder job = Json.createObjectBuilder();
@@ -2311,7 +2364,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addBigDecimalToObjectTest() {
+    public void addBigDecimalToObjectTest()
+    {
         JsonObject jsonObject = null;
         try {
             JsonObjectBuilder job = Json.createObjectBuilder();
@@ -2347,7 +2401,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addBooleanToObjectTest() {
+    public void addBooleanToObjectTest()
+    {
         JsonObject jsonObject = null;
         try {
             JsonObjectBuilder job = Json.createObjectBuilder();
@@ -2393,7 +2448,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addStringToArrayTest() {
+    public void addStringToArrayTest()
+    {
         JsonArray jsonArray = null;
         try {
             JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -2429,7 +2485,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addIntegerToArrayTest() {
+    public void addIntegerToArrayTest()
+    {
         JsonArray jsonArray = null;
         try {
             JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -2465,7 +2522,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addLongToArrayTest() {
+    public void addLongToArrayTest()
+    {
         JsonArray jsonArray = null;
         try {
             JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -2501,7 +2559,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addDoubleToArrayTest() {
+    public void addDoubleToArrayTest()
+    {
         JsonArray jsonArray = null;
         try {
             JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -2537,7 +2596,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addFloatToArrayTest() {
+    public void addFloatToArrayTest()
+    {
         JsonArray jsonArray = null;
         try {
             JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -2573,7 +2633,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addBigIntegerToArrayTest() {
+    public void addBigIntegerToArrayTest()
+    {
         JsonArray jsonArray = null;
         try {
             JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -2609,7 +2670,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addBigDecimalToArrayTest() {
+    public void addBigDecimalToArrayTest()
+    {
         JsonArray jsonArray = null;
         try {
             JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -2645,7 +2707,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void addBooleanToArrayTest() {
+    public void addBooleanToArrayTest()
+    {
         JsonArray jsonArray = null;
         try {
             JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -2690,7 +2753,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideParseJsonObjectParams() {
+    public List<Arguments> provideParseJsonObjectParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("givenName", "John");
@@ -2723,7 +2787,8 @@ public class JsonUtilitiesTest {
     @ParameterizedTest
     @MethodSource("provideParseJsonObjectParams")
     public void parseJsonObjectTest(String jsonText,
-            JsonObject expectedResult) {
+            JsonObject expectedResult)
+    {
         try {
             JsonObject result = parseJsonObject(jsonText);
 
@@ -2739,7 +2804,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideParseJsonArrayParams() {
+    public List<Arguments> provideParseJsonArrayParams()
+    {
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
         builder.add("John");
@@ -2768,7 +2834,8 @@ public class JsonUtilitiesTest {
     @ParameterizedTest
     @MethodSource("provideParseJsonArrayParams")
     public void parseJsonArrayTest(String jsonText,
-            JsonArray expectedResult) {
+            JsonArray expectedResult)
+    {
         try {
             JsonArray result = parseJsonArray(jsonText);
 
@@ -2784,7 +2851,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideNormalizeJsonTextParams() {
+    public List<Arguments> provideNormalizeJsonTextParams()
+    {
         List<Arguments> result = new LinkedList<>();
 
         result.add(arguments(
@@ -2822,7 +2890,8 @@ public class JsonUtilitiesTest {
     @ParameterizedTest
     @MethodSource("provideNormalizeJsonTextParams")
     public void normalizeJsonTextTest(String jsonText,
-            Object expectedResult) {
+            Object expectedResult)
+    {
         try {
             Object result = normalizeJsonText(jsonText);
 
@@ -2836,7 +2905,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideNormalizeJsonValueParams() {
+    public List<Arguments> provideNormalizeJsonValueParams()
+    {
         List<Arguments> result = new LinkedList<>();
 
         JsonObject jsonObject = parseJsonObject(
@@ -2893,7 +2963,8 @@ public class JsonUtilitiesTest {
     @ParameterizedTest
     @MethodSource("provideNormalizeJsonValueParams")
     public void normalizeJsonValueTest(JsonValue jsonValue,
-            Object expectedResult) {
+            Object expectedResult)
+    {
         try {
             Object result = normalizeJsonValue(jsonValue);
 
@@ -2907,7 +2978,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideAddPropertyParams() {
+    public List<Arguments> provideAddPropertyParams()
+    {
         List<Arguments> result = new LinkedList<>();
 
         result.add(arguments(null, JsonValue.ValueType.NULL));
@@ -2937,7 +3009,8 @@ public class JsonUtilitiesTest {
     @ParameterizedTest
     @MethodSource("provideAddPropertyParams")
     public void addPropertyTest(Object value,
-            JsonValue.ValueType expectedType) {
+            JsonValue.ValueType expectedType)
+    {
         try {
             JsonObjectBuilder builder = Json.createObjectBuilder();
             addProperty(builder, "value", value);
@@ -2959,7 +3032,8 @@ public class JsonUtilitiesTest {
     @ParameterizedTest
     @MethodSource("provideAddPropertyParams")
     public void addElementTest(Object value,
-            JsonValue.ValueType expectedType) {
+            JsonValue.ValueType expectedType)
+    {
         try {
             JsonArrayBuilder builder = Json.createArrayBuilder();
             addElement(builder, value);
@@ -2980,7 +3054,8 @@ public class JsonUtilitiesTest {
 
     private void validateJsonValue(Object value,
             JsonValue jsonValue,
-            JsonValue.ValueType expectedType) {
+            JsonValue.ValueType expectedType)
+    {
         assertEquals(expectedType, jsonValue.getValueType(),
                 "Unexpected value type after adding property: "
                         + value + " / "
@@ -3066,7 +3141,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void testToJsonObject1() {
+    public void testToJsonObject1()
+    {
         try {
             JsonObjectBuilder builder = Json.createObjectBuilder();
             builder.add("foo", "bar");
@@ -3084,7 +3160,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void testToJsonObject2() {
+    public void testToJsonObject2()
+    {
         try {
             JsonObjectBuilder builder = Json.createObjectBuilder();
             builder.add("foo", "bar");
@@ -3106,7 +3183,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void testToJsonObject3() {
+    public void testToJsonObject3()
+    {
         try {
             JsonObjectBuilder builder = Json.createObjectBuilder();
             builder.add("foo", "bar");
@@ -3129,7 +3207,8 @@ public class JsonUtilitiesTest {
 
     }
 
-    public List<Arguments> provideToJsonObjectParams() {
+    public List<Arguments> provideToJsonObjectParams()
+    {
         List<Arguments> result = new LinkedList<>();
 
         Map<String, Object> map1 = new LinkedHashMap<>();
@@ -3186,7 +3265,8 @@ public class JsonUtilitiesTest {
     @ParameterizedTest
     @MethodSource("provideToJsonObjectParams")
     public void testToJsonObject(Map<String, ?> map,
-            JsonObject expectedResult) {
+            JsonObject expectedResult)
+    {
         try {
             JsonObject actual = toJsonObject(map);
 
@@ -3201,7 +3281,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideToJsonArrayParams() {
+    public List<Arguments> provideToJsonArrayParams()
+    {
         List<Arguments> result = new LinkedList<>();
 
         Map subObj = Map.of("givenName", "Joe", "surname", "Schmoe");
@@ -3257,7 +3338,8 @@ public class JsonUtilitiesTest {
     }
 
     @Test
-    public void testToJsonArrayN() {
+    public void testToJsonArrayN()
+    {
         try {
             JsonArrayBuilder builder = Json.createArrayBuilder();
             builder.add("bar");
@@ -3280,7 +3362,8 @@ public class JsonUtilitiesTest {
     @ParameterizedTest
     @MethodSource("provideToJsonArrayParams")
     public void testToJsonArray(List<?> list,
-            JsonArray expectedResult) {
+            JsonArray expectedResult)
+    {
         try {
             JsonArray actual = toJsonArray(list);
 
@@ -3295,7 +3378,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideToJsonTextParams() {
+    public List<Arguments> provideToJsonTextParams()
+    {
         List<Arguments> result = new LinkedList<>();
 
         JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -3334,7 +3418,8 @@ public class JsonUtilitiesTest {
         return result;
     }
 
-    private static int getPrettyPrintLineCount(JsonValue jsonValue) {
+    private static int getPrettyPrintLineCount(JsonValue jsonValue)
+    {
         if (jsonValue instanceof JsonArray) {
             int lineCount = 1; // for the opening bracket
             JsonArray jsonArray = (JsonArray) jsonValue;
@@ -3360,7 +3445,8 @@ public class JsonUtilitiesTest {
 
     @ParameterizedTest
     @MethodSource("provideToJsonTextParams")
-    public void testToJsonText1(JsonValue jsonValue, String expectedText) {
+    public void testToJsonText1(JsonValue jsonValue, String expectedText)
+    {
         try {
             String result = toJsonText(jsonValue);
 
@@ -3396,7 +3482,8 @@ public class JsonUtilitiesTest {
 
     @ParameterizedTest
     @MethodSource("provideToJsonTextParams")
-    public void testToJsonText2(JsonValue jsonValue, String expectedText) {
+    public void testToJsonText2(JsonValue jsonValue, String expectedText)
+    {
         try {
             JsonObjectBuilder builder1 = null;
             JsonObjectBuilder builder2 = null;
@@ -3451,7 +3538,8 @@ public class JsonUtilitiesTest {
 
     @ParameterizedTest
     @MethodSource("provideToJsonTextParams")
-    public void testToJsonText3(JsonValue jsonValue, String expectedText) {
+    public void testToJsonText3(JsonValue jsonValue, String expectedText)
+    {
         try {
             JsonArrayBuilder builder1 = null;
             JsonArrayBuilder builder2 = null;
@@ -3506,7 +3594,8 @@ public class JsonUtilitiesTest {
 
     @ParameterizedTest
     @MethodSource("provideToJsonTextParams")
-    public void testToJsonText4(JsonValue jsonValue, String expectedText) {
+    public void testToJsonText4(JsonValue jsonValue, String expectedText)
+    {
         try {
             StringWriter writer = new StringWriter();
             String result = toJsonText(writer, jsonValue).toString();
@@ -3544,7 +3633,8 @@ public class JsonUtilitiesTest {
 
     @ParameterizedTest
     @MethodSource("provideToJsonTextParams")
-    public void testToJsonText5(JsonValue jsonValue, String expectedText) {
+    public void testToJsonText5(JsonValue jsonValue, String expectedText)
+    {
         try {
             JsonObjectBuilder builder1 = null;
             JsonObjectBuilder builder2 = null;
@@ -3597,7 +3687,8 @@ public class JsonUtilitiesTest {
 
     @ParameterizedTest
     @MethodSource("provideToJsonTextParams")
-    public void testToJsonText6(JsonValue jsonValue, String expectedText) {
+    public void testToJsonText6(JsonValue jsonValue, String expectedText)
+    {
         try {
             JsonArrayBuilder builder1 = null;
             JsonArrayBuilder builder2 = null;
@@ -3648,7 +3739,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    public List<Arguments> provideIniToJsonParams() {
+    public List<Arguments> provideIniToJsonParams()
+    {
         LinkedList<Arguments> result = new LinkedList<>();
 
         StringWriter sw = new StringWriter();
@@ -3693,7 +3785,8 @@ public class JsonUtilitiesTest {
 
     @ParameterizedTest
     @MethodSource("provideIniToJsonParams")
-    public void iniToJsonTest(String iniText, JsonObject expectedResult) {
+    public void iniToJsonTest(String iniText, JsonObject expectedResult)
+    {
         File file = null;
         try {
             file = File.createTempFile("test-", ".ini");
@@ -3720,7 +3813,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    private static JsonObject createObject(String key, String value) {
+    private static JsonObject createObject(String key, String value)
+    {
         JsonObjectBuilder job = Json.createObjectBuilder();
         if (value != null) {
             job.add(key, value);
@@ -3746,7 +3840,8 @@ public class JsonUtilitiesTest {
      * 
      * @return The {@link List} of {@link Argumebts} as described above.
      */
-    public List<Arguments> getJsonDateObjectParameters() {
+    public List<Arguments> getJsonDateObjectParameters()
+    {
         List<Arguments> result = new LinkedList<>();
         long offset = 0;
         Instant instant = Instant.now();
@@ -3840,7 +3935,8 @@ public class JsonUtilitiesTest {
         }
     }
 
-    private static JsonArray createArray(int index, String value) {
+    private static JsonArray createArray(int index, String value)
+    {
         JsonArrayBuilder jab = Json.createArrayBuilder();
         for (int i = 0; i < index * 2; i++) {
             if (i != index) {
@@ -3876,7 +3972,8 @@ public class JsonUtilitiesTest {
      * 
      * @return The {@link List} of {@link Argumebts} as described above.
      */
-    public List<Arguments> getJsonDateArrayParameters() {
+    public List<Arguments> getJsonDateArrayParameters()
+    {
         List<Arguments> result = new LinkedList<>();
         long offset = 0;
         Instant instant = Instant.now();

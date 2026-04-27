@@ -24,7 +24,8 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class RecordReaderTest {
+public class RecordReaderTest
+{
 
   private List<JsonObject> records;
 
@@ -43,7 +44,8 @@ public class RecordReaderTest {
   private String jsonLinesRecordsSansDS;
 
   @BeforeAll
-  public void setup() {
+  public void setup()
+  {
     this.records = new ArrayList<>();
     JsonObjectBuilder job = Json.createObjectBuilder();
     job.add("DATA_SOURCE", "EMPLOYEES");
@@ -155,7 +157,8 @@ public class RecordReaderTest {
 
 
   @Test
-  public void testSurroundingSpacesInCSV() {
+  public void testSurroundingSpacesInCSV()
+  {
     String  CSV_SPEC      = "text/csv";
 
     StringWriter sw  = new StringWriter();
@@ -208,7 +211,8 @@ public class RecordReaderTest {
   }
 
   @Test
-  public void detectCSVFormatTest() {
+  public void detectCSVFormatTest()
+  {
     StringReader sr = new StringReader(this.csvRecords);
     try {
       RecordReader rr = new RecordReader(sr);
@@ -223,7 +227,8 @@ public class RecordReaderTest {
   }
 
   @Test
-  public void detectJsonFormatTest() {
+  public void detectJsonFormatTest()
+  {
     StringReader sr = new StringReader(this.jsonRecords);
     try {
       RecordReader rr = new RecordReader(sr);
@@ -238,7 +243,8 @@ public class RecordReaderTest {
   }
 
   @Test
-  public void detectJsonLinesFormatTest() {
+  public void detectJsonLinesFormatTest()
+  {
     StringReader sr = new StringReader(this.jsonLinesRecords);
     try {
       RecordReader rr = new RecordReader(sr);
@@ -253,7 +259,8 @@ public class RecordReaderTest {
   }
 
   @Test
-  public void readCsvRecordsTest() {
+  public void readCsvRecordsTest()
+  {
     StringReader sr = new StringReader(this.csvRecords);
     try {
       RecordReader rr = new RecordReader(sr);
@@ -274,7 +281,8 @@ public class RecordReaderTest {
     }
   }
 
-  private List<Arguments> getTestParameters() {
+  private List<Arguments> getTestParameters()
+  {
     Map<String, List<JsonObject>> recordsMap = new LinkedHashMap<>();
     recordsMap.put(this.csvRecords, this.records);
     recordsMap.put(this.csvRecordsSansDS, this.recordsSansDS);

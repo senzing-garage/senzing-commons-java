@@ -16,11 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class TextUtilitiesTest {
+public class TextUtilitiesTest
+{
     private static final SecureRandom PRNG = new SecureRandom();
 
     @Test
-    public void randomPrintableTextTest() {
+    public void randomPrintableTextTest()
+    {
         try {
             for (int count = 100; count < 150; count += PRNG.nextInt(10)) {
                 String text1 = randomPrintableText(count);
@@ -48,7 +50,8 @@ public class TextUtilitiesTest {
     }
 
     @Test
-    public void boundedRandomPrintableTextTest() {
+    public void boundedRandomPrintableTextTest()
+    {
         try {
             for (int count = 100; count < 150; count += PRNG.nextInt(10)) {
                 int minCount = count - 10;
@@ -84,7 +87,8 @@ public class TextUtilitiesTest {
     }
 
     @Test
-    public void randomAlphabeticTextTest() {
+    public void randomAlphabeticTextTest()
+    {
         try {
             for (int count = 100; count < 150; count += PRNG.nextInt(10)) {
                 String text1 = randomAlphabeticText(count);
@@ -112,7 +116,8 @@ public class TextUtilitiesTest {
     }
 
     @Test
-    public void boundedRandomAlphabeticTextTest() {
+    public void boundedRandomAlphabeticTextTest()
+    {
         try {
             for (int count = 100; count < 150; count += PRNG.nextInt(10)) {
                 int minCount = count - 10;
@@ -148,7 +153,8 @@ public class TextUtilitiesTest {
     }
 
     @Test
-    public void randomAlphanumericTextTest() {
+    public void randomAlphanumericTextTest()
+    {
         try {
             for (int count = 100; count < 150; count += PRNG.nextInt(10)) {
                 String text1 = randomAlphanumericText(count);
@@ -176,7 +182,8 @@ public class TextUtilitiesTest {
     }
 
     @Test
-    public void boundedRandomAlphanumericTextTest() {
+    public void boundedRandomAlphanumericTextTest()
+    {
         try {
             for (int count = 100; count < 150; count += PRNG.nextInt(10)) {
                 int minCount = count - 10;

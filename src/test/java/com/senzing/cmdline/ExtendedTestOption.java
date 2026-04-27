@@ -18,49 +18,57 @@ public enum ExtendedTestOption
   DATABASE_TABLE("--table"),
   DATABASE_PASSWORD("--database-password");
 
-  ExtendedTestOption(String cmdLineFlag) {
+  ExtendedTestOption(String cmdLineFlag)
+  {
     this.cmdLineFlag = cmdLineFlag;
   }
 
   private String cmdLineFlag;
 
   @Override
-  public Class<TestOption> getBaseOptionType() {
+  public Class<TestOption> getBaseOptionType()
+  {
     return TestOption.class;
   }
 
   @Override
-  public String getCommandLineFlag() {
+  public String getCommandLineFlag()
+  {
     return this.cmdLineFlag;
   }
 
   @Override
-  public Set<String> getSynonymFlags() {
+  public Set<String> getSynonymFlags()
+  {
     String flag = this.getCommandLineFlag();
     return Collections.singleton(flag.substring(1));
   }
 
   @Override
-  public String getEnvironmentVariable() {
+  public String getEnvironmentVariable()
+  {
     String flag = this.getCommandLineFlag();
     return "SENZING_EXT_TEST_" + flag.substring(2).toUpperCase();
   }
 
   @Override
-  public Set<String> getEnvironmentSynonyms() {
+  public Set<String> getEnvironmentSynonyms()
+  {
     String flag = this.getCommandLineFlag();
     return Collections.singleton(
         "SZ_EXT_TEST_" + flag.substring(2).toUpperCase());
   }
 
   @Override
-  public List<String> getEnvironmentFallbacks() {
+  public List<String> getEnvironmentFallbacks()
+  {
     String flag = this.getCommandLineFlag();
     return List.of("SENZING_ALT_EXT_TEST_" + flag.substring(2).toUpperCase());
   }
 
   @Override
-  public int getMinimumParameterCount() {
+  public int getMinimumParameterCount()
+  {
     switch (this) {
       case SQS_QUEUE_URL:
       case DATABASE_TABLE:
@@ -72,7 +80,8 @@ public enum ExtendedTestOption
   }
 
   @Override
-  public int getMaximumParameterCount() {
+  public int getMaximumParameterCount()
+  {
     switch (this) {
       case SQS_QUEUE_URL:
       case DATABASE_TABLE:
@@ -84,7 +93,8 @@ public enum ExtendedTestOption
   }
 
   @Override
-  public Set<CommandLineOption> getConflicts() {
+  public Set<CommandLineOption> getConflicts()
+  {
     switch (this) {
       case SQS_QUEUE_URL:
         return Set.of(DATABASE_TABLE, DATABASE_PASSWORD, HELP, VERSION);
@@ -96,7 +106,8 @@ public enum ExtendedTestOption
   }
 
   @Override
-  public Set<Set<CommandLineOption>> getDependencies() {
+  public Set<Set<CommandLineOption>> getDependencies()
+  {
     switch (this) {
       case DATABASE_PASSWORD:
         return Set.of(Set.of(DATABASE_TABLE));

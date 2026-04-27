@@ -6,7 +6,8 @@ import java.util.Objects;
  * Provides state-tracking functionality for suppressing errors for a period
  * when there are too many.
  */
-public class ErrorLogSuppressor {
+public class ErrorLogSuppressor
+{
   /**
    * The default time window for checking for reaching the error limit.
    */
@@ -25,7 +26,8 @@ public class ErrorLogSuppressor {
   /**
    * The state of the suppressor.
    */
-  public enum State {
+  public enum State
+  {
     /**
      * Logging of these errors is currently being suppressed.
      */
@@ -43,10 +45,11 @@ public class ErrorLogSuppressor {
   }
 
   /**
-   * The result of evaluating the current error for whether or not it
-   * should be logged.
+   * The result of evaluating the current error for whether or not it should be
+   * logged.
    */
-  public static class Result {
+  public static class Result
+  {
     /**
      * The state of suppressor after evaluating the current error.
      */
@@ -61,22 +64,24 @@ public class ErrorLogSuppressor {
      * Constructs with the specified {@link State} and suppressed count.
      * 
      * @param state           The {@link State} of the error suppressor.
-     * @param suppressedCount The number of errors that have been suppressed
-     *                        so far if suppressing.
+     * @param suppressedCount The number of errors that have been suppressed so
+     *                        far if suppressing.
      */
-    public Result(State state, int suppressedCount) {
+    public Result(State state, int suppressedCount)
+    {
       this.state = state;
       this.suppressedCount = suppressedCount;
     }
 
     /**
-     * Gets the {@link State} of the error suppressor after evaluating the
-     * last error.
+     * Gets the {@link State} of the error suppressor after evaluating the last
+     * error.
      *
      * @return The {@link State} of the error suppressor after evaluating the
-     *         last error.
+     *             last error.
      */
-    public State getState() {
+    public State getState()
+    {
       return this.state;
     }
 
@@ -85,25 +90,26 @@ public class ErrorLogSuppressor {
      * {@link State#ACTIVE} state.
      *
      * @return The number of errors that have been suppressed if not in an
-     *         {@link State#ACTIVE} state.
+     *             {@link State#ACTIVE} state.
      */
-    public int getSuppressedCount() {
+    public int getSuppressedCount()
+    {
       return this.suppressedCount;
     }
 
     @Override
-    public boolean equals(Object o) {
-      if (this == o)
-        return true;
-      if (o == null || getClass() != o.getClass())
-        return false;
+    public boolean equals(Object o)
+    {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
       Result result = (Result) o;
       return (this.getSuppressedCount() == result.getSuppressedCount()
           && this.getState() == result.getState());
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
       return Objects.hash(this.getState(), this.getSuppressedCount());
     }
 
@@ -112,7 +118,8 @@ public class ErrorLogSuppressor {
      *
      * @return A {@link String} representation of this result.
      */
-    public String toString() {
+    public String toString()
+    {
       return "" + this.getState() + "(" + this.getSuppressedCount() + ")";
     }
   }
@@ -171,7 +178,8 @@ public class ErrorLogSuppressor {
   /**
    * Default constructor.
    */
-  public ErrorLogSuppressor() {
+  public ErrorLogSuppressor()
+  {
     this(DEFAULT_ERROR_LIMIT,
         DEFAULT_TIME_WINDOW,
         DEFAULT_SUPPRESS_DURATION);
@@ -181,16 +189,15 @@ public class ErrorLogSuppressor {
    * Constructs with the specified parameters.
    *
    * @param errorLimit       The maximum number of errors that can occur within
-   *                         the
-   *                         time window before triggering suppression.
+   *                         the time window before triggering suppression.
    * @param timeWindow       The length of the time window in milliseconds.
-   * @param suppressDuration How long to suppress errors if the number of
-   *                         errors exceeds the limit within the specified
-   *                         time window.
+   * @param suppressDuration How long to suppress errors if the number of errors
+   *                         exceeds the limit within the specified time window.
    */
   public ErrorLogSuppressor(int errorLimit,
       long timeWindow,
-      long suppressDuration) {
+      long suppressDuration)
+  {
     if (errorLimit <= 0) {
       throw new IllegalArgumentException(
           "Error limit must be a positive number: " + errorLimit);
@@ -215,18 +222,20 @@ public class ErrorLogSuppressor {
    *
    * @return The total error count as of the last update on error.
    */
-  public synchronized int getErrorCount() {
+  public synchronized int getErrorCount()
+  {
     return this.errorCount;
   }
 
   /**
-   * Checks if the errors are currently being suppressed as of the last
-   * update on error.
+   * Checks if the errors are currently being suppressed as of the last update
+   * on error.
    *
    * @return <code>true</code> if suppressing as of the last update on error,
-   *         and <code>false</code> if not.
+   *                           and <code>false</code> if not.
    */
-  public synchronized boolean isSuppressing() {
+  public synchronized boolean isSuppressing()
+  {
     return this.suppressing;
   }
 
@@ -235,20 +244,21 @@ public class ErrorLogSuppressor {
    * error.
    *
    * @return The number of suppressed error messages as of the last update on
-   *         error.
+   *             error.
    */
-  public synchronized int getSuppressedCount() {
+  public synchronized int getSuppressedCount()
+  {
     return this.suppressedCount;
   }
 
   /**
-   * Gets the number of errors within the period as of the last update on
-   * error.
+   * Gets the number of errors within the period as of the last update on error.
    *
    * @return The number of errors within the period as of the last update on
-   *         error.
+   *             error.
    */
-  public synchronized int getPeriodCount() {
+  public synchronized int getPeriodCount()
+  {
     return this.periodCount;
   }
 
@@ -257,7 +267,8 @@ public class ErrorLogSuppressor {
    *
    * @return The error limit for the time window.
    */
-  public int getErrorLimit() {
+  public int getErrorLimit()
+  {
     return this.errorLimit;
   }
 
@@ -266,7 +277,8 @@ public class ErrorLogSuppressor {
    *
    * @return The length of the time window in milliseconds.
    */
-  public long getTimeWindow() {
+  public long getTimeWindow()
+  {
     return this.timeWindow;
   }
 
@@ -275,7 +287,8 @@ public class ErrorLogSuppressor {
    *
    * @return The duration of the suppression period in milliseconds.
    */
-  public long getSuppressDuration() {
+  public long getSuppressDuration()
+  {
     return this.suppressDuration;
   }
 
@@ -284,7 +297,8 @@ public class ErrorLogSuppressor {
    *
    * @return The result of handling the error.
    */
-  public synchronized Result updateOnError() {
+  public synchronized Result updateOnError()
+  {
     long now = System.nanoTime();
     State state = null;
     int count = 0;
