@@ -6,6 +6,112 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2026-04-28
+
+### Changed in 4.0.0
+
+- First general-availability release of the V4 line. No public API
+  changes since `4.0.0-beta.3.0`; this release graduates the beta
+  line and rolls in test, formatting, and tooling improvements.
+
+#### Bug fixes
+
+- `PropertyReflector.setPropertyValue` previously selected primitive
+  setters when assigning a `null` value (the predicate was inverted).
+  Beans with non-primitive setters threw `NullPointerException` and
+  primitive-only beans threw `IllegalArgumentException`. Fixed the
+  predicate so non-primitive setters are preferred for null values.
+- `SQLUtilities.getBigDecimal(ResultSet, ...)` (both index and
+  column-name overloads) now pre-checks `ResultSet.getObject(...)`
+  for null before calling `getBigDecimal`. The xerial sqlite-jdbc
+  driver throws on `getBigDecimal` for SQL NULL columns instead of
+  returning null per the contract; the pre-check normalizes behavior
+  across drivers.
+- `SzInstallLocations.findLocations()` set the `isDevelopmentBuild`
+  flag based on `installDir.getName()`, which always returns `"er"`
+  because the install dir is constructed as
+  `new File(senzingDir, "er")` — making the dev-build detection dead
+  code. Fixed to canonicalize the path first
+  (`installDir.getCanonicalFile().getName()`) so a development build
+  whose `er` entry is a symlink to `dist/` is correctly detected.
+- `SzInstallLocations` now adds an explicit directory-existence
+  check at construction time when the install path is supplied via
+  the `File` constructor, matching the documented contract.
+- `Registry.lookup(null)` now throws `NullPointerException` per its
+  javadoc rather than `NameNotFoundException`.
+- `DatabaseType` had three latent bugs surfaced by new tests: a
+  missing `break` in `setTimestamp(CallableStatement)`, and
+  `sqlLeast` / `sqlGreatest` validating the `first` argument twice
+  instead of validating `second`. All three are fixed; the
+  corresponding javadoc has also been corrected.
+- `SQLiteConnector` URL construction now uses the `file:` prefix when
+  in-memory mode is requested even if no file path is given,
+  preventing a stray temporary file from being created.
+
+#### Tests and code coverage
+
+- Added `jacoco` and `spotbugs` Maven profiles with shared versions
+  and configuration matching other Senzing Java projects (jacoco
+  0.8.14, spotbugs 4.9.8.3, findsecbugs 1.14.0).
+- Added `system-stubs-jupiter` 2.1.8 (test scope) for environment
+  variable stubbing and `System.err` / `System.out` capture in tests
+  that exercise expected-error paths. Used programmatically at the
+  method level under `@Execution(SAME_THREAD)` plus the appropriate
+  `@ResourceLock(Resources.SYSTEM_OUT)` /
+  `@ResourceLock(Resources.SYSTEM_ERR)`.
+- Added Zonky `embedded-postgres` 2.2.2 (with darwin-arm64 and
+  linux-arm64 binaries) for in-process PostgreSQL tests.
+- Added or extended unit tests across every package, raising
+  aggregate line coverage from **61.1% to 91.6%** and branch
+  coverage from **54.1% to 83.4%** (2,150 / 2,150 tests pass).
+  Highlights:
+  - 13 zero-coverage classes (`Registry`, `OperatingSystemFamily`,
+    `TransactionIsolation`, `DatabaseType`, `SQLiteConnector`,
+    `PoolConnectionProvider`, `PostgreSqlConnector`, `SzUtilities`,
+    `SzInstallLocations`, `Connector`, `ConnectionProvider`,
+    `Quantified.Statistic`, and the `RestrictedHandler` inner class)
+    are now all ≥90%.
+  - `LoggingUtilities`, `SQLUtilities`, and `ZipUtilities` raised to
+    ≥82%.
+  - `JsonUtilities`, `RecordReader`, `PropertyReflector`,
+    `ReflectionUtilities`, `TemporaryDataCache`, and the inner
+    `ChainFileInputStream` and `CacheFilePart` raised to ≥85%.
+  - `CommandLineUtilities` raised to 90% (up from 67%) — the static
+    initializer's JAR-URL parsing was extracted into a
+    package-private `extractJarLocation(classUrl, classFqn)` helper
+    plus a `JarLocation` record so the parsing can be tested directly
+    with synthetic URLs.
+  - Polished classes (`SemanticVersion`, `Timers`, `WorkerThreadPool`,
+    `ConnectionPool`, `ChunkedEncodingInputStream`,
+    `ErrorLogSuppressor.Result`, `AsyncWorkerPool.AsyncResult`,
+    `CommandLineOption`, `CommandLineValue`, and the small
+    `cmdline` exception classes) all raised to ≥85%.
+- Added a local FAQ MCP server (`.mcp.json` →
+  `senzing-commons-faq`) at `.claude/faq_server.py` with content
+  under `.claude/faqs/<category>/<topic>.md`, queryable via the
+  `mcp__senzing-commons-faq__*` tools.
+
+#### Code formatting and tooling
+
+- Adopted the Senzing Java coding standards across every source and
+  test file: 80-character line limit; Allman braces for type/method/
+  constructor definitions; same-line braces for control flow;
+  8-space continuation indent; operators (`+`, `&&`, `||`, `?`, `:`,
+  `.`) start the continuation line; reflowed Javadoc prose and
+  `@param`/`@return`/`@throws` descriptions to fill near 80
+  characters with no orphan continuation words.
+- Added the `checkstyle` Maven profile and `checkstyle.xml` /
+  `checkstyle-suppressions.xml` configuration. `mvn -Pcheckstyle
+  validate` reports BUILD SUCCESS across the codebase.
+- Added the standards documentation under `.claude/`
+  (`java-coding-standards.md`, FAQs, and bulk-fix Python scripts)
+  to guide future contributions.
+- Tightened the short-circuit-`if` rule in the standards: the
+  brace-less single-line form is reserved for short-circuit control
+  flow only (`return`, `continue`, `break`, `throw`); assignments
+  and method calls always use braces, and `if`/`else` pairs always
+  brace both branches regardless of body type or fit.
+
 ## [4.0.0-beta.3.0] - 2026-03-12
 
 ### Changed in 4.0.0-beta.3.0
