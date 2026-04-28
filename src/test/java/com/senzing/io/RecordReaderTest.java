@@ -660,7 +660,7 @@ public class RecordReaderTest
    * by treating it as the empty map (no remapping).
    */
   @Test
-  public void constructorTolerantsNullDataSourceMap() throws IOException
+  public void constructorToleratesNullDataSourceMap() throws IOException
   {
     RecordReader reader = new RecordReader(
         RecordReader.Format.JSON_LINES,

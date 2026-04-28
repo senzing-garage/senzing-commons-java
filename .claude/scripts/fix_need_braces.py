@@ -165,35 +165,11 @@ def find_next_code_line(lines, start_idx):
     return n
 
 
-def detect_indent_unit(lines):
-    """Detect the file's indent step (2 or 4 spaces).
-
-    Counts the indent depth of every non-empty, non-comment line and
-    returns whichever of 2 or 4 spaces best fits the file's indent
-    pattern. Falls back to 4 spaces if no signal.
-    """
-    counts = {2: 0, 4: 0}
-    for raw in lines:
-        line = raw.rstrip('\n').rstrip('\r')
-        if not line.strip():
-            continue
-        # Count leading spaces only (ignore tabs).
-        spaces = 0
-        for ch in line:
-            if ch == ' ':
-                spaces += 1
-            else:
-                break
-        if spaces == 0:
-            continue
-        if spaces % 2 == 0 and spaces % 4 != 0:
-            # Indent of 2, 6, 10, ... — strong signal of 2-space step.
-            counts[2] += 1
-        elif spaces % 4 == 0:
-            # Indent of 4, 8, 12, ... — could be either; weak signal
-            # for 4-space.
-            counts[4] += 1
-    return '  ' if counts[2] > counts[4] else '    '
+# The project's coding standards mandate 4-space indentation for all
+# Java source. Hard-coded here rather than detected per-file, because
+# any reliable detection requires scanning multiple nesting levels and
+# this script only ever rewrites Java files in this repo.
+INDENT_UNIT = '    '
 
 
 def process_file(path):
@@ -204,7 +180,6 @@ def process_file(path):
     text = path.read_text(encoding='utf-8')
     lines = text.splitlines(True)
     n = len(lines)
-    indent_unit = detect_indent_unit(lines)
 
     out = []
     i = 0
@@ -246,20 +221,25 @@ def process_file(path):
                 inline_body = m_inline.group('body').strip()
                 if not is_short_circuit_stmt(inline_body):
                     inline_indent = m_inline.group('indent')
-                    body_indent = inline_indent + indent_unit
+                    body_indent = inline_indent + INDENT_UNIT
 
-                    # Look ahead for a paired `else` (inline or
-                    # multi-line) at the same indent.
-                    next_idx = find_next_code_line(lines, i + 1)
+                    # Look ahead for a paired `else` on the next line
+                    # at the same indent. Only collapse the pair when
+                    # NO blank/comment lines sit between them — if any
+                    # do, we'd have to drop them to produce a single
+                    # if/else block, which is destructive. Instead,
+                    # fall through and brace only the if branch (the
+                    # interleaved lines and the `else` are emitted
+                    # untouched in subsequent iterations).
                     else_handled = False
-                    if next_idx < n:
-                        next_line = lines[next_idx].rstrip('\n')\
-                                                   .rstrip('\r')
+                    next_idx_immediate = i + 1
+                    if next_idx_immediate < n:
+                        next_line = lines[
+                            next_idx_immediate].rstrip(
+                                '\n').rstrip('\r')
                         next_stripped = next_line.strip()
-                        next_indent_match = re.match(
-                            r'^([ \t]*)', next_line)
-                        next_indent = (next_indent_match.group(1)
-                                       if next_indent_match else '')
+                        next_indent = re.match(
+                            r'^([ \t]*)', next_line).group(1)
                         if (next_indent == inline_indent
                                 and (next_stripped.startswith('else ')
                                      or next_stripped == 'else'
@@ -285,12 +265,7 @@ def process_file(path):
                                     f"{body_indent}{else_body}\n")
                                 out.append(f"{inline_indent}}}\n")
                                 fixes += 1
-                                # Skip blank lines and the else.
-                                i = next_idx + 1
-                                # Re-emit any blank/comment lines that
-                                # were between if and else? No — they
-                                # belonged between branches and would
-                                # be confusing. Drop them.
+                                i = next_idx_immediate + 1
                                 else_handled = True
 
                     if not else_handled:

@@ -373,7 +373,7 @@ public class DatabaseTypeTest
    * since the implementation explicitly null-checks it.
    */
   @Test
-  public void sqlLeastTolerantsNullOtherArray()
+  public void sqlLeastToleratesNullOtherArray()
   {
     assertEquals("MIN(a, b)",
                  SQLITE.sqlLeast("a", "b", (String[]) null));

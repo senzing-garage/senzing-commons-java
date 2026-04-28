@@ -93,7 +93,9 @@ public class ChunkedEncodingInputStreamExtraTest
   public void crWithoutLfInChunkHeaderThrows()
   {
     // CR followed by something other than LF.
+    // cspell:disable
     String malformed = "8\rXABCDEFGH";
+    // cspell:enable
     ChunkedEncodingInputStream s = wrap(malformed);
 
     IOException ex = assertThrows(IOException.class, s::read);
@@ -180,7 +182,9 @@ public class ChunkedEncodingInputStreamExtraTest
   public void wrongTrailingCharacterAfterChunkThrows()
   {
     // Chunk data followed by 'X' instead of CR.
+    // cspell:disable
     String malformed = "4\r\nABCDX\n";
+    // cspell:enable
     ChunkedEncodingInputStream s = wrap(malformed);
 
     IOException ex = assertThrows(IOException.class,
