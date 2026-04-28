@@ -229,7 +229,10 @@ public class PropertyReflector<T>
     // value to null (no primitives allowed)
     if (propertyValue == null) {
       invoked = findAndInvokeMutator(
-          methods, Class::isPrimitive, target, null);
+          methods,
+          (argType -> !argType.isPrimitive()),
+          target,
+          null);
 
       if (invoked) return;
 

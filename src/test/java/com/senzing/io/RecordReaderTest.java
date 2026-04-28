@@ -400,4 +400,278 @@ public class RecordReaderTest
     }
     return job.build();
   }
+
+  // -------------------------------------------------------------------
+  // RecordReader.Format contract
+  // -------------------------------------------------------------------
+
+  /**
+   * {@link RecordReader.Format#fromMediaType(String)} with
+   * {@code null} must return {@code null} per the javadoc.
+   */
+  @Test
+  public void fromMediaTypeReturnsNullForNullArgument()
+  {
+    assertNull(RecordReader.Format.fromMediaType(null));
+  }
+
+  /**
+   * {@link RecordReader.Format#fromMediaType(String)} must return
+   * the matching enum for each documented media type and must
+   * apply trim/lowercase normalization.
+   */
+  @Test
+  public void fromMediaTypeReturnsExpectedEnumForKnownMediaTypes()
+  {
+    assertSame(RecordReader.Format.JSON,
+               RecordReader.Format.fromMediaType("application/json"));
+    assertSame(RecordReader.Format.JSON_LINES,
+               RecordReader.Format.fromMediaType(
+                   "application/x-jsonlines"));
+    assertSame(RecordReader.Format.CSV,
+               RecordReader.Format.fromMediaType("text/csv"));
+
+    // Trim and lowercase normalization
+    assertSame(RecordReader.Format.JSON,
+               RecordReader.Format.fromMediaType(" Application/JSON "));
+  }
+
+  /**
+   * {@link RecordReader.Format#fromMediaType(String)} must return
+   * {@code null} for an unrecognized media type.
+   */
+  @Test
+  public void fromMediaTypeReturnsNullForUnknownMediaType()
+  {
+    assertNull(RecordReader.Format.fromMediaType("text/plain"));
+  }
+
+  /**
+   * Each {@link RecordReader.Format} value must report its
+   * media type and simple name per the constructor arguments.
+   */
+  @Test
+  public void formatAccessorsReturnConstructorValues()
+  {
+    assertEquals("application/json",
+                 RecordReader.Format.JSON.getMediaType());
+    assertEquals("JSON",
+                 RecordReader.Format.JSON.getSimpleName());
+    assertEquals("application/x-jsonlines",
+                 RecordReader.Format.JSON_LINES.getMediaType());
+    assertEquals("JSON Lines",
+                 RecordReader.Format.JSON_LINES.getSimpleName());
+    assertEquals("text/csv",
+                 RecordReader.Format.CSV.getMediaType());
+    assertEquals("CSV",
+                 RecordReader.Format.CSV.getSimpleName());
+  }
+
+  // -------------------------------------------------------------------
+  // Format auto-detection edge cases
+  // -------------------------------------------------------------------
+
+  /**
+   * When the input stream contains only whitespace (no
+   * format-determining character), the constructor must default to
+   * {@link RecordReader.Format#JSON_LINES} per the implementation's
+   * fallback comment.
+   */
+  @Test
+  public void emptyOrWhitespaceOnlyInputDefaultsToJsonLines()
+      throws IOException
+  {
+    RecordReader reader = new RecordReader(new StringReader("   \n\t "));
+    assertSame(RecordReader.Format.JSON_LINES, reader.getFormat(),
+               "Empty/whitespace-only input must default to"
+                   + " JSON_LINES");
+  }
+
+  /**
+   * Auto-detect must skip leading whitespace before sniffing the
+   * first non-whitespace character.
+   */
+  @Test
+  public void autoDetectSkipsLeadingWhitespace() throws IOException
+  {
+    RecordReader reader = new RecordReader(
+        new StringReader("\n\t\r   [ {\"X\":1} ]"));
+    assertSame(RecordReader.Format.JSON, reader.getFormat());
+  }
+
+  // -------------------------------------------------------------------
+  // JSON-Lines edge cases — comments, blanks, malformed lines
+  // -------------------------------------------------------------------
+
+  /**
+   * The JSON-Lines provider must skip blank lines per the
+   * implementation comment.
+   */
+  @Test
+  public void jsonLinesSkipsBlankLines() throws IOException
+  {
+    String text = "\n"
+        + "{\"DATA_SOURCE\":\"X\",\"NAME\":\"alpha\"}\n"
+        + "\n"
+        + "{\"DATA_SOURCE\":\"Y\",\"NAME\":\"beta\"}\n"
+        + "\n";
+    RecordReader reader = new RecordReader(
+        RecordReader.Format.JSON_LINES, new StringReader(text));
+
+    JsonObject r1 = reader.readRecord();
+    JsonObject r2 = reader.readRecord();
+    JsonObject r3 = reader.readRecord();
+    assertNotNull(r1);
+    assertNotNull(r2);
+    assertNull(r3,
+               "Blank lines must be skipped, no extra record produced");
+    assertEquals("alpha", r1.getString("NAME"));
+    assertEquals("beta",  r2.getString("NAME"));
+  }
+
+  /**
+   * The JSON-Lines provider must skip comment lines that start with
+   * {@code #} per the implementation.
+   */
+  @Test
+  public void jsonLinesSkipsCommentLines() throws IOException
+  {
+    String text = "# this is a comment\n"
+        + "{\"DATA_SOURCE\":\"X\",\"NAME\":\"alpha\"}\n"
+        + "# another comment\n"
+        + "{\"DATA_SOURCE\":\"Y\",\"NAME\":\"beta\"}\n";
+    RecordReader reader = new RecordReader(
+        RecordReader.Format.JSON_LINES, new StringReader(text));
+
+    assertEquals("alpha",
+                 reader.readRecord().getString("NAME"));
+    assertEquals("beta",
+                 reader.readRecord().getString("NAME"));
+    assertNull(reader.readRecord());
+  }
+
+  /**
+   * A JSON-Lines line that does not start with {@code "{"} must
+   * cause {@code readRecord()} to throw
+   * {@link IllegalStateException} per the explicit check in the
+   * provider.
+   */
+  @Test
+  public void jsonLinesRejectsLineNotStartingWithBrace()
+      throws IOException
+  {
+    RecordReader reader = new RecordReader(
+        RecordReader.Format.JSON_LINES,
+        new StringReader("not a json record\n"));
+    assertThrows(IllegalStateException.class, reader::readRecord);
+  }
+
+  /**
+   * A JSON-Lines line with unparseable JSON must record the line
+   * number on the {@link RecordReader} and rethrow the parse
+   * exception.
+   */
+  @Test
+  public void jsonLinesCapturesErrorLineNumberOnParseFailure()
+      throws IOException
+  {
+    String text = "{\"NAME\":\"alpha\"}\n"
+        + "{ this is not valid JSON\n";
+    RecordReader reader = new RecordReader(
+        RecordReader.Format.JSON_LINES, new StringReader(text));
+
+    // First record reads OK
+    assertNotNull(reader.readRecord());
+    assertNull(reader.getErrorLineNumber(),
+               "No error after a successful read");
+
+    // Second record (line 2) fails — error line should be 2
+    assertThrows(Exception.class, reader::readRecord);
+    assertEquals(2L, reader.getErrorLineNumber(),
+                 "Error line number must be the bad-record line");
+  }
+
+  // -------------------------------------------------------------------
+  // JSON array error capture
+  // -------------------------------------------------------------------
+
+  /**
+   * A JSON array containing malformed JSON must surface a
+   * non-null error line number on {@link RecordReader} after
+   * the failing {@code readRecord} call.
+   */
+  @Test
+  public void jsonArrayCapturesErrorLineNumberOnParseFailure()
+      throws IOException
+  {
+    // Malformed: trailing junk after first object
+    String text = "[{\"X\":1}, this is not valid]";
+    RecordReader reader = new RecordReader(
+        RecordReader.Format.JSON, new StringReader(text));
+
+    // First record OK
+    assertNotNull(reader.readRecord());
+    // Second triggers a parse exception
+    assertThrows(Exception.class, reader::readRecord);
+    assertNotNull(reader.getErrorLineNumber(),
+                  "JSON-array parse error must record a line number");
+  }
+
+  // -------------------------------------------------------------------
+  // CSV error capture
+  // -------------------------------------------------------------------
+
+  /**
+   * After a CSV {@code readRecord()} that succeeds,
+   * {@link RecordReader#getErrorLineNumber()} must return
+   * {@code null} (no error) per the documented contract.
+   */
+  @Test
+  public void csvErrorLineNumberIsNullAfterSuccessfulRead()
+      throws IOException
+  {
+    String text = "DATA_SOURCE,NAME\nX,alpha\nY,beta\n";
+    RecordReader reader = new RecordReader(
+        RecordReader.Format.CSV, new StringReader(text));
+    assertNotNull(reader.readRecord());
+    assertNull(reader.getErrorLineNumber());
+  }
+
+  // -------------------------------------------------------------------
+  // Constructor variants — null sourceId, null map
+  // -------------------------------------------------------------------
+
+  /**
+   * The 4-arg constructor must tolerate a null {@code dataSourceMap}
+   * by treating it as the empty map (no remapping).
+   */
+  @Test
+  public void constructorTolerantsNullDataSourceMap() throws IOException
+  {
+    RecordReader reader = new RecordReader(
+        RecordReader.Format.JSON_LINES,
+        new StringReader("{\"DATA_SOURCE\":\"ORIG\",\"NAME\":\"x\"}\n"),
+        (Map<String, String>) null,
+        null);
+    JsonObject record = reader.readRecord();
+    assertEquals("ORIG", record.getString("DATA_SOURCE"),
+                 "Null map must leave DATA_SOURCE unchanged");
+  }
+
+  /**
+   * Empty / whitespace-only sourceId must be normalized to null
+   * (no SOURCE_ID added to records) per the constructor's
+   * post-processing.
+   */
+  @Test
+  public void constructorNormalizesEmptySourceIdToNull() throws IOException
+  {
+    RecordReader reader = new RecordReader(
+        new StringReader(
+            "{\"DATA_SOURCE\":\"X\",\"NAME\":\"alpha\"}\n"),
+        "  ");
+    JsonObject record = reader.readRecord();
+    assertFalse(record.containsKey("SOURCE_ID"),
+                "Whitespace sourceId must be treated as null");
+  }
 }
