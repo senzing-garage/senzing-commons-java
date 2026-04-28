@@ -138,6 +138,7 @@ public class Registry<T>
   public synchronized T lookup(String name)
       throws NullPointerException, NameNotFoundException
   {
+    Objects.requireNonNull(name, "The specified name cannot be null");
     if (!this.bindingMap.containsKey(name)) {
       throw new NameNotFoundException(
           "The specified name is not bound: " + name);

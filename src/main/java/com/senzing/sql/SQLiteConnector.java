@@ -202,6 +202,11 @@ public class SQLiteConnector implements Connector
         {
             Objects.requireNonNull(
                     file, "The specified file cannot be null");
+            if (file.exists() && file.isDirectory()) {
+                throw new IllegalArgumentException(
+                        "The specified file path exists and is a "
+                                + "directory: " + file);
+            }
         }
         this.sqliteFile = file;
         this.connProperties = connProperties;
@@ -252,8 +257,14 @@ public class SQLiteConnector implements Connector
         boolean memoryMode = this.connProperties != null 
             && "memory".equals(this.connProperties.get("mode"));
 
-        String jdbcUrl = "jdbc:sqlite:" 
-            + (memoryMode && this.sqliteFile != null ? "file:" : "")
+        // SQLite URI parameters (e.g. `?mode=memory`) require the
+        // `file:` URI scheme. Without it, `:memory:?mode=memory` is
+        // parsed as a literal path and a database file with that name
+        // is created in the CWD. We use the `file:` prefix whenever
+        // memory mode is requested (whether or not a backing file is
+        // supplied) so the parameters are honored.
+        String jdbcUrl = "jdbc:sqlite:"
+            + (memoryMode ? "file:" : "")
             + (this.sqliteFile == null ? ":memory:" : this.sqliteFile.getPath())
             + formatConnectionProperties(this.connProperties);
 

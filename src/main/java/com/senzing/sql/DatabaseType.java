@@ -146,6 +146,7 @@ public enum DatabaseType
 
         cs.setString(index, DATE_TIME_FORMATTER.format(zonedDateTime));
       }
+      break;
       default:
         cs.setTimestamp(index, value, UTC_CALENDAR);
     }
@@ -166,9 +167,9 @@ public enum DatabaseType
   public String sqlLeast(String first, String second, String... other) 
     throws NullPointerException
   {
-    Objects.requireNonNull(first, 
+    Objects.requireNonNull(first,
       "The first parameter to LEAST cannot be null");
-    Objects.requireNonNull(first, 
+    Objects.requireNonNull(second,
       "The second parameter to LEAST cannot be null");
     StringBuilder sb = new StringBuilder();
     switch (this) {
@@ -188,24 +189,24 @@ public enum DatabaseType
     return sb.toString();
   }
 
-    /**
-   * Provides a generic way to format the equivalent of the SQL "least" function
-   * for the database type.
-   * 
-   * @param first The first parameter to the LEAST function.
-   * @param second The second parameter to the LEAST function.
-   * @param other The optional other parameters to the LEAST function for
+  /**
+   * Provides a generic way to format the equivalent of the SQL "greatest"
+   * function for the database type.
+   *
+   * @param first The first parameter to the GREATEST function.
+   * @param second The second parameter to the GREATEST function.
+   * @param other The optional other parameters to the GREATEST function for
    *              variable length parameters.
-   * @return The formatted SQL "least" function for the respective database.
+   * @return The formatted SQL "greatest" function for the respective database.
    * @throws NullPointerException If either the first or second parameters is
    *                              <code>null</code>.
    */
-  public String sqlGreatest(String first, String second, String... other) 
+  public String sqlGreatest(String first, String second, String... other)
     throws NullPointerException
   {
-    Objects.requireNonNull(first, 
+    Objects.requireNonNull(first,
       "The first parameter to GREATEST cannot be null");
-    Objects.requireNonNull(first, 
+    Objects.requireNonNull(second,
       "The second parameter to GREATEST cannot be null");
     StringBuilder sb = new StringBuilder();
     switch (this) {

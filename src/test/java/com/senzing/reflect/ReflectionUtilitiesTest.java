@@ -288,4 +288,199 @@ public class ReflectionUtilitiesTest
     }
 
   }
+
+  // -------------------------------------------------------------------
+  // restrictedProxy() contract — exercises ReflectionUtilities and
+  // its private RestrictedHandler inner class.
+  // -------------------------------------------------------------------
+
+  /**
+   * Test interface used by the {@code restrictedProxy} tests below.
+   * Two methods so we can restrict one and verify the other still
+   * delegates to the underlying target.
+   */
+  protected interface RestrictableInterface
+  {
+    String allowed();
+    String restricted();
+    String throwingMethod();
+  }
+
+  /** Test class that implements zero interfaces. */
+  protected static class NoInterfacesClass
+  {
+    public String getValue()
+    {
+      return "no-interfaces";
+    }
+  }
+
+  /** Concrete implementation used as the target for restricted proxies. */
+  protected static class RestrictableImpl implements RestrictableInterface
+  {
+    @Override
+    public String allowed()
+    {
+      return "allowed-result";
+    }
+
+    @Override
+    public String restricted()
+    {
+      return "restricted-result";
+    }
+
+    @Override
+    public String throwingMethod()
+    {
+      throw new IllegalStateException("intentional from target");
+    }
+  }
+
+  /**
+   * {@link ReflectionUtilities#restrictedProxy(Object, java.lang.reflect.Method...)}
+   * must produce a proxy where the restricted method throws
+   * {@link UnsupportedOperationException} per the javadoc, while
+   * unrestricted methods still delegate to the target object.
+   */
+  @Test
+  public void restrictedProxyBlocksOnlyRestrictedMethods() throws Exception
+  {
+    RestrictableImpl target = new RestrictableImpl();
+    java.lang.reflect.Method restrictedMethod
+        = RestrictableInterface.class.getMethod("restricted");
+
+    RestrictableInterface proxy = (RestrictableInterface)
+        ReflectionUtilities.restrictedProxy(target, restrictedMethod);
+
+    assertEquals("allowed-result", proxy.allowed(),
+                 "Unrestricted method must still delegate to target");
+    assertThrows(UnsupportedOperationException.class,
+                 proxy::restricted,
+                 "Restricted method must throw"
+                     + " UnsupportedOperationException");
+  }
+
+  /**
+   * When the target's underlying method throws an exception, the
+   * proxy must propagate the cause (not the wrapping
+   * {@link java.lang.reflect.InvocationTargetException}).
+   */
+  @Test
+  public void restrictedProxyPropagatesTargetExceptionCause()
+      throws Exception
+  {
+    RestrictableImpl target = new RestrictableImpl();
+    RestrictableInterface proxy = (RestrictableInterface)
+        ReflectionUtilities.restrictedProxy(target);
+    assertThrows(IllegalStateException.class, proxy::throwingMethod,
+                 "Proxy must unwrap InvocationTargetException and"
+                     + " propagate the original cause");
+  }
+
+  /**
+   * {@code restrictedProxy(null, ...)} must throw
+   * {@link NullPointerException} per the javadoc.
+   */
+  @Test
+  public void restrictedProxyThrowsNpeForNullTarget()
+  {
+    assertThrows(NullPointerException.class,
+                 () -> ReflectionUtilities.restrictedProxy(null));
+  }
+
+  /**
+   * {@code restrictedProxy(target, (Method) null)} must throw
+   * {@link NullPointerException} when one of the supplied methods is
+   * null.
+   */
+  @Test
+  public void restrictedProxyThrowsNpeForNullMethodArgument()
+  {
+    RestrictableImpl target = new RestrictableImpl();
+    assertThrows(NullPointerException.class,
+                 () -> ReflectionUtilities.restrictedProxy(
+                     target, (java.lang.reflect.Method) null));
+  }
+
+  /**
+   * The two-arg overload {@code restrictedProxy(ClassLoader,
+   * Object, Method...)} must throw {@link NullPointerException} when
+   * given a null class loader.
+   */
+  @Test
+  public void restrictedProxyThrowsNpeForNullClassLoader()
+  {
+    RestrictableImpl target = new RestrictableImpl();
+    assertThrows(NullPointerException.class,
+                 () -> ReflectionUtilities.restrictedProxy(
+                     null, target, new java.lang.reflect.Method[0]));
+  }
+
+  /**
+   * If the target object implements no interfaces,
+   * {@code restrictedProxy} must throw
+   * {@link IllegalArgumentException} per the javadoc. Uses a custom
+   * test class (rather than {@code java.lang.Object}) because system
+   * classes have a {@code null} classloader, which would trip the
+   * NPE check in the {@code (ClassLoader, Object, Method...)}
+   * overload before the interface-check fires.
+   */
+  @Test
+  public void restrictedProxyThrowsIaeForTargetWithNoInterfaces()
+  {
+    NoInterfacesClass target = new NoInterfacesClass();
+    assertThrows(IllegalArgumentException.class,
+                 () -> ReflectionUtilities.restrictedProxy(target));
+  }
+
+  /**
+   * Re-restricting an already-restricted proxy with the same method
+   * set must return the same proxy instance unchanged (per the
+   * implementation's "all already restricted → return as-is"
+   * branch).
+   */
+  @Test
+  public void restrictedProxyReturnsSameInstanceWhenAlreadyRestricted()
+      throws Exception
+  {
+    RestrictableImpl target = new RestrictableImpl();
+    java.lang.reflect.Method restrictedMethod
+        = RestrictableInterface.class.getMethod("restricted");
+
+    RestrictableInterface proxy = (RestrictableInterface)
+        ReflectionUtilities.restrictedProxy(target, restrictedMethod);
+
+    Object reproxied = ReflectionUtilities.restrictedProxy(
+        proxy, restrictedMethod);
+    assertSame(proxy, reproxied,
+               "Re-applying the same restriction must short-circuit"
+                   + " and return the same proxy");
+  }
+
+  /**
+   * Re-restricting an already-restricted proxy with an additional
+   * method must yield a new proxy that restricts both methods.
+   */
+  @Test
+  public void restrictedProxyAddsAdditionalRestriction() throws Exception
+  {
+    RestrictableImpl target = new RestrictableImpl();
+    java.lang.reflect.Method restrictedMethod
+        = RestrictableInterface.class.getMethod("restricted");
+    java.lang.reflect.Method allowedMethod
+        = RestrictableInterface.class.getMethod("allowed");
+
+    RestrictableInterface proxy1 = (RestrictableInterface)
+        ReflectionUtilities.restrictedProxy(target, restrictedMethod);
+    RestrictableInterface proxy2 = (RestrictableInterface)
+        ReflectionUtilities.restrictedProxy(proxy1, allowedMethod);
+
+    assertNotSame(proxy1, proxy2,
+                  "Adding a new restriction must produce a new proxy");
+    assertThrows(UnsupportedOperationException.class,
+                 proxy2::allowed);
+    assertThrows(UnsupportedOperationException.class,
+                 proxy2::restricted);
+  }
 }
