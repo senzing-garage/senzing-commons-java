@@ -53,6 +53,53 @@ public class CommandLineOptionAndValueTest
     }
   }
 
+  /**
+   * Enum with a public non-static instance field so that
+   * {@link CommandLineOption#isSensitive()}'s reflective field
+   * iteration sees a non-public-static field and exercises the
+   * "skip if not public-static" continue branch.
+   */
+  enum NonStaticFieldOption
+      implements CommandLineOption<NonStaticFieldOption, NonStaticFieldOption>
+  {
+    ONLY;
+
+    /**
+     * A public non-static field on the enum constant. {@code
+     * Class.getFields()} returns this field, but
+     * {@code isSensitive()} must skip it via the
+     * "modifiers & PUBLIC_STATIC == 0" guard.
+     */
+    public String publicInstanceField = "ignored";
+
+    @Override
+    public String getCommandLineFlag()
+    {
+      return "--only";
+    }
+  }
+
+  /**
+   * Non-enum implementation of {@link CommandLineOption} used to
+   * exercise the {@code return false} fall-through in
+   * {@link CommandLineOption#isSensitive()} — for a non-enum,
+   * {@code Class.getFields()} contains no static field whose value
+   * is the instance, so the loop completes without returning.
+   *
+   * <p>Uses raw types because {@code CommandLineOption}'s generic
+   * type parameter requires {@code T extends Enum<T>}, which a
+   * regular class cannot satisfy.</p>
+   */
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  static class NonEnumOption implements CommandLineOption
+  {
+    @Override
+    public String getCommandLineFlag()
+    {
+      return "--non-enum";
+    }
+  }
+
   // -------------------------------------------------------------------
   // CommandLineOption defaults
   // -------------------------------------------------------------------
@@ -151,6 +198,39 @@ public class CommandLineOptionAndValueTest
   {
     assertFalse(DefaultsOption.PLAIN.isSensitive(),
                 "Ordinary option should not be sensitive");
+  }
+
+  /**
+   * When the implementing enum has a non-static public instance
+   * field, {@link CommandLineOption#isSensitive()}'s reflective
+   * loop must {@code continue} past it (the "modifiers &
+   * PUBLIC_STATIC == 0" branch) without trying to read it. The
+   * enum constant's own field still drives the result.
+   */
+  @Test
+  public void isSensitiveSkipsNonStaticFields()
+  {
+    // Should return false without throwing — the public instance
+    // field is correctly skipped, and the enum constant's name
+    // ("ONLY") is not "PASSWORD" so the eventual result is false.
+    assertFalse(NonStaticFieldOption.ONLY.isSensitive(),
+                "Option whose enum has a non-static public field"
+                    + " must skip that field and not throw");
+  }
+
+  /**
+   * For a non-enum implementation of {@link CommandLineOption},
+   * {@link CommandLineOption#isSensitive()} must reach its
+   * {@code return false} fall-through: no static field on the
+   * implementing class equals the instance, so the loop completes
+   * without an inner return.
+   */
+  @Test
+  public void isSensitiveFalseForNonEnumImplementation()
+  {
+    assertFalse(new NonEnumOption().isSensitive(),
+                "Non-enum option must fall through to 'return false'"
+                    + " — no public-static field equals the instance");
   }
 
   // -------------------------------------------------------------------
