@@ -55,35 +55,103 @@ public class CommandLineUtilities
             String url = cls.getResource(
                     cls.getSimpleName() + ".class").toString();
 
-            if (url.indexOf(".jar") >= 0) {
-                int index = url.lastIndexOf(
-                        cls.getName().replace(".", "/") + ".class");
-                jarBaseUrl = url.substring(0, index);
-
-                index = jarBaseUrl.lastIndexOf("!");
-                if (index >= 0) {
-                    url = url.substring(0, index);
-                    index = url.lastIndexOf("/");
-
-                    if (index >= 0) {
-                        jarFileName = url.substring(index + 1);
-                    }
-
-                    url = url.substring(0, index);
-                    index = url.indexOf("/");
-                    pathToJar = url.substring(index);
-                }
-            }
+            JarLocation loc = extractJarLocation(url, cls.getName());
+            jarBaseUrl  = loc.baseUrl();
+            jarFileName = loc.fileName();
+            pathToJar   = loc.pathToJar();
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new ExceptionInInitializerError(e);
 
         } finally {
-            JAR_BASE_URL = jarBaseUrl;
+            JAR_BASE_URL  = jarBaseUrl;
             JAR_FILE_NAME = jarFileName;
-            PATH_TO_JAR = pathToJar;
+            PATH_TO_JAR   = pathToJar;
         }
+    }
+
+    /**
+     * Holds the three JAR-derived values parsed from a class resource
+     * URL. Package-private record used by the {@code static}
+     * initializer and by tests that exercise {@link
+     * #extractJarLocation(String, String)} directly with synthetic
+     * URLs.
+     *
+     * @param baseUrl   The base URL of the JAR (everything before the
+     *                  package path inside the JAR), or
+     *                  <code>null</code> if the URL does not reference
+     *                  a JAR.
+     * @param fileName  The bare file name of the JAR (e.g.
+     *                  {@code "foo.jar"}), or <code>null</code> if not
+     *                  available.
+     * @param pathToJar The filesystem path containing the JAR (e.g.
+     *                  {@code "/path/to/dir"}), or <code>null</code>
+     *                  if not available.
+     */
+    record JarLocation(String baseUrl, String fileName, String pathToJar)
+    {
+        /**
+         * Sentinel value with all three components <code>null</code>,
+         * returned when the input URL does not reference a JAR.
+         */
+        static final JarLocation EMPTY
+            = new JarLocation(null, null, null);
+    }
+
+    /**
+     * Parses a class resource URL of the form
+     * <code>jar:file:/path/to/dir/foo.jar!/com/pkg/Name.class</code>
+     * into the three components stored as {@link #JAR_BASE_URL},
+     * {@link #JAR_FILE_NAME}, and {@link #PATH_TO_JAR}.
+     *
+     * <p>If the specified URL does not contain {@code ".jar"}, this
+     * method returns {@link JarLocation#EMPTY} (all three components
+     * <code>null</code>), matching the {@code static} initializer's
+     * behavior for classes loaded from a directory.</p>
+     *
+     * <p>Package-private to enable direct testing with synthetic URLs
+     * without needing a class loaded from a real JAR on the test
+     * classpath.</p>
+     *
+     * @param classUrl The class resource URL, typically
+     *                 {@code cls.getResource(simpleName + ".class")
+     *                 .toString()}.
+     * @param classFqn The fully-qualified class name with periods
+     *                 (e.g.
+     *                 {@code "com.senzing.cmdline.CommandLineUtilities"}).
+     *
+     * @return The parsed {@link JarLocation}, or
+     *             {@link JarLocation#EMPTY} if the URL does not
+     *             reference a JAR.
+     */
+    static JarLocation extractJarLocation(String classUrl, String classFqn)
+    {
+        if (classUrl == null || classUrl.indexOf(".jar") < 0) {
+            return JarLocation.EMPTY;
+        }
+
+        int index = classUrl.lastIndexOf(
+                classFqn.replace(".", "/") + ".class");
+        String baseUrl   = classUrl.substring(0, index);
+        String fileName  = null;
+        String pathToJar = null;
+
+        int bangIndex = baseUrl.lastIndexOf("!");
+        if (bangIndex >= 0) {
+            String url = classUrl.substring(0, bangIndex);
+            int slashIndex = url.lastIndexOf("/");
+
+            if (slashIndex >= 0) {
+                fileName = url.substring(slashIndex + 1);
+            }
+
+            url = url.substring(0, slashIndex);
+            int firstSlash = url.indexOf("/");
+            pathToJar = url.substring(firstSlash);
+        }
+
+        return new JarLocation(baseUrl, fileName, pathToJar);
     }
 
     /**

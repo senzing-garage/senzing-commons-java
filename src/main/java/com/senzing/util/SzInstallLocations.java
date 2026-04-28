@@ -486,7 +486,13 @@ public class SzInstallLocations
             result.supportDir = supportDir;
             result.resourceDir = resourceDir;
             result.templatesDir = templatesDir;
-            result.devBuild = ("dist".equals(installDir.getName()));
+            // installDir is constructed as `new File(senzingDir, "er")`,
+            // so its raw name is always "er". Resolve through any
+            // symbolic links so a development build whose `er`
+            // entry is a symlink to `dist/` is detected per the
+            // documented "true if from a development build" contract.
+            result.devBuild = ("dist".equals(
+                installDir.getCanonicalFile().getName()));
 
             // return the result
             return result;

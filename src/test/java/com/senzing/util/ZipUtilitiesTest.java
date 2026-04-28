@@ -19,6 +19,9 @@ import java.util.zip.ZipOutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
+
 /**
  * Tests for {@link ZipUtilities}.
  */
@@ -500,6 +503,7 @@ public class ZipUtilitiesTest
    */
   @Test
   @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(Resources.SYSTEM_OUT)
   public void mainWithTextArgsPrintsRoundTripDiagnostics()
   {
     PrintStream originalOut = System.out;
@@ -593,6 +597,7 @@ public class ZipUtilitiesTest
    */
   @Test
   @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(Resources.SYSTEM_OUT)
   public void mainWithMultipleTextArgsIteratesAllArguments()
   {
     PrintStream originalOut = System.out;

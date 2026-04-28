@@ -6,9 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.api.parallel.ResourceLock;
+import org.junit.jupiter.api.parallel.Resources;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import uk.org.webcompere.systemstubs.stream.SystemOut;
 
 import javax.json.*;
 import java.io.*;
@@ -601,8 +605,10 @@ public class RecordReaderTest
    * the failing {@code readRecord} call.
    */
   @Test
+  @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(Resources.SYSTEM_OUT)
   public void jsonArrayCapturesErrorLineNumberOnParseFailure()
-      throws IOException
+      throws Exception
   {
     // Malformed: trailing junk after first object
     String text = "[{\"X\":1}, this is not valid]";
@@ -611,8 +617,16 @@ public class RecordReaderTest
 
     // First record OK
     assertNotNull(reader.readRecord());
-    // Second triggers a parse exception
-    assertThrows(Exception.class, reader::readRecord);
+
+    // The JSON-array provider prints LOCATION / LINE NUMBER to
+    // System.out as part of its parse-error path; capture so the
+    // build log stays clean. SAME_THREAD execution so the redirect
+    // does not interleave with concurrent tests.
+    new SystemOut().execute(() -> {
+      // Second triggers a parse exception
+      assertThrows(Exception.class, reader::readRecord);
+    });
+
     assertNotNull(reader.getErrorLineNumber(),
                   "JSON-array parse error must record a line number");
   }

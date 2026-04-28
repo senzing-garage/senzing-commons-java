@@ -93,6 +93,15 @@
       <version>14.22.0</version>
       <scope>test</scope>
     </dependency>
+    <!-- Used programmatically (not via @ExtendWith) for env-var stubbing
+         in CommandLineUtilities tests and System.err/System.out capture
+         in tests that exercise expected-error paths. -->
+    <dependency>
+      <groupId>uk.org.webcompere</groupId>
+      <artifactId>system-stubs-jupiter</artifactId>
+      <version>2.1.8</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <properties>
     <gpg.skip>true</gpg.skip> <!-- skip GPG unless release profile -->
