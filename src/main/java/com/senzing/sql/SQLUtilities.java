@@ -208,9 +208,12 @@ public class SQLUtilities
     public static BigDecimal getBigDecimal(ResultSet rs, int index)
             throws SQLException
     {
-        BigDecimal result = rs.getBigDecimal(index);
-        if (rs.wasNull()) return null;
-        return result;
+        // Detect null via getObject first: the xerial sqlite-jdbc
+        // driver throws on getBigDecimal for NULL columns rather
+        // than returning null and setting wasNull=true. getObject
+        // is portable across drivers and safe for NULL columns.
+        if (rs.getObject(index) == null) return null;
+        return rs.getBigDecimal(index);
     }
 
     /**
@@ -546,9 +549,11 @@ public class SQLUtilities
     public static BigDecimal getBigDecimal(ResultSet rs, String columnName)
             throws SQLException
     {
-        BigDecimal result = rs.getBigDecimal(columnName);
-        if (rs.wasNull()) return null;
-        return result;
+        // Detect null via getObject first (see getBigDecimal(rs, int)
+        // for rationale — the xerial sqlite-jdbc driver throws on
+        // getBigDecimal for NULL columns rather than returning null).
+        if (rs.getObject(columnName) == null) return null;
+        return rs.getBigDecimal(columnName);
     }
 
     /**
