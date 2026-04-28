@@ -72,7 +72,9 @@ public class IOUtilities
   public static void close(AutoCloseable closeable)
   {
     try {
-      if (closeable != null) closeable.close();
+      if (closeable != null) {
+        closeable.close();
+      }
     } catch (Exception ignore) {
       // ignore the exception
     }
@@ -101,7 +103,9 @@ public class IOUtilities
          BufferedReader br = new BufferedReader(reader))
     {
       long size = file.length();
-      if (size > Integer.MAX_VALUE) size = Integer.MAX_VALUE;
+      if (size > Integer.MAX_VALUE) {
+        size = Integer.MAX_VALUE;
+      }
 
       StringBuilder sb = new StringBuilder((int) size);
       for (int nextChar = br.read(); nextChar >= 0; nextChar = br.read()) {

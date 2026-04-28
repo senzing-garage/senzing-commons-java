@@ -441,15 +441,41 @@ prose flow and not left as orphaned short lines.
 
 ## Short-Circuit Conditionals
 
-When a conditional is used to short-circuit a method with a single
-`return` statement, there are three formatting tiers based on line
-length:
+The single-line / brace-less `if` form is **only** allowed when the
+body is a short-circuit control-flow statement: `return`, `continue`,
+`break`, or `throw`. Assignments, method calls, and any other body
+always use braces — even when the result would fit on one line.
 
-**Tier 1: Everything fits on one line** — no curly braces needed:
+When a **standalone `if`** (no `else`) is used to short-circuit a
+method with a short-circuit statement, there are three formatting
+tiers based on line length:
+
+**Tier 1: Everything fits on one line** — no curly braces needed
+(body must be `return`/`continue`/`break`/`throw`):
 
 ```java
     if (param == null) return null;
     if (list.isEmpty()) return Collections.emptyList();
+    if (i == 0) continue;
+    if (s.length() == 0) break;
+    if (input == null) throw new NullPointerException();
+```
+
+Bodies that are NOT short-circuit (assignments, method calls) always
+use braces, even when they would fit on one line:
+
+```java
+    // WRONG — assignment/method call is not short-circuit:
+    if (moduleName == null) moduleName = "Sz Repository Manager";
+    if (env != null) env.destroy();
+
+    // RIGHT — brace it:
+    if (moduleName == null) {
+        moduleName = "Sz Repository Manager";
+    }
+    if (env != null) {
+        env.destroy();
+    }
 ```
 
 **Tier 2: Condition + opening brace fit on one line** — curly braces
@@ -473,18 +499,59 @@ braces required:
     }
 ```
 
+### `if`/`else` pairs always use braces
+
+The single-line / brace-less form is **only** allowed for a
+standalone `if` (no `else` or `else if`). When an `else` clause is
+present, both branches must use curly braces — even when both bodies
+would fit on one line.
+
+**Wrong:**
+
+```java
+    if (x == null) doA();
+    else doB();
+
+    if (x == null) doA(); else doB();
+```
+
+**Right:**
+
+```java
+    if (x == null) {
+        doA();
+    } else {
+        doB();
+    }
+```
+
+The same rule applies to `if` / `else if` / `else` chains — once any
+branch has an `else`, every branch is braced.
+
 ## Single-Line Statements
 
-More generally, braces may be omitted for any single-line `if`
-statement when the condition and statement fit on one line:
+Braces may be omitted for a single-line **standalone** `if` (no
+`else`) **only** when the body is a short-circuit control-flow
+statement (`return`, `continue`, `break`, `throw`) AND the whole
+thing fits on one line:
 
 ```java
     if (value == null) return null;
     if (index < 0) break;
+    if (badInput) throw new IllegalArgumentException();
 ```
 
-This is permitted by checkstyle's `NeedBraces` module with
-`allowSingleLineStatement = true`.
+Brace-less form is **not** allowed when:
+
+- The body is an assignment or method call (not short-circuit) —
+  even if it fits on one line.
+- An `else` clause is present — see "Short-Circuit Conditionals"
+  above.
+
+Checkstyle's `NeedBraces` module is configured with
+`allowSingleLineStatement = true`, so it permits a wider range of
+single-line forms than this project's coding standards. The stricter
+project rule above takes precedence.
 
 ---
 
@@ -650,9 +717,8 @@ WHAT NOT TO CHANGE:
 
 ### Python Scripts Used
 
-Three Python scripts were developed to automate bulk formatting.
-They are stored in `.claude/scripts/` and can be run from the
-project root:
+Five Python scripts automate bulk formatting. They are stored in
+`.claude/scripts/` and can be run from the project root:
 
 #### 1. fix_allman_braces.py — Brace Placement
 
@@ -735,6 +801,78 @@ Reflows `@param`, `@return`, and `@throws` tag descriptions.
   start, not a fixed offset
 - `@return` has no parameter name, so the regex must handle both
   `@param name desc` and `@return desc` patterns
+
+#### 4. fix_need_braces.py — Short-circuit if collapse / if-else bracing
+
+Fixes brace placement for `if` / `else` patterns. Behaviour depends
+on (a) whether an `else` is present and (b) whether the body is a
+short-circuit control-flow statement.
+
+- **Standalone `if`** (no `else`):
+  - If the body is short-circuit (`return`, `continue`, `break`,
+    `throw`) AND the collapsed line fits within 80 chars, collapse
+    to a single line `if (cond) body;` (Tier 1).
+  - Otherwise (non-short-circuit body, or it doesn't fit) wrap with
+    braces (Tier 2).
+- **`if` paired with `else`** (or `else if`): always brace both
+  branches, regardless of body type or whether the bodies would fit
+  on one line. Single-line / brace-less form is never used for
+  if/else pairs.
+
+The script also reformats already-inline `if (cond) body;` lines
+where `body;` is non-short-circuit (e.g.
+`if (moduleName == null) moduleName = "default";`) by adding braces.
+
+**Key logic:**
+
+- Walk each `.java` file looking for both already-inline
+  `if (cond) body;` and multi-line `if (cond)\n   body;` patterns
+- Recognize `return`/`continue`/`break`/`throw` as the only
+  permitted single-line bodies
+- For a standalone `if` with a short-circuit body that fits in
+  80 chars, collapse to one line; otherwise wrap with braces
+- For an `if`/`else` pair, always brace both branches — never single
+  line, even when both bodies fit
+
+**Lessons learned:**
+
+- Single-line / brace-less form is reserved for short-circuit
+  control-flow only. Assignments and method calls always use braces
+  even when they would fit on one line — this keeps the
+  control-flow signal visually distinct from ordinary statements.
+- Single-line / brace-less form is also reserved for standalone
+  `if`. The asymmetric form `if (cond) stmt;\nelse {…}` reads
+  poorly, and the symmetric `if (cond) stmt;\nelse stmt;` form
+  blurs the structure of the conditional. Always brace both
+  branches when an `else` is present.
+- Skip lines whose body looks like a sub-construct (`{`, another
+  `if`, etc.) to avoid mangling nested control flow
+
+#### 5. fix_javadoc_inline_tags.py — Inline-tag paragraph reflow
+
+Reflows javadoc paragraphs that mix prose with inline tags
+(`{@link}`, `{@code}`, `<code>`, …). The base
+`fix_javadoc_reflow.py` is conservative and bails the moment a
+paragraph contains an inline-tag line; this complement picks those
+up.
+
+**Key logic:**
+
+- Same paragraph-detection as `fix_javadoc_reflow.py`, except
+  `is_prose_line()` accepts lines that contain inline tags rather
+  than rejecting them on the leading-`{@` check
+- Reflow proceeds normally once the paragraph is captured
+- Still skips block-level HTML (`<p>`, `<pre>`, `<li>`, `<ul>`, …)
+  and `@tag` continuation lines, so it does not mangle structured
+  javadoc
+
+**Lessons learned:**
+
+- Block-level HTML markers (`<p>`, `<pre>`, `<ul>`, `<ol>`, `<li>`,
+  `<table>`, `<tr>`, `<td>`, `<th>`) must still terminate a
+  paragraph — otherwise unrelated chunks merge
+- `@tag` continuation lines (extra-indented after the `*` prefix)
+  must still terminate a paragraph for the same reason
 
 ### VSCode Formatter Limitations
 

@@ -467,7 +467,9 @@ public class ConnectionPoolTest
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -522,7 +524,9 @@ public class ConnectionPoolTest
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -605,7 +609,9 @@ public class ConnectionPoolTest
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -690,7 +696,9 @@ public class ConnectionPoolTest
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -772,7 +780,9 @@ public class ConnectionPoolTest
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -833,7 +843,9 @@ public class ConnectionPoolTest
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -894,7 +906,9 @@ public class ConnectionPoolTest
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -1149,7 +1163,9 @@ public class ConnectionPoolTest
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -1295,7 +1311,9 @@ public class ConnectionPoolTest
       ps    = SQLUtilities.close(ps);
       stmt  = SQLUtilities.close(stmt);
       conn  = SQLUtilities.close(conn);
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
 
     }
   }

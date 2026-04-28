@@ -116,7 +116,9 @@ public class LoggingUtilities
                 if (packageName.startsWith("com.senzing.")
                         && packageName.length() > prefixLength) {
                     int index = packageName.indexOf(".", prefixLength);
-                    if (index < 0) index = packageName.length();
+                    if (index < 0) {
+                        index = packageName.length();
+                    }
                     return packageName.substring(prefixLength, index);
                 }
 

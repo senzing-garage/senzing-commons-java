@@ -488,7 +488,9 @@ public class CommandLineUtilities
         Class baseType = null;
         for (T option : enumSet) {
             set.add((CommandLineOption) option);
-            if (baseType == null) baseType = option.getBaseOptionType();
+            if (baseType == null) {
+                baseType = option.getBaseOptionType();
+            }
         }
 
         if (baseType != null) {
@@ -671,7 +673,9 @@ public class CommandLineUtilities
 
             // add the synonym flags if any
             Set<String> synonymFlags = option.getSynonymFlags();
-            if (synonymFlags == null) synonymFlags = Collections.emptySet();
+            if (synonymFlags == null) {
+                synonymFlags = Collections.emptySet();
+            }
             for (String synonym : synonymFlags) {
                 // check the synonym against the primary flag (sanity check)
                 if (synonym.equals(flag)) {
@@ -1032,7 +1036,9 @@ public class CommandLineUtilities
                 int bound = (maxParamCount < 0)
                         ? args.length
                         : index + (maxParamCount - minParamCount) + 1;
-                if (bound > args.length) bound = args.length;
+                if (bound > args.length) {
+                    bound = args.length;
+                }
                 for (int nextIndex = index + 1;
                      nextIndex < bound
                              && !lookupMap.containsKey(args[nextIndex]);
@@ -1327,7 +1333,9 @@ public class CommandLineUtilities
             if (fallBacks) {
                 // get the fallbacks
                 envVars = option.getEnvironmentFallbacks();
-                if (envVars == null) envVars = Collections.emptyList();
+                if (envVars == null) {
+                    envVars = Collections.emptyList();
+                }
 
             } else {
                 // get the environment variable and its synonyms
@@ -1335,8 +1343,12 @@ public class CommandLineUtilities
                 Set<String> synonymSet = option.getEnvironmentSynonyms();
                 envVars = new ArrayList<>(
                     synonymSet == null ? 1 : synonymSet.size() + 1);
-                if (envVar != null) envVars.add(envVar);
-                if (synonymSet != null) envVars.addAll(synonymSet);
+                if (envVar != null) {
+                    envVars.add(envVar);
+                }
+                if (synonymSet != null) {
+                    envVars.addAll(synonymSet);
+                }
             }
 
             // iterate over the items in the list
@@ -1751,14 +1763,19 @@ public class CommandLineUtilities
         }
 
         // if less than 1, then set a minimum of 1 column
-        if (columnCount < 1) columnCount = 1;
+        if (columnCount < 1) {
+            columnCount = 1;
+        }
 
         int columnIndex = 0;
         for (CommandLineOption option : options) {
             String flag = option.getCommandLineFlag();
             int spaceCount = maxLength - flag.length() - bullet.length();
-            if (columnIndex == 0) pw.print(indenter);
-            else pw.print(spacer);
+            if (columnIndex == 0) {
+                pw.print(indenter);
+            } else {
+                pw.print(spacer);
+            }
             pw.print(bullet);
             pw.print(flag);
             for (int index = 0; index < spaceCount; index++) {

@@ -354,7 +354,9 @@ public class SzInstallLocations
                 } else {
                     pw.println("Senzing resource directory appears invalid:");
                 }
-                if (resourceDir != null) pw.println("         " + resourceDir);
+                if (resourceDir != null) {
+                    pw.println("         " + resourceDir);
+                }
                 
                 pw.println();
 
@@ -435,7 +437,9 @@ public class SzInstallLocations
                 } else {
                     pw.println("Senzing config directory appears invalid:");
                 }
-                if (configDir != null) pw.println("     " + configDir);
+                if (configDir != null) {
+                    pw.println("     " + configDir);
+                }
 
                 if (missingFiles.size() > 0) {
                     for (String missing : missingFiles) {

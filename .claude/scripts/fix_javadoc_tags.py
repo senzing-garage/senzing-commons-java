@@ -28,17 +28,19 @@ def process_file(filepath):
         rstripped = line.rstrip('\n').rstrip('\r')
         stripped = rstripped.strip()
 
-        # Detect a @tag line inside a Javadoc comment
-        # Pattern: " * @param name description" or
-        #          " * @return description" or
-        #          " * @throws Type description"
+        # Detect a @tag line inside a Javadoc comment.
+        # @return has NO parameter name — its description starts right
+        # after `@return`, so try it before the @param/@throws pattern
+        # to avoid mistakenly capturing the first description word as
+        # a parameter name.
         tag_match = re.match(
-            r'^(\s*)\*\s+(@(?:param|return|throws)\s+\S+\s+)(.*)',
+            r'^(\s*)\*\s+(@return\s+)(.*)',
             rstripped)
         if not tag_match:
-            # Also match @return with no extra word
+            # Pattern: " * @param name description" or
+            #          " * @throws Type description"
             tag_match = re.match(
-                r'^(\s*)\*\s+(@return\s+)(.*)',
+                r'^(\s*)\*\s+(@(?:param|throws)\s+\S+\s+)(.*)',
                 rstripped)
 
         if not tag_match:

@@ -193,7 +193,9 @@ public class ReflectionUtilities
         // verify the target number type is valid
         Objects.requireNonNull(numType, "Number type cannot be null");
 
-        if (numType.isPrimitive()) numType = getPromotedType(numType);
+        if (numType.isPrimitive()) {
+            numType = getPromotedType(numType);
+        }
 
         if (!Number.class.isAssignableFrom(numType)
                 || (getPrimitiveType(numType) == null)) {

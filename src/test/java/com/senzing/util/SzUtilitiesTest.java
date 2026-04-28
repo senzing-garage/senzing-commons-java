@@ -71,7 +71,9 @@ public class SzUtilitiesTest
   @AfterAll
   public void tearDownFakeInstall() throws IOException
   {
-    if (this.install != null) this.install.close();
+    if (this.install != null) {
+      this.install.close();
+    }
   }
 
   @AfterEach

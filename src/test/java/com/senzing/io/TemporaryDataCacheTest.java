@@ -146,7 +146,9 @@ public class TemporaryDataCacheTest
       {
         for (int byteRead = bis.read(); byteRead >= 0; byteRead = bis.read()) {
           int count = tempDir.listFiles().length;
-          if (count > maxCount) maxCount = count;
+          if (count > maxCount) {
+            maxCount = count;
+          }
         }
 
       } finally {
@@ -200,7 +202,9 @@ public class TemporaryDataCacheTest
         for (int byteRead = bis.read(); byteRead >= 0; byteRead = bis.read()) {
           int count = tempDir.listFiles(
               f -> f.getName().startsWith("TempDataCache-")).length;
-          if (count > maxCount) maxCount = count;
+          if (count > maxCount) {
+            maxCount = count;
+          }
         }
 
       } finally {
@@ -308,7 +312,9 @@ public class TemporaryDataCacheTest
       {
         for (int byteRead = bis.read(); byteRead >= 0; byteRead = bis.read())
         {
-          if (!appended) appended = tdc.isAppending();
+          if (!appended) {
+            appended = tdc.isAppending();
+          }
         }
 
       } finally {

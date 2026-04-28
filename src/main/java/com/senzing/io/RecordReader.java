@@ -445,7 +445,9 @@ public class RecordReader
       if (dataSourceMap != null) {
         dataSourceMap.entrySet().forEach(entry -> {
           String key = entry.getKey();
-          if (key != null) key = key.trim().toUpperCase();
+          if (key != null) {
+            key = key.trim().toUpperCase();
+          }
           String value = entry.getValue().trim().toUpperCase();
           this.dataSourceMap.put(key, value);
         });
@@ -540,7 +542,9 @@ public class RecordReader
 
     // get the mapped data source
     String dataSource = this.dataSourceMap.get(dsrc);
-    if (dataSource == null) dataSource = this.dataSourceMap.get(null);
+    if (dataSource == null) {
+      dataSource = this.dataSourceMap.get(null);
+    }
     if (dataSource != null && dataSource.trim().length() == 0) {
       dataSource = null;
     }

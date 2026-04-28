@@ -119,7 +119,9 @@ public class ConnectionPoolExtraTest
                  "Diagnostic info should be non-empty when a"
                      + " connection is leased");
     } finally {
-      if (conn != null) pool.release(conn);
+      if (conn != null) {
+        pool.release(conn);
+      }
       pool.shutdown();
     }
   }

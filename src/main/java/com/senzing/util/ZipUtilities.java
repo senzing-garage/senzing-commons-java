@@ -323,7 +323,9 @@ public class ZipUtilities
     // check if we have a directory
     if (directoryOrFile.isDirectory()) {
       String dirName = name;
-      if (!dirName.endsWith("/")) dirName = dirName + "/";
+      if (!dirName.endsWith("/")) {
+        dirName = dirName + "/";
+      }
       ZipEntry zipEntry = new ZipEntry(dirName);
       targetZip.putNextEntry(zipEntry);
       targetZip.closeEntry();
@@ -414,7 +416,9 @@ public class ZipUtilities
       if (args.length == 2) {
         source = new File(args[0]);
         target = new File(args[1]);
-        if (!source.exists()) source = null;
+        if (!source.exists()) {
+          source = null;
+        }
       }
       if (source == null || target == null) {
         for (int index = 0; index < args.length; index++) {

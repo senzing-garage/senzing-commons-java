@@ -435,7 +435,9 @@ public class IOUtilitiesTest
     StringBuilder sb = new StringBuilder();
     for (byte b: bytes) {
       String hex = Integer.toString((b & 0xFF), 16);
-      if (hex.length() == 1) hex = "0" + hex;
+      if (hex.length() == 1) {
+        hex = "0" + hex;
+      }
       sb.append(hex);
     }
     return sb.toString();

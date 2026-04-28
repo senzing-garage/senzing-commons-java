@@ -1134,7 +1134,9 @@ public class ConnectionPool implements Quantified
         boolean success = false;
         try {
             // ensure auto-commit is turned off
-            if (conn.getAutoCommit()) conn.setAutoCommit(false);
+            if (conn.getAutoCommit()) {
+                conn.setAutoCommit(false);
+            }
 
             // check isolation level
             if (this.getIsolationLevel() != null) {

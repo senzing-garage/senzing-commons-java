@@ -154,7 +154,9 @@ public class PoolConnectionProviderTest
                  "SQLException message must mention the failure: "
                      + sqe.getMessage());
     } finally {
-      if (leased != null) leased.close();
+      if (leased != null) {
+        leased.close();
+      }
       pool.shutdown();
     }
   }

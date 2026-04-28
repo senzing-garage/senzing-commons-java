@@ -39,6 +39,9 @@ def is_prose_line(stripped):
     """Return True if this line is plain Javadoc prose (possibly with
     inline tags). Returns False for tag descriptions, list items,
     block-level HTML, blank comment lines, or comment delimiters.
+    Also returns False for lines that contain {@snippet ...} or its
+    file= continuation, since those are unbreakable units relying on
+    the checkstyle @snippet ignorePattern.
     """
     if not stripped.startswith('* '):
         return False
@@ -53,6 +56,10 @@ def is_prose_line(stripped):
         if content.startswith(tok) and len(content) <= len(tok) + 4:
             return False
     if content == '*/':
+        return False
+    # Skip {@snippet ...} blocks — file/region paths can't be wrapped
+    # and rely on the checkstyle @snippet ignorePattern.
+    if '{@snippet' in content or content.startswith('file="'):
         return False
     return True
 

@@ -92,7 +92,9 @@ public class PropertyReflector<T>
           && method.getParameterCount() == 0
           && method.getReturnType() != void.class) {
         String key = name.substring(3, 4).toLowerCase();
-        if (name.length() > 4) key += name.substring(4);
+        if (name.length() > 4) {
+          key += name.substring(4);
+        }
         accessors.put(key, method);
         continue;
       }
@@ -103,7 +105,9 @@ public class PropertyReflector<T>
           && (method.getReturnType() == Boolean.class
               || method.getReturnType() == boolean.class)) {
         String key = name.substring(2, 3).toLowerCase();
-        if (name.length() > 3) key += name.substring(3);
+        if (name.length() > 3) {
+          key += name.substring(3);
+        }
         accessors.put(key, method);
         continue;
       }
@@ -113,7 +117,9 @@ public class PropertyReflector<T>
           && method.getParameterCount() == 1
           && method.getReturnType() == void.class) {
         String key = name.substring(3, 4).toLowerCase();
-        if (name.length() > 4) key += name.substring(4);
+        if (name.length() > 4) {
+          key += name.substring(4);
+        }
         List<Method> methodList = mutators.get(key);
         if (methodList == null) {
           methodList = new LinkedList<>();

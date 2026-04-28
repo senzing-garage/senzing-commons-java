@@ -65,7 +65,9 @@ public class ReflectionUtilitiesTest
 
       } finally {
         synchronized (this.monitor) {
-          if (thread == this.currentThread) this.currentThread = null;
+          if (thread == this.currentThread) {
+              this.currentThread = null;
+          }
         }
       }
     }

@@ -210,7 +210,9 @@ public class TemporaryDataCache
     int count = 0;
     synchronized (this.fileParts) {
       for (CacheFilePart filePart : this.fileParts) {
-        if (filePart.file.delete()) count++;
+        if (filePart.file.delete()) {
+          count++;
+        }
       }
       this.fileParts.clear();
       this.deleted = true;
@@ -1015,7 +1017,9 @@ public class TemporaryDataCache
               }
             } else {
               this.eof = true;
-              if (this.consuming) owner.delete();
+              if (this.consuming) {
+                owner.delete();
+              }
               return -1; // EOF
             }
           }

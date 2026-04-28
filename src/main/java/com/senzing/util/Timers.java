@@ -259,11 +259,15 @@ public class Timers
         int count = 0;
         long now = now();
         TimerInfo info = this.timerInfos.get(timerName);
-        if (info != null && info.pause(now)) count++;
+        if (info != null && info.pause(now)) {
+            count++;
+        }
         if (moreTimerNames != null) {
             for (String addlTimerName : moreTimerNames) {
                 info = this.timerInfos.get(addlTimerName);
-                if (info != null && info.pause(now)) count++;
+                if (info != null && info.pause(now)) {
+                    count++;
+                }
             }
         }
         return count;
@@ -289,11 +293,15 @@ public class Timers
         int count = 0;
         long now = now();
         TimerInfo info = this.timerInfos.get(timerName);
-        if (info != null && info.resume(now)) count++;
+        if (info != null && info.resume(now)) {
+            count++;
+        }
         if (moreTimerNames != null) {
             for (String addlTimerName : moreTimerNames) {
                 info = this.timerInfos.get(addlTimerName);
-                if (info != null && info.resume(now)) count++;
+                if (info != null && info.resume(now)) {
+                    count++;
+                }
             }
         }
         return count;
@@ -310,7 +318,9 @@ public class Timers
     {
         int count = 0;
         for (TimerInfo info : this.timerInfos.values()) {
-            if (info.pause()) count++;
+            if (info.pause()) {
+                count++;
+            }
         }
         return count;
     }
@@ -326,7 +336,9 @@ public class Timers
     {
         int count = 0;
         for (TimerInfo info : this.timerInfos.values()) {
-            if (info.resume()) count++;
+            if (info.resume()) {
+                count++;
+            }
         }
         return count;
     }

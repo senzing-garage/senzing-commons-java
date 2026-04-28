@@ -139,7 +139,9 @@ public class SQLUtilitiesTest
   @AfterAll
   public void closeFixture() throws SQLException
   {
-    if (this.conn != null) this.conn.close();
+    if (this.conn != null) {
+      this.conn.close();
+    }
   }
 
   // -------------------------------------------------------------------
