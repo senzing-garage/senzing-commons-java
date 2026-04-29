@@ -181,27 +181,26 @@ public class TemporaryDataCacheExtraTest
     LoggingUtilities.overrideDebugLogging(true);
     try {
       byte[] data = largeBytes();
-      TemporaryDataCache tdc = new TemporaryDataCache(
-          new ByteArrayInputStream(data));
-      try {
-        tdc.waitUntilAppendingComplete();
 
-        SystemOut stub = new SystemOut();
-        stub.execute(() -> {
+      // Construct the cache and consume it inside the SystemOut stub
+      // — the consumer thread starts in the constructor and emits
+      // debug logging during consumption, so the redirect must be
+      // active before the constructor runs.
+      new SystemOut().execute(() -> {
+        TemporaryDataCache tdc = new TemporaryDataCache(
+            new ByteArrayInputStream(data));
+        try {
+          tdc.waitUntilAppendingComplete();
           InputStream is = tdc.getInputStream();
           try {
             drain(is);
           } finally {
             is.close();
           }
-        });
-
-        // We do not need to validate exact debug text; reaching here
-        // means the debug-logging branch ran without throwing.
-        assertTrue(true);
-      } finally {
-        tdc.delete();
-      }
+        } finally {
+          tdc.delete();
+        }
+      });
     } finally {
       LoggingUtilities.clearDebugOverride();
     }
