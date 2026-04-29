@@ -52,6 +52,9 @@ RE_IF_OPEN = re.compile(
 RE_ELSE_OPEN = re.compile(
     r'^(?P<indent>[ \t]*)else\s*$'
 )
+# Leading whitespace on a line (always matches — used for indent
+# extraction).
+RE_LEADING_WS = re.compile(r'^([ \t]*)')
 # Body line: deeper indent, ends with ';' (single statement)
 RE_BODY_STMT = re.compile(
     r'^(?P<indent>[ \t]+)(?P<stmt>[^\s].*;)\s*$'
@@ -238,8 +241,8 @@ def process_file(path):
                             next_idx_immediate].rstrip(
                                 '\n').rstrip('\r')
                         next_stripped = next_line.strip()
-                        next_indent = re.match(
-                            r'^([ \t]*)', next_line).group(1)
+                        next_indent = RE_LEADING_WS.match(
+                            next_line).group(1)
                         if (next_indent == inline_indent
                                 and (next_stripped.startswith('else ')
                                      or next_stripped == 'else'
@@ -249,8 +252,38 @@ def process_file(path):
                             # Strip leading '{' if present (else { ...).
                             if else_body.startswith('{'):
                                 else_body = else_body[1:].strip()
-                            # Single-line else statement: `else stmt;`.
-                            if (else_body.endswith(';')
+                            # Detect `else if (cond) stmt;` so we can
+                            # emit a properly braced `} else if (...)`
+                            # rather than a plain `} else {` wrapping
+                            # an unbraced inner if (which would
+                            # otherwise need a second pass to clean
+                            # up).
+                            m_elseif = RE_IF_INLINE.match(else_body)
+                            elseif_balanced = (
+                                m_elseif is not None
+                                and (m_elseif.group('cond').count('(')
+                                     == m_elseif.group(
+                                         'cond').count(')')))
+                            if elseif_balanced:
+                                inner_cond = m_elseif.group('cond')
+                                inner_body = m_elseif.group(
+                                    'body').strip()
+                                out.append(
+                                    f"{inline_indent}if "
+                                    f"({inline_cond}) {{\n")
+                                out.append(
+                                    f"{body_indent}{inline_body}\n")
+                                out.append(
+                                    f"{inline_indent}}} else if "
+                                    f"({inner_cond}) {{\n")
+                                out.append(
+                                    f"{body_indent}{inner_body}\n")
+                                out.append(f"{inline_indent}}}\n")
+                                fixes += 1
+                                i = next_idx_immediate + 1
+                                else_handled = True
+                            # Plain `else stmt;`: single-line else.
+                            elif (else_body.endswith(';')
                                     and '{' not in else_body
                                     and '}' not in else_body):
                                 # Emit if-else with both braced.
