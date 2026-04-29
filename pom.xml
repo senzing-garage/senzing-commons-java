@@ -111,6 +111,11 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <junit.jupiter.version>5.13.4</junit.jupiter.version>
     <buildDirectory>${project.basedir}/target</buildDirectory>
+    <!-- Declared empty so the surefire `<argLine>@{argLine} ...</argLine>`
+         late-bound reference always resolves. The jacoco profile's
+         prepare-agent goal overwrites this with the JaCoCo agent
+         flags during tests run under -Pjacoco. -->
+    <argLine></argLine>
   </properties>
   <build>
     <directory>${buildDirectory}</directory>
@@ -132,6 +137,16 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.5.5</version>
         <configuration>
+          <!-- -XX:+EnableDynamicAgentLoading silences the JVM warning
+               emitted when system-stubs-jupiter dynamically attaches
+               its byte-buddy agent at test time. -Xshare:off avoids
+               the "Sharing is only supported for boot loader classes"
+               warning that appears alongside it on some JDKs when the
+               bootstrap classpath is appended. The @{argLine}
+               late-bound reference lets the jacoco profile's
+               prepare-agent contribution be prepended without being
+               overwritten. -->
+          <argLine>@{argLine} -XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
           <systemPropertyVariables>
             <project.build.directory>${project.build.directory}</project.build.directory>
           </systemPropertyVariables>
