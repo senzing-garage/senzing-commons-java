@@ -1,4 +1,4 @@
-## System Stubs, ExecutionMode, and ResourceLock — the project pattern
+# System Stubs, ExecutionMode, and ResourceLock — the project pattern
 
 The project uses
 [`uk.org.webcompere:system-stubs-jupiter`](https://github.com/webcompere/system-stubs)
@@ -14,7 +14,7 @@ There is a specific pattern that **every** test using these stubs must
 follow. Deviating from it causes either flaky inter-class races or
 output leakage in the build log.
 
-### The pattern
+## The pattern
 
 ```java
 import org.junit.jupiter.api.parallel.Execution;
@@ -46,7 +46,7 @@ public void someTest() throws Exception
 
 Three rules in this pattern, all required:
 
-#### 1. Programmatic, at method level — not annotation-driven
+### 1. Programmatic, at method level — not annotation-driven
 
 Use `new EnvironmentVariables(...).execute(...)` and
 `new SystemOut().execute(...)` / `new SystemErr().execute(...)`
@@ -59,14 +59,14 @@ with parallel test execution, and makes it harder to scope the stub
 to just the lines that need it. Method-level execute-with-callable
 keeps the scope explicit and test-local.
 
-#### 2. `@Execution(ExecutionMode.SAME_THREAD)` on the test (or class)
+### 2. `@Execution(ExecutionMode.SAME_THREAD)` on the test (or class)
 
 `System.setOut` / `System.setErr` are JVM-wide. If two test methods
 in the same class redirect concurrently, their captured output races.
 `SAME_THREAD` keeps the test from running concurrently with siblings
 in the same class.
 
-#### 3. `@ResourceLock` for cross-class mutual exclusion
+### 3. `@ResourceLock` for cross-class mutual exclusion
 
 Add `@ResourceLock(Resources.SYSTEM_OUT)` and/or
 `@ResourceLock(Resources.SYSTEM_ERR)` on the test (or class) to
@@ -85,7 +85,7 @@ Use the lock matching what the test redirects:
 - `SystemErr.execute(...)` → `@ResourceLock(Resources.SYSTEM_ERR)`
 - Both → both locks (see ordering rule below)
 
-### Lock ordering convention — avoid deadlocks
+## Lock ordering convention — avoid deadlocks
 
 When a test holds **both** `SYSTEM_OUT` and `SYSTEM_ERR` locks, declare
 them in this canonical order:
@@ -102,7 +102,7 @@ waiting for `OUT`. The project convention is **always
 `SYSTEM_OUT` first, `SYSTEM_ERR` second**, which makes deadlock
 impossible.
 
-### Class-level vs. method-level locking
+## Class-level vs. method-level locking
 
 - **Class-level locks** make sense when **most** tests in the class
   redirect (e.g. `LoggingUtilitiesTest`, `SQLUtilitiesTest`,
@@ -117,9 +117,9 @@ impossible.
   the class would needlessly serialize against unrelated tests in
   other classes.
 
-### Gotchas
+## Gotchas
 
-#### Wrap the **right** stream
+### Wrap the **right** stream
 
 `LoggingUtilities.logDebug(...)` writes to **`System.out`** (despite
 the word "log" suggesting stderr). Tests that exercise debug-logging
@@ -136,7 +136,7 @@ whether the production code writes to `out` vs `err`:
 - `printStackTrace()` (no args) → `System.err`
 - `Throwable.printStackTrace(System.out)` → `System.out`
 
-#### Background-thread output: wrap the construction call too
+### Background-thread output: wrap the construction call too
 
 If the production code starts a background thread inside its
 constructor (e.g. `TemporaryDataCache` starts a `ConsumerThread` that
@@ -169,7 +169,7 @@ new SystemErr().execute(() -> {
 });
 ```
 
-#### JVM warnings about byte-buddy
+### JVM warnings about byte-buddy
 
 `system-stubs-jupiter` transitively pulls in `byte-buddy-agent` so it
 can dynamically attach as a Java agent and modify JDK-internal fields
@@ -192,7 +192,7 @@ JaCoCo agent flags via the `argLine` property when running under
 producing a final argument list with the JaCoCo flags followed by
 `-XX:+EnableDynamicAgentLoading -Xshare:off`.
 
-### Tests that don't use system-stubs
+## Tests that don't use system-stubs
 
 A small number of older tests redirect `System.out` / `System.err`
 with raw `System.setOut(new PrintStream(baos))` plus a try/finally
@@ -214,7 +214,7 @@ If a test only needs to verify a method **doesn't throw**, capture
 is unnecessary — but wrapping with `SystemOut` / `SystemErr` is
 still cheap and keeps the build log clean.
 
-### Examples in this codebase
+## Examples in this codebase
 
 - `CommandLineUtilitiesEnvTest` — `EnvironmentVariables.execute`,
   class-level `@Execution(SAME_THREAD)`.
