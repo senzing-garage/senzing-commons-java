@@ -343,7 +343,8 @@ public class TemporaryDataCacheExtraTest
   @Test
   @Execution(ExecutionMode.SAME_THREAD)
   @ResourceLock(Resources.SYSTEM_ERR)
-  public void failureInSourceStreamSurfacesToReader() throws Exception
+  public void failureInSourceStreamSurfacesToReader()
+      throws Exception
   {
     InputStream failing = new InputStream()
     {
