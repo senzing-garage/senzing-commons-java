@@ -46,7 +46,7 @@ push operational/troubleshooting depth into FAQ files.
 
 Senzing Commons Java Library is a collection of reusable Java utilities, interfaces, and classes common to multiple Senzing projects. Originally refactored from senzing-api-server, this library provides foundational components for command-line parsing, database connection pooling, I/O operations, reflection utilities, and more.
 
-The current version is `4.0.0-beta.3.0` (a beta line — see `CHANGELOG.md` for the per-release history).
+The current version is `4.0.0` (see `CHANGELOG.md` for the per-release history).
 
 ## Build and Test Commands
 
@@ -171,6 +171,38 @@ Tests use JUnit Jupiter 6 with parallel execution enabled:
 - Methods within a class run in same thread
 - Dynamic parallelism factor (1x number of cores)
 - System property `project.build.directory` available in tests
+
+#### System Stubs, ExecutionMode, and ResourceLock
+
+Tests that **stub environment variables** or **capture stdout / stderr**
+must follow the project's `system-stubs` +
+`@Execution(SAME_THREAD)` + `@ResourceLock` pattern to avoid
+build-log noise and inter-class capture races. Before writing such a
+test, search the FAQ:
+`mcp__senzing-commons-faq__search_faqs(query="system stubs")`.
+
+Headline rules:
+
+- Use `system-stubs-jupiter` **programmatically at the method level**
+  (`new EnvironmentVariables(...).execute(...)`, `new SystemOut()
+  .execute(...)`, `new SystemErr().execute(...)`) — never the
+  `@ExtendWith` annotation form.
+- Tag the test (or the class) with
+  `@Execution(ExecutionMode.SAME_THREAD)` — `System.setOut` /
+  `setErr` are JVM-wide, so concurrent redirects race.
+- Add `@ResourceLock(Resources.SYSTEM_OUT)` and/or
+  `@ResourceLock(Resources.SYSTEM_ERR)` for cross-class mutual
+  exclusion. When both are present, **always declare
+  `SYSTEM_OUT` first, `SYSTEM_ERR` second** to avoid deadlock.
+- `LoggingUtilities.logDebug` writes to **`System.out`** (not
+  stderr); use `SystemOut` to capture it.
+- If the production code starts a background thread in its
+  constructor, place the `new ...()` call **inside** the
+  `stub.execute(...)` lambda so the redirect is active before the
+  thread starts.
+
+Full pattern, examples, and the JVM-warning suppression details
+are in the `testing/system-stubs-and-output-capture` FAQ.
 
 ## Development Notes
 

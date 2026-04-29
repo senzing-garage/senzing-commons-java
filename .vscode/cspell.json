@@ -44,6 +44,7 @@
     "Pcheckstyle",
     "phoo",
     "PKCS",
+    "Pjacoco",
     "prefs",
     "PRNG",
     "pushback",
@@ -65,8 +66,9 @@
     "szcore",
     "Unsynchronized",
     "webcompere",
-    "Xlint",
     "xerial",
+    "Xlint",
+    "Xshare",
     "Zonky"
   ],
   "ignorePaths": [

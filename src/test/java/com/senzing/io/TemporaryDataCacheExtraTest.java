@@ -8,6 +8,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
 import uk.org.webcompere.systemstubs.stream.SystemErr;
+import uk.org.webcompere.systemstubs.stream.SystemOut;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -165,41 +166,41 @@ public class TemporaryDataCacheExtraTest
    * {@code logDebug}. Wrapping the test in a thread-local
    * debug-logging override exercises that branch.
    *
-   * <p>Captures {@link System#err} since {@code logDebug} writes
-   * there, and tags {@link Execution} {@code SAME_THREAD} +
-   * {@link ResourceLock} for the global stderr to keep the build
+   * <p>{@link LoggingUtilities#logDebug} writes to
+   * {@link System#out}, so a {@link SystemOut} stub captures the
+   * output. Tagged {@link Execution} {@code SAME_THREAD} +
+   * {@link ResourceLock} for the global stdout to keep the build
    * log clean and avoid races with concurrent tests.</p>
    */
   @Test
   @Execution(ExecutionMode.SAME_THREAD)
-  @ResourceLock(Resources.SYSTEM_ERR)
+  @ResourceLock(Resources.SYSTEM_OUT)
   public void attachStreamDebugLoggingBranchEnabled()
       throws Exception
   {
     LoggingUtilities.overrideDebugLogging(true);
     try {
       byte[] data = largeBytes();
-      TemporaryDataCache tdc = new TemporaryDataCache(
-          new ByteArrayInputStream(data));
-      try {
-        tdc.waitUntilAppendingComplete();
 
-        SystemErr stub = new SystemErr();
-        stub.execute(() -> {
+      // Construct the cache and consume it inside the SystemOut stub
+      // — the consumer thread starts in the constructor and emits
+      // debug logging during consumption, so the redirect must be
+      // active before the constructor runs.
+      new SystemOut().execute(() -> {
+        TemporaryDataCache tdc = new TemporaryDataCache(
+            new ByteArrayInputStream(data));
+        try {
+          tdc.waitUntilAppendingComplete();
           InputStream is = tdc.getInputStream();
           try {
             drain(is);
           } finally {
             is.close();
           }
-        });
-
-        // We do not need to validate exact debug text; reaching here
-        // means the debug-logging branch ran without throwing.
-        assertTrue(true);
-      } finally {
-        tdc.delete();
-      }
+        } finally {
+          tdc.delete();
+        }
+      });
     } finally {
       LoggingUtilities.clearDebugOverride();
     }
@@ -328,9 +329,22 @@ public class TemporaryDataCacheExtraTest
    * If the source {@link InputStream} throws on read, the consumer
    * thread must record the failure via {@code setFailure}, and the
    * next reader-side method must rethrow it via {@code checkFailure}.
+   *
+   * <p>The {@code ConsumerThread} rethrows the wrapped
+   * {@link RuntimeException} after recording the failure, which the
+   * JVM's default uncaught-exception handler then prints to
+   * {@link System#err}. The whole test runs inside a
+   * {@link SystemErr} stub so the simulated failure's stack trace
+   * does not pollute the build log. Tagged
+   * {@link Execution} {@code SAME_THREAD} +
+   * {@link ResourceLock} on stderr to avoid races with concurrent
+   * tests.</p>
    */
   @Test
-  public void failureInSourceStreamSurfacesToReader() throws Exception
+  @Execution(ExecutionMode.SAME_THREAD)
+  @ResourceLock(Resources.SYSTEM_ERR)
+  public void failureInSourceStreamSurfacesToReader()
+      throws Exception
   {
     InputStream failing = new InputStream()
     {
@@ -346,21 +360,26 @@ public class TemporaryDataCacheExtraTest
       }
     };
 
-    TemporaryDataCache tdc = new TemporaryDataCache(failing);
-    try {
-      // Wait for consumer thread to encounter the failure.
-      tdc.waitUntilAppendingComplete();
+    new SystemErr().execute(() -> {
+      TemporaryDataCache tdc = new TemporaryDataCache(failing);
+      try {
+        // Wait for consumer thread to encounter the failure. The
+        // wait is inside the stub so the consumer thread's uncaught
+        // RuntimeException stack trace, printed by the JVM's default
+        // handler, is captured rather than leaked to the build log.
+        tdc.waitUntilAppendingComplete();
 
-      // Reading must surface the failure as a RuntimeException
-      // wrapping the IOException (per setFailure / checkFailure).
-      assertThrows(RuntimeException.class, () -> {
-        try (InputStream is = tdc.getInputStream()) {
-          drain(is);
-        }
-      });
-    } finally {
-      tdc.delete();
-    }
+        // Reading must surface the failure as a RuntimeException
+        // wrapping the IOException (per setFailure / checkFailure).
+        assertThrows(RuntimeException.class, () -> {
+          try (InputStream is = tdc.getInputStream()) {
+            drain(is);
+          }
+        });
+      } finally {
+        tdc.delete();
+      }
+    });
   }
 
   // -------------------------------------------------------------------
