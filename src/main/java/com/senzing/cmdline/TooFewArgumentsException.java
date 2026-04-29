@@ -1,14 +1,16 @@
 package com.senzing.cmdline;
 
 /**
- * Thrown when a command-line argument is specified that conflicts with
- * another command-line argument that has been specified.
+ * Thrown when a command-line argument is specified that conflicts with another
+ * command-line argument that has been specified.
  */
-public class TooFewArgumentsException extends IllegalArgumentException {
+public class TooFewArgumentsException extends IllegalArgumentException
+{
   /**
    * Default constructor.
    */
-  public TooFewArgumentsException() {
+  public TooFewArgumentsException()
+  {
     super();
   }
 
@@ -17,7 +19,8 @@ public class TooFewArgumentsException extends IllegalArgumentException {
    *
    * @param message The message for the exception.
    */
-  public TooFewArgumentsException(String message) {
+  public TooFewArgumentsException(String message)
+  {
     super(message);
   }
 }

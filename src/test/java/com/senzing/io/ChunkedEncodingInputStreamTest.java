@@ -20,10 +20,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class ChunkedEncodingInputStreamTest {
+public class ChunkedEncodingInputStreamTest
+{
   private static final SecureRandom PRNG = new SecureRandom();
 
-  private static byte[] encodeChunks(String text) {
+  private static byte[] encodeChunks(String text)
+  {
     try {
       byte[] CRLF = "\r\n".getBytes("ASCII");
       byte[] data = text.getBytes("UTF-8");
@@ -56,7 +58,8 @@ public class ChunkedEncodingInputStreamTest {
   }
 
   @Test
-  public void chunkedEncodingAvailableTest() {
+  public void chunkedEncodingAvailableTest()
+  {
     int totalAvailable = 0;
     try {
       String text   = randomPrintableText(8192);
@@ -96,7 +99,8 @@ public class ChunkedEncodingInputStreamTest {
   }
 
   @Test
-  public void chunkedEncodingCloseTest() {
+  public void chunkedEncodingCloseTest()
+  {
     try {
       String text   = "Does not matter";
       byte[] chunks = encodeChunks(text);
@@ -114,25 +118,31 @@ public class ChunkedEncodingInputStreamTest {
     }
   }
 
-  protected static class TestInputStream extends ByteArrayInputStream {
+  protected static class TestInputStream extends ByteArrayInputStream
+  {
     private boolean closed = false;
-    public boolean isClosed() {
+    public boolean isClosed()
+    {
       return this.closed;
     }
 
     @Override
-    public void close() throws IOException {
+    public void close()
+        throws IOException
+    {
       this.closed = true;
       super.close();
     }
 
-    public TestInputStream(byte[] data) {
+    public TestInputStream(byte[] data)
+    {
       super(data);
     }
   }
 
   @Test
-  public void chunkedEncodingMarkTest() {
+  public void chunkedEncodingMarkTest()
+  {
     try {
       String text   = "Does not matter";
       byte[] chunks = encodeChunks(text);
@@ -154,7 +164,8 @@ public class ChunkedEncodingInputStreamTest {
   }
 
   @Test
-  public void chunkedEncodingMarkSupportedTest() {
+  public void chunkedEncodingMarkSupportedTest()
+  {
     try {
       String text   = "Does not matter";
       byte[] chunks = encodeChunks(text);
@@ -172,7 +183,8 @@ public class ChunkedEncodingInputStreamTest {
   }
 
   @Test
-  public void chunkedEncodingReadTest() {
+  public void chunkedEncodingReadTest()
+  {
     try {
       String text   = randomPrintableText(8192);
       byte[] bytes  = text.getBytes("UTF-8");
@@ -200,7 +212,8 @@ public class ChunkedEncodingInputStreamTest {
   }
 
   @Test
-  public void chunkedEncodingReadBufferTest() {
+  public void chunkedEncodingReadBufferTest()
+  {
     try {
       String text   = randomPrintableText(8192);
       byte[] bytes  = text.getBytes("UTF-8");
@@ -232,7 +245,8 @@ public class ChunkedEncodingInputStreamTest {
   }
 
   @Test
-  public void chunkedEncodingResetTest() {
+  public void chunkedEncodingResetTest()
+  {
     try {
       String text   = "Does not matter";
       byte[] chunks = encodeChunks(text);
@@ -254,7 +268,8 @@ public class ChunkedEncodingInputStreamTest {
   }
 
   @Test
-  public void chunkedEncodingSkipTest() {
+  public void chunkedEncodingSkipTest()
+  {
     try {
       String text   = randomPrintableText(8192);
       byte[] bytes  = text.getBytes("UTF-8");

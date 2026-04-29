@@ -18,7 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class TemporaryDataCacheTest {
+public class TemporaryDataCacheTest
+{
   /**
    * The test file
    */
@@ -35,7 +36,9 @@ public class TemporaryDataCacheTest {
   private static final int TEST_FILE_COUNT = 4;
 
   @BeforeAll
-  public void setup() throws IOException {
+  public void setup()
+      throws IOException
+  {
     this.testFiles = new ArrayList<>(TEST_FILE_COUNT);
 
     char[] characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
@@ -66,19 +69,24 @@ public class TemporaryDataCacheTest {
   }
 
   @AfterAll
-  public void teardown() throws IOException {
+  public void teardown()
+      throws IOException
+  {
     for (File file: this.testFiles) {
       file.delete();
     }
   }
 
-  public List<File> getTestFiles() {
+  public List<File> getTestFiles()
+  {
     return this.testFiles;
   }
 
   @ParameterizedTest
   @MethodSource("getTestFiles")
-  public void verifyContentAccurate(File file) throws IOException {
+  public void verifyContentAccurate(File file)
+      throws IOException
+  {
     File tempFile = File.createTempFile("test-file-", ".dat");
     FileInputStream fis = new FileInputStream(file);
     try {
@@ -109,7 +117,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testCustomDirectory() throws IOException {
+  public void testCustomDirectory()
+      throws IOException
+  {
     File    tempFile      = File.createTempFile("TempDataCache-", ".dat");
     String  tempFileName  = tempFile.getName();
     int     length        = tempFileName.length();
@@ -136,7 +146,9 @@ public class TemporaryDataCacheTest {
       {
         for (int byteRead = bis.read(); byteRead >= 0; byteRead = bis.read()) {
           int count = tempDir.listFiles().length;
-          if (count > maxCount) maxCount = count;
+          if (count > maxCount) {
+            maxCount = count;
+          }
         }
 
       } finally {
@@ -163,7 +175,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testFilePrefix() throws IOException {
+  public void testFilePrefix()
+      throws IOException
+  {
     File    tempFile      = File.createTempFile("TempDataCache-", ".dat");
     String  tempFileName  = tempFile.getName();
     int     length        = tempFileName.length();
@@ -188,7 +202,9 @@ public class TemporaryDataCacheTest {
         for (int byteRead = bis.read(); byteRead >= 0; byteRead = bis.read()) {
           int count = tempDir.listFiles(
               f -> f.getName().startsWith("TempDataCache-")).length;
-          if (count > maxCount) maxCount = count;
+          if (count > maxCount) {
+            maxCount = count;
+          }
         }
 
       } finally {
@@ -216,7 +232,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testConsuming() throws IOException {
+  public void testConsuming()
+      throws IOException
+  {
     File    tempFile      = File.createTempFile("TempDataCache-", ".dat");
     String  tempFileName  = tempFile.getName();
     int     length        = tempFileName.length();
@@ -281,7 +299,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testAppending() throws IOException {
+  public void testAppending()
+      throws IOException
+  {
     File inputFile = this.testFiles.get(this.testFiles.size() - 1);
     FileInputStream fis = new FileInputStream(inputFile);
     try {
@@ -292,7 +312,9 @@ public class TemporaryDataCacheTest {
       {
         for (int byteRead = bis.read(); byteRead >= 0; byteRead = bis.read())
         {
-          if (!appended) appended = tdc.isAppending();
+          if (!appended) {
+            appended = tdc.isAppending();
+          }
         }
 
       } finally {
@@ -350,7 +372,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testSplitAppending() throws IOException {
+  public void testSplitAppending()
+      throws IOException
+  {
     PipedInputStream  pis = new PipedInputStream();
     PipedOutputStream pos = new PipedOutputStream(pis);
 
@@ -392,7 +416,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testRepeatedRead() throws IOException {
+  public void testRepeatedRead()
+      throws IOException
+  {
     File inputFile = this.testFiles.get(0);
     int fileSize = (int) inputFile.length();
     FileInputStream fis = new FileInputStream(inputFile);
@@ -438,7 +464,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testRepeatedReadWithConsume() throws IOException {
+  public void testRepeatedReadWithConsume()
+      throws IOException
+  {
     File inputFile = this.testFiles.get(0);
     int fileSize = (int) inputFile.length();
     FileInputStream fis = new FileInputStream(inputFile);
@@ -482,7 +510,9 @@ public class TemporaryDataCacheTest {
   }
 
   @Test
-  public void testDeleted() throws IOException {
+  public void testDeleted()
+      throws IOException
+  {
     File  inputFile = this.testFiles.get(this.testFiles.size() - 1);
     int   fileSize  = (int) inputFile.length();
     FileInputStream fis = new FileInputStream(inputFile);
@@ -527,5 +557,291 @@ public class TemporaryDataCacheTest {
       e.printStackTrace();
       throw new RuntimeException(e);
     }
+  }
+
+  // -------------------------------------------------------------------
+  // ChainFileInputStream — skip / close / read-after-close
+  // -------------------------------------------------------------------
+
+  /**
+   * {@link InputStream#skip(long) skip(0)} on the cache's input
+   * stream must return 0 without advancing.
+   */
+  @Test
+  public void chainStreamSkipZeroReturnsZero() throws Exception
+  {
+    File f = this.testFiles.get(0);
+    try (FileInputStream fis = new FileInputStream(f)) {
+      TemporaryDataCache tdc = new TemporaryDataCache(fis);
+      try {
+        tdc.waitUntilAppendingComplete();
+        try (InputStream in = tdc.getInputStream()) {
+          assertEquals(0L, in.skip(0L));
+        }
+      } finally {
+        tdc.delete();
+      }
+    }
+  }
+
+  /**
+   * Skipping a negative amount must return 0 per the implementation
+   * (which short-circuits on {@code n < 0}).
+   */
+  @Test
+  public void chainStreamSkipNegativeReturnsZero() throws Exception
+  {
+    File f = this.testFiles.get(0);
+    try (FileInputStream fis = new FileInputStream(f)) {
+      TemporaryDataCache tdc = new TemporaryDataCache(fis);
+      try {
+        tdc.waitUntilAppendingComplete();
+        try (InputStream in = tdc.getInputStream()) {
+          assertEquals(0L, in.skip(-100L));
+        }
+      } finally {
+        tdc.delete();
+      }
+    }
+  }
+
+  /**
+   * Skipping by N bytes must skip exactly N bytes (or fewer if EOF
+   * is reached) and the next byte read must equal the byte at
+   * position N in the original file.
+   */
+  @Test
+  public void chainStreamSkipAdvancesByRequestedAmount()
+      throws Exception
+  {
+    File f = this.testFiles.get(0);
+    long fileSize = f.length();
+    long skipAmount = Math.max(1L, fileSize / 4L);
+
+    int expectedByte;
+    try (FileInputStream rawFis = new FileInputStream(f)) {
+      rawFis.skip(skipAmount);
+      expectedByte = rawFis.read();
+    }
+    if (expectedByte < 0) return; // file too small; skip the test
+
+    try (FileInputStream fis = new FileInputStream(f)) {
+      TemporaryDataCache tdc = new TemporaryDataCache(fis);
+      try {
+        tdc.waitUntilAppendingComplete();
+        try (InputStream in = tdc.getInputStream()) {
+          long skipped = in.skip(skipAmount);
+          assertEquals(skipAmount, skipped,
+                       "Skip must advance by the requested amount"
+                           + " when bytes are available");
+          int actualByte = in.read();
+          assertEquals(expectedByte, actualByte,
+                       "Byte after skip must match source-file byte"
+                           + " at the same offset");
+        }
+      } finally {
+        tdc.delete();
+      }
+    }
+  }
+
+  /**
+   * Calling {@link InputStream#close} twice on the cache's input
+   * stream must be safe (the second close is a no-op).
+   */
+  @Test
+  public void chainStreamDoubleCloseIsSafe() throws Exception
+  {
+    File f = this.testFiles.get(0);
+    try (FileInputStream fis = new FileInputStream(f)) {
+      TemporaryDataCache tdc = new TemporaryDataCache(fis);
+      try {
+        tdc.waitUntilAppendingComplete();
+        InputStream in = tdc.getInputStream();
+        in.close();
+        in.close(); // must not throw
+      } finally {
+        tdc.delete();
+      }
+    }
+  }
+
+  /**
+   * Reading from the cache's input stream after it has been closed
+   * must throw {@link IOException} per the implementation's
+   * explicit "stream already closed" guard.
+   */
+  @Test
+  public void chainStreamReadAfterCloseThrowsIoException()
+      throws Exception
+  {
+    File f = this.testFiles.get(0);
+    try (FileInputStream fis = new FileInputStream(f)) {
+      TemporaryDataCache tdc = new TemporaryDataCache(fis);
+      try {
+        tdc.waitUntilAppendingComplete();
+        InputStream in = tdc.getInputStream();
+        in.close();
+        assertThrows(IOException.class, in::read);
+      } finally {
+        tdc.delete();
+      }
+    }
+  }
+
+  /**
+   * Skipping on the cache's input stream after it has been closed
+   * must throw {@link IOException}.
+   */
+  @Test
+  public void chainStreamSkipAfterCloseThrowsIoException()
+      throws Exception
+  {
+    File f = this.testFiles.get(0);
+    try (FileInputStream fis = new FileInputStream(f)) {
+      TemporaryDataCache tdc = new TemporaryDataCache(fis);
+      try {
+        tdc.waitUntilAppendingComplete();
+        InputStream in = tdc.getInputStream();
+        in.close();
+        assertThrows(IOException.class, () -> in.skip(10L));
+      } finally {
+        tdc.delete();
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------
+  // CacheFilePart — equals / hashCode / compareTo via reflection
+  //
+  // CacheFilePart is a private static nested class. We reach it via
+  // the declaring class's getDeclaredClasses() list and instantiate
+  // via the package-private constructor so we can directly assert
+  // the documented sort/equality contract.
+  // -------------------------------------------------------------------
+
+  private static Object newCacheFilePart(File f, long offset, long length)
+      throws Exception
+  {
+    Class<?>[] inner = TemporaryDataCache.class.getDeclaredClasses();
+    Class<?> filePartClass = null;
+    for (Class<?> c : inner) {
+      if (c.getSimpleName().equals("CacheFilePart")) {
+        filePartClass = c;
+        break;
+      }
+    }
+    assertNotNull(filePartClass,
+                  "CacheFilePart inner class must exist");
+    java.lang.reflect.Constructor<?> ctor
+        = filePartClass.getDeclaredConstructor(
+            File.class, long.class, long.class);
+    ctor.setAccessible(true);
+    return ctor.newInstance(f, offset, length);
+  }
+
+  /**
+   * {@code CacheFilePart.equals} must return true for the same
+   * instance.
+   */
+  @Test
+  public void cacheFilePartEqualsSameInstance() throws Exception
+  {
+    Object a = newCacheFilePart(this.testFiles.get(0), 0L, 100L);
+    assertTrue(a.equals(a), "Same-instance equality must hold");
+  }
+
+  /**
+   * {@code CacheFilePart.equals} must return false for null.
+   */
+  @Test
+  public void cacheFilePartEqualsNullReturnsFalse() throws Exception
+  {
+    Object a = newCacheFilePart(this.testFiles.get(0), 0L, 100L);
+    assertFalse(a.equals(null));
+  }
+
+  /**
+   * {@code CacheFilePart.equals} must return false for an instance
+   * of a different class.
+   */
+  @Test
+  public void cacheFilePartEqualsDifferentClassReturnsFalse()
+      throws Exception
+  {
+    Object a = newCacheFilePart(this.testFiles.get(0), 0L, 100L);
+    assertFalse(a.equals("not a CacheFilePart"));
+  }
+
+  /**
+   * Two {@code CacheFilePart} instances with the same offset+length
+   * must be equal even if their underlying {@link File} differs
+   * (only offset/length participate in equals per the impl).
+   */
+  @Test
+  public void cacheFilePartEqualsByOffsetAndLength() throws Exception
+  {
+    Object a = newCacheFilePart(this.testFiles.get(0), 50L, 200L);
+    Object b = newCacheFilePart(this.testFiles.get(1), 50L, 200L);
+    assertTrue(a.equals(b),
+               "Same offset+length must compare equal");
+    assertEquals(a.hashCode(), b.hashCode(),
+                 "Equal instances must have equal hash codes");
+  }
+
+  /**
+   * Two {@code CacheFilePart} instances with different offset must
+   * not be equal.
+   */
+  @Test
+  public void cacheFilePartEqualsDifferentOffsetReturnsFalse()
+      throws Exception
+  {
+    Object a = newCacheFilePart(this.testFiles.get(0), 50L, 200L);
+    Object b = newCacheFilePart(this.testFiles.get(0), 60L, 200L);
+    assertFalse(a.equals(b));
+  }
+
+  /**
+   * Two {@code CacheFilePart} instances with different length must
+   * not be equal.
+   */
+  @Test
+  public void cacheFilePartEqualsDifferentLengthReturnsFalse()
+      throws Exception
+  {
+    Object a = newCacheFilePart(this.testFiles.get(0), 50L, 200L);
+    Object b = newCacheFilePart(this.testFiles.get(0), 50L, 300L);
+    assertFalse(a.equals(b));
+  }
+
+  /**
+   * {@code CacheFilePart.compareTo} must order by offset first, then
+   * by length (ascending) — and return 0 for matching offset+length
+   * pairs.
+   */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @Test
+  public void cacheFilePartCompareToOrdersByOffsetThenLength()
+      throws Exception
+  {
+    Object a = newCacheFilePart(this.testFiles.get(0), 50L, 100L);
+    Object b = newCacheFilePart(this.testFiles.get(0), 50L, 200L);
+    Object c = newCacheFilePart(this.testFiles.get(0), 60L, 100L);
+    Object d = newCacheFilePart(this.testFiles.get(0), 50L, 100L);
+
+    Comparable cmpA = (Comparable) a;
+    Comparable cmpB = (Comparable) b;
+    Comparable cmpC = (Comparable) c;
+    Comparable cmpD = (Comparable) d;
+
+    assertEquals(0, cmpA.compareTo(cmpD));
+    assertTrue(cmpA.compareTo(cmpB) < 0,
+               "Smaller length must sort before larger when offsets"
+                   + " match");
+    assertTrue(cmpB.compareTo(cmpA) > 0);
+    assertTrue(cmpA.compareTo(cmpC) < 0,
+               "Smaller offset must sort before larger");
+    assertTrue(cmpC.compareTo(cmpA) > 0);
   }
 }

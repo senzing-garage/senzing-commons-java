@@ -1,10 +1,11 @@
 package com.senzing.cmdline;
 
 /**
- * Thrown when a command-line argument is specified that conflicts with
- * another command-line argument that has been specified.
+ * Thrown when a command-line argument is specified that conflicts with another
+ * command-line argument that has been specified.
  */
-public class ConflictingOptionsException extends CommandLineException {
+public class ConflictingOptionsException extends CommandLineException
+{
   /**
    * The first {@link SpecifiedOption}.
    */
@@ -35,7 +36,8 @@ public class ConflictingOptionsException extends CommandLineException {
    *
    * @return The first {@link SpecifiedOption}.
    */
-  public SpecifiedOption getFirstOption() {
+  public SpecifiedOption getFirstOption()
+  {
     return this.firstOption;
   }
 
@@ -44,7 +46,8 @@ public class ConflictingOptionsException extends CommandLineException {
    *
    * @return The conflicting {@link SpecifiedOption}.
    */
-  public SpecifiedOption getConflictingOption() {
+  public SpecifiedOption getConflictingOption()
+  {
     return this.conflictingOption;
   }
 }

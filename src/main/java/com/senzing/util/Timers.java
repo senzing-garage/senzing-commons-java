@@ -6,85 +6,99 @@ import java.util.*;
  * Provides functionality to measure timing values associated with functions
  * with {@link String} keys to assigned to identify what is being timed.
  */
-public class Timers {
+public class Timers
+{
     /**
      * Internal method for getting {@link System#nanoTime()}.
      *
      * @return The current value for {@link System#nanoTime()}.
      */
-    private static long now() {
+    private static long now()
+    {
         return System.nanoTime();
     }
 
-    private static class TimerInfo {
+    private static class TimerInfo
+    {
         private Long start = null;
         private long accumulated = 0;
 
-        private TimerInfo(long startTime) {
+        private TimerInfo(long startTime)
+        {
             this.start = startTime;
         }
 
-        private TimerInfo() {
+        private TimerInfo()
+        {
             this(now());
         }
 
-        private TimerInfo(TimerInfo other) {
+        private TimerInfo(TimerInfo other)
+        {
             this(other, now());
         }
 
-        private TimerInfo(TimerInfo other, long atTime) {
+        private TimerInfo(TimerInfo other, long atTime)
+        {
             this.start = null;
             this.accumulated = other.getDuration(atTime);
         }
 
-        private long getDuration() {
+        private long getDuration()
+        {
             return this.getDuration(now());
         }
 
-        private long getDuration(long atTime) {
-            if (this.start == null)
-                return this.accumulated;
+        private long getDuration(long atTime)
+        {
+            if (this.start == null) return this.accumulated;
 
             return this.accumulated + ((atTime - this.start) / 1000000L);
         }
 
-        private boolean isRunning() {
+        private boolean isRunning()
+        {
             return (this.start != null);
         }
 
-        private boolean isPaused() {
+        private boolean isPaused()
+        {
             return (this.start == null);
         }
 
-        private boolean pause() {
+        private boolean pause()
+        {
             return this.pause(now());
         }
 
-        private boolean pause(long atTime) {
-            if (this.start == null)
-                return false;
+        private boolean pause(long atTime)
+        {
+            if (this.start == null) return false;
             long duration = (atTime - this.start) / 1000000L;
             this.accumulated += duration;
             this.start = null;
             return true;
         }
 
-        private boolean resume() {
+        private boolean resume()
+        {
             return this.resume(now());
         }
 
-        private boolean resume(long atTime) {
-            if (this.start != null)
-                return false;
+        private boolean resume(long atTime)
+        {
+            if (this.start != null) return false;
             this.start = atTime;
             return true;
         }
 
-        private void mergeWith(TimerInfo timerInfo) {
+        private void mergeWith(TimerInfo timerInfo)
+        {
             this.accumulated += timerInfo.getDuration();
         }
 
-        private void mergeWith(TimerInfo timerInfo, long now) {
+        private void mergeWith(TimerInfo timerInfo, long now)
+        {
             this.accumulated += timerInfo.getDuration(now);
         }
     }
@@ -92,9 +106,8 @@ public class Timers {
     private Map<String, TimerInfo> timerInfos;
 
     /**
-     * Constructs with zero or more timer names that represent the initial
-     * timer keys. All of these timers will start immediately with the same
-     * timestamp.
+     * Constructs with zero or more timer names that represent the initial timer
+     * keys. All of these timers will start immediately with the same timestamp.
      *
      * @param initialTimers The zero or more names of the initial timers. A
      *                      <code>null</code> array is treated like an empty
@@ -106,7 +119,8 @@ public class Timers {
      *                                  duplicated.
      */
     public Timers(String... initialTimers)
-            throws NullPointerException, IllegalArgumentException {
+            throws NullPointerException, IllegalArgumentException
+    {
         this.timerInfos = new LinkedHashMap<>();
         long startTime = now();
         if (initialTimers != null) {
@@ -121,7 +135,8 @@ public class Timers {
                 // check for a duplicate
                 if (this.timerInfos.containsKey(initialTimer)) {
                     throw new IllegalArgumentException(
-                            "At least one timer (" + initialTimer + ") is duplicated: "
+                            "At least one timer (" + initialTimer
+                                    + ") is duplicated: "
                                     + (Arrays.asList(initialTimers)));
                 }
                 this.timerInfos.put(initialTimer, new TimerInfo(startTime));
@@ -134,9 +149,11 @@ public class Timers {
      *
      * @param timerName The name of the timer.
      *
-     * @return <code>true</code> if the timer exists, otherwise <code>false</code>.
+     * @return <code>true</code> if the timer exists, otherwise
+     *         <code>false</code>.
      */
-    public boolean hasTimer(String timerName) {
+    public boolean hasTimer(String timerName)
+    {
         return this.timerInfos.containsKey(timerName);
     }
 
@@ -146,9 +163,10 @@ public class Timers {
      * @param timerName The name of the timer.
      *
      * @return <code>true</code> if the timer exists and is paused, otherwise
-     *         <code>false</code>.
+     *                           <code>false</code>.
      */
-    public boolean isPaused(String timerName) {
+    public boolean isPaused(String timerName)
+    {
         TimerInfo info = this.timerInfos.get(timerName);
         return (info != null && info.isPaused());
     }
@@ -159,9 +177,10 @@ public class Timers {
      * @param timerName The name of the timer.
      *
      * @return <code>true</code> if the timer exists and is running, otherwise
-     *         <code>false</code>.
+     *                           <code>false</code>.
      */
-    public boolean isRunning(String timerName) {
+    public boolean isRunning(String timerName)
+    {
         TimerInfo info = this.timerInfos.get(timerName);
         return (info != null && info.isRunning());
     }
@@ -173,10 +192,11 @@ public class Timers {
      * @param timerName The name of the timer being requested.
      *
      * @return The accumulated elapsed number of milliseconds for the timer with
-     *         the specified name or negative-one (-1) if the specified timer
-     *         name is not recognized.
+     *             the specified name or negative-one (-1) if the specified
+     *             timer name is not recognized.
      */
-    public long getElapsedTime(String timerName) {
+    public long getElapsedTime(String timerName)
+    {
         TimerInfo info = this.timerInfos.get(timerName);
         return (info != null ? info.getDuration() : -1L);
     }
@@ -194,9 +214,10 @@ public class Timers {
      *                       start time.
      *
      * @return The number of timer names that were for new timers that were
-     *         created.
+     *             created.
      */
-    public int start(String timerName, String... moreTimerNames) {
+    public int start(String timerName, String... moreTimerNames)
+    {
         int count = 0;
         long now = now();
         TimerInfo info = this.timerInfos.get(timerName);
@@ -233,17 +254,20 @@ public class Timers {
      *
      * @return The number of timers that were successfully paused.
      */
-    public int pause(String timerName, String... moreTimerNames) {
+    public int pause(String timerName, String... moreTimerNames)
+    {
         int count = 0;
         long now = now();
         TimerInfo info = this.timerInfos.get(timerName);
-        if (info != null && info.pause(now))
+        if (info != null && info.pause(now)) {
             count++;
+        }
         if (moreTimerNames != null) {
             for (String addlTimerName : moreTimerNames) {
                 info = this.timerInfos.get(addlTimerName);
-                if (info != null && info.pause(now))
+                if (info != null && info.pause(now)) {
                     count++;
+                }
             }
         }
         return count;
@@ -259,21 +283,25 @@ public class Timers {
      * @param moreTimerNames Additional timer names to pause at the same time.
      *
      * @return <code>null</code> if the timer name is not recognized,
-     *         <code>false</code>
-     *         if the timer is found, but was already running, and <code>true</code>
-     *         if the timer is found and was paused and was successfully resumed.
+     *                           <code>false</code> if the timer is found, but
+     *                           was already running, and <code>true</code> if
+     *                           the timer is found and was paused and was
+     *                           successfully resumed.
      */
-    public int resume(String timerName, String... moreTimerNames) {
+    public int resume(String timerName, String... moreTimerNames)
+    {
         int count = 0;
         long now = now();
         TimerInfo info = this.timerInfos.get(timerName);
-        if (info != null && info.resume(now))
+        if (info != null && info.resume(now)) {
             count++;
+        }
         if (moreTimerNames != null) {
             for (String addlTimerName : moreTimerNames) {
                 info = this.timerInfos.get(addlTimerName);
-                if (info != null && info.resume(now))
+                if (info != null && info.resume(now)) {
                     count++;
+                }
             }
         }
         return count;
@@ -284,13 +312,15 @@ public class Timers {
      * that were running that were successfully paused.
      *
      * @return The number of timers that were running and were successfully
-     *         paused.
+     *             paused.
      */
-    public int pauseAll() {
+    public int pauseAll()
+    {
         int count = 0;
         for (TimerInfo info : this.timerInfos.values()) {
-            if (info.pause())
+            if (info.pause()) {
                 count++;
+            }
         }
         return count;
     }
@@ -300,28 +330,31 @@ public class Timers {
      * that were paused that were successfully resumed.
      *
      * @return The number of timers that were paused and were successfully
-     *         resumed.
+     *             resumed.
      */
-    public int resumeAll() {
+    public int resumeAll()
+    {
         int count = 0;
         for (TimerInfo info : this.timerInfos.values()) {
-            if (info.resume())
+            if (info.resume()) {
                 count++;
+            }
         }
         return count;
     }
 
     /**
      * Returns a {@link Map} of all timer names to the their current durations.
-     * If a timer is currently running it remains running, but the duration
-     * is returned as if it was paused at the time this method was called. If
-     * the timer is currently paused it remains paused and the duration
-     * accumulated at the time it was paused is returned.
+     * If a timer is currently running it remains running, but the duration is
+     * returned as if it was paused at the time this method was called. If the
+     * timer is currently paused it remains paused and the duration accumulated
+     * at the time it was paused is returned.
      *
      * @return A {@link Map} of {@link String} timer name keys to {@link Long}
-     *         values representing the current timings.
+     *           values representing the current timings.
      */
-    public Map<String, Long> getTimings() {
+    public Map<String, Long> getTimings()
+    {
         Map<String, Long> result = new LinkedHashMap<>();
         long now = now();
         this.timerInfos.entrySet().forEach(e -> {
@@ -337,9 +370,9 @@ public class Timers {
      *
      * @param timers The {@link Timers} to merge with.
      */
-    public void mergeWith(Timers timers) {
-        if (timers == null)
-            return;
+    public void mergeWith(Timers timers)
+    {
+        if (timers == null) return;
         long now = now();
         timers.timerInfos.entrySet().forEach(e -> {
             String key = e.getKey();

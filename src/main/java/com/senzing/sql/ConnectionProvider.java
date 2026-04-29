@@ -15,11 +15,12 @@ import java.sql.SQLException;
  * Connection#close()} to indicate that the {@link Connection} is no longer
  * needed.
  */
-public interface ConnectionProvider {
+public interface ConnectionProvider
+{
   /**
    * A simple global registry for non-null {@link ConnectionProvider} instances.
-   * This acts as a simplified version of {@link javax.naming.Context} that
-   * is dedicated to instances of {@link ConnectionProvider} and confined to an
+   * This acts as a simplified version of {@link javax.naming.Context} that is
+   * dedicated to instances of {@link ConnectionProvider} and confined to an
    * in-memory naming registry.
    *
    * @see Registry

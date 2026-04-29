@@ -9,12 +9,13 @@ import java.util.Set;
  * dependencies for that argument.
  */
 @SuppressWarnings("rawtypes")
-public class MissingDependenciesException extends SpecifiedOptionException {
+public class MissingDependenciesException extends SpecifiedOptionException
+{
   /**
    * Constructs with the specified parameters.
    *
-   * @param source The {@link CommandLineSource} describing how the option
-   *               was specified.
+   * @param source The {@link CommandLineSource} describing how the option was
+   *               specified.
    * @param specifier The command-line flag or environment variable used to
    *                  specify the option, or <code>null</code> if specified as a
    *                  default value.
@@ -40,28 +41,29 @@ public class MissingDependenciesException extends SpecifiedOptionException {
   /**
    * Constructs with the specified parameters.
    *
-   * @param source The {@link CommandLineSource} describing how the option
-   *               was specified.
+   * @param source The {@link CommandLineSource} describing how the option was
+   *               specified.
    * @param option The {@link CommandLineOption} that was missing required
    *               parameters.
-   * @param dependencySets The {@link Set} of {@link CommandLineOption} 
-   *                       {@link Set} values representing the missing
-   *                       dependencies to report.
+   * @param dependencySets The {@link Set} of {@link CommandLineOption} {@link
+   *                       Set} values representing the missing dependencies to
+   *                       report.
    * @param specifier The command-line flag or environment variable used to
    *                  specify the option, or <code>null</code> if specified as a
    *                  default value.
    * @param specifiedOptions The {@link Set} of {@link CommandLineOption}
    *                         instances that were specified.
    */
-  public MissingDependenciesException(CommandLineSource           source,
-                                      CommandLineOption           option,
-                                      Set<Set<CommandLineOption>> dependencySets,
-                                      String                      specifier,
-                                      Set<CommandLineOption>      specifiedOptions)
+  public MissingDependenciesException(
+      CommandLineSource           source,
+      CommandLineOption           option,
+      Set<Set<CommandLineOption>> dependencySets,
+      String                      specifier,
+      Set<CommandLineOption>      specifiedOptions)
   {
     super(source, option, specifier,
-          buildErrorMessage(source, 
-                            option, 
+          buildErrorMessage(source,
+                            option,
                             dependencySets,
                             specifier,
                             specifiedOptions));
@@ -70,13 +72,13 @@ public class MissingDependenciesException extends SpecifiedOptionException {
   /**
    * Formats the exception message for the specified parameters.
    *
-   * @param source The {@link CommandLineSource} describing how the option
-   *               was specified.
+   * @param source The {@link CommandLineSource} describing how the option was
+   *               specified.
    * @param option The {@link CommandLineOption} that was missing required
    *               parameters.
-   * @param dependencySets The {@link Set} of {@link CommandLineOption} 
-   *                       {@link Set} values representing the missing
-   *                       dependencies to report.
+   * @param dependencySets The {@link Set} of {@link CommandLineOption} {@link
+   *                       Set} values representing the missing dependencies to
+   *                       report.
    * @param specifier The command-line flag or environment variable used to
    *                  specify the option, or <code>null</code> if specified as a
    *                  default value.
@@ -86,9 +88,9 @@ public class MissingDependenciesException extends SpecifiedOptionException {
    * @return The formatted error message.
    *
    * @throws NullPointerException If the {@link CommandLineSource}, {@link
-   *                              CommandLineOption} or {@link Set} of
-   *                              specified {@link CommandLineOption} instances
-   *                              is <code>null</code>.
+   *                              CommandLineOption} or {@link Set} of specified
+   *                              {@link CommandLineOption} instances is
+   *                              <code>null</code>.
    */
   @SuppressWarnings("unchecked")
   public static String buildErrorMessage(

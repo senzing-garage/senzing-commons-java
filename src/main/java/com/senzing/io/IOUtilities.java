@@ -17,7 +17,8 @@ import static java.nio.file.FileVisitResult.*;
 /**
  * Static I/O utility functions.
  */
-public class IOUtilities {
+public class IOUtilities
+{
   /**
    * Constant for the name of the UTF-8 character encoding.
    */
@@ -31,13 +32,14 @@ public class IOUtilities {
   /**
    * Private default constructor.
    */
-  private IOUtilities() {
+  private IOUtilities()
+  {
     // do nothing
   }
 
   /**
-   * Reads an ASCII line of text from the specified {@link InputStream} until
-   * a linefeed character is encountered.
+   * Reads an ASCII line of text from the specified {@link InputStream} until a
+   * linefeed character is encountered.
    *
    * @param inputStream The input stream to read from.
    *
@@ -67,9 +69,12 @@ public class IOUtilities {
    *
    * @param closeable The {@link AutoCloseable} to close.
    */
-  public static void close(AutoCloseable closeable) {
+  public static void close(AutoCloseable closeable)
+  {
     try {
-      if (closeable != null) closeable.close();
+      if (closeable != null) {
+        closeable.close();
+      }
     } catch (Exception ignore) {
       // ignore the exception
     }
@@ -98,7 +103,9 @@ public class IOUtilities {
          BufferedReader br = new BufferedReader(reader))
     {
       long size = file.length();
-      if (size > Integer.MAX_VALUE) size = Integer.MAX_VALUE;
+      if (size > Integer.MAX_VALUE) {
+        size = Integer.MAX_VALUE;
+      }
 
       StringBuilder sb = new StringBuilder((int) size);
       for (int nextChar = br.read(); nextChar >= 0; nextChar = br.read()) {
@@ -134,8 +141,8 @@ public class IOUtilities {
   /**
    * Reads data from the specified {@link InputStream} assuming the data
    * represents characters and attempts via several methods to guess the
-   * character encoding of those characters.  If no character encoding can
-   * be determined with confidence then this returns <code>null</code>.
+   * character encoding of those characters. If no character encoding can be
+   * determined with confidence then this returns <code>null</code>.
    *
    * @param is The {@link InputStream} to read from.
    * @return The name of the character encoding that was guessed.
@@ -213,11 +220,11 @@ public class IOUtilities {
 
   /**
    * Using the specified character encoding, this method will wraps the
-   * specified {@link Reader} in a new {@link Reader} that will skip
-   * the "byte order mark" (BOM) character at the beginning of the file for
-   * UTF character encodings (e.g.: "UTF-8", "UTF-16" or "UTF-32").  If the
-   * specified character encoding is not a "UTF" character encoding then it is
-   * simply returned as-is.
+   * specified {@link Reader} in a new {@link Reader} that will skip the "byte
+   * order mark" (BOM) character at the beginning of the file for UTF character
+   * encodings (e.g.: "UTF-8", "UTF-16" or "UTF-32"). If the specified character
+   * encoding is not a "UTF" character encoding then it is simply returned
+   * as-is.
    * @param src The source {@link Reader}.
    * @param encoding The character encoding.
    * @return The new {@link Reader} that will skip the byte-order mark.
@@ -265,12 +272,15 @@ public class IOUtilities {
    * @param dir The {@link File} representing the directory.
    *
    * @return <code>true</code> if the directory was created and
-   *         <code>false</code> if the directory already existed.
+   *                           <code>false</code> if the directory already
+   *                           existed.
    *
-   * @throws IOException If a failure occurs creating the directory or if
-   *                     the named directory exists but is not a directory.
+   * @throws IOException If a failure occurs creating the directory or if the
+   *                     named directory exists but is not a directory.
    */
-  public static boolean createDirectoryIfMissing(File dir) throws IOException {
+  public static boolean createDirectoryIfMissing(File dir)
+      throws IOException
+  {
     if (dir.exists() && dir.isDirectory()) return false;
     if (dir.exists()) {
       throw new IOException(
@@ -284,8 +294,8 @@ public class IOUtilities {
   }
 
   /**
-   * Recursively deletes the specified directory and returns the number of
-   * files in the directory that failed to be deleted.
+   * Recursively deletes the specified directory and returns the number of files
+   * in the directory that failed to be deleted.
    *
    * @param dir The {@link File} representing the directory.
    *
@@ -293,27 +303,41 @@ public class IOUtilities {
    *
    * @throws IOException If a serious failure occurs.
    */
-  public static int recursiveDeleteDirectory(File dir) throws IOException {
+  public static int recursiveDeleteDirectory(File dir)
+      throws IOException
+  {
     int[] failedCount = { 0 };
 
     Files.walkFileTree(
         dir.toPath(), new FileVisitor<java.nio.file.Path>() {
-          public FileVisitResult preVisitDirectory(java.nio.file.Path path, BasicFileAttributes attrs) {
+          public FileVisitResult preVisitDirectory(
+              java.nio.file.Path     path,
+              BasicFileAttributes    attrs)
+          {
             return CONTINUE;
           }
-          public FileVisitResult postVisitDirectory(java.nio.file.Path path, IOException e) {
+          public FileVisitResult postVisitDirectory(
+              java.nio.file.Path  path,
+              IOException         e)
+          {
             if (e != null) return CONTINUE;
             path.toFile().delete();
             return CONTINUE;
           }
-          public FileVisitResult visitFile(java.nio.file.Path path, BasicFileAttributes attrs) {
+          public FileVisitResult visitFile(
+              java.nio.file.Path     path,
+              BasicFileAttributes    attrs)
+          {
             boolean result = path.toFile().delete();
             if (!result) {
               failedCount[0]++;
             }
             return CONTINUE;
           }
-          public FileVisitResult visitFileFailed(java.nio.file.Path path, IOException e) {
+          public FileVisitResult visitFileFailed(
+              java.nio.file.Path  path,
+              IOException         e)
+          {
             e.printStackTrace();
             return CONTINUE;
           }
@@ -386,8 +410,8 @@ public class IOUtilities {
   }
 
   /**
-   * Creates the specified file if it does not exist, otherwise it updates
-   * the modified time for the specified file.
+   * Creates the specified file if it does not exist, otherwise it updates the
+   * modified time for the specified file.
    *
    * @param file The {@link File} to be touched.
    *
@@ -395,7 +419,9 @@ public class IOUtilities {
    *
    * @throws IOException If a failure occurs.
    */
-  public static long touchFile(File file) throws IOException {
+  public static long touchFile(File file)
+      throws IOException
+  {
     if (file.exists()) {
       file.setLastModified(System.currentTimeMillis());
     } else {
@@ -405,80 +431,84 @@ public class IOUtilities {
   }
 
   /**
-   * Wraps the specified {@link InputStream} in one that will <b>not</b>
-   * close the underlying {@link InputStream} when {@link InputStream#close()}
-   * is called.  This means you must keep a reference to the original input
-   * stream so that you can close it when appropriate.
+   * Wraps the specified {@link InputStream} in one that will <b>not</b> close
+   * the underlying {@link InputStream} when {@link InputStream#close()} is
+   * called. This means you must keep a reference to the original input stream
+   * so that you can close it when appropriate.
    *
    * @param inputStream The backing input stream to wrap.
    *
    * @return The {@link InputStream} that is backed by the specified {@link
-   *         InputStream}, but will not close the backing {@link InputStream}
-   *         when closed.
+   *             InputStream}, but will not close the backing {@link
+   *             InputStream} when closed.
    */
-  public static InputStream nonClosingWrapper(InputStream inputStream) {
+  public static InputStream nonClosingWrapper(InputStream inputStream)
+  {
     return new NonClosingInputStream(inputStream);
   }
 
   /**
-   * Wraps the specified {@link OutputStream} in one that will <b>not</b>
-   * close the underlying {@link OutputStream} when {@link OutputStream#close()}
-   * is called -- it will instead call {@link OutputStream#flush()}  This means
-   * you must keep a reference to the original output stream so that you can
-   * close it when appropriate.
+   * Wraps the specified {@link OutputStream} in one that will <b>not</b> close
+   * the underlying {@link OutputStream} when {@link OutputStream#close()} is
+   * called -- it will instead call {@link OutputStream#flush()} This means you
+   * must keep a reference to the original output stream so that you can close
+   * it when appropriate.
    *
    * @param outputStream The backing output stream to wrap.
    *
    * @return The {@link OutputStream} that is backed by the specified {@link
-   *         OutputStream}, but will not close the backing {@link OutputStream}
-   *         when closed.
+   *             OutputStream}, but will not close the backing {@link
+   *             OutputStream} when closed.
    */
-  public static OutputStream nonClosingWrapper(OutputStream outputStream) {
+  public static OutputStream nonClosingWrapper(OutputStream outputStream)
+  {
     return new NonClosingOutputStream(outputStream);
   }
 
   /**
-   * Wraps the specified {@link Reader} in one that will <b>not</b>
-   * close the underlying {@link Reader} when {@link Reader#close()}
-   * is called.  This means you must keep a reference to the original reader
-   * so that you can close it when appropriate.
+   * Wraps the specified {@link Reader} in one that will <b>not</b> close the
+   * underlying {@link Reader} when {@link Reader#close()} is called. This means
+   * you must keep a reference to the original reader so that you can close it
+   * when appropriate.
    *
    * @param reader The backing reader to wrap.
    *
-   * @return The {@link Reader} that is backed by the specified {@link
-   *         Reader}, but will not close the backing {@link Reader}
-   *         when closed.
+   * @return The {@link Reader} that is backed by the specified {@link Reader},
+   *             but will not close the backing {@link Reader} when closed.
    */
-  public static Reader nonClosingWrapper(Reader reader) {
+  public static Reader nonClosingWrapper(Reader reader)
+  {
     return new NonClosingReader(reader);
   }
 
   /**
-   * Wraps the specified {@link Writer} in one that will <b>not</b>
-   * close the underlying {@link Writer} when {@link Writer#close()}
-   * is called -- it will instead call {@link Writer#flush()}  This means
-   * you must keep a reference to the original output stream so that you can
-   * close it when appropriate.
+   * Wraps the specified {@link Writer} in one that will <b>not</b> close the
+   * underlying {@link Writer} when {@link Writer#close()} is called -- it will
+   * instead call {@link Writer#flush()} This means you must keep a reference to
+   * the original output stream so that you can close it when appropriate.
    *
    * @param writer The backing output stream to wrap.
    *
-   * @return The {@link Writer} that is backed by the specified {@link
-   *         Writer}, but will not close the backing {@link Writer}
-   *         when closed.
+   * @return The {@link Writer} that is backed by the specified {@link Writer},
+   *             but will not close the backing {@link Writer} when closed.
    */
-  public static Writer nonClosingWrapper(Writer writer) {
+  public static Writer nonClosingWrapper(Writer writer)
+  {
     return new NonClosingWriter(writer);
   }
 
   /**
    * Extends {@link FilterInputStream} to prevent closing of the backing stream.
    */
-  private static class NonClosingInputStream extends FilterInputStream {
-    private NonClosingInputStream(InputStream backingStream) {
+  private static class NonClosingInputStream extends FilterInputStream
+  {
+    private NonClosingInputStream(InputStream backingStream)
+    {
       super(backingStream);
     }
 
-    public void close() {
+    public void close()
+    {
       // do nothing
     }
   }
@@ -487,12 +517,15 @@ public class IOUtilities {
    * Extends {@link FilterOutputStream} to prevent closing of the backing
    * stream.
    */
-  private static class NonClosingOutputStream extends FilterOutputStream {
-    private NonClosingOutputStream(OutputStream backingStream) {
+  private static class NonClosingOutputStream extends FilterOutputStream
+  {
+    private NonClosingOutputStream(OutputStream backingStream)
+    {
       super(backingStream);
     }
 
-    public void close() {
+    public void close()
+    {
       try {
         this.out.flush();
       } catch (IOException ignore) {
@@ -504,12 +537,15 @@ public class IOUtilities {
   /**
    * Extends {@link FilterReader} to prevent closing of the backing reader.
    */
-  private static class NonClosingReader extends FilterReader {
-    private NonClosingReader(Reader backingReader) {
+  private static class NonClosingReader extends FilterReader
+  {
+    private NonClosingReader(Reader backingReader)
+    {
       super(backingReader);
     }
 
-    public void close() {
+    public void close()
+    {
       // do nothing
     }
   }
@@ -517,12 +553,15 @@ public class IOUtilities {
   /**
    * Extends {@link FilterWriter} to prevent closing of the backing writer.
    */
-  private static class NonClosingWriter extends FilterWriter {
-    private NonClosingWriter(Writer backingWriter) {
+  private static class NonClosingWriter extends FilterWriter
+  {
+    private NonClosingWriter(Writer backingWriter)
+    {
       super(backingWriter);
     }
 
-    public void close() {
+    public void close()
+    {
       try {
         this.out.flush();
       } catch (IOException ignore) {

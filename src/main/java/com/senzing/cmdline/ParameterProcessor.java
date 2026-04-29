@@ -6,19 +6,20 @@ import java.util.List;
  * Interface for parsing command-line argument parameters.
  */
 @SuppressWarnings("rawtypes")
-public interface ParameterProcessor {
+public interface ParameterProcessor
+{
   /**
    * Converts the specified command-line {@link String} parameters to a
    * {@link CommandLineOption} into an {@link Object} or array of
    * {@link Object} instances and determines if the parameters appear valid.
    *
-   * @param commandLineOption The {@link CommandLineOption} associated with
-   *                          the parameters.
+   * @param commandLineOption The {@link CommandLineOption} associated with the
+   *                          parameters.
    *
    * @param params            The {@link List} of {@link String} parameters.
    *
    * @return The {@link Object} or array of {@link Object} instances
-   *         representing the processed parameters.
+   *             representing the processed parameters.
    *
    * @throws BadOptionParametersException If the parameter(s) to the option are
    *                                      illegal in some way.

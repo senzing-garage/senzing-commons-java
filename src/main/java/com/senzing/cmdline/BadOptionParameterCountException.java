@@ -17,8 +17,8 @@ public class BadOptionParameterCountException extends SpecifiedOptionException
   /**
    * Constructs with the specified parameters.
    *
-   * @param source The {@link CommandLineSource} describing how the option
-   *               was specified.
+   * @param source The {@link CommandLineSource} describing how the option was
+   *               specified.
    * @param option The {@link CommandLineOption} that was missing required
    *               parameters.
    * @param specifier The command-line flag or environment variable used to
@@ -40,17 +40,18 @@ public class BadOptionParameterCountException extends SpecifiedOptionException
    * specified for the {@linkplain #getOption() option} (if any).
    *
    * @return The <b>unmodifiable</b> {@link List} of parameters that were
-   *         specified for the {@linkplain #getOption() option} (if any).
+   *             specified for the {@linkplain #getOption() option} (if any).
    */
-  public List<String> getParameters() {
+  public List<String> getParameters()
+  {
     return this.parameters;
   }
 
   /**
    * Formats the exception message for the specified parameters.
    *
-   * @param source The {@link CommandLineSource} describing how the option
-   *               was specified.
+   * @param source The {@link CommandLineSource} describing how the option was
+   *               specified.
    * @param option The {@link CommandLineOption} that was missing required
    *               parameters.
    * @param specifier The command-line flag or environment variable used to

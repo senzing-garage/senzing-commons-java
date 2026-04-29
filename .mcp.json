@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "senzing-commons-faq": {
+      "command": "uv",
+      "args": ["run", "--script", ".claude/faq_server.py"]
+    }
+  }
+}

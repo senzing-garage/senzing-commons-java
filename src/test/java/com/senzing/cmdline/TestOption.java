@@ -7,7 +7,8 @@ import java.util.*;
 /**
  * Test implementation of {@link CommandLineOption}.
  */
-public enum TestOption implements CommandLineOption<TestOption, TestOption> {
+public enum TestOption implements CommandLineOption<TestOption, TestOption>
+{
   HELP("--help"),
   VERSION("--version"),
   VERBOSE("--verbose"),
@@ -18,19 +19,22 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   URL("--url"),
   PASSWORD("--password");
 
-  TestOption(String cmdLineFlag) {
+  TestOption(String cmdLineFlag)
+  {
     this.cmdLineFlag = cmdLineFlag;
   }
 
   private String cmdLineFlag;
 
   @Override
-  public String getCommandLineFlag() {
+  public String getCommandLineFlag()
+  {
     return this.cmdLineFlag;
   }
 
   @Override
-  public Set<String> getSynonymFlags() {
+  public Set<String> getSynonymFlags()
+  {
     String flag = this.getCommandLineFlag();
     flag = flag.substring(1);
     int index = flag.lastIndexOf('-');
@@ -45,12 +49,14 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   }
 
   @Override
-  public boolean isDeprecated() {
+  public boolean isDeprecated()
+  {
     return (this == URL);
   }
 
   @Override
-  public Set<TestOption> getDeprecationAlternatives() {
+  public Set<TestOption> getDeprecationAlternatives()
+  {
     if (this == URL) {
       return Set.of(PORT, INTERFACE);
     } else {
@@ -59,14 +65,16 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   }
 
   @Override
-  public String getEnvironmentVariable() {
+  public String getEnvironmentVariable()
+  {
     if (this == VERSION || this == HELP || this == IGNORE_ENV) return null;
     String flag = this.getCommandLineFlag();
     return "SENZING_TEST_" + flag.substring(2).toUpperCase();
   }
 
   @Override
-  public Set<String> getEnvironmentSynonyms() {
+  public Set<String> getEnvironmentSynonyms()
+  {
     if (this == VERSION || this == HELP || this == IGNORE_ENV) {
       return Collections.emptySet();
     }
@@ -75,7 +83,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   }
 
   @Override
-  public List<String> getEnvironmentFallbacks() {
+  public List<String> getEnvironmentFallbacks()
+  {
     if (this == VERSION || this == HELP || this == IGNORE_ENV) {
       return Collections.emptyList();
     }
@@ -84,7 +93,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   }
 
   @Override
-  public boolean isPrimary() {
+  public boolean isPrimary()
+  {
     switch (this) {
       case HELP:
       case VERSION:
@@ -96,7 +106,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   }
 
   @Override
-  public Set<CommandLineOption> getConflicts() {
+  public Set<CommandLineOption> getConflicts()
+  {
     switch (this) {
       case HELP:
         return Set.of(VERSION, VERBOSE, PORT, INTERFACE);
@@ -118,7 +129,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   }
 
   @Override
-  public Set<Set<CommandLineOption>> getDependencies() {
+  public Set<Set<CommandLineOption>> getDependencies()
+  {
     switch (this) {
       case HELP:
       case VERSION:
@@ -141,7 +153,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   }
 
   @Override
-  public int getMinimumParameterCount() {
+  public int getMinimumParameterCount()
+  {
     switch (this) {
       case PORT:
       case INTERFACE:
@@ -155,7 +168,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   }
 
   @Override
-  public int getMaximumParameterCount() {
+  public int getMaximumParameterCount()
+  {
     switch (this) {
       case PORT:
       case INTERFACE:
@@ -169,7 +183,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
   }
 
   @Override
-  public List<String> getDefaultParameters() {
+  public List<String> getDefaultParameters()
+  {
     switch (this) {
       case VERBOSE:
       case IGNORE_ENV:
@@ -188,7 +203,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
    */
   private static class ParamProcessor implements ParameterProcessor
   {
-    public Object process(CommandLineOption option,  List<String> params) {
+    public Object process(CommandLineOption option,  List<String> params)
+    {
       if (!(option instanceof TestOption)) {
         throw new IllegalArgumentException(
             "Unhandled command-line option: " + option.getCommandLineFlag()
@@ -250,7 +266,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
       }
     }
 
-    private static int parsePort(String text) {
+    private static int parsePort(String text)
+    {
       int port = Integer.parseInt(text);
       if (port < 0) {
         throw new IllegalArgumentException(
@@ -259,7 +276,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption> {
       return port;
     }
 
-    private static InetAddress parseInterface(String text) {
+    private static InetAddress parseInterface(String text)
+    {
       InetAddress addr = null;
       try {
         if ("all".equals(text)) {

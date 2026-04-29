@@ -10,7 +10,8 @@ import java.util.Set;
  * to display.
  */
 @SuppressWarnings("rawtypes")
-public class DeprecatedOptionWarning implements SpecifiedOption {
+public class DeprecatedOptionWarning implements SpecifiedOption
+{
   /**
    * The {@link CommandLineSource} for the deprecated option.
    */
@@ -23,16 +24,16 @@ public class DeprecatedOptionWarning implements SpecifiedOption {
   private CommandLineOption option;
 
   /**
-   * The specifier (e.g.: command-line flag or environment variable) that
-   * was used to specify the option.
+   * The specifier (e.g.: command-line flag or environment variable) that was
+   * used to specify the option.
    */
   private String specifier;
 
   /**
    * Constructs with the specified parameters.
    *
-   * @param source The {@link CommandLineSource} describing how the option
-   *               value was specified.
+   * @param source The {@link CommandLineSource} describing how the option value
+   *               was specified.
    * @param option The {@link CommandLineOption} that was deprecated.
    * @param specifier The specifier for the option (e.g.: either command line
    *                  flag or environment variable).
@@ -80,7 +81,8 @@ public class DeprecatedOptionWarning implements SpecifiedOption {
    * @return The {@link CommandLineSource} for the deprecated option.
    */
   @Override
-  public CommandLineSource getSource() {
+  public CommandLineSource getSource()
+  {
     return this.source;
   }
 
@@ -89,10 +91,11 @@ public class DeprecatedOptionWarning implements SpecifiedOption {
    * deprecated option.
    *
    * @return The {@link CommandLineOption} that programmatically identifies the
-   *         deprecated option.
+   *             deprecated option.
    */
   @Override
-  public CommandLineOption getOption() {
+  public CommandLineOption getOption()
+  {
     return this.option;
   }
 
@@ -100,11 +103,12 @@ public class DeprecatedOptionWarning implements SpecifiedOption {
    * Gets the specifier (e.g.: command-line flag or environment variable) that
    * was used to specify the option.
    *
-   * @return The specifier (e.g.: command-line flag or environment variable) that
-   *         was used to specify the option.
+   * @return The specifier (e.g.: command-line flag or environment variable)
+   *             that was used to specify the option.
    */
   @Override
-  public String getSpecifier() {
+  public String getSpecifier()
+  {
     return this.specifier;
   }
 
@@ -113,7 +117,8 @@ public class DeprecatedOptionWarning implements SpecifiedOption {
    * deprecation and alternate options that can be specified.
    */
   @SuppressWarnings("unchecked")
-  public String toString() {
+  public String toString()
+  {
     StringWriter  sw = new StringWriter();
     PrintWriter   pw = new PrintWriter(sw);
     pw.println("WARNING: The " + this.getSourceDescriptor()
@@ -143,7 +148,8 @@ public class DeprecatedOptionWarning implements SpecifiedOption {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(Object o)
+  {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     DeprecatedOptionWarning that = (DeprecatedOptionWarning) o;
@@ -153,7 +159,8 @@ public class DeprecatedOptionWarning implements SpecifiedOption {
   }
 
   @Override
-  public int hashCode() {
+  public int hashCode()
+  {
     return Objects.hash(getSource(), getOption(), getSpecifier());
   }
 }

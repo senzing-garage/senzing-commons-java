@@ -18,46 +18,53 @@ public enum OtherTestOption
   INPUT("--input"),
   OUTPUT("--output");
 
-  OtherTestOption(String cmdLineFlag) {
+  OtherTestOption(String cmdLineFlag)
+  {
     this.cmdLineFlag = cmdLineFlag;
   }
 
   private String cmdLineFlag;
 
   @Override
-  public String getCommandLineFlag() {
+  public String getCommandLineFlag()
+  {
     return this.cmdLineFlag;
   }
 
   @Override
-  public Set<String> getSynonymFlags() {
+  public Set<String> getSynonymFlags()
+  {
     String flag = this.getCommandLineFlag();
     return Collections.singleton(flag.substring(1));
   }
 
   @Override
-  public String getEnvironmentVariable() {
+  public String getEnvironmentVariable()
+  {
     if (this == VERSION || this == HELP) return null;
     String flag = this.getCommandLineFlag();
     return "SENZING_OTHER_" + flag.substring(2).toUpperCase();
   }
 
   @Override
-  public Set<String> getEnvironmentSynonyms() {
+  public Set<String> getEnvironmentSynonyms()
+  {
     if (this == VERSION || this == HELP) return Collections.emptySet();
     String flag = this.getCommandLineFlag();
     return Collections.singleton("SZ_OTHER_" + flag.substring(2).toUpperCase());
   }
 
   @Override
-  public List<String> getEnvironmentFallbacks() {
+  public List<String> getEnvironmentFallbacks()
+  {
     if (this == VERSION || this == HELP) return Collections.emptyList();
     String flag = this.getCommandLineFlag();
     return List.of("SENZING_OTHER_TEST_" + flag.substring(2).toUpperCase());
   }
 
   @Override
-  public boolean isPrimary() {
+  public boolean isPrimary()
+  {
     switch (this) {
       case HELP:
       case VERSION:
@@ -69,7 +76,8 @@ public enum OtherTestOption
   }
 
   @Override
-  public Set<CommandLineOption> getConflicts() {
+  public Set<CommandLineOption> getConflicts()
+  {
     switch (this) {
       case HELP:
         return Set.of(VERSION, VERBOSE, INPUT, OUTPUT);
@@ -85,7 +93,8 @@ public enum OtherTestOption
   }
 
   @Override
-  public Set<Set<CommandLineOption>> getDependencies() {
+  public Set<Set<CommandLineOption>> getDependencies()
+  {
     switch (this) {
       case HELP:
       case VERSION:
@@ -100,7 +109,8 @@ public enum OtherTestOption
   }
 
   @Override
-  public int getMinimumParameterCount() {
+  public int getMinimumParameterCount()
+  {
     switch (this) {
       case INPUT:
       case OUTPUT:
@@ -111,7 +121,8 @@ public enum OtherTestOption
   }
 
   @Override
-  public int getMaximumParameterCount() {
+  public int getMaximumParameterCount()
+  {
     switch (this) {
       case INPUT:
       case OUTPUT:
@@ -122,7 +133,8 @@ public enum OtherTestOption
   }
 
   @Override
-  public List<String> getDefaultParameters() {
+  public List<String> getDefaultParameters()
+  {
     switch (this) {
       case VERBOSE:
         return List.of("false");
@@ -139,7 +151,8 @@ public enum OtherTestOption
    */
   private static class ParamProcessor implements ParameterProcessor
   {
-    public Object process(CommandLineOption option,  List<String> params) {
+    public Object process(CommandLineOption option,  List<String> params)
+    {
       if (!(option instanceof OtherTestOption)) {
         throw new IllegalArgumentException(
             "Unhandled command-line option: " + option.getCommandLineFlag()
@@ -183,7 +196,8 @@ public enum OtherTestOption
       }
     }
 
-    private static int parsePort(String text) {
+    private static int parsePort(String text)
+    {
       int port = Integer.parseInt(text);
       if (port < 0) {
         throw new IllegalArgumentException(
@@ -192,7 +206,8 @@ public enum OtherTestOption
       return port;
     }
 
-    private static InetAddress parseInterface(String text) {
+    private static InetAddress parseInterface(String text)
+    {
       InetAddress addr = null;
       try {
         if ("all".equals(text)) {

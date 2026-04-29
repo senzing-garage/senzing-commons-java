@@ -28,14 +28,16 @@ import static com.senzing.util.Quantified.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class ConnectionPoolTest {
+public class ConnectionPoolTest
+{
   private static final long ONE_MILLION = 1000000L;
 
   /**
    * An invocation handler for connection proxy that does nothing and always
    * returns <code>null</code>.
    */
-  public static class DummyConnectionHandler implements InvocationHandler {
+  public static class DummyConnectionHandler implements InvocationHandler
+  {
     private List<Exception> failures = null;
     private IdentityHashMap<Connection, Thread> connThreadMap = null;
     private IdentityHashMap<Thread, Connection> threadConnMap = null;
@@ -97,10 +99,11 @@ public class ConnectionPoolTest {
     }
 
     /**
-     * Call this function to record / verify the state of the
-     * thread and connection.
+     * Call this function to record / verify the state of the thread and
+     * connection.
      */
-    private void record(Connection connection) {
+    private void record(Connection connection)
+    {
       synchronized (this.connThreadMap) {
         synchronized (this.threadConnMap) {
           Thread current = Thread.currentThread();
@@ -152,7 +155,8 @@ public class ConnectionPoolTest {
   /**
    * A {@link Connector} implementation that produces dummy connections.
    */
-  public static class DummyConnector implements Connector {
+  public static class DummyConnector implements Connector
+  {
     private DummyConnectionHandler handler = null;
     public DummyConnector(List<Exception> failures,
                           IdentityHashMap<Connection, Thread> connThreadMap,
@@ -163,7 +167,9 @@ public class ConnectionPoolTest {
                                                 threadConnMap);
     }
     @Override
-    public Connection openConnection() throws SQLException {
+    public Connection openConnection()
+        throws SQLException
+    {
       return (Connection) Proxy.newProxyInstance(
           this.getClass().getClassLoader(), INTERFACES, this.handler);
     }
@@ -172,7 +178,8 @@ public class ConnectionPoolTest {
   /**
    *
    */
-  public List<Arguments> getPoolSizeParameters() {
+  public List<Arguments> getPoolSizeParameters()
+  {
     List<Arguments> result = new LinkedList<>();
     for (int min = 0; min < 5; min++) {
       for (int max = Math.max(1, min); max < 10; max++) {
@@ -185,7 +192,8 @@ public class ConnectionPoolTest {
   /**
    *
    */
-  public List<Arguments> getStatisticsParameters() {
+  public List<Arguments> getStatisticsParameters()
+  {
     List<Arguments> result = new LinkedList<>();
     for (int min = 0; min < 5; min++) {
       for (int max = Math.max(1, min); max < 10; max++) {
@@ -202,7 +210,8 @@ public class ConnectionPoolTest {
   /**
    *
    */
-  public List<Arguments> getConcurrentParameters() {
+  public List<Arguments> getConcurrentParameters()
+  {
     List<Arguments> result = new LinkedList<>();
     for (int min = 0; min < 5; min++) {
       for (int max = Math.max(1, min); max < 10; max++) {
@@ -218,7 +227,8 @@ public class ConnectionPoolTest {
 
   private static final SecureRandom PRNG = new SecureRandom();
 
-  private static class DummyThread extends Thread {
+  private static class DummyThread extends Thread
+  {
     private ConnectionPool pool = null;
     private List<Exception> failures = null;
     private IdentityHashMap<Connection, Thread> connThreadMap = null;
@@ -255,7 +265,8 @@ public class ConnectionPoolTest {
       this.threadConnMap  = threadConnMap;
     }
     @Override
-    public void run() {
+    public void run()
+    {
       String info = "minSize=[ " + this.pool.getMaximumSize() + " ], maxSize=[ "
           + this.pool.getMaximumSize() + " ], threadIndex=[ " + threadIndex
           + " ], threadCount =[ " + threadCount + " ], maxWait=[ "
@@ -456,7 +467,9 @@ public class ConnectionPoolTest {
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -511,7 +524,9 @@ public class ConnectionPoolTest {
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -594,7 +609,9 @@ public class ConnectionPoolTest {
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -679,14 +696,17 @@ public class ConnectionPoolTest {
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
   /**
    * Utility method for obtaining a failure message for multiple exceptions.
    */
-  private static String failuresMessage(List<Exception> failures) {
+  private static String failuresMessage(List<Exception> failures)
+  {
     StringWriter  sw = new StringWriter();
     PrintWriter   pw = new PrintWriter(sw);
     pw.println(failures.size() + " failures occurred");
@@ -700,7 +720,8 @@ public class ConnectionPoolTest {
   }
 
   @Test
-  public void idleExpireTest() {
+  public void idleExpireTest()
+  {
     ConnectionPool pool = null;
     try {
       IdentityHashMap<Connection, Thread> connThreadMap
@@ -759,12 +780,15 @@ public class ConnectionPoolTest {
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
   @Test
-  public void activeExpireTest() {
+  public void activeExpireTest()
+  {
     ConnectionPool pool = null;
     try {
       IdentityHashMap<Connection, Thread> connThreadMap
@@ -819,12 +843,15 @@ public class ConnectionPoolTest {
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
   @Test
-  public void retireTest() {
+  public void retireTest()
+  {
     ConnectionPool pool = null;
     try {
       IdentityHashMap<Connection, Thread> connThreadMap
@@ -879,7 +906,9 @@ public class ConnectionPoolTest {
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -1134,7 +1163,9 @@ public class ConnectionPoolTest {
       e.printStackTrace();
       fail("Received a SQL exception", e);
     } finally {
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
     }
   }
 
@@ -1142,7 +1173,8 @@ public class ConnectionPoolTest {
    *
    */
   @Test
-  public void sqliteTest() {
+  public void sqliteTest()
+  {
     ConnectionPool    pool  = null;
     Connection        conn  = null;
     PreparedStatement ps    = null;
@@ -1279,7 +1311,9 @@ public class ConnectionPoolTest {
       ps    = SQLUtilities.close(ps);
       stmt  = SQLUtilities.close(stmt);
       conn  = SQLUtilities.close(conn);
-      if (pool != null) pool.shutdown();
+      if (pool != null) {
+        pool.shutdown();
+      }
 
     }
   }

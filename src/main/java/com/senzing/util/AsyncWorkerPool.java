@@ -6,12 +6,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Provides a pool of worker threads to execute asynchronous tasks and
- * provide the results.
+ * Provides a pool of worker threads to execute asynchronous tasks and provide
+ * the results.
  *
  * @param <T> The return type from the asynchronous task.
  */
-public class AsyncWorkerPool<T> {
+public class AsyncWorkerPool<T>
+{
   /**
    * The list of available {@link AsyncWorker} instances.
    */
@@ -32,7 +33,8 @@ public class AsyncWorkerPool<T> {
    * 
    * @param <T> The return type for the task.
    */
-  public interface Task<T> {
+  public interface Task<T>
+  {
     /**
      * Executes the task and returns the result.
      * 
@@ -48,24 +50,28 @@ public class AsyncWorkerPool<T> {
    * 
    * @param <T> The type of the result returned.
    */
-  public static class AsyncResult<T> {
+  public static class AsyncResult<T>
+  {
     private T value;
     private Exception failure;
 
-    private AsyncResult(T value, Exception failure) {
+    private AsyncResult(T value, Exception failure)
+    {
       this.value      = value;
       this.failure    = failure;
     }
 
     /**
-     * Returns the value produced by the completed task.
-     * If an exception is thrown by the task and it does not complete
-     * then this throws the associated failure.
+     * Returns the value produced by the completed task. If an exception is
+     * thrown by the task and it does not complete then this throws the
+     * associated failure.
      *
      * @return The value produced by the completed task.
      * @throws Exception If a failure occurs.
      */
-    public T getValue() throws Exception {
+    public T getValue()
+        throws Exception
+    {
       if (this.failure != null) throw this.failure;
       return this.value;
     }
@@ -75,7 +81,8 @@ public class AsyncWorkerPool<T> {
      *
      * @return A diagnostic string describing this instance.
      */
-    public String toString() {
+    public String toString()
+    {
       return "{ value=[ " + this.value + " ]"
               + ((this.failure != null)
                   ? ", failure=[ " + this.failure + " ]" : "")
@@ -87,20 +94,22 @@ public class AsyncWorkerPool<T> {
    * Constructs with the specified number of threads in the pool.
    * @param size The number of threads to create in the pool.
    */
-  public AsyncWorkerPool(int size) {
+  public AsyncWorkerPool(int size)
+  {
     this("AsyncWorker", size);
   }
 
   /**
-   * Constructs with the specified thread base name and the number of threads
-   * to create.
+   * Constructs with the specified thread base name and the number of threads to
+   * create.
    *
-   * @param baseName The base name to use as a prefix when naming the
-   *                 async worker threads in the pool.
+   * @param baseName The base name to use as a prefix when naming the async
+   *                 worker threads in the pool.
    *
    * @param size The number of worker threads to create.
    */
-  public AsyncWorkerPool(String baseName, int size) {
+  public AsyncWorkerPool(String baseName, int size)
+  {
     this.available    = new LinkedList<>();
     this.allThreads   = new LinkedList<>();
     this.closed       = false;
@@ -125,9 +134,10 @@ public class AsyncWorkerPool<T> {
    * Checks if one or more tasks are currently executing.
    *
    * @return <code>true</code> if one or more tasks are currently executing,
-   *         otherwise <code>false</code>.
+   *                           otherwise <code>false</code>.
    */
-  public boolean isBusy() {
+  public boolean isBusy()
+  {
     synchronized (this.available) {
       if (this.isClosed()) return false;
       return (this.available.size() < this.allThreads.size());
@@ -135,16 +145,17 @@ public class AsyncWorkerPool<T> {
   }
 
   /**
-   * Executes the specified {@link Task} asynchronously and returns the {@link
-   * AsyncResult} (if any) produced by a previous execution of the assigned
-   * worker.  The returned {@link AsyncResult} is <code>null</code> if the assigned
-   * worker's result has already been consumed or has not executed a previous
-   * task.
+   * Executes the specified {@link Task} asynchronously and returns the
+   * {@link AsyncResult} (if any) produced by a previous execution of the
+   * assigned worker.  The returned {@link AsyncResult} is
+   * <code>null</code> if the assigned worker's result has already been
+   * consumed or has not executed a previous task.
    *
    * @param task The task to execute.
    * @return The {@link AsyncResult} of the previous execution if ready.
    */
-  public AsyncResult<T> execute(Task<T> task) {
+  public AsyncResult<T> execute(Task<T> task)
+  {
     synchronized (this.available) {
       AsyncWorker<T> worker = null;
       // wait for an available worker
@@ -177,7 +188,8 @@ public class AsyncWorkerPool<T> {
    *
    * @return The size of the worker thread pool.
    */
-  public int size() {
+  public int size()
+  {
     return this.allThreads.size();
   }
 
@@ -187,7 +199,8 @@ public class AsyncWorkerPool<T> {
    *
    * @return <code>true</code> if closed, otherwise <code>false</code>
    */
-  public boolean isClosed() {
+  public boolean isClosed()
+  {
     synchronized (this.available) {
       return this.closed;
     }
@@ -197,7 +210,7 @@ public class AsyncWorkerPool<T> {
    * Closes this pool so no further tasks can be executed against it.
    *
    * @return The {@link List} of non-null {@link AsyncResult} instances
-   *         describing the results from the concluding tasks.
+   *             describing the results from the concluding tasks.
    */
   public List<AsyncResult<T>> close()
   {
@@ -221,7 +234,8 @@ public class AsyncWorkerPool<T> {
   /**
    * A worker thread for performing asynchronous tasks.
    */
-  private class AsyncWorker<T> extends Thread {
+  private class AsyncWorker<T> extends Thread
+  {
     /**
      * Flag to indicate if the worker thread is complete.
      */
@@ -240,7 +254,8 @@ public class AsyncWorkerPool<T> {
     /**
      * Default constructor.
      */
-    private AsyncWorker() {
+    private AsyncWorker()
+    {
       this.previousResult = null;
       this.complete = false;
     }
@@ -248,7 +263,8 @@ public class AsyncWorkerPool<T> {
     /**
      * Resets the thread so it is ready to execute the next task.
      */
-    private synchronized AsyncResult<T> reset() {
+    private synchronized AsyncResult<T> reset()
+    {
       AsyncResult<T> prevResult = this.previousResult;
       this.currentTask    = null;
       this.previousResult = null;
@@ -259,7 +275,8 @@ public class AsyncWorkerPool<T> {
      * Sets the current task for the thread and returns the result from the
      * previous execution.
      */
-    private synchronized AsyncResult<T> enlist(Task<T> task) {
+    private synchronized AsyncResult<T> enlist(Task<T> task)
+    {
       AsyncResult<T> prevResult = this.reset();
       this.currentTask = task;
       this.notifyAll();
@@ -267,13 +284,14 @@ public class AsyncWorkerPool<T> {
     }
 
     /**
-     * Checks if the thread has been marked complete and should stop
-     * processing tasks.
+     * Checks if the thread has been marked complete and should stop processing
+     * tasks.
      *
      * @return <code>true</code> if this instance has been marked complete,
-     *         otherwise <code>false</code>.
+     *                           otherwise <code>false</code>.
      */
-    private synchronized boolean isComplete() {
+    private synchronized boolean isComplete()
+    {
       return this.complete;
     }
 
@@ -283,7 +301,8 @@ public class AsyncWorkerPool<T> {
      * Finally, this method returns the {@link AsyncResult} from the previous
      * task that was executed (if not yet consumed).
      */
-    private AsyncResult<T> retire() {
+    private AsyncResult<T> retire()
+    {
       synchronized (this) {
         while (this.isBusy()) {
           try {
@@ -307,15 +326,16 @@ public class AsyncWorkerPool<T> {
      * Checks if this thread is currently busy executing a task.
      *
      * @return <code>true</code> if this thread is currently busy executing a
-     *         task, otherwise <code>false</code>.
+     *                           task, otherwise <code>false</code>.
      */
-    private synchronized boolean isBusy() {
+    private synchronized boolean isBusy()
+    {
       return (this.currentTask != null);
     }
 
     /**
-     * Implement the run method to wait for the next task and execute it.
-     * This continues until this thread is marked complete.
+     * Implement the run method to wait for the next task and execute it. This
+     * continues until this thread is marked complete.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void run()

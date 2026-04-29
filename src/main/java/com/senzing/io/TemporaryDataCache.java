@@ -19,12 +19,13 @@ import static com.senzing.util.LoggingUtilities.*;
 import static com.senzing.io.IOUtilities.*;
 
 /**
- * Provides an {@link InputStream} implementation that will read data from
- * a source stream in the background and as it becomes available makes it
- * possible to concurrently read that data from the beginning of the stream
- * multiple times.
+ * Provides an {@link InputStream} implementation that will read data from a
+ * source stream in the background and as it becomes available makes it possible
+ * to concurrently read that data from the beginning of the stream multiple
+ * times.
  */
-public class TemporaryDataCache {
+public class TemporaryDataCache
+{
   /**
    * How long to wait for more data before closing out a file part.
    */
@@ -128,7 +129,8 @@ public class TemporaryDataCache {
    * @throws IOException If an I/O failure occurs.
    */
   public TemporaryDataCache(InputStream sourceStream)
-      throws IOException {
+      throws IOException
+  {
     this(sourceStream, null, null);
   }
 
@@ -141,7 +143,8 @@ public class TemporaryDataCache {
    * @throws IOException If an I/O failure occurs.
    */
   public TemporaryDataCache(InputStream sourceStream, File directory)
-      throws IOException {
+      throws IOException
+  {
     this(sourceStream, directory, null);
   }
 
@@ -202,11 +205,14 @@ public class TemporaryDataCache {
    *
    * @return The number of deleted file parts.
    */
-  public int delete() {
+  public int delete()
+  {
     int count = 0;
     synchronized (this.fileParts) {
       for (CacheFilePart filePart : this.fileParts) {
-        if (filePart.file.delete()) count++;
+        if (filePart.file.delete()) {
+          count++;
+        }
       }
       this.fileParts.clear();
       this.deleted = true;
@@ -218,10 +224,11 @@ public class TemporaryDataCache {
   /**
    * Checks if this instance has had its backing file(s) deleted.
    *
-   * @return <code>true</code> if the backing files have been deleted,
-   *         otherwise <code>false</code>.
+   * @return <code>true</code> if the backing files have been deleted, otherwise
+   *                           <code>false</code>.
    */
-  public boolean isDeleted() {
+  public boolean isDeleted()
+  {
     synchronized (this.fileParts) {
       return this.deleted;
     }
@@ -232,7 +239,8 @@ public class TemporaryDataCache {
    *
    * @return The directory that the file parts are stored in.
    */
-  public File getDirectory() {
+  public File getDirectory()
+  {
     return this.directory;
   }
 
@@ -241,9 +249,10 @@ public class TemporaryDataCache {
    * constructor.
    *
    * @return <code>true</code> if data is still being appended to the stream,
-   * otherwise <code>false</code>
+   *                           otherwise <code>false</code>
    */
-  public boolean isAppending() {
+  public boolean isAppending()
+  {
     synchronized (this.fileParts) {
       return this.consumerThread.isAlive() && this.consumerThread.isAppending();
     }
@@ -267,7 +276,8 @@ public class TemporaryDataCache {
   /**
    * Sets the failure for this instance if one occurs.
    */
-  private void setFailure(Exception e) {
+  private void setFailure(Exception e)
+  {
     synchronized (this.fileParts) {
       this.failure = e;
     }
@@ -276,7 +286,9 @@ public class TemporaryDataCache {
   /**
    * Checks if a failure has occurred and if so, throws an exception.
    */
-  private void checkFailure() throws RuntimeException {
+  private void checkFailure()
+      throws RuntimeException
+  {
     synchronized (this.fileParts) {
       if (this.failure != null) throw new RuntimeException(this.failure);
     }
@@ -287,7 +299,8 @@ public class TemporaryDataCache {
    *
    * @param maxWait The maximum amount of time to wait.
    *
-   * @return <code>true</code> if appending completed, otherwise <code>false</code>
+   * @return <code>true</code> if appending completed, otherwise
+   *         <code>false</code>
    *
    * @throws InterruptedException If interrupted.
    */
@@ -318,9 +331,10 @@ public class TemporaryDataCache {
    * from the source stream.
    *
    * @return An input stream that will read the data as it becomes available
-   *         from the source stream.
+   *            from the source stream.
    */
-  public InputStream getInputStream() {
+  public InputStream getInputStream()
+  {
     return this.getInputStream(false);
   }
 
@@ -328,22 +342,24 @@ public class TemporaryDataCache {
    * Returns an input stream that will read the data as it becomes available
    * from the source stream.
    *
-   * @param consume <code>true</code> if the file parts should be deleted
-   *                as they are read, and <code>false</code> if not.
+   * @param consume <code>true</code> if the file parts should be deleted as
+   *                they are read, and <code>false</code> if not.
    *
    * @return An input stream that will read the data as it becomes available
-   *         from the source stream.
+   *            from the source stream.
    */
-  public InputStream getInputStream(boolean consume) {
+  public InputStream getInputStream(boolean consume)
+  {
     return new ChainFileInputStream(consume);
   }
 
   /**
    * Provides the sink for the consumed data that will break the consumed data
-   * into file parts rather than store them in memory to avoid exceeding
-   * memory limitations.
+   * into file parts rather than store them in memory to avoid exceeding memory
+   * limitations.
    */
-  private class FilePartSink extends Thread {
+  private class FilePartSink extends Thread
+  {
     /**
      * The current file.
      */
@@ -402,14 +418,16 @@ public class TemporaryDataCache {
     /**
      * Default constructor.
      */
-    private FilePartSink() {
+    private FilePartSink()
+    {
       // do nothing
     }
 
     /**
      * Flags this instance for shutdown.
      */
-    private void close() {
+    private void close()
+    {
       TemporaryDataCache owner = TemporaryDataCache.this;
       synchronized (owner.fileParts) {
         this.closed = true;
@@ -420,7 +438,8 @@ public class TemporaryDataCache {
     /**
      * Checks if the file sink has been shutdown.
      */
-    private boolean isClosed() {
+    private boolean isClosed()
+    {
       TemporaryDataCache owner = TemporaryDataCache.this;
       synchronized (owner.fileParts) {
         return this.closed;
@@ -430,7 +449,8 @@ public class TemporaryDataCache {
     /**
      * Closes the current file and adds the file part to the queue.
      */
-    private void completeCurrentFilePart() {
+    private void completeCurrentFilePart()
+    {
       TemporaryDataCache owner = TemporaryDataCache.this;
 
       synchronized (owner.fileParts) {
@@ -507,7 +527,8 @@ public class TemporaryDataCache {
     /**
      * Creates the next file part.
      */
-    private void beginNextFilePart() {
+    private void beginNextFilePart()
+    {
       final TemporaryDataCache  owner     = TemporaryDataCache.this;
       final int                 gzSize    = FLUSH_THRESHOLD + 8192;
       final boolean             syncFlush = SYNC_FLUSH;
@@ -557,7 +578,9 @@ public class TemporaryDataCache {
      *
      * @param data The byte to write.
      */
-    public void writeByte(byte data) throws IOException {
+    public void writeByte(byte data)
+        throws IOException
+    {
       final TemporaryDataCache owner = TemporaryDataCache.this;
       synchronized (owner.fileParts) {
         // check if shutdown
@@ -601,7 +624,8 @@ public class TemporaryDataCache {
     /**
      * Periodically checks if we have a partial
      */
-    public void run() {
+    public void run()
+    {
       final TemporaryDataCache owner = TemporaryDataCache.this;
       long waitTime = FILE_PART_TIMEOUT;
       while (!this.isClosed()) {
@@ -640,7 +664,8 @@ public class TemporaryDataCache {
   /**
    * The consumer thread for consuming the data from the source stream.
    */
-  private class ConsumerThread extends Thread {
+  private class ConsumerThread extends Thread
+  {
     /**
      * The source stream to read from.
      */
@@ -656,7 +681,8 @@ public class TemporaryDataCache {
      *
      * @param sourceStream The source {@link InputStream} to read from.
      */
-    public ConsumerThread(InputStream sourceStream) {
+    public ConsumerThread(InputStream sourceStream)
+    {
       this.sourceStream = sourceStream;
       this.appending = true;
     }
@@ -664,7 +690,8 @@ public class TemporaryDataCache {
     /**
      * Checks if still appending.
      */
-    public synchronized boolean isAppending() {
+    public synchronized boolean isAppending()
+    {
       return this.appending;
     }
 
@@ -672,7 +699,8 @@ public class TemporaryDataCache {
      * Reads the data from the source stream and writes it to the underlying
      * file parts.
      */
-    public void run() {
+    public void run()
+    {
       TemporaryDataCache owner = TemporaryDataCache.this;
 
       InputStream is = this.sourceStream;
@@ -710,31 +738,36 @@ public class TemporaryDataCache {
     }
   }
 
-  private static class CacheFilePart implements Comparable<CacheFilePart> {
+  private static class CacheFilePart implements Comparable<CacheFilePart>
+  {
     private final File file;
     private final long offset;
     private final long length;
 
-    CacheFilePart(File file, long offset, long length) {
+    CacheFilePart(File file, long offset, long length)
+    {
       this.file   = file;
       this.offset = offset;
       this.length = length;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       CacheFilePart filePart = (CacheFilePart) o;
-      return offset == filePart.offset &&
-          length == filePart.length;
+      return offset == filePart.offset
+          && length == filePart.length;
     }
 
-    public int hashCode() {
+    public int hashCode()
+    {
       return ((int)(this.offset^this.length));
     }
 
-    public int compareTo(CacheFilePart p) {
+    public int compareTo(CacheFilePart p)
+    {
       if (this.offset == p.offset) {
         if (this.length == p.length) return 0;
         return (this.length < p.length) ? -1 : 1;
@@ -746,7 +779,8 @@ public class TemporaryDataCache {
   /**
    * The consumer thread for consuming the data from the source stream.
    */
-  private class ChainFileInputStream extends InputStream {
+  private class ChainFileInputStream extends InputStream
+  {
 
     private boolean consuming;
 
@@ -762,7 +796,8 @@ public class TemporaryDataCache {
 
     private long currentOffset;
 
-    private ChainFileInputStream(boolean consuming) {
+    private ChainFileInputStream(boolean consuming)
+    {
       this.consuming        = consuming;
       this.eof              = false;
       this.closed           = false;
@@ -772,14 +807,18 @@ public class TemporaryDataCache {
       this.currentOffset    = 0;
     }
 
-    private void closeInputStream() throws IOException {
+    private void closeInputStream()
+        throws IOException
+    {
       if (this.currentIS != null) {
         this.currentIS.close();
         this.currentIS = null;
       }
     }
 
-    public void close() throws IOException {
+    public void close()
+        throws IOException
+    {
       if (this.closed) return;
       this.closeInputStream();
       this.currentFilePart = null;
@@ -788,7 +827,9 @@ public class TemporaryDataCache {
       this.closed           = true;
     }
 
-    public long skip(long n) throws IOException {
+    public long skip(long n)
+        throws IOException
+    {
       TemporaryDataCache owner = TemporaryDataCache.this;
       owner.checkFailure();
       if (this.closed) {
@@ -845,7 +886,9 @@ public class TemporaryDataCache {
       return totalSkipped;
     }
 
-    private void advanceFile() throws IOException {
+    private void advanceFile()
+        throws IOException
+    {
       if (this.consuming && this.currentFilePart != null) {
         this.currentFilePart.file.delete();
       }
@@ -858,7 +901,9 @@ public class TemporaryDataCache {
       this.currentOffset = 0L;
     }
 
-    private void attachStream() throws IOException {
+    private void attachStream()
+        throws IOException
+    {
       try {
         TemporaryDataCache owner = TemporaryDataCache.this;
         Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
@@ -925,7 +970,9 @@ public class TemporaryDataCache {
       }
     }
 
-    public int read() throws IOException {
+    public int read()
+        throws IOException
+    {
       TemporaryDataCache owner = TemporaryDataCache.this;
 
       owner.checkFailure();
@@ -970,7 +1017,9 @@ public class TemporaryDataCache {
               }
             } else {
               this.eof = true;
-              if (this.consuming) owner.delete();
+              if (this.consuming) {
+                owner.delete();
+              }
               return -1; // EOF
             }
           }

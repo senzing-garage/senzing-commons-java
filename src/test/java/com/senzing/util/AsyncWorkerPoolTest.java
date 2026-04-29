@@ -17,9 +17,11 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class AsyncWorkerPoolTest {
+public class AsyncWorkerPoolTest
+{
   @Test
-  public void asyncWorkerPoolTest() {
+  public void asyncWorkerPoolTest()
+  {
     try {
       final int                   THREAD_COUNT    = 100;
       final int                   POOL_SIZE       = 10;
@@ -130,7 +132,8 @@ public class AsyncWorkerPoolTest {
 
   @ParameterizedTest
   @CsvSource({"1, 1", "1, 2" ,"1, 5", "2, 1", "2, 2", "2, 5", "3, 5"})
-  public void busyTest(int tasks, int poolSize) {
+  public void busyTest(int tasks, int poolSize)
+  {
     AsyncWorkerPool<Long> pool = new AsyncWorkerPool<>(poolSize);
     for (int index = 0; index < tasks; index++) {
       pool.execute(() -> {

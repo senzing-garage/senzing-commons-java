@@ -13,7 +13,8 @@ import static com.senzing.io.IOUtilities.UTF_8;
 /**
  * Provides text utility functions.
  */
-public class TextUtilities {
+public class TextUtilities
+{
     /**
      * The random number generator to use for generating encryption keys.
      */
@@ -80,7 +81,8 @@ public class TextUtilities {
     /**
      * Default constructor.
      */
-    private TextUtilities() {
+    private TextUtilities()
+    {
         // do nothing
     }
 
@@ -92,11 +94,12 @@ public class TextUtilities {
      * 
      * @return The random count.
      * 
-     * @throws IllegalArgumentException If the specified minimum count is greater
-     *                                  that the specified maximum count, or if
-     *                                  either count is negative.
+     * @throws IllegalArgumentException If the specified minimum count is
+     *                                  greater that the specified maximum
+     *                                  count, or if either count is negative.
      */
-    private static int randomCount(int minCount, int maxCount) {
+    private static int randomCount(int minCount, int maxCount)
+    {
         if (minCount < 0 || maxCount < 0) {
             throw new IllegalArgumentException(
                     "Neither of the specified parameters can be negative");
@@ -104,8 +107,9 @@ public class TextUtilities {
 
         if (minCount > maxCount) {
             throw new IllegalArgumentException(
-                    "The specified minimum count cannot be greater than the "
-                            + "maximum count.  minCount=[ " + minCount + " ], maxCount=[ "
+                    "The specified minimum count cannot be greater than"
+                            + " the maximum count.  minCount=[ "
+                            + minCount + " ], maxCount=[ "
                             + maxCount + " ]");
         }
 
@@ -124,7 +128,8 @@ public class TextUtilities {
      * 
      * @throws IllegalArgumentException If the specified count is negative.
      */
-    public static String randomPrintableText(int count) {
+    public static String randomPrintableText(int count)
+    {
         return randomText(count, PRINTABLE_CHARS);
     }
 
@@ -132,17 +137,20 @@ public class TextUtilities {
      * Utility function to generate random printable non-whitespace ASCII text
      * of a random length within the specified bounds.
      *
-     * @param minCount The non-negative minimum number of characters to generate.
-     * @param maxCount The non-negative maximum number of characters to generate.
+     * @param minCount The non-negative minimum number of characters to
+     *                 generate.
+     * @param maxCount The non-negative maximum number of characters to
+     *                 generate.
      *
      * @return The generated text.
      * 
-     * @throws IllegalArgumentException If the specified minimum count is greater
-     *                                  that the specified maximum count, or if
-     *                                  either count is negative.
+     * @throws IllegalArgumentException If the specified minimum count is
+     *                                  greater that the specified maximum
+     *                                  count, or if either count is negative.
      */
     public static String randomPrintableText(int minCount, int maxCount)
-            throws IllegalArgumentException {
+            throws IllegalArgumentException
+    {
         return randomPrintableText(randomCount(minCount, maxCount));
     }
 
@@ -156,7 +164,8 @@ public class TextUtilities {
      * 
      * @throws IllegalArgumentException If the specified count is negative.
      */
-    public static String randomAlphabeticText(int count) {
+    public static String randomAlphabeticText(int count)
+    {
         return randomText(count, ALPHA_CHARS);
     }
 
@@ -164,16 +173,19 @@ public class TextUtilities {
      * Utility function to generate random ASCII alphabetic text of a specified
      * length.
      *
-     * @param minCount The non-negative minimum number of characters to generate.
-     * @param maxCount The non-negative maximum number of characters to generate.
+     * @param minCount The non-negative minimum number of characters to
+     *                 generate.
+     * @param maxCount The non-negative maximum number of characters to
+     *                 generate.
      *
      * @return The generated text.
      * 
-     * @throws IllegalArgumentException If the specified minimum count is greater
-     *                                  that the specified maximum count, or if
-     *                                  either count is negative.
+     * @throws IllegalArgumentException If the specified minimum count is
+     *                                  greater that the specified maximum
+     *                                  count, or if either count is negative.
      */
-    public static String randomAlphabeticText(int minCount, int maxCount) {
+    public static String randomAlphabeticText(int minCount, int maxCount)
+    {
         return randomAlphabeticText(randomCount(minCount, maxCount));
     }
 
@@ -187,7 +199,8 @@ public class TextUtilities {
      * 
      * @throws IllegalArgumentException If the specified count is negative.
      */
-    public static String randomAlphanumericText(int count) {
+    public static String randomAlphanumericText(int count)
+    {
         return randomText(count, ALPHANUMERIC_CHARS);
     }
 
@@ -195,16 +208,19 @@ public class TextUtilities {
      * Utility function to generate random ASCII alpha-numeric text of a
      * specified length.
      *
-     * @param minCount The non-negative minimum number of characters to generate.
-     * @param maxCount The non-negative maximum number of characters to generate.
+     * @param minCount The non-negative minimum number of characters to
+     *                 generate.
+     * @param maxCount The non-negative maximum number of characters to
+     *                 generate.
      *
      * @return The generated text.
      * 
-     * @throws IllegalArgumentException If the specified minimum count is greater
-     *                                  that the specified maximum count, or if
-     *                                  either count is negative.
+     * @throws IllegalArgumentException If the specified minimum count is
+     *                                  greater that the specified maximum
+     *                                  count, or if either count is negative.
      */
-    public static String randomAlphanumericText(int minCount, int maxCount) {
+    public static String randomAlphanumericText(int minCount, int maxCount)
+    {
         return randomAlphanumericText(randomCount(minCount, maxCount));
     }
 
@@ -212,7 +228,8 @@ public class TextUtilities {
      * Internal functions to generate random text given a list of allowed
      * characters and a count of the number of desired characters.
      */
-    private static String randomText(int count, List<Character> allowedChars) {
+    private static String randomText(int count, List<Character> allowedChars)
+    {
         if (count < 0) {
             throw new IllegalArgumentException(
                 "The specified count cannot be negative: " + count);
@@ -232,7 +249,8 @@ public class TextUtilities {
      *
      * @return The encoded text.
      */
-    public static String urlEncodeUtf8(String text) {
+    public static String urlEncodeUtf8(String text)
+    {
         try {
             return URLEncoder.encode(text, UTF_8);
         } catch (UnsupportedEncodingException cannotHappen) {
@@ -247,7 +265,8 @@ public class TextUtilities {
      *
      * @return The decoded text.
      */
-    public static String urlDecodeUtf8(String encodedText) {
+    public static String urlDecodeUtf8(String encodedText)
+    {
         try {
             return URLDecoder.decode(encodedText, UTF_8);
         } catch (UnsupportedEncodingException cannotHappen) {

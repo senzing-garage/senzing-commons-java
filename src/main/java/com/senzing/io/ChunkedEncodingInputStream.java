@@ -1,14 +1,14 @@
 package com.senzing.io;
 
 import java.io.*;
-import java.nio.file.FileSystemNotFoundException;
 
 /**
  * Provides a {@link FilterInputStream} implementation that will wrap an
  * {@link InputStream} that provides data encoded with chunked transfer encoding
  * and then decode the chunked transfer encoding.
  */
-public class ChunkedEncodingInputStream extends FilterInputStream {
+public class ChunkedEncodingInputStream extends FilterInputStream
+{
   /**
    * The current chunk.
    */
@@ -24,7 +24,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
    *
    * @param inputStream The {@link InputStream} to wrap.
    */
-  public ChunkedEncodingInputStream(InputStream inputStream) {
+  public ChunkedEncodingInputStream(InputStream inputStream)
+  {
     super(inputStream);
   }
 
@@ -34,7 +35,9 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
    * chunk and return how many bytes are available.
    */
   @Override
-  public int available() throws IOException {
+  public int available()
+      throws IOException
+  {
     // check if we do not have a current chunk
     if (this.currentChunk == null) {
       // check if the underlying input stream has a chunk available
@@ -57,18 +60,22 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
    * @throws IOException If a failure occurs.
    */
   @Override
-  public void close() throws IOException {
+  public void close()
+      throws IOException
+  {
     this.in.close();
   }
 
   /**
-   * Implemented to throw {@link UnsupportedOperationException} since mark
-   * is not supported.
+   * Implemented to throw {@link UnsupportedOperationException} since mark is
+   * not supported.
    *
    * @throws UnsupportedOperationException Whenever this method is called.
    */
   @Override
-  public void mark(int readLimit) throws UnsupportedOperationException {
+  public void mark(int readLimit)
+      throws UnsupportedOperationException
+  {
     throw new UnsupportedOperationException(
         "Mark is not supported when decoding chunked transfer encoding");
   }
@@ -77,10 +84,12 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
    * Overridden to return <code>false</code> to indicate that mark and reset are
    * not supported.
    *
-   * @return <code>false</code> to indicate that mark and reset are not supported.
+   * @return <code>false</code> to indicate that mark and reset are not
+   *         supported.
    */
   @Override
-  public boolean markSupported() {
+  public boolean markSupported()
+  {
     return false;
   }
 
@@ -90,7 +99,9 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
    * @throws IOException If a failure occurs.
    */
   @Override
-  public int read() throws IOException {
+  public int read()
+      throws IOException
+  {
     if (this.currentChunk == null || this.currentChunk.available() == 0) {
       this.readChunk();
     }
@@ -103,7 +114,9 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
    * @throws IOException If a failure occurs.
    */
   @Override
-  public int read(byte[] buffer, int offset, int length) throws IOException {
+  public int read(byte[] buffer, int offset, int length)
+      throws IOException
+  {
     if (this.currentChunk == null || this.currentChunk.available() == 0) {
       this.readChunk();
     }
@@ -113,13 +126,15 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
   }
 
   /**
-   * Implemented to throw {@link UnsupportedOperationException} since mark
-   * is not supported.
+   * Implemented to throw {@link UnsupportedOperationException} since mark is
+   * not supported.
    *
    * @throws UnsupportedOperationException Whenever this method is called.
    */
   @Override
-  public void reset() throws UnsupportedOperationException {
+  public void reset()
+      throws UnsupportedOperationException
+  {
     throw new UnsupportedOperationException(
         "Reset is not supported when decoding chunked transfer encoding");
   }
@@ -132,7 +147,9 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
    * @throws IOException If a failure occurs.
    */
   @Override
-  public long skip(long n) throws IOException {
+  public long skip(long n)
+      throws IOException
+  {
     long skipped = 0;
     while (!this.eof && skipped < n) {
       if (this.currentChunk == null || this.currentChunk.available() == 0) {
@@ -148,11 +165,16 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
   /**
    * Reads the next chunk, discarding the current chunk if any.
    */
-  private boolean readChunk() throws IOException {
+  private boolean readChunk()
+      throws IOException
+  {
     this.currentChunk = null;
     StringBuilder sb = new StringBuilder();
     boolean cr = false;
-    for (int readByte = this.in.read(); readByte >= 0; readByte = this.in.read()) {
+    for (int readByte = this.in.read();
+         readByte >= 0;
+         readByte = this.in.read())
+    {
       // if we have a carriage return then look for a line-feed
       if (cr) {
         if (readByte != ((int) '\n')) {
@@ -206,8 +228,9 @@ public class ChunkedEncodingInputStream extends FilterInputStream {
       if (chunkBytes.length != readCount) {
         this.eof = true;
         throw new IOException(
-            "Bad chunked encoding.  Unexpected EOF while reading chunk of size "
-                + readCount + " (only " + chunkBytes.length + " read): " + chunkLine);
+            "Bad chunked encoding.  Unexpected EOF while reading chunk "
+                + "of size " + readCount + " (only "
+                + chunkBytes.length + " read): " + chunkLine);
       }
     }
 

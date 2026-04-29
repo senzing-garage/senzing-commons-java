@@ -3,12 +3,13 @@ package com.senzing.cmdline;
 import java.util.Map;
 
 /**
- * Creates an instance of the parameterized type using a {@link Map}
- * of {@link CommandLineOption} keys to {@link Object} command-line values.
+ * Creates an instance of the parameterized type using a {@link Map} of {@link
+ * CommandLineOption} keys to {@link Object} command-line values.
  * 
  * @param <T> The type of the instance created by the builder.
  */
-public interface CommandLineBuilder <T> {
+public interface CommandLineBuilder <T>
+{
   /**
    * Creates an instance of the parameterized type using the specified
    * command-line options.

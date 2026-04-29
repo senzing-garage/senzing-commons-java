@@ -3,11 +3,13 @@ package com.senzing.cmdline;
 /**
  * Provides a base class for a checked exception for command-line failures.
  */
-public class CommandLineException extends Exception {
+public class CommandLineException extends Exception
+{
   /**
    * Default constructor.
    */
-  public CommandLineException() {
+  public CommandLineException()
+  {
     super();
   }
 
@@ -16,7 +18,8 @@ public class CommandLineException extends Exception {
    *
    * @param message The message describing the failure.
    */
-  public CommandLineException(String message) {
+  public CommandLineException(String message)
+  {
     super(message);
   }
 }

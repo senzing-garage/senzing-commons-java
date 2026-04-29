@@ -13,14 +13,15 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Provides a reader over records that are formatted as JSON, JSON-Lines
- * or CSV.
+ * Provides a reader over records that are formatted as JSON, JSON-Lines or CSV.
  */
-public class RecordReader {
+public class RecordReader
+{
   /**
    * Represents the supported format for the records.
    */
-  public enum Format {
+  public enum Format
+  {
     /**
      * JSON format (as in a JSON array of JSON objects).
      */
@@ -56,7 +57,8 @@ public class RecordReader {
      * @param mediaType The media type.
      * @param simpleName The simple name for the format.
      */
-    Format(String mediaType, String simpleName) {
+    Format(String mediaType, String simpleName)
+    {
       this.mediaType = mediaType;
       this.simpleName = simpleName;
     }
@@ -66,7 +68,8 @@ public class RecordReader {
      *
      * @return The associated media type.
      */
-    public String getMediaType() {
+    public String getMediaType()
+    {
       return this.mediaType;
     }
 
@@ -95,18 +98,20 @@ public class RecordReader {
     }
 
     /**
-     * Returns the {@link Format} for the specified media type or <code>null</code>
-     * if no format is associated with the media type.  This method returns
-     * <code>null</code> if <code>null</code> is specified as the media type.
+     * Returns the {@link Format} for the specified media type or
+     * <code>null</code> if no format is associated with the media type.
+     * This method returns <code>null</code> if <code>null</code> is specified
+     * as the media type.
      *
      * @param mediaType The media type for which the {@link Format} is being
      *                  requested.
      *
      * @return The associated {@link Format} for the media type, or
-     *         <code>null</code> if there is none or if the specified parameter is
-     *         <code>null</code>
+     *             <code>null</code> if there is none or if the specified
+     *             parameter is <code>null</code>
      */
-    public static Format fromMediaType(String mediaType) {
+    public static Format fromMediaType(String mediaType)
+    {
       if (mediaType == null) return null;
       return MEDIA_TYPE_LOOKUP.get(mediaType.trim().toLowerCase());
     }
@@ -138,15 +143,17 @@ public class RecordReader {
   private RecordProvider recordProvider;
 
   /**
-   * Constructs a {@link RecordReader} with the specified {@link Reader}.
-   * The format of the reader is inferred using the first character read.
+   * Constructs a {@link RecordReader} with the specified {@link Reader}. The
+   * format of the reader is inferred using the first character read.
    *
    * @param reader The {@link Reader} from which to read the text for the
    *               records.
    *
    * @throws IOException If an I/O failure occurs.
    */
-  public RecordReader(Reader reader) throws IOException {
+  public RecordReader(Reader reader)
+      throws IOException
+  {
     this(null,
          reader,
          Collections.emptyMap(),
@@ -164,7 +171,9 @@ public class RecordReader {
    *
    * @throws IOException If an I/O failure occurs.
    */
-  public RecordReader(Format format, Reader reader) throws IOException {
+  public RecordReader(Format format, Reader reader)
+      throws IOException
+  {
     this(format,
          reader,
          Collections.emptyMap(),
@@ -215,9 +224,9 @@ public class RecordReader {
   }
 
   /**
-   * Constructs a {@link RecordReader} with the specified {@link Reader},
-   * data source code and source ID.  The format of the reader is inferred from
-   * the first character.
+   * Constructs a {@link RecordReader} with the specified {@link Reader}, data
+   * source code and source ID. The format of the reader is inferred from the
+   * first character.
    *
    * @param reader The {@link Reader} from which to read the text for the
    *               records.
@@ -265,16 +274,16 @@ public class RecordReader {
   }
 
   /**
-   * Constructs a {@link RecordReader} with the specified {@link Reader}
-   * and data source code map.  The format of the reader is inferred from
-   * the first character.
+   * Constructs a {@link RecordReader} with the specified {@link Reader} and
+   * data source code map. The format of the reader is inferred from the first
+   * character.
    *
    * @param reader The {@link Reader} from which to read the text for the
    *               records.
    *
    * @param dataSourceMap The map of original data source codes to replacement
-   *                      data source codes.  The mapping from empty-string will
-   *                      be used for any record that has no data source.  The
+   *                      data source codes. The mapping from empty-string will
+   *                      be used for any record that has no data source. The
    *                      mapping from <code>null</code> will be for any data
    *                      source (including no data source) that has no key in
    *                      the map.
@@ -297,7 +306,7 @@ public class RecordReader {
    *               records.
    *
    * @param dataSourceMap The map of original data source names to replacement
-   *                      data source name.  The mapping from empty-string will
+   *                      data source name. The mapping from empty-string will
    *                      be used for any record that has no data source or
    *                      whose data source is not in the map.
    *
@@ -312,15 +321,15 @@ public class RecordReader {
   }
 
   /**
-   * Constructs a {@link RecordReader} with the specified {@link Reader},
-   * data source code map and source ID.  The format of the reader is inferred
-   * using the first character read.
+   * Constructs a {@link RecordReader} with the specified {@link Reader}, data
+   * source code map and source ID. The format of the reader is inferred using
+   * the first character read.
    *
    * @param reader The {@link Reader} from which to read the text for the
    *               records.
    *
    * @param dataSourceMap The map of original data source names to replacement
-   *                      data source name.  The mapping from empty-string will
+   *                      data source name. The mapping from empty-string will
    *                      be used for any record that has no data source or
    *                      whose data source is not in the map.
    *
@@ -347,7 +356,7 @@ public class RecordReader {
    *               records.
    *
    * @param dataSourceMap The map of original data source names to replacement
-   *                      data source name.  The mapping from empty-string will
+   *                      data source name. The mapping from empty-string will
    *                      be used for any record that has no data source or
    *                      whose data source is not in the map.
    *
@@ -436,7 +445,9 @@ public class RecordReader {
       if (dataSourceMap != null) {
         dataSourceMap.entrySet().forEach(entry -> {
           String key = entry.getKey();
-          if (key != null) key = key.trim().toUpperCase();
+          if (key != null) {
+            key = key.trim().toUpperCase();
+          }
           String value = entry.getValue().trim().toUpperCase();
           this.dataSourceMap.put(key, value);
         });
@@ -461,7 +472,8 @@ public class RecordReader {
    *
    * @return The {@link Format} of the records.
    */
-  public Format getFormat() {
+  public Format getFormat()
+  {
     return this.format;
   }
 
@@ -470,29 +482,32 @@ public class RecordReader {
    * records.
    *
    * @return The next record and returns <code>null</code> if there are no more
-   *         records.
+   *             records.
    */
-  public JsonObject readRecord() {
+  public JsonObject readRecord()
+  {
     return this.recordProvider.getNextRecord();
   }
 
   /**
-   * Gets the line number of an error after calling {@link #readRecord()}.
-   * This returns <code>null</code> if there was no error after calling {@link
+   * Gets the line number of an error after calling {@link #readRecord()}. This
+   * returns <code>null</code> if there was no error after calling {@link
    * #readRecord()} and will return <code>null</code> if {@link #readRecord()}
    * has never been called.
    *
    * @return The line number associated with the error on the last attempt to
-   *         get a record, or <code>null</code> if there was no error.
+   *             get a record, or <code>null</code> if there was no error.
    */
-  public Long getErrorLineNumber() {
+  public Long getErrorLineNumber()
+  {
     return this.recordProvider.getErrorLineNumber();
   }
 
   /**
    * A interface for providing records.
    */
-  private interface RecordProvider {
+  private interface RecordProvider
+  {
     /**
      * Gets the next record as a {@link JsonObject}.
      * @return The next {@link JsonObject} record.
@@ -506,7 +521,7 @@ public class RecordReader {
      * #getNextRecord()} has never been called.
      *
      * @return The line number associated with the error on the last attempt to
-     *         get a record, or <code>null</code> if there was no error.
+     *             get a record, or <code>null</code> if there was no error.
      */
     Long getErrorLineNumber();
   }
@@ -527,7 +542,9 @@ public class RecordReader {
 
     // get the mapped data source
     String dataSource = this.dataSourceMap.get(dsrc);
-    if (dataSource == null) dataSource = this.dataSourceMap.get(null);
+    if (dataSource == null) {
+      dataSource = this.dataSourceMap.get(null);
+    }
     if (dataSource != null && dataSource.trim().length() == 0) {
       dataSource = null;
     }
@@ -550,8 +567,8 @@ public class RecordReader {
   }
 
   /**
-   * A {@link RecordProvider} implementation for records when reading
-   * a JSON array.
+   * A {@link RecordProvider} implementation for records when reading a JSON
+   * array.
    */
   private class JsonArrayRecordProvider implements RecordProvider
   {
@@ -573,7 +590,8 @@ public class RecordReader {
     /**
      * Constructor.
      */
-    public JsonArrayRecordProvider(Reader reader) {
+    public JsonArrayRecordProvider(Reader reader)
+    {
       JsonParserFactory jpf = Json.createParserFactory(Collections.emptyMap());
       JsonParser jp = jpf.createParser(reader);
       jp.next();
@@ -585,7 +603,8 @@ public class RecordReader {
      * Gets the next record from the JSON array.
      * @return The next {@link JsonObject} from the array.
      */
-    public JsonObject getNextRecord() {
+    public JsonObject getNextRecord()
+    {
       RecordReader owner = RecordReader.this;
       JsonObject result = null;
       while (result == null) {
@@ -599,7 +618,8 @@ public class RecordReader {
           if (e instanceof JsonParsingException) {
             JsonParsingException jpe = (JsonParsingException) e;
             System.out.println("LOCATION: " + jpe.getLocation());
-            System.out.println("LINE NUMBER: " + jpe.getLocation().getLineNumber());
+            System.out.println("LINE NUMBER: "
+                                   + jpe.getLocation().getLineNumber());
             this.errorLineNumber = jpe.getLocation().getLineNumber();
           }
           this.errant = true;
@@ -610,16 +630,18 @@ public class RecordReader {
     }
 
     @Override
-    public Long getErrorLineNumber() {
+    public Long getErrorLineNumber()
+    {
       return this.errorLineNumber;
     }
   }
 
   /**
-   * A {@link RecordProvider} implementation for records when reading
-   * a files in a "JSON lines" format.
+   * A {@link RecordProvider} implementation for records when reading a files in
+   * a "JSON lines" format.
    */
-  private class JsonLinesRecordProvider implements RecordProvider {
+  private class JsonLinesRecordProvider implements RecordProvider
+  {
     /**
      * The backing {@link BufferedReader} for reading the lines from the file.
      */
@@ -638,17 +660,19 @@ public class RecordReader {
     /**
      * Default constructor.
      */
-    public JsonLinesRecordProvider(Reader reader) {
+    public JsonLinesRecordProvider(Reader reader)
+    {
       this.reader = new BufferedReader(reader);
     }
 
     /**
-     * Implemented to get the next line from the file and parse it as
-     * a {@link JsonObject} record.
+     * Implemented to get the next line from the file and parse it as a {@link
+     * JsonObject} record.
      *
      * @return The next {@link JsonObject} record.
      */
-    public JsonObject getNextRecord() {
+    public JsonObject getNextRecord()
+    {
       try {
         RecordReader  owner   = RecordReader.this;
         JsonObject    record  = null;
@@ -697,7 +721,8 @@ public class RecordReader {
     }
 
     @Override
-    public Long getErrorLineNumber() {
+    public Long getErrorLineNumber()
+    {
       return this.errorLineNumber;
     }
   }
@@ -706,7 +731,8 @@ public class RecordReader {
    * Implements {@link RecordProvider} for a CSV file.
    *
    */
-  private class CsvRecordProvider implements RecordProvider {
+  private class CsvRecordProvider implements RecordProvider
+  {
     /**
      * The CSV parser.
      */
@@ -722,13 +748,15 @@ public class RecordReader {
      */
     private Long errorLineNumber = null;
 
-    public CsvRecordProvider(Reader reader) {
+    public CsvRecordProvider(Reader reader)
+    {
       CSVFormat csvFormat = CSVFormat.Builder.create(CSVFormat.DEFAULT)
           .setHeader().setSkipHeaderRecord(true).setIgnoreEmptyLines(true)
           .setTrim(true).setIgnoreSurroundingSpaces(true).get();
 
       try {
-        this.parser = CSVParser.builder().setReader(reader).setFormat(csvFormat).get();
+        this.parser = CSVParser.builder().setReader(reader)
+            .setFormat(csvFormat).get();
         Map<String, Integer> headerMap = this.parser.getHeaderMap();
         Set<String> headers = new HashSet<>();
         headerMap.keySet().forEach(h -> {
@@ -741,7 +769,8 @@ public class RecordReader {
       }
     }
 
-    public JsonObject getNextRecord() {
+    public JsonObject getNextRecord()
+    {
       RecordReader owner = RecordReader.this;
       this.errorLineNumber = null;
       try {
@@ -778,7 +807,8 @@ public class RecordReader {
     }
 
     @Override
-    public Long getErrorLineNumber() {
+    public Long getErrorLineNumber()
+    {
       return this.errorLineNumber;
     }
   }
@@ -788,7 +818,8 @@ public class RecordReader {
    *
    * @param args The command-line arguments.
    */
-  public static void main(String[] args) {
+  public static void main(String[] args)
+  {
     try {
       for (String arg: args) {
         File file = new File(arg);

@@ -13,28 +13,30 @@ import java.io.PrintWriter;
 import static com.senzing.sql.ConnectionPool.Stat.*;
 
 /**
- * Provides a pool for JDBC {@link Connection} instances. The pool can
- * be a fixed size or may have a maximum and minimum size that it may
- * grow and shrink between. Additionally, each {@link Connection} can
- * have a maximum lifespan and a maximum number of uses before being
- * replaced with a new {@link Connection}.
+ * Provides a pool for JDBC {@link Connection} instances. The pool can be a
+ * fixed size or may have a maximum and minimum size that it may grow and shrink
+ * between. Additionally, each {@link Connection} can have a maximum lifespan
+ * and a maximum number of uses before being replaced with a new {@link
+ * Connection}.
  */
-public class ConnectionPool implements Quantified {
+public class ConnectionPool implements Quantified
+{
     /**
      * Constant for converting between nanoseconds and milliseconds.
      */
     private static final long ONE_MILLION = 1000000L;
 
     /**
-     * The amount of time to wait before forcing to wakeup and checking the
-     * pool state.
+     * The amount of time to wait before forcing to wakeup and checking the pool
+     * state.
      */
     private static final long WAIT_TIMEOUT = 2000L;
 
     /**
      * Encapsulates and describes a pooled database connection.
      */
-    protected static class PooledConnection {
+    protected static class PooledConnection
+    {
         /**
          * The associated {@link Connection}.
          */
@@ -51,8 +53,8 @@ public class ConnectionPool implements Quantified {
         private int leaseCount = 0;
 
         /**
-         * The {@link PooledConnectionHandler} for the current lease. This
-         * is <code>null</code> if not currently leased.
+         * The {@link PooledConnectionHandler} for the current lease. This is
+         * <code>null</code> if not currently leased.
          */
         private PooledConnectionHandler currentLeaseHandler = null;
 
@@ -61,7 +63,8 @@ public class ConnectionPool implements Quantified {
          *
          * @param connection The {@link Connection} with which to construct.
          */
-        public PooledConnection(Connection connection) {
+        public PooledConnection(Connection connection)
+        {
             this.connection = connection;
             this.createdTimeNanos = System.nanoTime();
             this.leaseCount = 0;
@@ -73,7 +76,8 @@ public class ConnectionPool implements Quantified {
          *
          * @return The associated {@link Connection}.
          */
-        public Connection getConnection() {
+        public Connection getConnection()
+        {
             return this.connection;
         }
 
@@ -82,18 +86,20 @@ public class ConnectionPool implements Quantified {
          *
          * @return The nanosecond creation timestamp.
          */
-        public long getCreatedTimeNanos() {
+        public long getCreatedTimeNanos()
+        {
             return this.createdTimeNanos;
         }
 
         /**
-         * Gets the lifespan (in milliseconds) of the associated {@link Connection}
-         * thus far.
+         * Gets the lifespan (in milliseconds) of the associated
+         * {@link Connection} thus far.
          *
-         * @return The lifespan (in milliseconds) of the associated
-         *         {@link Connection} thus far.
+         * @return The lifespan (in milliseconds) of the associated {@link
+         *             Connection} thus far.
          */
-        public long getLifespan() {
+        public long getLifespan()
+        {
             return (System.nanoTime() - this.createdTimeNanos) / ONE_MILLION;
         }
 
@@ -102,23 +108,26 @@ public class ConnectionPool implements Quantified {
          * returns <code>null</code> if not currently leased.
          *
          * @return The {@link PooledConnectionHandler} for the current lease, or
-         *         <code>null</code> if not currently leased.
+         *             <code>null</code> if not currently leased.
          */
-        public PooledConnectionHandler getCurrentLeaseHandler() {
+        public PooledConnectionHandler getCurrentLeaseHandler()
+        {
             return this.currentLeaseHandler;
         }
 
         /**
          * Sets the {@link PooledConnectionHandler} for the current lease.
          *
-         * @param handler The {@link PooledConnectionHandler} for the current lease,
-         *                or <code>null</code> if not leased.
+         * @param handler The {@link PooledConnectionHandler} for the current
+         *                lease, or <code>null</code> if not leased.
          */
-        public void setCurrentLeaseHandler(PooledConnectionHandler handler) {
+        public void setCurrentLeaseHandler(PooledConnectionHandler handler)
+        {
             if (handler != null && this.currentLeaseHandler != null) {
                 throw new IllegalStateException(
-                        "Setting a connection handler on a pooled connection that already "
-                                + "has one set (i.e.: is already or still leased)");
+                        "Setting a connection handler on a pooled "
+                                + "connection that already has one set "
+                                + "(i.e.: is already or still leased)");
             }
 
             // set the handler
@@ -135,7 +144,8 @@ public class ConnectionPool implements Quantified {
          *
          * @return The number of times the {@link Connection} has been leased.
          */
-        public int getLeaseCount() {
+        public int getLeaseCount()
+        {
             return this.leaseCount;
         }
     }
@@ -146,11 +156,13 @@ public class ConnectionPool implements Quantified {
      * anything when the {@link ConnectionPool} is actively providing new leases
      * on connections.
      */
-    private class ConnectionExpireThread extends Thread {
+    private class ConnectionExpireThread extends Thread
+    {
         /**
          * Default constructor.
          */
-        private ConnectionExpireThread() {
+        private ConnectionExpireThread()
+        {
             // do nothing
         }
 
@@ -158,7 +170,8 @@ public class ConnectionPool implements Quantified {
          * Provides a loop to handle cleaning up expired connections when the
          * {@link ConnectionPool} becomes idle.
          */
-        public void run() {
+        public void run()
+        {
             // get the pool
             ConnectionPool pool = ConnectionPool.this;
 
@@ -184,7 +197,8 @@ public class ConnectionPool implements Quantified {
                         continue;
                     }
 
-                    // check to see if pool is idle, if not let the pool handle it
+                    // check to see if pool is idle, if not
+                    // let the pool handle it
                     if (pool.getIdleTime() < waitTime) {
                         continue;
                     }
@@ -194,7 +208,8 @@ public class ConnectionPool implements Quantified {
                         pool.expireConnections();
                     } catch (SQLException e) {
                         System.err.println(
-                                "*** WARNING: Exception while expiring connections");
+                                "*** WARNING: Exception while expiring "
+                                        + "connections");
                         e.printStackTrace();
                     }
                 }
@@ -214,8 +229,8 @@ public class ConnectionPool implements Quantified {
     private TransactionIsolation isolationLevel = null;
 
     /**
-     * The {@link List} of all {@link PooledConnection} instances managed by
-     * the pool.
+     * The {@link List} of all {@link PooledConnection} instances managed by the
+     * pool.
      */
     private IdentityHashMap<PooledConnection, Long> allConnections = null;
 
@@ -227,8 +242,8 @@ public class ConnectionPool implements Quantified {
 
     /**
      * The {@link IdentityHashMap} of currently leased {@link Connection}
-     * instances to the {@link PooledConnection} containing additional
-     * data associated with the connection.
+     * instances to the {@link PooledConnection} containing additional data
+     * associated with the connection.
      */
     private IdentityHashMap<Connection, PooledConnection> leasedMap;
 
@@ -243,14 +258,14 @@ public class ConnectionPool implements Quantified {
     private int maxPoolSize = 1;
 
     /**
-     * The maximum number of milliseconds a {@link Connection} will be
-     * used before it is closed and replaced with a new {@link Connection}.
+     * The maximum number of milliseconds a {@link Connection} will be used
+     * before it is closed and replaced with a new {@link Connection}.
      */
     private long expireTime = 0L;
 
     /**
-     * The maximum number of times a {@link Connection} can be leased
-     * before it is replaced.
+     * The maximum number of times a {@link Connection} can be leased before it
+     * is replaced.
      */
     private int retireLimit = 0;
 
@@ -266,7 +281,8 @@ public class ConnectionPool implements Quantified {
 
     /**
      * The total number of leased connections counted on each acquisition and
-     * release for measuring an average number of used connections from the pool.
+     * release for measuring an average number of used connections from the
+     * pool.
      */
     private long cumulativeLeaseCount = 0L;
 
@@ -299,8 +315,8 @@ public class ConnectionPool implements Quantified {
     private int expiredCount = 0;
 
     /**
-     * The number of {@link Connection} instances that have been retired due
-     * to the number of times they have been leased exceeding a limit.
+     * The number of {@link Connection} instances that have been retired due to
+     * the number of times they have been leased exceeding a limit.
      */
     private int retiredCount = 0;
 
@@ -358,10 +374,11 @@ public class ConnectionPool implements Quantified {
     /**
      * Enumerates the statistics associated with a {@link ConnectionPool}.
      */
-    public enum Stat implements Statistic {
+    public enum Stat implements Statistic
+    {
         /**
-         * The minimum number of {@link Connection} instances maintained
-         * in the {@link ConnectionPool}.
+         * The minimum number of {@link Connection} instances maintained in the
+         * {@link ConnectionPool}.
          */
         minimumSize(CONNECTION_UNITS),
 
@@ -402,25 +419,25 @@ public class ConnectionPool implements Quantified {
         averageOutstandingLeaseTime(MILLISECOND_UNITS),
 
         /**
-         * The maximum number of a milliseconds that a {@link Connection}
-         * will be used by the pool before it is closed and replaced. If
-         * no maximum exists then the value for this statistic is
+         * The maximum number of a milliseconds that a {@link Connection} will
+         * be used by the pool before it is closed and replaced. If no maximum
+         * exists then the value for this statistic is
          * <code>null</code>.
          */
         expireTime(MILLISECOND_UNITS),
 
         /**
-         * The maximum number of times that a {@link Connection} will be
-         * leased by the pool before it is closed and replaced. If no
-         * maximum exists then the value for this statistic is
+         * The maximum number of times that a {@link Connection} will be leased
+         * by the pool before it is closed and replaced. If no maximum exists
+         * then the value for this statistic is
          * <code>null</code>.
          */
         retireLimit(LEASE_UNITS),
 
         /**
-         * The greatest number of {@link Connection} instances that have
-         * been simultaneously leased. This is the greatest utilization
-         * of the {@link ConnectionPool}.
+         * The greatest number of {@link Connection} instances that have been
+         * simultaneously leased. This is the greatest utilization of the {@link
+         * ConnectionPool}.
          */
         greatestLeasedCount(CONNECTION_UNITS),
 
@@ -439,14 +456,14 @@ public class ConnectionPool implements Quantified {
         greatestPoolSize(CONNECTION_UNITS),
 
         /**
-         * The total number of {@link Connection} instances that have been expired
-         * due to exceeding the maximum allowed lifespan.
+         * The total number of {@link Connection} instances that have been
+         * expired due to exceeding the maximum allowed lifespan.
          */
         expiredConnections(CONNECTION_UNITS),
 
         /**
-         * The total number of {@link Connection} instances that have been retired
-         * due to be leased the maximum number of times.
+         * The total number of {@link Connection} instances that have been
+         * retired due to be leased the maximum number of times.
          */
         retiredConnections(CONNECTION_UNITS),
 
@@ -463,21 +480,21 @@ public class ConnectionPool implements Quantified {
         greatestAcquireTime(MILLISECOND_UNITS),
 
         /**
-         * The greatest number of milliseconds that a {@link Connection}
-         * has been leased from the {@link ConnectionPool}. This includes
-         * currently leased connections.
+         * The greatest number of milliseconds that a {@link Connection} has
+         * been leased from the {@link ConnectionPool}. This includes currently
+         * leased connections.
          */
         greatestLeaseTime(MILLISECOND_UNITS),
 
         /**
-         * The average number of milliseconds for all {@link Connection}
-         * leases including those currently leased.
+         * The average number of milliseconds for all {@link Connection} leases
+         * including those currently leased.
          */
         averageLeaseTime(MILLISECOND_UNITS),
 
         /**
-         * The total number of {@link Connection} leases that have been
-         * granted by this pool.
+         * The total number of {@link Connection} leases that have been granted
+         * by this pool.
          */
         lifetimeLeaseCount(LEASE_UNITS),
 
@@ -494,7 +511,8 @@ public class ConnectionPool implements Quantified {
          *
          * @param units The units for the statistics.
          */
-        Stat(String units) {
+        Stat(String units)
+        {
             this.units = units;
         }
 
@@ -504,7 +522,8 @@ public class ConnectionPool implements Quantified {
          * @return The description of the units for the statistic.
          */
         @Override
-        public String getUnits() {
+        public String getUnits()
+        {
             return this.units;
         }
 
@@ -515,7 +534,8 @@ public class ConnectionPool implements Quantified {
     }
 
     /**
-     * Constructs with the {@link Connector} and the size of the connection pool.
+     * Constructs with the {@link Connector} and the size of the connection
+     * pool.
      *
      * @param connector The {@link Connector} for establishing new database
      *                  connections.
@@ -529,21 +549,23 @@ public class ConnectionPool implements Quantified {
      *                                  <code>null</code>.
      */
     public ConnectionPool(Connector connector, int poolSize)
-            throws SQLException, IllegalArgumentException, NullPointerException {
+            throws SQLException, IllegalArgumentException, NullPointerException
+    {
         this(connector, null, poolSize);
     }
 
     /**
-     * Constructs with the {@link Connector} and the size of the connection pool.
+     * Constructs with the {@link Connector} and the size of the connection
+     * pool.
      *
      * @param connector      The {@link Connector} for establishing new database
      *                       connections.
      * @param isolationLevel The {@link TransactionIsolation} level to ensure is
      *                       set on each {@link Connection} before providing it,
-     *                       or <code>null</code> if the isolation level need not
-     *                       be verified and set.
-     * @param poolSize       The number of connections to initialize the connection
-     *                       pool with.
+     *                       or <code>null</code> if the isolation level need
+     *                       not be verified and set.
+     * @param poolSize       The number of connections to initialize the
+     *                       connection pool with.
      * @throws SQLException             If a failure occurs in establishing a
      *                                  connection.
      * @throws IllegalArgumentException If the specified pool size is less-than
@@ -554,15 +576,16 @@ public class ConnectionPool implements Quantified {
     public ConnectionPool(Connector connector,
             TransactionIsolation isolationLevel,
             int poolSize)
-            throws SQLException, IllegalArgumentException, NullPointerException {
+            throws SQLException, IllegalArgumentException, NullPointerException
+    {
         this(connector, isolationLevel, poolSize, poolSize);
     }
 
     /**
-     * Constructs with the specified {@link Connector} for establishing new
-     * JDBC connections, a minimum connection pool size and maximum connection
-     * pool size. The pool will start at the minimum size and grow to the
-     * maximum size if demand for connections requires it.
+     * Constructs with the specified {@link Connector} for establishing new JDBC
+     * connections, a minimum connection pool size and maximum connection pool
+     * size. The pool will start at the minimum size and grow to the maximum
+     * size if demand for connections requires it.
      *
      * @param connector   The {@link Connector} for establishing new database
      *                    connections.
@@ -583,22 +606,23 @@ public class ConnectionPool implements Quantified {
     public ConnectionPool(Connector connector,
             int minPoolSize,
             int maxPoolSize)
-            throws SQLException, IllegalArgumentException, NullPointerException {
+            throws SQLException, IllegalArgumentException, NullPointerException
+    {
         this(connector, null, minPoolSize, maxPoolSize);
     }
 
     /**
-     * Constructs with the specified {@link Connector} for establishing new
-     * JDBC connections, a minimum connection pool size and maximum connection
-     * pool size. The pool will start at the minimum size and grow to the
-     * maximum size if demand for connections requires it.
+     * Constructs with the specified {@link Connector} for establishing new JDBC
+     * connections, a minimum connection pool size and maximum connection pool
+     * size. The pool will start at the minimum size and grow to the maximum
+     * size if demand for connections requires it.
      *
      * @param connector      The {@link Connector} for establishing new database
      *                       connections.
      * @param isolationLevel The {@link TransactionIsolation} level to ensure is
      *                       set on each {@link Connection} before providing it,
-     *                       or <code>null</code> if the isolation level need not
-     *                       be verified and set.
+     *                       or <code>null</code> if the isolation level need
+     *                       not be verified and set.
      * @param minPoolSize    The minimum number of connections to initialize the
      *                       connection pool with.
      * @param maxPoolSize    The maximum number of connections that the pool can
@@ -617,16 +641,17 @@ public class ConnectionPool implements Quantified {
             TransactionIsolation isolationLevel,
             int minPoolSize,
             int maxPoolSize)
-            throws SQLException, IllegalArgumentException, NullPointerException {
+            throws SQLException, IllegalArgumentException, NullPointerException
+    {
         this(connector, isolationLevel, minPoolSize, maxPoolSize, 0, 0);
     }
 
     /**
-     * Constructs with the specified {@link Connector} for establishing new
-     * JDBC connections, a minimum connection pool size and maximum connection
-     * pool size. The pool will start at the minimum size and grow to the
-     * maximum size if demand for connections requires it. Additionally, optional
-     * limits on the lifespan of a {@link Connection} (an expire time) and on the
+     * Constructs with the specified {@link Connector} for establishing new JDBC
+     * connections, a minimum connection pool size and maximum connection pool
+     * size. The pool will start at the minimum size and grow to the maximum
+     * size if demand for connections requires it. Additionally, optional limits
+     * on the lifespan of a {@link Connection} (an expire time) and on the
      * number of times a {@link Connection} will be leased (a retire count) can
      * be specified as non-zero values to impose limits.
      *
@@ -636,13 +661,13 @@ public class ConnectionPool implements Quantified {
      *                    connection pool with.
      * @param maxPoolSize The maximum number of connections that the pool can
      *                    grow to have.
-     * @param expireTime  The maximum number of <b>seconds</b> that a
-     *                    {@link Connection} will be used before it is closed and
-     *                    replaced, or zero (0) then {@link Connection} instances
-     *                    will not be expired based on time.
-     * @param retireLimit The maximum number of times a {@link Connection}
-     *                    will be leased before it is closed and replaced, or
-     *                    zero (0) if {@link Connection} instances should not be
+     * @param expireTime  The maximum number of <b>seconds</b> that a {@link
+     *                    Connection} will be used before it is closed and
+     *                    replaced, or zero (0) then {@link Connection}
+     *                    instances will not be expired based on time.
+     * @param retireLimit The maximum number of times a {@link Connection} will
+     *                    be leased before it is closed and replaced, or zero
+     *                    (0) if {@link Connection} instances should not be
      *                    retired after exceeding a number of leases.
      * @throws SQLException             If a failure occurs in establishing a
      *                                  connection.
@@ -651,8 +676,8 @@ public class ConnectionPool implements Quantified {
      *                                  minimum pool size is less-than zero (0),
      *                                  or the minimum pool size is greater-than
      *                                  the maximum pool size or if the maximum
-     *                                  lifespan or number of leases are less-than
-     *                                  or equal-to zero (0).
+     *                                  lifespan or number of leases are
+     *                                  less-than or equal-to zero (0).
      * @throws NullPointerException     If the specified {@link Connector} is
      *                                  <code>null</code>.
      */
@@ -661,16 +686,18 @@ public class ConnectionPool implements Quantified {
             int maxPoolSize,
             int expireTime,
             int retireLimit)
-            throws SQLException, IllegalArgumentException, NullPointerException {
-        this(connector, null, minPoolSize, maxPoolSize, expireTime, retireLimit);
+            throws SQLException, IllegalArgumentException, NullPointerException
+    {
+        this(connector, null,
+             minPoolSize, maxPoolSize, expireTime, retireLimit);
     }
 
     /**
-     * Constructs with the specified {@link Connector} for establishing new
-     * JDBC connections, a minimum connection pool size and maximum connection
-     * pool size. The pool will start at the minimum size and grow to the
-     * maximum size if demand for connections requires it. Additionally, optional
-     * limits on the lifespan of a {@link Connection} (an expire time) and on the
+     * Constructs with the specified {@link Connector} for establishing new JDBC
+     * connections, a minimum connection pool size and maximum connection pool
+     * size. The pool will start at the minimum size and grow to the maximum
+     * size if demand for connections requires it. Additionally, optional limits
+     * on the lifespan of a {@link Connection} (an expire time) and on the
      * number of times a {@link Connection} will be leased (a retire count) can
      * be specified as non-zero values to impose limits.
      *
@@ -678,20 +705,20 @@ public class ConnectionPool implements Quantified {
      *                       connections.
      * @param isolationLevel The {@link TransactionIsolation} level to ensure is
      *                       set on each {@link Connection} before providing it,
-     *                       or <code>null</code> if the isolation level need not
-     *                       be verified and set.
+     *                       or <code>null</code> if the isolation level need
+     *                       not be verified and set.
      * @param minPoolSize    The minimum number of connections to initialize the
      *                       connection pool with.
      * @param maxPoolSize    The maximum number of connections that the pool can
      *                       grow to have.
-     * @param expireTime     The maximum number of <b>seconds</b> that a
-     *                       {@link Connection} will be used before it is closed and
-     *                       replaced, or zero (0) then {@link Connection} instances
-     *                       will not be expired based on time.
+     * @param expireTime     The maximum number of <b>seconds</b> that a {@link
+     *                       Connection} will be used before it is closed and
+     *                       replaced, or zero (0) then {@link Connection}
+     *                       instances will not be expired based on time.
      * @param retireLimit    The maximum number of times a {@link Connection}
      *                       will be leased before it is closed and replaced, or
-     *                       zero (0) if {@link Connection} instances should not be
-     *                       retired after exceeding a number of leases.
+     *                       zero (0) if {@link Connection} instances should not
+     *                       be retired after exceeding a number of leases.
      * @throws SQLException             If a failure occurs in establishing a
      *                                  connection.
      * @throws IllegalArgumentException If the specified maximum pool size is
@@ -699,8 +726,8 @@ public class ConnectionPool implements Quantified {
      *                                  minimum pool size is less-than zero (0),
      *                                  or the minimum pool size is greater-than
      *                                  the maximum pool size or if the maximum
-     *                                  lifespan or number of leases are less-than
-     *                                  or equal-to zero (0).
+     *                                  lifespan or number of leases are
+     *                                  less-than or equal-to zero (0).
      * @throws NullPointerException     If the specified {@link Connector} is
      *                                  <code>null</code>.
      */
@@ -710,7 +737,8 @@ public class ConnectionPool implements Quantified {
             int maxPoolSize,
             int expireTime,
             int retireLimit)
-            throws SQLException, IllegalArgumentException, NullPointerException {
+            throws SQLException, IllegalArgumentException, NullPointerException
+    {
         // check if the connector is null
         Objects.requireNonNull(connector,
                 "The specified connector cannot be null");
@@ -718,31 +746,36 @@ public class ConnectionPool implements Quantified {
         // check the min pool size is non-negative
         if (minPoolSize < 0) {
             throw new IllegalArgumentException(
-                    "The minimum pool size cannot be negative: " + minPoolSize);
+                    "The minimum pool size cannot be negative: "
+                            + minPoolSize);
         }
         if (maxPoolSize <= 0) {
             throw new IllegalArgumentException(
-                    "The maximum pool size must be a positive number: " + maxPoolSize);
+                    "The maximum pool size must be a positive number: "
+                            + maxPoolSize);
         }
 
         // check the maximum and minimum pool sizes
         if (minPoolSize > maxPoolSize) {
             throw new IllegalArgumentException(
                     "Minimum pool size (" + minPoolSize
-                            + ") cannot exceed maximum poll size (" + maxPoolSize + ").");
+                            + ") cannot exceed maximum poll size ("
+                            + maxPoolSize + ").");
         }
 
         // check the max connection lifespan
         if (expireTime < 0) {
             throw new IllegalArgumentException(
-                    "The maximum connection lifespan (expire time) cannot be negative: "
+                    "The maximum connection lifespan (expire time) cannot"
+                            + " be negative: "
                             + expireTime);
         }
 
         // check the max connection leases
         if (expireTime < 0) {
             throw new IllegalArgumentException(
-                    "The maximum connection leases (retire count) cannot be negative: "
+                    "The maximum connection leases (retire count) cannot"
+                            + " be negative: "
                             + retireLimit);
         }
 
@@ -794,26 +827,29 @@ public class ConnectionPool implements Quantified {
      * <code>null</code> if no isolation level is being enforced.
      *
      * @return The {@link TransactionIsolation} level that is ensured on the
-     *         {@link Connection} instances when they are acquired, or
-     *         <code>null</code> if none is enforced.
+     *             {@link Connection} instances when they are acquired, or
+     *             <code>null</code> if none is enforced.
      */
-    public TransactionIsolation getIsolationLevel() {
+    public TransactionIsolation getIsolationLevel()
+    {
         return this.isolationLevel;
     }
 
     /**
      * Obtains a diagnostic string describing where each leased connection was
-     * obtained
-     * and the state of the current lease holder threads.
+     * obtained and the state of the current lease holder threads.
      * 
-     * @return The diagnostic {@link String} describing the state of this instance.
+     * @return The diagnostic {@link String} describing the state of this
+     *             instance.
      */
-    public synchronized String getDiagnosticLeaseInfo() {
+    public synchronized String getDiagnosticLeaseInfo()
+    {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
 
         leasedMap.values().forEach((pooledConnection) -> {
-            PooledConnectionHandler handler = pooledConnection.getCurrentLeaseHandler();
+            PooledConnectionHandler handler
+                = pooledConnection.getCurrentLeaseHandler();
             pw.println();
             pw.println(handler.getDiagnosticInfo());
         });
@@ -825,10 +861,11 @@ public class ConnectionPool implements Quantified {
      * Gets the statistics for this instance as a {@link Map} of {@link Stat}
      * keys to {@link Number} values.
      *
-     * @return The statistics for this instance as a {@link Map} of {@link
-     *         Stat} keys to {@link Number} values.
+     * @return The statistics for this instance as a {@link Map} of {@link Stat}
+     *             keys to {@link Number} values.
      */
-    public Map<Statistic, Number> getStatistics() {
+    public Map<Statistic, Number> getStatistics()
+    {
         Map<Statistic, Number> result = new LinkedHashMap<>();
         synchronized (this) {
             putStat(result, minimumSize, this.getMinimumSize());
@@ -837,13 +874,20 @@ public class ConnectionPool implements Quantified {
             putStat(result, Stat.retireLimit, this.getRetireLimit());
             putStat(result, Stat.greatestLeasedCount,
                     this.getGreatestLeasedCount());
-            putStat(result, averageLeasedCount, this.getAverageLeasedCount());
-            putStat(result, Stat.greatestPoolSize, this.getGreatestPoolSize());
-            putStat(result, expiredConnections, this.getExpiredConnectionCount());
-            putStat(result, retiredConnections, this.getRetiredConnectionCount());
-            putStat(result, averageAcquireTime, this.getAverageAcquisitionTime());
-            putStat(result, greatestAcquireTime, this.getGreatestAcquisitionTime());
-            putStat(result, Stat.greatestLeaseTime, this.getGreatestLeaseTime());
+            putStat(result, averageLeasedCount,
+                    this.getAverageLeasedCount());
+            putStat(result, Stat.greatestPoolSize,
+                    this.getGreatestPoolSize());
+            putStat(result, expiredConnections,
+                    this.getExpiredConnectionCount());
+            putStat(result, retiredConnections,
+                    this.getRetiredConnectionCount());
+            putStat(result, averageAcquireTime,
+                    this.getAverageAcquisitionTime());
+            putStat(result, greatestAcquireTime,
+                    this.getGreatestAcquisitionTime());
+            putStat(result, Stat.greatestLeaseTime,
+                    this.getGreatestLeaseTime());
             putStat(result, averageLeaseTime, this.getAverageLeaseTime());
             putStat(result, lifetimeLeaseCount, this.getLifetimeLeaseCount());
             putStat(result, currentPoolSize, this.getCurrentPoolSize());
@@ -870,9 +914,9 @@ public class ConnectionPool implements Quantified {
      */
     private static void putStat(Map<Statistic, Number> map,
             Stat key,
-            Number value) {
-        if (value == null)
-            return;
+            Number value)
+    {
+        if (value == null) return;
         map.put(key, value);
     }
 
@@ -883,7 +927,8 @@ public class ConnectionPool implements Quantified {
      * @param startNanos The starting nanosecond time.
      * @return The elapsed number of milliseconds.
      */
-    private static long elapsed(long startNanos) {
+    private static long elapsed(long startNanos)
+    {
         return (System.nanoTime() - startNanos) / ONE_MILLION;
     }
 
@@ -897,19 +942,23 @@ public class ConnectionPool implements Quantified {
      *
      * @throws SQLException If a failure occurs.
      */
-    public Connection acquire() throws SQLException {
+    public Connection acquire()
+        throws SQLException
+    {
         return this.acquire(-1L);
     }
 
     /**
      * Acquires a {@link Connection} from the {@link ConnectionPool}, blocking
-     * for the specified maximum wait time if necessary. If no {@link Connection}
-     * instances are available and the pool has not reached its {@linkplain
-     * #getMaximumSize() maximum size} then a new {@link Connection} is opened.
-     * If the specified wait time is zero (0) then this method will not wait for
-     * a {@link Connection} to become available, but will immediately return a
-     * {@link Connection} if one is available or if the {@link ConnectionPool} can
-     * grow/expand to make one available, otherwise it returns <code>null</code>.
+     * for the specified maximum wait time if necessary. If no
+     * {@link Connection} instances are available and the pool has not
+     * reached its {@linkplain #getMaximumSize() maximum size} then a new
+     * {@link Connection} is opened. If the specified wait time is zero
+     * (0) then this method will not wait for a {@link Connection} to become
+     * available, but will immediately return a {@link Connection} if one is
+     * available or if the {@link ConnectionPool} can grow/expand to make one
+     * available, otherwise it returns
+     * <code>null</code>.
      * Finally, a negative wait time can be specified to indicate no maximum
      * wait time and therefore indefinite waiting for a {@link Connection} to
      * become available.
@@ -920,13 +969,14 @@ public class ConnectionPool implements Quantified {
      *                is immediately available, or a negative number if no
      *                maximum wait time and willing to wait indefinitely.
      *
-     * @return The {@link Connection} acquired from the pool, or <code>null</code>
-     *         if a connection could not be obtained within the time allotted.
+     * @return The {@link Connection} acquired from the pool, or
+     *             <code>null</code> if a connection could not be obtained
+     *             within the time allotted.
      *
      * @throws SQLException If a failure occurs.
      */
     public Connection acquire(long maxWait)
-            throws SQLException, IllegalArgumentException 
+            throws SQLException, IllegalArgumentException
     {
         final long startTime = System.nanoTime();
         PooledConnection acquired = null;
@@ -937,14 +987,19 @@ public class ConnectionPool implements Quantified {
             while (acquired == null && !this.isShutdown()
                     && (maxWait <= 0L || elapsed(startTime) < maxWait)) {
                 // wait for a connection to become available
-                while (!this.isShutdown() && (this.availableConnections.size() == 0)
-                        && (this.allConnections.size() == this.getMaximumSize())
-                        && (maxWait < 0L || elapsed(startTime) < maxWait)) {
+                while (!this.isShutdown()
+                        && (this.availableConnections.size() == 0)
+                        && (this.allConnections.size()
+                                == this.getMaximumSize())
+                        && (maxWait < 0L
+                                || elapsed(startTime) < maxWait)) {
                     // unless no-wait was specified, then wait for a connection
                     if (maxWait != 0L) {
                         try {
-                            long timeout = (maxWait < 0L) ? WAIT_TIMEOUT
-                                    : Math.min(WAIT_TIMEOUT, maxWait - elapsed(startTime));
+                            long timeout = (maxWait < 0L)
+                                    ? WAIT_TIMEOUT
+                                    : Math.min(WAIT_TIMEOUT,
+                                          maxWait - elapsed(startTime));
                             if (timeout < 0L) {
                                 break;
                             }
@@ -959,12 +1014,13 @@ public class ConnectionPool implements Quantified {
                 // now check if shutdown
                 if (this.isShutdown()) {
                     throw new SQLException(
-                            "Unable to obtain a connection because the connection pool was "
-                                    + "shutdown");
+                            "Unable to obtain a connection because the "
+                                    + "connection pool was shutdown");
                 }
 
-                // check if we have any connections that have exceeded their maximum
-                // lifespan (we handle maximum leases on release)
+                // check if we have any connections that have exceeded
+                // their maximum lifespan (we handle maximum leases on
+                // release)
                 Long maxLifespan = this.getExpireTime();
                 if (maxLifespan != null) {
                     this.expireConnections();
@@ -977,9 +1033,11 @@ public class ConnectionPool implements Quantified {
                 if (this.availableConnections.size() == 0
                         && this.allConnections.size() < this.getMaximumSize()) {
                     // create a new pooled connection
-                    acquired = new PooledConnection(this.connector.openConnection());
+                    acquired = new PooledConnection(
+                        this.connector.openConnection());
 
-                    this.allConnections.put(acquired, acquired.getCreatedTimeNanos());
+                    this.allConnections.put(
+                        acquired, acquired.getCreatedTimeNanos());
 
                     // record the new pool size
                     newPoolSize = this.allConnections.size();
@@ -990,29 +1048,31 @@ public class ConnectionPool implements Quantified {
                 }
 
                 // check if no wait and skip looping
-                if (maxWait == 0L)
-                    break;
+                if (maxWait == 0L) break;
             }
 
             // check if shutdown
             if (acquired == null && this.isShutdown()) {
                 throw new SQLException(
-                        "Unable to obtain a connection because the connection pool was "
-                                + "shutdown");
+                        "Unable to obtain a connection because the "
+                                + "connection pool was shutdown");
             }
 
             // we must have an acquired connection
             if (acquired == null && maxWait < 0L) {
                 // we must have an acquired connection
                 throw new IllegalStateException(
-                        "Exited wait loop, but did not acquire a pooled connection.");
+                        "Exited wait loop, but did not acquire a pooled "
+                                + "connection.");
             }
 
             // check if we acquired a connection
             if (acquired != null) {
                 // we must have an acquired connection
                 // create a handler
-                PooledConnectionHandler handler = new PooledConnectionHandler(this, acquired.getConnection());
+                PooledConnectionHandler handler
+                    = new PooledConnectionHandler(
+                        this, acquired.getConnection());
 
                 // set the handler
                 acquired.setCurrentLeaseHandler(handler);
@@ -1030,7 +1090,8 @@ public class ConnectionPool implements Quantified {
             // compute the statistics
             if (acquired != null) {
                 // compute acquisition time stats
-                long acquisitionTime = (System.nanoTime() - startTime) / ONE_MILLION;
+                long acquisitionTime
+                    = (System.nanoTime() - startTime) / ONE_MILLION;
                 this.totalAcquisitionTime += acquisitionTime;
                 if (acquisitionTime > this.greatestAcquisitionTime) {
                     this.greatestAcquisitionTime = acquisitionTime;
@@ -1073,18 +1134,20 @@ public class ConnectionPool implements Quantified {
         boolean success = false;
         try {
             // ensure auto-commit is turned off
-            if (conn.getAutoCommit())
+            if (conn.getAutoCommit()) {
                 conn.setAutoCommit(false);
+            }
 
             // check isolation level
             if (this.getIsolationLevel() != null) {
                 this.getIsolationLevel().applyTo(conn);
             }
             success = true;
-            
+
         } finally {
             if (!success) {
-                this.release(acquired.getCurrentLeaseHandler().getProxiedConnection());
+                this.release(acquired.getCurrentLeaseHandler()
+                                     .getProxiedConnection());
             }
         }
 
@@ -1101,11 +1164,14 @@ public class ConnectionPool implements Quantified {
      * nothing.
      *
      * @param connection The {@link Connection} to release, or <code>null</code>
-     *                   if none was acquired and therefore none need be released.
+     *                   if none was acquired and therefore none need be
+     *                   released.
      *
      * @throws SQLException If a JDBC failure occurs.
      */
-    public void release(Connection connection) throws SQLException {
+    public void release(Connection connection)
+        throws SQLException
+    {
         // check if null -- allow for easy semantics in finally blocks
         // when acquisition times out and null is returned
         if (connection == null) {
@@ -1127,19 +1193,20 @@ public class ConnectionPool implements Quantified {
                 handler = Proxy.getInvocationHandler(connection);
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(
-                        "The specified Connection is not from this pool instance ("
-                                + "not a proxy).");
+                        "The specified Connection is not from this pool "
+                                + "instance (not a proxy).");
             }
             if (!(handler instanceof PooledConnectionHandler)) {
                 throw new IllegalArgumentException(
-                        "The specified Connection is not from this pool instance ("
-                                + "wrong handler type): " + handler.getClass().getName());
+                        "The specified Connection is not from this pool "
+                                + "instance (wrong handler type): "
+                                + handler.getClass().getName());
             }
             PooledConnectionHandler pch = (PooledConnectionHandler) handler;
             if (pch.getPool() != this) {
                 throw new IllegalArgumentException(
-                        "The specified Connection is not from this pool instance ("
-                                + "wrong pool instance).");
+                        "The specified Connection is not from this pool "
+                                + "instance (wrong pool instance).");
             }
 
             // get the associated pooled connection
@@ -1147,9 +1214,12 @@ public class ConnectionPool implements Quantified {
 
             // check if null (i.e.: already released)
             if (pooledConn == null) {
-                Exception exception = new Exception("WARNING: Connection released more than once");
+                Exception exception = new Exception(
+                    "WARNING: Connection released more than once");
                 System.err.println();
+                // CSOFF
                 System.err.println("-------------------------------------------------");
+                // CSON
                 exception.printStackTrace();
                 return;
             }
@@ -1200,9 +1270,11 @@ public class ConnectionPool implements Quantified {
                 // check if we have dropped below the minimum
                 if (this.allConnections.size() < this.getMinimumSize()) {
                     try {
-                        PooledConnection refill = new PooledConnection(this.connector.openConnection());
+                        PooledConnection refill = new PooledConnection(
+                            this.connector.openConnection());
 
-                        this.allConnections.put(refill, refill.getCreatedTimeNanos());
+                        this.allConnections.put(
+                            refill, refill.getCreatedTimeNanos());
                         this.availableConnections.add(refill);
 
                     } catch (SQLException ignore) {
@@ -1236,9 +1308,10 @@ public class ConnectionPool implements Quantified {
      * Checks if this {@link ConnectionPool} has been shutdown.
      *
      * @return <code>true</code> if this {@link ConnectionPool} has been
-     *         shutdown, otherwise <code>false</code>.
+     *                           shutdown, otherwise <code>false</code>.
      */
-    public synchronized boolean isShutdown() {
+    public synchronized boolean isShutdown()
+    {
         return this.shutdown;
     }
 
@@ -1247,7 +1320,8 @@ public class ConnectionPool implements Quantified {
      * begun.
      *
      */
-    public void shutdown() {
+    public void shutdown()
+    {
         // set the shutdown flag and notify all
         synchronized (this) {
             if (this.shutdown) {
@@ -1266,7 +1340,8 @@ public class ConnectionPool implements Quantified {
         // now wait for all connections to become available
         synchronized (this) {
             int waitCount = 0;
-            while (this.availableConnections.size() < this.allConnections.size()) {
+            while (this.availableConnections.size()
+                    < this.allConnections.size()) {
                 try {
                     this.wait(WAIT_TIMEOUT);
                     if (waitCount++ > 2) {
@@ -1303,9 +1378,10 @@ public class ConnectionPool implements Quantified {
      * by this {@link ConnectionPool}.
      *
      * @return The minimum number of {@link Connection} instances to be
-     *         maintained by this {@link ConnectionPool}.
+     *             maintained by this {@link ConnectionPool}.
      */
-    public int getMinimumSize() {
+    public int getMinimumSize()
+    {
         return this.minPoolSize;
     }
 
@@ -1314,22 +1390,24 @@ public class ConnectionPool implements Quantified {
      * {@link ConnectionPool} can grow.
      *
      * @return The maximum number of {@link Connection} instances to which this
-     *         {@link ConnectionPool} can grow.
+     *             {@link ConnectionPool} can grow.
      */
-    public int getMaximumSize() {
+    public int getMaximumSize()
+    {
         return this.maxPoolSize;
     }
 
     /**
-     * Gets the maximum number of milliseconds a {@link Connection} in this
-     * pool will be used before it is closed and replaced. This returns
+     * Gets the maximum number of milliseconds a {@link Connection} in this pool
+     * will be used before it is closed and replaced. This returns
      * <code>null</code> if no maximum lifespan is configured for this pool.
      *
      * @return The maximum number of milliseconds a {@link Connection} in this
-     *         pool will be used before it is closed and replaced, or
-     *         <code>null</code> if no maximum is configured.
+     *             pool will be used before it is closed and replaced, or
+     *             <code>null</code> if no maximum is configured.
      */
-    public Long getExpireTime() {
+    public Long getExpireTime()
+    {
         if (this.expireTime <= 0) {
             return null;
         } else {
@@ -1339,14 +1417,17 @@ public class ConnectionPool implements Quantified {
 
     /**
      * Gets the maximum number of times a {@link Connection} will be leased from
-     * this pool before it is closed and replaced. This returns <code>null</code>
-     * if no maximum number of leases is configured for this pool.
+     * this pool before it is closed and replaced. This returns
+     * <code>null</code> if no maximum number of leases is configured for this
+     * pool.
      *
      * @return The maximum number of times a {@link Connection} will be leased
-     *         from this pool before it is closed and replaced, or
-     *         <code>null</code> if no maximum number of leases is configured.
+     *             from this pool before it is closed and replaced, or
+     *             <code>null</code> if no maximum number of leases is
+     *             configured.
      */
-    public Integer getRetireLimit() {
+    public Integer getRetireLimit()
+    {
         if (this.retireLimit <= 0) {
             return null;
         } else {
@@ -1359,11 +1440,12 @@ public class ConnectionPool implements Quantified {
      * concurrently leased from the pool at any given time. This returns
      * <code>null</code> if no connections have been leased.
      *
-     * @return The greatest number of {@link Connection} instances that have been
-     *         concurrently leased from the pool at any given time, or
-     *         <code>null</code> if none have ever been leased.
+     * @return The greatest number of {@link Connection} instances that have
+     *             been concurrently leased from the pool at any given time, or
+     *             <code>null</code> if none have ever been leased.
      */
-    public Integer getGreatestLeasedCount() {
+    public Integer getGreatestLeasedCount()
+    {
         synchronized (this) {
             if (this.greatestLeasedCount < 0) {
                 return null;
@@ -1383,11 +1465,12 @@ public class ConnectionPool implements Quantified {
      * this returns <code>null</code>.
      *
      * @return The average number of {@link Connection} instances that have been
-     *         acquired from the pool at each time when a {@link Connection} is
-     *         acquired or released, or <code>null</code> if none have been
-     *         acquired.
+     *             acquired from the pool at each time when a {@link Connection}
+     *             is acquired or released, or <code>null</code> if none have
+     *             been acquired.
      */
-    public Double getAverageLeasedCount() {
+    public Double getAverageLeasedCount()
+    {
         synchronized (this) {
             if (this.totalLeaseCount <= 0 || this.cumulativeLeaseChecks <= 0) {
                 return null;
@@ -1405,9 +1488,10 @@ public class ConnectionPool implements Quantified {
      * returns zero (0).
      *
      * @return The greatest number of connections that the pool has grown to
-     *         over its lifespan.
+     *             over its lifespan.
      */
-    public Integer getGreatestPoolSize() {
+    public Integer getGreatestPoolSize()
+    {
         synchronized (this) {
             return this.greatestPoolSize;
         }
@@ -1415,13 +1499,15 @@ public class ConnectionPool implements Quantified {
 
     /**
      * Gets the number of {@link Connection} instances that have been expired
-     * due to exceeding the {@linkplain #getExpireTime() maximum lifespan limit}.
-     * This returns <code>null</code> if no such maximum limits is set.
+     * due to exceeding the {@linkplain #getExpireTime() maximum lifespan
+     * limit}. This returns <code>null</code> if no such maximum limits is set.
      *
-     * @return The number of {@link Connection} instances that have been expired,
-     *         or <code>null</code> if connections are not being expired.
+     * @return The number of {@link Connection} instances that have been
+     *             expired, or <code>null</code> if connections are not being
+     *             expired.
      */
-    public Integer getExpiredConnectionCount() {
+    public Integer getExpiredConnectionCount()
+    {
         synchronized (this) {
             if (this.getExpireTime() == null) {
                 return null;
@@ -1436,10 +1522,12 @@ public class ConnectionPool implements Quantified {
      * due to reaching the {@linkplain #getRetireLimit() maximum lease limit}.
      * This returns <code>null</code> if no such maximum limit is set.
      *
-     * @return The number of {@link Connection} instances that have been retired,
-     *         or <code>null</code> if connections are not being retired.
+     * @return The number of {@link Connection} instances that have been
+     *             retired, or <code>null</code> if connections are not being
+     *             retired.
      */
-    public Integer getRetiredConnectionCount() {
+    public Integer getRetiredConnectionCount()
+    {
         synchronized (this) {
             if (this.getRetireLimit() == null) {
                 return null;
@@ -1450,16 +1538,17 @@ public class ConnectionPool implements Quantified {
     }
 
     /**
-     * Gets the average amount of time in milliseconds that it takes to
-     * acquire a connection from the pool. This does not include attempts to
-     * acquire a {@link Connection} that fail within the allotted time limit.
-     * This returns <code>null</code> if no connections have been acquired.
+     * Gets the average amount of time in milliseconds that it takes to acquire
+     * a connection from the pool. This does not include attempts to acquire a
+     * {@link Connection} that fail within the allotted time limit. This returns
+     * <code>null</code> if no connections have been acquired.
      *
      * @return The average amount of time in milliseconds that it takes to
-     *         acquire a connection from the pool, or <code>null</code> if no
-     *         connections have been acquired.
+     *             acquire a connection from the pool, or <code>null</code> if
+     *             no connections have been acquired.
      */
-    public Double getAverageAcquisitionTime() {
+    public Double getAverageAcquisitionTime()
+    {
         synchronized (this) {
             if (this.totalAcquisitionTime < 0 || this.totalLeaseCount <= 0) {
                 return null;
@@ -1473,16 +1562,18 @@ public class ConnectionPool implements Quantified {
 
     /**
      * Gets the greatest amount of time in milliseconds that it has taken to
-     * acquire a connection from the pool. This returns <code>null</code> if
-     * no connections have been acquired.
+     * acquire a connection from the pool. This returns <code>null</code> if no
+     * connections have been acquired.
      *
      * @return The greatest amount of time in milliseconds that it has taken to
-     *         acquire a connection from the pool, or <code>null</code> if no
-     *         connections have been acquired.
+     *             acquire a connection from the pool, or <code>null</code> if
+     *             no connections have been acquired.
      */
-    public Long getGreatestAcquisitionTime() {
+    public Long getGreatestAcquisitionTime()
+    {
         synchronized (this) {
-            if (this.totalLeaseCount == 0 || this.greatestAcquisitionTime < 0L) {
+            if (this.totalLeaseCount == 0
+                    || this.greatestAcquisitionTime < 0L) {
                 return null;
             } else {
                 return this.greatestAcquisitionTime;
@@ -1491,20 +1582,22 @@ public class ConnectionPool implements Quantified {
     }
 
     /**
-     * Gets the greatest amount of time that a connection has been leased.
-     * This includes connections that are currently leased and have not yet
-     * been released back to the pool. If no connections have been ever
-     * been leased from this pool instance, then <code>null</code> is returned.
+     * Gets the greatest amount of time that a connection has been leased. This
+     * includes connections that are currently leased and have not yet been
+     * released back to the pool. If no connections have been ever been leased
+     * from this pool instance, then <code>null</code> is returned.
      *
-     * @return The greatest amount of time that a connection has been leased,
-     *         or <code>null</code> if no connections have been leased from this
-     *         pool.
+     * @return The greatest amount of time that a connection has been leased, or
+     *             <code>null</code> if no connections have been leased from
+     *             this pool.
      */
-    public Long getGreatestLeaseTime() {
+    public Long getGreatestLeaseTime()
+    {
         long greatestTime = -1L;
         synchronized (this) {
             for (PooledConnection pooledConn : this.leasedMap.values()) {
-                PooledConnectionHandler handler = pooledConn.getCurrentLeaseHandler();
+                PooledConnectionHandler handler
+                    = pooledConn.getCurrentLeaseHandler();
                 Long leaseTime = handler.getLeaseTime();
                 if (leaseTime != null && leaseTime > greatestTime) {
                     greatestTime = leaseTime;
@@ -1521,14 +1614,17 @@ public class ConnectionPool implements Quantified {
 
     /**
      * Gets the average amount of time connections are leased. This only
-     * includes times for leases that have completed (i.e.: connections that have
-     * been released back to the pool). If no connections have completed their
-     * leases for this pool instance, then <code>null</code> is returned.
+     * includes times for leases that have completed (i.e.: connections that
+     * have been released back to the pool). If no connections have completed
+     * their leases for this pool instance, then
+     * <code>null</code> is returned.
      *
      * @return The average amount of time it has taken to complete a connection
-     *         lease, or <code>null</code> if no connection leases have completed.
+     *             lease, or <code>null</code> if no connection leases have
+     *             completed.
      */
-    public Double getAverageLeaseTime() {
+    public Double getAverageLeaseTime()
+    {
         synchronized (this) {
             if (this.completedLeaseCount == 0) {
                 return null;
@@ -1545,9 +1641,10 @@ public class ConnectionPool implements Quantified {
      * {@link ConnectionPool} instance.
      *
      * @return The current total number of {@link Connection} instances in this
-     *         {@link ConnectionPool} instance.
+     *             {@link ConnectionPool} instance.
      */
-    public int getCurrentPoolSize() {
+    public int getCurrentPoolSize()
+    {
         synchronized (this) {
             return this.allConnections.size();
         }
@@ -1557,10 +1654,11 @@ public class ConnectionPool implements Quantified {
      * Gets the current number of available {@link Connection} instances in this
      * {@link ConnectionPool} instance.
      *
-     * @return The current number of available {@link Connection} instances in this
-     *         {@link ConnectionPool} instance.
+     * @return The current number of available {@link Connection} instances in
+     *             this {@link ConnectionPool} instance.
      */
-    public int getAvailableConnectionCount() {
+    public int getAvailableConnectionCount()
+    {
         synchronized (this) {
             return this.availableConnections.size();
         }
@@ -1571,9 +1669,10 @@ public class ConnectionPool implements Quantified {
      * this {@link ConnectionPool} is waiting.
      *
      * @return The current number of outstanding {@link Connection} leases on
-     *         which this {@link ConnectionPool} is waiting.
+     *             which this {@link ConnectionPool} is waiting.
      */
-    public int getOutstandingLeaseCount() {
+    public int getOutstandingLeaseCount()
+    {
         synchronized (this) {
             return this.leasedMap.size();
         }
@@ -1584,15 +1683,17 @@ public class ConnectionPool implements Quantified {
      * <code>null</code> if there are currently no outstanding leases.
      *
      * @return The longest outstanding lease time in milliseconds, or
-     *         <code>null</code> if there are currently no outstanding leases.
+     *             <code>null</code> if there are currently no outstanding
+     *             leases.
      */
-    public Long getGreatestOutstandingLeaseTime() {
+    public Long getGreatestOutstandingLeaseTime()
+    {
         synchronized (this) {
-            if (this.leasedMap.size() == 0)
-                return null;
+            if (this.leasedMap.size() == 0) return null;
             long greatestTime = -1L;
             for (PooledConnection pooledConn : this.leasedMap.values()) {
-                long leaseTime = pooledConn.getCurrentLeaseHandler().getLeaseTime();
+                long leaseTime
+                    = pooledConn.getCurrentLeaseHandler().getLeaseTime();
                 if (leaseTime > greatestTime) {
                     greatestTime = leaseTime;
                 }
@@ -1606,12 +1707,13 @@ public class ConnectionPool implements Quantified {
      * <code>null</code> if there are currently no outstanding leases.
      *
      * @return The average outstanding lease time in milliseconds, or
-     *         <code>null</code> if there are currently no outstanding leases.
+     *             <code>null</code> if there are currently no outstanding
+     *             leases.
      */
-    public Double getAverageOutstandingLeaseTime() {
+    public Double getAverageOutstandingLeaseTime()
+    {
         synchronized (this) {
-            if (this.leasedMap.size() == 0)
-                return null;
+            if (this.leasedMap.size() == 0) return null;
             long totalTime = 0L;
             for (PooledConnection pooledConn : this.leasedMap.values()) {
                 totalTime += pooledConn.getCurrentLeaseHandler().getLeaseTime();
@@ -1622,16 +1724,18 @@ public class ConnectionPool implements Quantified {
     }
 
     /**
-     * Gets the number of milliseconds that have past since the last {@link
-     * Connection} lease was requested. This returns the number of milliseconds
-     * since construction if a {@link Connection} lease has never been requested.
+     * Gets the number of milliseconds that have past since the last
+     * {@link Connection} lease was requested. This returns the number of
+     * milliseconds since construction if a {@link Connection} lease has never
+     * been requested.
      *
      * @return The number of milliseconds that have past since the last {@link
-     *         Connection} lease was requested, or the number of milliseconds
-     *         since construction if a {@link Connection} lease has never been
-     *         requested.
+     *             Connection} lease was requested, or the number of
+     *             milliseconds since construction if a {@link Connection} lease
+     *             has never been requested.
      */
-    public long getIdleTime() {
+    public long getIdleTime()
+    {
         synchronized (this) {
             return (System.nanoTime() - this.idleStartTimeNanos) / ONE_MILLION;
         }
@@ -1641,10 +1745,11 @@ public class ConnectionPool implements Quantified {
      * Gets the total number of leases that have been granted over the lifetime
      * of this {@link ConnectionPool}.
      *
-     * @return The total number of leases that have been granted over the lifetime
-     *         of this {@link ConnectionPool}.
+     * @return The total number of leases that have been granted over the
+     *             lifetime of this {@link ConnectionPool}.
      */
-    public long getLifetimeLeaseCount() {
+    public long getLifetimeLeaseCount()
+    {
         synchronized (this) {
             return this.totalLeaseCount;
         }
@@ -1656,10 +1761,11 @@ public class ConnectionPool implements Quantified {
      *
      * @throws SQLException If a failure occurs.
      */
-    protected synchronized void expireConnections() throws SQLException {
+    protected synchronized void expireConnections()
+        throws SQLException
+    {
         // check if no expiration defined
-        if (this.getExpireTime() == null)
-            return;
+        if (this.getExpireTime() == null) return;
 
         int expired = 0;
         long maxLifespan = this.getExpireTime();
@@ -1689,7 +1795,8 @@ public class ConnectionPool implements Quantified {
 
         // now check if we need to refill to maintain the minimum pool size
         while (this.allConnections.size() < this.getMinimumSize()) {
-            PooledConnection refill = new PooledConnection(this.connector.openConnection());
+            PooledConnection refill = new PooledConnection(
+                this.connector.openConnection());
             this.allConnections.put(refill, refill.getCreatedTimeNanos());
             this.availableConnections.add(refill);
         }

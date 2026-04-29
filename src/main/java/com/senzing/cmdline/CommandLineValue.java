@@ -8,7 +8,8 @@ import java.util.Objects;
  * {@link CommandLineOption}.
  */
 @SuppressWarnings("rawtypes")
-public class CommandLineValue implements SpecifiedOption {
+public class CommandLineValue implements SpecifiedOption
+{
   /**
    * The option for this value.
    */
@@ -20,8 +21,8 @@ public class CommandLineValue implements SpecifiedOption {
   private CommandLineSource source;
 
   /**
-   * The command-line flag or environment variable from which the value
-   * was obtained if the source is not {@link CommandLineSource#DEFAULT}.
+   * The command-line flag or environment variable from which the value was
+   * obtained if the source is not {@link CommandLineSource#DEFAULT}.
    */
   private String specifier;
 
@@ -87,7 +88,8 @@ public class CommandLineValue implements SpecifiedOption {
    * @return The associated {@link CommandLineOption}.
    */
   @Override
-  public CommandLineOption getOption() {
+  public CommandLineOption getOption()
+  {
     return this.option;
   }
 
@@ -97,7 +99,8 @@ public class CommandLineValue implements SpecifiedOption {
    * @return The associated {@link CommandLineSource}.
    */
   @Override
-  public CommandLineSource getSource() {
+  public CommandLineSource getSource()
+  {
     return this.source;
   }
 
@@ -106,7 +109,8 @@ public class CommandLineValue implements SpecifiedOption {
    *
    * @param source The associated {@link CommandLineSource}.
    */
-  public void setSource(CommandLineSource source) {
+  public void setSource(CommandLineSource source)
+  {
     this.source = source;
   }
 
@@ -118,7 +122,8 @@ public class CommandLineValue implements SpecifiedOption {
    *         <code>null</code> if none.
    */
   @Override
-  public String getSpecifier() {
+  public String getSpecifier()
+  {
     return this.specifier;
   }
 
@@ -129,7 +134,8 @@ public class CommandLineValue implements SpecifiedOption {
    * @param specifier The specifier associated with the {@link
    *                  CommandLineSource}, or <code>null</code> if none.
    */
-  public void setSpecifier(String specifier) {
+  public void setSpecifier(String specifier)
+  {
     this.specifier = specifier;
   }
 
@@ -138,7 +144,8 @@ public class CommandLineValue implements SpecifiedOption {
    *
    * @return The processed value associated with the {@link CommandLineOption}.
    */
-  public Object getProcessedValue() {
+  public Object getProcessedValue()
+  {
     return this.processedValue;
   }
 
@@ -148,28 +155,31 @@ public class CommandLineValue implements SpecifiedOption {
    * @param processedValue The processed value associated with the {@link
    *                       CommandLineOption}.
    */
-  public void setProcessedValue(Object processedValue) {
+  public void setProcessedValue(Object processedValue)
+  {
     this.processedValue = processedValue;
   }
 
   /**
-   * Gets the {@link List} of {@link String} parameters for this option.
-   * These are the unprocessed parameter values that were passed.
+   * Gets the {@link List} of {@link String} parameters for this option. These
+   * are the unprocessed parameter values that were passed.
    *
    * @return The {@link List} of {@link String} parameters for this option.
    */
-  public List<String> getParameters() {
+  public List<String> getParameters()
+  {
     return this.parameters;
   }
 
   /**
-   * Sets the {@link List} of {@link String} parameters for this option.
-   * These are the unprocessed parameter values that were passed.
+   * Sets the {@link List} of {@link String} parameters for this option. These
+   * are the unprocessed parameter values that were passed.
    *
    * @param parameters The {@link List} of {@link String} parameters for this
    *                   option.
    */
-  public void setParameters(List<String> parameters) {
+  public void setParameters(List<String> parameters)
+  {
     this.parameters = parameters;
   }
 
@@ -178,7 +188,8 @@ public class CommandLineValue implements SpecifiedOption {
    *
    * @return A diagnostic {@link String} describing this instance.
    */
-  public String toString() {
+  public String toString()
+  {
     return ("{ option=[ " + this.getOption() + " ], processedValue=[ "
             + this.getProcessedValue() + " ], source=[ " + this.getSource()
             + " ], specifier=[ " + this.getSpecifier() + " ], parameters=[ "
@@ -186,7 +197,8 @@ public class CommandLineValue implements SpecifiedOption {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(Object o)
+  {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     CommandLineValue value = (CommandLineValue) o;
@@ -199,7 +211,8 @@ public class CommandLineValue implements SpecifiedOption {
   }
 
   @Override
-  public int hashCode() {
+  public int hashCode()
+  {
     return Objects.hash(this.getOption(),
                         this.getSource(),
                         this.getSpecifier(),

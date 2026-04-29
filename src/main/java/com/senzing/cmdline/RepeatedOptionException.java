@@ -6,7 +6,8 @@ import java.util.Set;
  * Thrown when a command-line option is illegally specified more than once.
  */
 @SuppressWarnings("rawtypes")
-public class RepeatedOptionException extends CommandLineException {
+public class RepeatedOptionException extends CommandLineException
+{
   /**
    * The option that was repeated.
    */
@@ -19,9 +20,8 @@ public class RepeatedOptionException extends CommandLineException {
 
   /**
    * Constructs with the {@link CommandLineOption} that was repeated and the
-   * flags used to specify it.  This is constructed with a {@link Set} of
-   * flags that were used in case the same option can be specified with synonym
-   * flags.
+   * flags used to specify it. This is constructed with a {@link Set} of flags
+   * that were used in case the same option can be specified with synonym flags.
    *
    * @param option The {@link CommandLineOption} that was not repeated.
    * @param flags The {@link Set} of flags that were used to specify the option.
@@ -38,7 +38,8 @@ public class RepeatedOptionException extends CommandLineException {
    *
    * @return The {@link CommandLineOption} that was repeated.
    */
-  public CommandLineOption getOption() {
+  public CommandLineOption getOption()
+  {
     return this.option;
   }
 
@@ -47,9 +48,10 @@ public class RepeatedOptionException extends CommandLineException {
    * specify the repeated {@link CommandLineOption}.
    *
    * @return The <b>unmodifiable</b> {@link Set} of command-line flags used to
-   *         specify the repeated {@link CommandLineOption}.
+   *             specify the repeated {@link CommandLineOption}.
    */
-  public Set<String> getFlags() {
+  public Set<String> getFlags()
+  {
     return this.flags;
   }
 
@@ -58,8 +60,8 @@ public class RepeatedOptionException extends CommandLineException {
    *
    * @param option The {@link CommandLineOption}.
    *
-   * @param flags The {@link Set} of {@link String} command-line flags that
-   *              were specified.
+   * @param flags The {@link Set} of {@link String} command-line flags that were
+   *              specified.
    *
    * @return The formatted error message.
    *

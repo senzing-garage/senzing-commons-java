@@ -21,16 +21,16 @@ public abstract class SpecifiedOptionException
   private CommandLineOption option;
 
   /**
-   * The specifier (e.g.: command-line flag or environment variable) that
-   * was used to specify the option.
+   * The specifier (e.g.: command-line flag or environment variable) that was
+   * used to specify the option.
    */
   private String specifier;
 
   /**
    * Constructs with the specified parameters.
    *
-   * @param source The {@link CommandLineSource} describing how the option
-   *               value was specified.
+   * @param source The {@link CommandLineSource} describing how the option value
+   *               was specified.
    * @param specifier The specifier for the option (e.g.: either command line
    *                  flag or environment variable).
    * @param option The {@link CommandLineOption} that was specified.
@@ -48,8 +48,8 @@ public abstract class SpecifiedOptionException
   /**
    * Constructs with the specified parameters.
    *
-   * @param source The {@link CommandLineSource} describing how the option
-   *               value was specified.
+   * @param source The {@link CommandLineSource} describing how the option value
+   *               was specified.
    * @param specifier The specifier for the option (e.g.: either command line
    *                  flag or environment variable).
    * @param option The {@link CommandLineOption} that was specified.
@@ -73,7 +73,8 @@ public abstract class SpecifiedOptionException
    * @return The {@link CommandLineSource} for the option.
    */
   @Override
-  public CommandLineSource getSource() {
+  public CommandLineSource getSource()
+  {
     return this.source;
   }
 
@@ -82,10 +83,11 @@ public abstract class SpecifiedOptionException
    * option.
    *
    * @return The {@link CommandLineOption} that programmatically identifies the
-   *         option.
+   *             option.
    */
   @Override
-  public CommandLineOption getOption() {
+  public CommandLineOption getOption()
+  {
     return this.option;
   }
 
@@ -93,11 +95,12 @@ public abstract class SpecifiedOptionException
    * Gets the specifier (e.g.: command-line flag or environment variable) that
    * was used to specify the option.
    *
-   * @return The specifier (e.g.: command-line flag or environment variable) that
-   *         was used to specify the option.
+   * @return The specifier (e.g.: command-line flag or environment variable)
+   *             that was used to specify the option.
    */
   @Override
-  public String getSpecifier() {
+  public String getSpecifier()
+  {
     return this.specifier;
   }
 

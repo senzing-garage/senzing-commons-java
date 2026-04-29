@@ -25,16 +25,17 @@ import static com.senzing.cmdline.ExtendedTestOption.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
-public class CommandLineUtilitiesTest {
+public class CommandLineUtilitiesTest
+{
   /**
    * Converts the specified array to a diagnostic {@link String}.
    * 
    * @param array The array to convert to a {@link String}.
    * @return A diagnostic {@link String} describing the specified array.
    */
-  private static String arrayToString(String[] array) {
-    if (array == null)
-      return "null";
+  private static String arrayToString(String[] array)
+  {
+    if (array == null) return "null";
     JsonArrayBuilder jab = Json.createArrayBuilder();
     for (int index = 0; index < array.length; index++) {
       jab.add(array[index]);
@@ -48,7 +49,8 @@ public class CommandLineUtilitiesTest {
    *
    * @return The {@link List} of arguments to the test.
    */
-  public List<Arguments> getShiftArgParameters() {
+  public List<Arguments> getShiftArgParameters()
+  {
     List<Arguments> result = new LinkedList<>();
 
     String[] initial = { "A", "B", "C" };
@@ -76,7 +78,8 @@ public class CommandLineUtilitiesTest {
   public void shiftArgumentsTest(String[] initialArray,
       int shiftCount,
       String[] expectedShift,
-      Class exceptionType) {
+      Class exceptionType)
+  {
     StringBuilder sb = new StringBuilder();
     sb.append("initialArray=[ ").append(arrayToString(initialArray))
         .append(" ], shiftCount=[ ").append(shiftCount)
@@ -130,7 +133,8 @@ public class CommandLineUtilitiesTest {
   /**
    * Gets the parameters for the putValue() test.
    */
-  public List<Arguments> getPutValueParameters() {
+  public List<Arguments> getPutValueParameters()
+  {
     List<Arguments> result = new LinkedList<>();
 
     // basic option value add
@@ -233,7 +237,8 @@ public class CommandLineUtilitiesTest {
   public void putValueTest(
       Map<CommandLineOption, CommandLineValue> optionMap,
       CommandLineValue value,
-      Class exceptionType) {
+      Class exceptionType)
+  {
     StringBuilder sb = new StringBuilder();
     sb.append("optionMap=[ ").append(optionMap)
         .append(" ], commandLineValue=[ ").append(value)
@@ -278,7 +283,8 @@ public class CommandLineUtilitiesTest {
   /**
    * Gets the parameters for the putValue() test.
    */
-  public List<Arguments> getLookupParameters() {
+  public List<Arguments> getLookupParameters()
+  {
     List<Arguments> result = new LinkedList<>();
 
     for (TestOption option : TestOption.values()) {
@@ -307,7 +313,8 @@ public class CommandLineUtilitiesTest {
   public <T extends Enum<T> & CommandLineOption<T, B>, B extends Enum<B> & CommandLineOption<B, ?>> void lookupTest(
       Class<T> optionClass,
       String flag,
-      CommandLineOption expectedValue) {
+      CommandLineOption expectedValue)
+  {
 
     StringBuilder sb = new StringBuilder();
     sb.append("flag=[ ").append(flag)
@@ -332,7 +339,8 @@ public class CommandLineUtilitiesTest {
    *
    * @return The {@link List} of arguments.
    */
-  public List<Arguments> getValidateOptionsParameters() {
+  public List<Arguments> getValidateOptionsParameters()
+  {
     List<Arguments> result = new LinkedList<>();
 
     Map<CommandLineOption, CommandLineValue> optionMap = null;
@@ -608,7 +616,8 @@ public class CommandLineUtilitiesTest {
       Class<T> optionClass,
       Map<CommandLineOption, CommandLineValue> optionMap,
       List<DeprecatedOptionWarning> deprecatedWarnings,
-      Class<?> exceptionType) {
+      Class<?> exceptionType)
+  {
 
     StringBuilder sb = new StringBuilder();
     sb.append("optionClass=[ ").append(optionClass)
@@ -650,7 +659,8 @@ public class CommandLineUtilitiesTest {
   /**
    * @return The {@link List} of arguments to the test.
    */
-  public List<Arguments> getParseCommandLineParameters() {
+  public List<Arguments> getParseCommandLineParameters()
+  {
     List<Arguments> result = new LinkedList<>();
     List emptyList = List.of();
 
@@ -990,7 +1000,8 @@ public class CommandLineUtilitiesTest {
       CommandLineOption ignoreEnvOption,
       Map<CommandLineOption, CommandLineValue> expectedResult,
       List<DeprecatedOptionWarning> expectedWarnings,
-      Class<?> expectedException) {
+      Class<?> expectedException)
+  {
     StringBuilder sb = new StringBuilder();
     sb.append("optionClass=[ ").append(optionClass)
         .append(" ], args=[ ").append(arrayToString(args))
@@ -1060,7 +1071,8 @@ public class CommandLineUtilitiesTest {
   /**
    * @return The {@link List} of arguments to the test.
    */
-  public List<Arguments> getProcessCommandLineParameters() {
+  public List<Arguments> getProcessCommandLineParameters()
+  {
     List<Arguments> result = new LinkedList<>();
 
     Map<CommandLineOption, CommandLineValue> defaultMap = Map.of(
@@ -1284,7 +1296,8 @@ public class CommandLineUtilitiesTest {
       Map<CommandLineOption, CommandLineValue> optionValues,
       Map<CommandLineOption, Object> expectedResult,
       JsonObject expectedJson,
-      boolean expectText) {
+      boolean expectText)
+  {
     StringBuilder sb = new StringBuilder();
     sb.append("optionValues=[ ").append(optionValues)
         .append(" ], expectedResult=[ ").append(expectedResult)
@@ -1334,7 +1347,8 @@ public class CommandLineUtilitiesTest {
     }
   }
 
-  public List<Arguments> getSensitiveTestParameters() {
+  public List<Arguments> getSensitiveTestParameters()
+  {
     List<Arguments> result = new LinkedList<>();
     result.add(arguments(PORT, false));
     result.add(arguments(CONFIG, false));
@@ -1348,7 +1362,8 @@ public class CommandLineUtilitiesTest {
   @ParameterizedTest
   @MethodSource("getSensitiveTestParameters")
   public <T extends CommandLineOption> void sensitiveTest(T option,
-      boolean sensitive) {
+      boolean sensitive)
+  {
     try {
       assertEquals(sensitive, option.isSensitive(),
           "Option sensitivity not as expected.");
