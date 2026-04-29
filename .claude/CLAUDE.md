@@ -46,7 +46,7 @@ push operational/troubleshooting depth into FAQ files.
 
 Senzing Commons Java Library is a collection of reusable Java utilities, interfaces, and classes common to multiple Senzing projects. Originally refactored from senzing-api-server, this library provides foundational components for command-line parsing, database connection pooling, I/O operations, reflection utilities, and more.
 
-The current version is `4.0.0-beta.3.0` (a beta line — see `CHANGELOG.md` for the per-release history).
+The current version is `4.0.0` (see `CHANGELOG.md` for the per-release history).
 
 ## Build and Test Commands
 
