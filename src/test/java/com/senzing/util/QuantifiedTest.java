@@ -16,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertSame;
  * {@link Quantified.Statistic} interface.
  *
  * <p>The {@link Quantified.Statistic#getName()} default method is
- * documented to return a name composed of the enclosing class'
- * simple name (when present) and {@code this.toString()}. This test
- * exercises both the with-enclosing branch (via a nested test
- * fixture) and the abstract method dispatch via a lambda.
+ * documented to return a name composed of the enclosing class' simple name
+ * (when present) and {@code this.toString()}. This test exercises both the
+ * with-enclosing branch (via a nested test fixture) and the abstract method
+ * dispatch via a lambda.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -58,8 +58,8 @@ public class QuantifiedTest
   }
 
   /**
-   * The abstract {@link Quantified.Statistic#getUnits()} method must
-   * dispatch to the implementation's value.
+   * The abstract {@link Quantified.Statistic#getUnits()} method must dispatch
+   * to the implementation's value.
    */
   @Test
   public void getUnitsReturnsImplementationValue()
@@ -68,11 +68,10 @@ public class QuantifiedTest
   }
 
   /**
-   * The abstract {@link Quantified#getStatistics()} method must be
-   * dispatched correctly to a lambda implementation. Exercises the
-   * outer-interface contract to give it line coverage and to confirm
-   * the abstract-method shape works with a method-reference style
-   * impl.
+   * The abstract {@link Quantified#getStatistics()} method must be dispatched
+   * correctly to a lambda implementation. Exercises the outer-interface
+   * contract to give it line coverage and to confirm the abstract-method shape
+   * works with a method-reference style impl.
    */
   @Test
   public void getStatisticsDispatchesToImplementation()

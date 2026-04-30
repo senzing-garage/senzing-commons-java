@@ -29,12 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * <p>Each test asserts the documented contract from
  * {@link SQLiteConnector}'s javadoc: every {@code @throws} clause on
- * each constructor is exercised with the input that should trigger
- * it; the documented {@link SQLiteConnector#DEFAULT_PRAGMA_FEATURES_LIST}
- * is verified against the prose-described list; and
+ * each constructor is exercised with the input that should trigger it; the
+ * documented {@link SQLiteConnector#DEFAULT_PRAGMA_FEATURES_LIST} is verified
+ * against the prose-described list; and
  * {@link SQLiteConnector#openConnection()} is verified to produce a
- * usable {@link Connection} that has the documented PRAGMAs applied
- * and {@code autoCommit} disabled.
+ * usable {@link Connection} that has the documented PRAGMAs applied and {@code
+ * autoCommit} disabled.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -45,9 +45,8 @@ public class SQLiteConnectorTest
   // -------------------------------------------------------------------
 
   /**
-   * The {@link SQLiteConnector#DEFAULT_PRAGMA_FEATURES_LIST} must
-   * contain exactly the five PRAGMA statements documented in its
-   * javadoc.
+   * The {@link SQLiteConnector#DEFAULT_PRAGMA_FEATURES_LIST} must contain
+   * exactly the five PRAGMA statements documented in its javadoc.
    */
   @Test
   public void defaultPragmaListMatchesJavadoc()
@@ -65,8 +64,7 @@ public class SQLiteConnectorTest
 
   /**
    * The {@link SQLiteConnector#DEFAULT_PRAGMA_FEATURES_LIST} must be
-   * unmodifiable, per the bold "unmodifiable" annotation in its
-   * javadoc.
+   * unmodifiable, per the bold "unmodifiable" annotation in its javadoc.
    */
   @Test
   public void defaultPragmaListIsUnmodifiable()
@@ -81,9 +79,8 @@ public class SQLiteConnectorTest
   // -------------------------------------------------------------------
 
   /**
-   * The no-arg {@link SQLiteConnector#SQLiteConnector()} constructor
-   * must produce an instance whose backing file is non-null (the
-   * temp file).
+   * The no-arg {@link SQLiteConnector#SQLiteConnector()} constructor must
+   * produce an instance whose backing file is non-null (the temp file).
    */
   @Test
   public void defaultConstructorUsesNonNullTempFile()
@@ -124,8 +121,8 @@ public class SQLiteConnectorTest
 
   /**
    * {@link SQLiteConnector#SQLiteConnector(String)} with a regular
-   * file path must succeed and {@code getSqliteFile()} must return
-   * a {@link File} for that path.
+   * file path must succeed and {@code getSqliteFile()} must return a {@link
+   * File} for that path.
    */
   @Test
   public void stringConstructorAcceptsFilePath(@TempDir Path tempDir)
@@ -153,8 +150,8 @@ public class SQLiteConnectorTest
 
   /**
    * {@link SQLiteConnector#SQLiteConnector(File)} with a regular file
-   * must succeed and {@code getSqliteFile()} must return the same
-   * file instance.
+   * must succeed and {@code getSqliteFile()} must return the same file
+   * instance.
    */
   @Test
   public void fileConstructorAcceptsFile(@TempDir Path tempDir)
@@ -185,8 +182,8 @@ public class SQLiteConnectorTest
 
   /**
    * {@link SQLiteConnector#SQLiteConnector(String, Map)} with memory
-   * mode in the properties and a null file path must succeed
-   * (memory mode does not require a file).
+   * mode in the properties and a null file path must succeed (memory mode does
+   * not require a file).
    */
   @Test
   public void stringMapConstructorAllowsNullPathInMemoryMode()
@@ -290,7 +287,8 @@ public class SQLiteConnectorTest
         tempDir.resolve("test.db").toString());
     try (Connection conn = connector.openConnection();
          Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery("SELECT 1")) {
+         ResultSet rs = stmt.executeQuery("SELECT 1"))
+         {
       assertTrue(rs.next(), "SELECT 1 must produce a row");
       assertEquals(1, rs.getInt(1));
     }
@@ -308,7 +306,8 @@ public class SQLiteConnectorTest
     SQLiteConnector connector = new SQLiteConnector(
         tempDir.resolve("pragmas.db").toString());
     try (Connection conn = connector.openConnection();
-         Statement stmt = conn.createStatement()) {
+         Statement stmt = conn.createStatement())
+         {
       assertEquals(1, queryInt(stmt, "PRAGMA foreign_keys"),
                    "foreign_keys must be ON (1) after openConnection");
       assertEquals("wal", queryString(stmt, "PRAGMA journal_mode"),
@@ -325,8 +324,8 @@ public class SQLiteConnectorTest
   /**
    * {@link SQLiteConnector#openConnection()} must return a
    * {@link Connection} with auto-commit disabled, per the final
-   * statement of the method's implementation
-   * ({@code conn.setAutoCommit(false);}).
+   * statement of the method's implementation ({@code
+   * conn.setAutoCommit(false);}).
    */
   @Test
   public void openConnectionReturnsConnectionWithAutoCommitDisabled(
@@ -342,12 +341,12 @@ public class SQLiteConnectorTest
 
   /**
    * {@link SQLiteConnector#openConnection()} must work with memory
-   * mode (no file required) and must NOT leak a database file into
-   * the current working directory. The implementation builds the
-   * JDBC URL with the {@code file:} URI scheme when
+   * mode (no file required) and must NOT leak a database file into the current
+   * working directory. The implementation builds the JDBC URL with the {@code
+   * file:} URI scheme when
    * {@code mode=memory} is in the props, which is required for the
-   * xerial sqlite-jdbc driver to recognize the URI parameters
-   * rather than parse the path verbatim.
+   * xerial sqlite-jdbc driver to recognize the URI parameters rather than parse
+   * the path verbatim.
    */
   @Test
   public void openConnectionWorksInMemoryMode() throws SQLException
@@ -359,7 +358,8 @@ public class SQLiteConnectorTest
 
     try (Connection conn = connector.openConnection();
          Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery("SELECT 1")) {
+         ResultSet rs = stmt.executeQuery("SELECT 1"))
+         {
       assertTrue(rs.next());
       assertEquals(1, rs.getInt(1));
     }

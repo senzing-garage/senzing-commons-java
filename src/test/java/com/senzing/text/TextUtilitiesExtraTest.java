@@ -14,13 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Supplementary {@link TextUtilities} tests targeting the
- * argument-validation paths and URL-encode/decode round-trip not in
+ * Supplementary {@link TextUtilities} tests targeting the argument-validation
+ * paths and URL-encode/decode round-trip not in
  * {@code TextUtilitiesTest}: each {@code random*} variant rejects
- * negative counts; {@code random*Text(min, max)} rejects negative
- * bounds and {@code min > max}; {@code min == max} is the
- * single-bound shortcut; and the URL utilities round-trip
- * correctly.
+ * negative counts; {@code random*Text(min, max)} rejects negative bounds and
+ * {@code min > max}; {@code min == max} is the single-bound shortcut; and the
+ * URL utilities round-trip correctly.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -81,8 +80,8 @@ public class TextUtilitiesExtraTest
   }
 
   /**
-   * When {@code min == max}, the bounded helpers must return a
-   * string of exactly that length — exercising the
+   * When {@code min == max}, the bounded helpers must return a string of
+   * exactly that length — exercising the
    * {@code (max == min) ? min : ...} shortcut in
    * {@code randomCount}.
    */
@@ -136,8 +135,8 @@ public class TextUtilitiesExtraTest
 
   /**
    * {@code randomXxxText(0)} must produce an empty string per the
-   * documented contract (count is the number of characters; zero is
-   * the valid lower bound).
+   * documented contract (count is the number of characters; zero is the valid
+   * lower bound).
    */
   @Test
   public void randomPrintableTextZeroCountReturnsEmpty()

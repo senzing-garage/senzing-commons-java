@@ -44,13 +44,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * <p>Each test asserts the documented contract from
  * {@link LoggingUtilities}'s javadoc: the four logging entry points
- * (error/warning/info/debug) write to the documented stream with the
- * documented prefix and timestamp; stack-trace and stack-frame
- * formatting handles null/unknown components per the documented
- * sentinel strings; per-thread debug-override semantics push/pop
- * cleanly; and the last-logged-exception machinery records and
- * compares exception identity so a single throwable is only logged
- * once even when it bubbles up through multiple {@code catch} sites.
+ * (error/warning/info/debug) write to the documented stream with the documented
+ * prefix and timestamp; stack-trace and stack-frame formatting handles
+ * null/unknown components per the documented sentinel strings; per-thread
+ * debug-override semantics push/pop cleanly; and the last-logged-exception
+ * machinery records and compares exception identity so a single throwable is
+ * only logged once even when it bubbles up through multiple {@code catch}
+ * sites.
  *
  * <p>Tests run single-threaded because they swap {@link System#err}
  * / {@link System#out} and toggle the global
@@ -137,8 +137,8 @@ public class LoggingUtilitiesTest
   // -------------------------------------------------------------------
 
   /**
-   * The public {@link LoggingUtilities#BASE_PRODUCT_ID} constant must
-   * equal the documented value ({@code "5025"}).
+   * The public {@link LoggingUtilities#BASE_PRODUCT_ID} constant must equal the
+   * documented value ({@code "5025"}).
    */
   @Test
   public void baseProductIdConstantIsExpectedValue()
@@ -147,8 +147,8 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * The public {@link LoggingUtilities#DEBUG_SYSTEM_PROPERTY}
-   * constant must equal the documented system-property name.
+   * The public {@link LoggingUtilities#DEBUG_SYSTEM_PROPERTY} constant must
+   * equal the documented system-property name.
    */
   @Test
   public void debugSystemPropertyConstantIsExpectedValue()
@@ -161,8 +161,8 @@ public class LoggingUtilitiesTest
   // -------------------------------------------------------------------
 
   /**
-   * For a {@code com.senzing.<x>} package with no registered ID the
-   * default discovery must return the segment immediately after
+   * For a {@code com.senzing.<x>} package with no registered ID the default
+   * discovery must return the segment immediately after
    * {@code com.senzing.}, per the implementation's javadoc-implied
    * derivation rule.
    */
@@ -175,9 +175,9 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * For a non-{@code com.senzing} package with no match anywhere
-   * along its prefix chain, the base product ID
-   * ({@link LoggingUtilities#BASE_PRODUCT_ID}) must be returned.
+   * For a non-{@code com.senzing} package with no match anywhere along its
+   * prefix chain, the base product ID ({@link
+   * LoggingUtilities#BASE_PRODUCT_ID}) must be returned.
    */
   @Test
   public void getProductIdForPackageFallsBackToBaseId()
@@ -188,8 +188,8 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * After {@link LoggingUtilities#setProductIdForPackage} registers
-   * a package, an exact lookup must return that ID.
+   * After {@link LoggingUtilities#setProductIdForPackage} registers a package,
+   * an exact lookup must return that ID.
    */
   @Test
   public void setProductIdForPackageRegistersExactMatch()
@@ -201,8 +201,8 @@ public class LoggingUtilitiesTest
 
   /**
    * A registration on a parent package must be picked up via the
-   * implementation's prefix-stripping fallback when looking up a
-   * child package that is not itself registered.
+   * implementation's prefix-stripping fallback when looking up a child package
+   * that is not itself registered.
    */
   @Test
   public void getProductIdForPackageFallsBackToRegisteredPrefix()
@@ -213,10 +213,9 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * The exact string {@code "com.senzing"} (no trailing dot) is
-   * shorter than the prefix the implementation checks
-   * ({@code "com.senzing."}) and must therefore fall through to the
-   * base product ID.
+   * The exact string {@code "com.senzing"} (no trailing dot) is shorter than
+   * the prefix the implementation checks ({@code "com.senzing."}) and must
+   * therefore fall through to the base product ID.
    */
   @Test
   public void getProductIdForPackageReturnsBaseForBareComSenzing()
@@ -257,9 +256,9 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * Pushing {@code overrideDebugLogging(false)} must override an
-   * earlier {@code true} push (the top of the stack wins) until it
-   * is popped via {@code clearDebugOverride}.
+   * Pushing {@code overrideDebugLogging(false)} must override an earlier {@code
+   * true} push (the top of the stack wins) until it is popped via {@code
+   * clearDebugOverride}.
    */
   @Test
   public void overrideDebugLoggingNestedPushPop()
@@ -284,9 +283,9 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * Calling {@link LoggingUtilities#clearDebugOverride()} when there
-   * is no override on the stack must NOT throw — it logs a warning
-   * to {@code System.err} per the implementation.
+   * Calling {@link LoggingUtilities#clearDebugOverride()} when there is no
+   * override on the stack must NOT throw — it logs a warning to {@code
+   * System.err} per the implementation.
    */
   @Test
   public void clearDebugOverrideOnEmptyStackLogsWarning()
@@ -420,9 +419,8 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * The {@link LoggingUtilities#logError(Throwable, Object...)}
-   * overload must include the {@link Throwable}'s stack trace in
-   * the stderr output.
+   * The {@link LoggingUtilities#logError(Throwable, Object...)} overload must
+   * include the {@link Throwable}'s stack trace in the stderr output.
    */
   @Test
   public void logErrorWithThrowableIncludesStackTrace()
@@ -437,8 +435,8 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * The {@link LoggingUtilities#logWarning(Throwable, Object...)}
-   * overload must include the {@link Throwable}'s stack trace.
+   * The {@link LoggingUtilities#logWarning(Throwable, Object...)} overload must
+   * include the {@link Throwable}'s stack trace.
    */
   @Test
   public void logWarningWithThrowableIncludesStackTrace()
@@ -502,8 +500,8 @@ public class LoggingUtilitiesTest
 
   /**
    * {@link LoggingUtilities#formatStackFrame(StackTraceElement)}
-   * must produce the frame string WITHOUT the {@code "        at "}
-   * prefix used by {@code formatStackTrace}.
+   * must produce the frame string WITHOUT the {@code " at "} prefix used by
+   * {@code formatStackTrace}.
    */
   @Test
   public void formatStackFrameOmitsAtPrefix()
@@ -543,8 +541,8 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * A frame with a negative line number (the JVM's "unknown line"
-   * convention) must use the {@code "[unknown line]"} sentinel.
+   * A frame with a negative line number (the JVM's "unknown line" convention)
+   * must use the {@code "[unknown line]"} sentinel.
    */
   @Test
   public void formatStackFrameUsesUnknownLineSentinel()
@@ -606,8 +604,8 @@ public class LoggingUtilitiesTest
 
   /**
    * {@link LoggingUtilities#multilineFormat(Object...)} must convert
-   * non-string objects via {@code toString()} and {@code null} via
-   * the literal text {@code "null"} (per the implementation's
+   * non-string objects via {@code toString()} and {@code null} via the literal
+   * text {@code "null"} (per the implementation's
    * {@code "" + line} concat).
    */
   @Test
@@ -625,8 +623,8 @@ public class LoggingUtilitiesTest
 
   /**
    * {@link LoggingUtilities#isLastLoggedException(Throwable)} must
-   * return {@code false} for a null argument or when no exception
-   * has been recorded.
+   * return {@code false} for a null argument or when no exception has been
+   * recorded.
    */
   @Test
   public void isLastLoggedExceptionReturnsFalseForNullOrUninitialized()
@@ -655,8 +653,8 @@ public class LoggingUtilitiesTest
 
   /**
    * {@link LoggingUtilities#setLastLoggedAndThrow} must record the
-   * throwable as the last logged AND rethrow it with the exact
-   * type the caller passed.
+   * throwable as the last logged AND rethrow it with the exact type the caller
+   * passed.
    */
   @Test
   public void setLastLoggedAndThrowRethrowsTheSameInstance()
@@ -673,9 +671,9 @@ public class LoggingUtilitiesTest
 
   /**
    * {@link LoggingUtilities#logOnceAndThrow(Throwable)} must always
-   * rethrow the supplied throwable, AND it must print the stack
-   * trace to {@code System.err} only on the first encounter (when
-   * the exception was not previously recorded).
+   * rethrow the supplied throwable, AND it must print the stack trace to {@code
+   * System.err} only on the first encounter (when the exception was not
+   * previously recorded).
    */
   @Test
   public void logOnceAndThrowPrintsStackTraceOnFirstEncounter()
@@ -713,10 +711,10 @@ public class LoggingUtilitiesTest
   }
 
   /**
-   * For a {@link RuntimeException} wrapping a cause, the
-   * last-logged-exception machinery must use the cause for
-   * identity. Hence after recording the wrapper, querying with the
-   * cause directly OR with the wrapper must both report match.
+   * For a {@link RuntimeException} wrapping a cause, the last-logged-exception
+   * machinery must use the cause for identity. Hence after recording the
+   * wrapper, querying with the cause directly OR with the wrapper must both
+   * report match.
    */
   @Test
   public void lastLoggedExceptionUsesCauseForRuntimeExceptionWrapper()

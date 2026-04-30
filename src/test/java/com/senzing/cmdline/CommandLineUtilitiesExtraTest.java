@@ -45,9 +45,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Supplementary tests for {@link CommandLineUtilities} that target the
- * paths not covered by {@code CommandLineUtilitiesTest}: the JAR-related
- * static helpers, {@link CommandLineUtilities#formatUsageOptionsList},
+ * Supplementary tests for {@link CommandLineUtilities} that target the paths
+ * not covered by {@code CommandLineUtilitiesTest}: the JAR-related static
+ * helpers, {@link CommandLineUtilities#formatUsageOptionsList},
  * {@link CommandLineUtilities#checkClassIsMain},
  * {@link CommandLineUtilities#main}, and the
  * {@link CommandLineUtilities#processCommandLine} sensitive-value /
@@ -204,8 +204,8 @@ public class CommandLineUtilitiesExtraTest
   // -------------------------------------------------------------------
 
   /**
-   * Builds a {@link CommandLineValue} via reflection because the
-   * constructor is package-private but we are in the same package.
+   * Builds a {@link CommandLineValue} via reflection because the constructor is
+   * package-private but we are in the same package.
    */
   private static CommandLineValue makeValue(CommandLineSource source,
                                             CommandLineOption option,

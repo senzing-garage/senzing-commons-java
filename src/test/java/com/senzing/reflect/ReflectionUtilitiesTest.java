@@ -297,9 +297,9 @@ public class ReflectionUtilitiesTest
   // -------------------------------------------------------------------
 
   /**
-   * Test interface used by the {@code restrictedProxy} tests below.
-   * Two methods so we can restrict one and verify the other still
-   * delegates to the underlying target.
+   * Test interface used by the {@code restrictedProxy} tests below. Two methods
+   * so we can restrict one and verify the other still delegates to the
+   * underlying target.
    */
   protected interface RestrictableInterface
   {
@@ -340,9 +340,9 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * {@link ReflectionUtilities#restrictedProxy(Object, java.lang.reflect.Method...)}
-   * must produce a proxy where the restricted method throws
-   * {@link UnsupportedOperationException} per the javadoc, while
+   * {@link ReflectionUtilities#restrictedProxy(Object,
+   * java.lang.reflect.Method...)} must produce a proxy where the restricted
+   * method throws {@link UnsupportedOperationException} per the javadoc, while
    * unrestricted methods still delegate to the target object.
    */
   @Test
@@ -364,8 +364,8 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * When the target's underlying method throws an exception, the
-   * proxy must propagate the cause (not the wrapping
+   * When the target's underlying method throws an exception, the proxy must
+   * propagate the cause (not the wrapping
    * {@link java.lang.reflect.InvocationTargetException}).
    */
   @Test
@@ -406,9 +406,9 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * The two-arg overload {@code restrictedProxy(ClassLoader,
-   * Object, Method...)} must throw {@link NullPointerException} when
-   * given a null class loader.
+   * The two-arg overload {@code restrictedProxy(ClassLoader, Object,
+   * Method...)} must throw {@link NullPointerException} when given a null class
+   * loader.
    */
   @Test
   public void restrictedProxyThrowsNpeForNullClassLoader()
@@ -423,10 +423,10 @@ public class ReflectionUtilitiesTest
    * If the target object implements no interfaces,
    * {@code restrictedProxy} must throw
    * {@link IllegalArgumentException} per the javadoc. Uses a custom
-   * test class (rather than {@code java.lang.Object}) because system
-   * classes have a {@code null} classloader, which would trip the
-   * NPE check in the {@code (ClassLoader, Object, Method...)}
-   * overload before the interface-check fires.
+   * test class (rather than {@code java.lang.Object}) because system classes
+   * have a {@code null} classloader, which would trip the NPE check in the
+   * {@code (ClassLoader, Object, Method...)} overload before the
+   * interface-check fires.
    */
   @Test
   public void restrictedProxyThrowsIaeForTargetWithNoInterfaces()
@@ -437,10 +437,9 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * Re-restricting an already-restricted proxy with the same method
-   * set must return the same proxy instance unchanged (per the
-   * implementation's "all already restricted → return as-is"
-   * branch).
+   * Re-restricting an already-restricted proxy with the same method set must
+   * return the same proxy instance unchanged (per the implementation's "all
+   * already restricted → return as-is" branch).
    */
   @Test
   public void restrictedProxyReturnsSameInstanceWhenAlreadyRestricted()
@@ -461,8 +460,8 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * Re-restricting an already-restricted proxy with an additional
-   * method must yield a new proxy that restricts both methods.
+   * Re-restricting an already-restricted proxy with an additional method must
+   * yield a new proxy that restricts both methods.
    */
   @Test
   public void restrictedProxyAddsAdditionalRestriction() throws Exception
@@ -491,18 +490,18 @@ public class ReflectionUtilitiesTest
   // -------------------------------------------------------------------
 
   /**
-   * Test fixtures used to obtain {@link java.lang.reflect.Method}
-   * instances that exercise each documented branch of the private
+   * Test fixtures used to obtain {@link java.lang.reflect.Method} instances
+   * that exercise each documented branch of the private
    * {@code ReflectionUtilities.MethodComparator}.
    *
    * <p>{@link CompA} provides several overloads of {@code alpha} (so
-   * we can construct method pairs that share a name but differ in
-   * return type, arity, or parameter type) and a separate
+   * we can construct method pairs that share a name but differ in return type,
+   * arity, or parameter type) and a separate
    * {@code beta} (different name). {@link CompB} provides an
    * {@code alpha} with a different return type from {@link CompA}'s
-   * — used to exercise the "same name, different return types"
-   * branch since Java disallows return-type-only differences within
-   * a single declaring class.
+   * — used to exercise the "same name, different return types" branch since
+   * Java disallows return-type-only differences within a single declaring
+   * class.
    */
   protected interface CompA
   {
@@ -519,9 +518,9 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * Reflectively grab the private {@code METHOD_COMPARATOR} for
-   * direct testing. Wrapped in an unchecked rethrow so the test
-   * methods don't have to declare {@code throws}.
+   * Reflectively grab the private {@code METHOD_COMPARATOR} for direct testing.
+   * Wrapped in an unchecked rethrow so the test methods don't have to declare
+   * {@code throws}.
    */
   @SuppressWarnings("unchecked")
   private static java.util.Comparator<java.lang.reflect.Method>
@@ -540,8 +539,8 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * The {@code MethodComparator} must return 0 when the two
-   * arguments are the same {@link java.lang.reflect.Method}.
+   * The {@code MethodComparator} must return 0 when the two arguments are the
+   * same {@link java.lang.reflect.Method}.
    */
   @Test
   public void methodComparatorReturnsZeroForEqualMethods() throws Exception
@@ -552,8 +551,8 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * The {@code MethodComparator} must order by method name when
-   * names differ, returning the sign of {@code name1.compareTo(name2)}.
+   * The {@code MethodComparator} must order by method name when names differ,
+   * returning the sign of {@code name1.compareTo(name2)}.
    */
   @Test
   public void methodComparatorOrdersByNameWhenNamesDiffer()
@@ -569,9 +568,9 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * When two methods share a name but have different return types,
-   * the comparator must order them by the return type's name (the
-   * second-tier fall-through).
+   * When two methods share a name but have different return types, the
+   * comparator must order them by the return type's name (the second-tier
+   * fall-through).
    */
   @Test
   public void methodComparatorOrdersByReturnTypeWhenNamesMatch()
@@ -588,9 +587,9 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * When two methods share name and return type but differ in
-   * parameter count, the comparator must order them by parameter
-   * count (longer parameter list sorts later).
+   * When two methods share name and return type but differ in parameter count,
+   * the comparator must order them by parameter count (longer parameter list
+   * sorts later).
    */
   @Test
   public void methodComparatorOrdersByParamCount() throws Exception
@@ -610,9 +609,8 @@ public class ReflectionUtilitiesTest
   }
 
   /**
-   * When two methods share name, return type, and arity but differ
-   * in parameter type, the comparator must order them by the
-   * parameter type's name.
+   * When two methods share name, return type, and arity but differ in parameter
+   * type, the comparator must order them by the parameter type's name.
    */
   @Test
   public void methodComparatorOrdersByParamTypeWhenAllElseEqual()

@@ -72,28 +72,24 @@ public class CommandLineUtilities
     }
 
     /**
-     * Holds the three JAR-derived values parsed from a class resource
-     * URL. Package-private record used by the {@code static}
-     * initializer and by tests that exercise {@link
-     * #extractJarLocation(String, String)} directly with synthetic
-     * URLs.
+     * Holds the three JAR-derived values parsed from a class resource URL.
+     * Package-private record used by the {@code static} initializer and by
+     * tests that exercise {@link #extractJarLocation(String, String)} directly
+     * with synthetic URLs.
      *
-     * @param baseUrl   The base URL of the JAR (everything before the
-     *                  package path inside the JAR), or
-     *                  <code>null</code> if the URL does not reference
-     *                  a JAR.
-     * @param fileName  The bare file name of the JAR (e.g.
-     *                  {@code "foo.jar"}), or <code>null</code> if not
-     *                  available.
-     * @param pathToJar The filesystem path containing the JAR (e.g.
-     *                  {@code "/path/to/dir"}), or <code>null</code>
-     *                  if not available.
+     * @param baseUrl   The base URL of the JAR (everything before the package
+     *                  path inside the JAR), or <code>null</code> if the URL
+     *                  does not reference a JAR.
+     * @param fileName  The bare file name of the JAR (e.g. {@code "foo.jar"}),
+     *                  or <code>null</code> if not available.
+     * @param pathToJar The filesystem path containing the JAR (e.g. {@code
+     *                  "/path/to/dir"}), or <code>null</code> if not available.
      */
     record JarLocation(String baseUrl, String fileName, String pathToJar)
     {
         /**
-         * Sentinel value with all three components <code>null</code>,
-         * returned when the input URL does not reference a JAR.
+         * Sentinel value with all three components <code>null</code>, returned
+         * when the input URL does not reference a JAR.
          */
         static final JarLocation EMPTY
             = new JarLocation(null, null, null);
@@ -111,19 +107,15 @@ public class CommandLineUtilities
      * behavior for classes loaded from a directory.</p>
      *
      * <p>Package-private to enable direct testing with synthetic URLs
-     * without needing a class loaded from a real JAR on the test
-     * classpath.</p>
+     * without needing a class loaded from a real JAR on the test classpath.</p>
      *
-     * @param classUrl The class resource URL, typically
-     *                 {@code cls.getResource(simpleName + ".class")
-     *                 .toString()}.
-     * @param classFqn The fully-qualified class name with periods
-     *                 (e.g.
-     *                 {@code "com.senzing.cmdline.CommandLineUtilities"}).
+     * @param classUrl The class resource URL, typically {@code
+     *                 cls.getResource(simpleName + ".class") .toString()}.
+     * @param classFqn The fully-qualified class name with periods (e.g. {@code
+     *                 "com.senzing.cmdline.CommandLineUtilities"}).
      *
-     * @return The parsed {@link JarLocation}, or
-     *             {@link JarLocation#EMPTY} if the URL does not
-     *             reference a JAR.
+     * @return The parsed {@link JarLocation}, or {@link JarLocation#EMPTY} if
+     *         the URL does not reference a JAR.
      */
     static JarLocation extractJarLocation(String classUrl, String classFqn)
     {
@@ -309,14 +301,12 @@ public class CommandLineUtilities
      * @param commandLineFlag The command line flag.
      *
      * @return The enumerated {@link CommandLineOption} or <code>null</code> if
-     *             not found.
+     *         not found.
      *
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     public static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -345,14 +335,12 @@ public class CommandLineUtilities
      *                  implementation.
      *
      * @return <code>true</code> if a primary option is required, otherwise
-     *                           <code>false</code>.
+     *         <code>false</code>.
      *
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     private static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -374,14 +362,12 @@ public class CommandLineUtilities
      *                  implementation.
      *
      * @return <code>true</code> if a primary option is required, otherwise
-     *                           <code>false</code>.
+     *         <code>false</code>.
      *
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     private static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -511,19 +497,17 @@ public class CommandLineUtilities
      *                     {@link CommandLineValue} values.
      *
      * @return A {@link List} of {@link DeprecatedOptionWarning} instances
-     *           describing the deprecation warnings (if any), or
-     *           <code>null</code> if there are no deprecation warnings.
+     *         describing the deprecation warnings (if any), or
+     *         <code>null</code> if there are no deprecation warnings.
      *
      * @throws IllegalArgumentException If the specified options are invalid
      *                                  together.
      * @throws CommandLineException     If the specified command-line options
      *                                  fail validation.
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     public static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -751,15 +735,13 @@ public class CommandLineUtilities
      *
      * @return The {@link Map} to populate with the result of the parsing.
      *
-     * @throws CommandLineException If a command-line option parsing
-     *                              error occurs.
+     * @throws CommandLineException If a command-line option parsing error
+     *                              occurs.
      *
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     public static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -802,15 +784,13 @@ public class CommandLineUtilities
      *
      * @return The {@link Map} to populate with the result of the parsing.
      *
-     * @throws CommandLineException If a command-line option parsing
-     *                              error occurs.
+     * @throws CommandLineException If a command-line option parsing error
+     *                              occurs.
      *
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     public static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -859,15 +839,13 @@ public class CommandLineUtilities
      *
      * @return The {@link Map} to populate with the result of the parsing.
      *
-     * @throws CommandLineException If a command-line option parsing
-     *                              error occurs.
+     * @throws CommandLineException If a command-line option parsing error
+     *                              occurs.
      *
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     public static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -909,17 +887,15 @@ public class CommandLineUtilities
      *                            warnings.
      *
      * @return The {@link Map} of {@link CommandLineOption} keys to {@link
-     *             CommandLineValue} values that are the result of the parsing.
+     *         CommandLineValue} values that are the result of the parsing.
      *
      * @throws CommandLineException If the specified command line arguments fail
      *                              to parse.
      *
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     private static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -1042,7 +1018,8 @@ public class CommandLineUtilities
                 for (int nextIndex = index + 1;
                      nextIndex < bound
                              && !lookupMap.containsKey(args[nextIndex]);
-                     nextIndex++) {
+                     nextIndex++)
+                {
                     params.add(args[nextIndex]);
                     index++;
                 }
@@ -1052,7 +1029,8 @@ public class CommandLineUtilities
                      (nextIndex < args.length
                              && !args[nextIndex].startsWith("-")
                              && !lookupMap.containsKey(args[index]));
-                     nextIndex++) {
+                     nextIndex++)
+                {
                     params.add(args[nextIndex]);
                     index++;
                 }
@@ -1203,12 +1181,10 @@ public class CommandLineUtilities
      * @throws CommandLineException If a command-line option processing error
      *                              occurs.
      *
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     private static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -1467,12 +1443,10 @@ public class CommandLineUtilities
      *
      * @throws CommandLineException If a command-line option processing error
      *                              occurs.
-     * @param <T> The enumerated type that implements
-     *            {@link CommandLineOption}.
-     * @param <B> The base enumerated type that the command-line options
-     *            extend, <b>OR</b> the same as type <code>T</code> if
-     *            the command-line option type has no base and returns
-     *            <code>null</code> from
+     * @param <T> The enumerated type that implements {@link CommandLineOption}.
+     * @param <B> The base enumerated type that the command-line options extend,
+     *            <b>OR</b> the same as type <code>T</code> if the command-line
+     *            option type has no base and returns <code>null</code> from
      *            {@link CommandLineOption#getBaseOptionType()}.
      */
     private static <T extends Enum<T> & CommandLineOption<T, B>,
@@ -1525,7 +1499,7 @@ public class CommandLineUtilities
      *                        values if specified, if <code>null</code> a new
      *                        {@link Map} is created and returned.
      * @return The {@link Map} of {@link CommandLineOption} keys to {@link
-     *             Object} values describing the parameters for the option.
+     *         Object} values describing the parameters for the option.
      */
     public static Map<CommandLineOption, Object> processCommandLine(
             Map<CommandLineOption, CommandLineValue> optionValues,
@@ -1552,7 +1526,7 @@ public class CommandLineUtilities
      *                        JsonObjectBuilder} is populated with startup
      *                        option information.
      * @return The {@link Map} of {@link CommandLineOption} keys to {@link
-     *             Object} values describing the parameters for the option.
+     *         Object} values describing the parameters for the option.
      */
     public static Map<CommandLineOption, Object> processCommandLine(
             Map<CommandLineOption, CommandLineValue> optionValues,
@@ -1581,7 +1555,7 @@ public class CommandLineUtilities
      *                        StringBuilder} is populated with JSON text
      *                        describing the startup options.
      * @return The {@link Map} of {@link CommandLineOption} keys to {@link
-     *             Object} values describing the parameters for the option.
+     *         Object} values describing the parameters for the option.
      */
     public static Map<CommandLineOption, Object> processCommandLine(
             Map<CommandLineOption, CommandLineValue> optionValues,
@@ -1612,7 +1586,7 @@ public class CommandLineUtilities
      *                        StringBuilder} is populated with JSON text
      *                        describing the startup options.
      * @return The {@link Map} of {@link CommandLineOption} keys to {@link
-     *             Object} values describing the parameters for the option.
+     *         Object} values describing the parameters for the option.
      */
     public static Map<CommandLineOption, Object> processCommandLine(
             Map<CommandLineOption, CommandLineValue> optionValues,
@@ -1710,8 +1684,8 @@ public class CommandLineUtilities
      * @param cls The {@link Class} to test for.
      *
      * @return <code>true</code> if the specified class' static
-     *                           <code>main(String[])</code> function was called
-     *                           to begin execution of the current process.
+     *         <code>main(String[])</code> function was called to begin
+     *         execution of the current process.
      */
     public static boolean checkClassIsMain(Class cls)
     {
@@ -1803,7 +1777,7 @@ public class CommandLineUtilities
      * @param cls The {@link Class} for which the JAR base URL is requested.
      *
      * @return The base URL for the JAR that has the specified class, or
-     *             <code>null</code> if it cannot be determined.
+     *         <code>null</code> if it cannot be determined.
      */
     public static String getJarBaseUrl(Class<?> cls)
     {
@@ -1826,7 +1800,7 @@ public class CommandLineUtilities
      * @param cls The {@link Class} for which the jar file name is requested.
      *
      * @return The name of the JAR file that has the specified class, or
-     *             <code>null</code> if it cannot be determined.
+     *         <code>null</code> if it cannot be determined.
      */
     public static String getJarName(Class<?> cls)
     {
@@ -1855,7 +1829,7 @@ public class CommandLineUtilities
      * @param cls The {@link Class} for which the jar file path is requested.
      *
      * @return The path to the JAR file that has the specified class, or
-     *             <code>null</code> if it cannot be determined.
+     *         <code>null</code> if it cannot be determined.
      */
     public static String getJarPath(Class<?> cls)
     {

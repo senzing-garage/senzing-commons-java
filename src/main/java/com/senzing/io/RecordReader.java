@@ -107,8 +107,8 @@ public class RecordReader
      *                  requested.
      *
      * @return The associated {@link Format} for the media type, or
-     *             <code>null</code> if there is none or if the specified
-     *             parameter is <code>null</code>
+     *         <code>null</code> if there is none or if the specified parameter
+     *         is <code>null</code>
      */
     public static Format fromMediaType(String mediaType)
     {
@@ -482,7 +482,7 @@ public class RecordReader
    * records.
    *
    * @return The next record and returns <code>null</code> if there are no more
-   *             records.
+   *         records.
    */
   public JsonObject readRecord()
   {
@@ -496,7 +496,7 @@ public class RecordReader
    * has never been called.
    *
    * @return The line number associated with the error on the last attempt to
-   *             get a record, or <code>null</code> if there was no error.
+   *         get a record, or <code>null</code> if there was no error.
    */
   public Long getErrorLineNumber()
   {
@@ -521,7 +521,7 @@ public class RecordReader
      * #getNextRecord()} has never been called.
      *
      * @return The line number associated with the error on the last attempt to
-     *             get a record, or <code>null</code> if there was no error.
+     *         get a record, or <code>null</code> if there was no error.
      */
     Long getErrorLineNumber();
   }

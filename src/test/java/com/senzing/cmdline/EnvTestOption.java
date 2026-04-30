@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Test enum used by {@link CommandLineUtilitiesEnvTest} to exercise
- * the environment-variable handling paths in
+ * Test enum used by {@link CommandLineUtilitiesEnvTest} to exercise the
+ * environment-variable handling paths in
  * {@link CommandLineUtilities#parseCommandLine} that the existing
  * {@link TestOption} cannot reach because none of its options have
  * a maximum parameter count greater than 1.
@@ -26,21 +26,20 @@ public enum EnvTestOption
   TAGS("--tags", 1, -1),
 
   /**
-   * Bounded multi-value option (2..3 parameters) used to exercise
-   * the bounded-range path and parameter-count error branches.
+   * Bounded multi-value option (2..3 parameters) used to exercise the
+   * bounded-range path and parameter-count error branches.
    */
   COORDS("--coords", 2, 3),
 
   /**
-   * Boolean no-arg flag (0..0) used to exercise the
-   * empty / "true" / "false" / invalid switch in
+   * Boolean no-arg flag (0..0) used to exercise the empty / "true" / "false" /
+   * invalid switch in
    * {@code processEnvironment}.
    */
   VERBOSE("--verbose", 0, 0),
 
   /**
-   * Single-value flag (1..1) used to exercise the single-parameter
-   * branch.
+   * Single-value flag (1..1) used to exercise the single-parameter branch.
    */
   NAME("--name", 1, 1);
 
@@ -119,9 +118,8 @@ public enum EnvTestOption
   }
 
   /**
-   * Pass-through processor: returns single-parameter values as the
-   * raw {@link String} and multi-parameter values as the {@link List}
-   * of strings.
+   * Pass-through processor: returns single-parameter values as the raw {@link
+   * String} and multi-parameter values as the {@link List} of strings.
    */
   public static final ParameterProcessor PARAMETER_PROCESSOR
       = (option, params) -> {

@@ -14,16 +14,15 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the {@link ConnectionProvider} interface — specifically
- * its public {@link ConnectionProvider#REGISTRY} static field.
+ * Tests for the {@link ConnectionProvider} interface — specifically its public
+ * {@link ConnectionProvider#REGISTRY} static field.
  *
  * <p>The interface itself only declares {@code getConnection()},
- * which is exercised through concrete implementations
- * ({@link PoolConnectionProvider} et al.) — see
+ * which is exercised through concrete implementations ({@link
+ * PoolConnectionProvider} et al.) — see
  * {@code PoolConnectionProviderTest}. This test class focuses on
- * the {@code REGISTRY} field's documented role as a global,
- * non-null in-memory registry of {@link ConnectionProvider}
- * instances.
+ * the {@code REGISTRY} field's documented role as a global, non-null in-memory
+ * registry of {@link ConnectionProvider} instances.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -43,9 +42,9 @@ public class ConnectionProviderTest
   }
 
   /**
-   * The {@code REGISTRY} must function as a normal {@link Registry}:
-   * a bound provider is retrievable by name and unbinding requires
-   * the access token from the original {@code bind} call.
+   * The {@code REGISTRY} must function as a normal {@link Registry}: a bound
+   * provider is retrievable by name and unbinding requires the access token
+   * from the original {@code bind} call.
    */
   @Test
   public void registryAcceptsBindAndLookupRoundTrip() throws Exception
@@ -66,9 +65,9 @@ public class ConnectionProviderTest
   }
 
   /**
-   * The {@link ConnectionProvider#getConnection()} method must be
-   * callable through a lambda implementation — exercised here to
-   * cover the abstract method's invocation path.
+   * The {@link ConnectionProvider#getConnection()} method must be callable
+   * through a lambda implementation — exercised here to cover the abstract
+   * method's invocation path.
    */
   @Test
   public void getConnectionInvokesProviderImplementation()

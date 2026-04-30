@@ -36,8 +36,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * missing or invalid.
  *
  * <p>Uses a {@link FakeSenzingInstall} fixture built once per class
- * to provide a hermetic install tree on disk. Tests mutate
- * process-wide system properties, hence
+ * to provide a hermetic install tree on disk. Tests mutate process-wide system
+ * properties, hence
  * {@link Execution.SAME_THREAD execution mode} and an
  * {@link AfterEach} hook that restores the senzing.* properties to
  * their pre-test values.
@@ -75,9 +75,8 @@ public class SzInstallLocationsTest
   }
 
   /**
-   * Restore system-property state after every test. We always clear
-   * the senzing.* properties; tests opt-in by setting whatever they
-   * need.
+   * Restore system-property state after every test. We always clear the
+   * senzing.* properties; tests opt-in by setting whatever they need.
    */
   @AfterEach
   public void clearProperties()
@@ -127,8 +126,8 @@ public class SzInstallLocationsTest
   // -------------------------------------------------------------------
 
   /**
-   * An explicit {@code senzing.support.dir} system property must
-   * override the {@code <senzing.path>/data} default.
+   * An explicit {@code senzing.support.dir} system property must override the
+   * {@code <senzing.path>/data} default.
    */
   @Test
   public void explicitSupportDirOverridesDefault() throws Exception
@@ -149,8 +148,8 @@ public class SzInstallLocationsTest
   }
 
   /**
-   * An explicit {@code senzing.resource.dir} system property must
-   * override the {@code <install>/resources} default.
+   * An explicit {@code senzing.resource.dir} system property must override the
+   * {@code <install>/resources} default.
    */
   @Test
   public void explicitResourceDirOverridesDefault() throws Exception
@@ -171,8 +170,8 @@ public class SzInstallLocationsTest
   }
 
   /**
-   * An explicit {@code senzing.config.dir} system property must
-   * override the default. The override directory must contain
+   * An explicit {@code senzing.config.dir} system property must override the
+   * default. The override directory must contain
    * {@code cfgVariant.json}.
    */
   @Test
@@ -199,10 +198,9 @@ public class SzInstallLocationsTest
   // -------------------------------------------------------------------
 
   /**
-   * If the {@code senzing.path} root has no {@code er/} install
-   * subdirectory, {@link SzInstallLocations#findLocations()} must
-   * throw {@link IllegalStateException} mentioning the install
-   * directory.
+   * If the {@code senzing.path} root has no {@code er/} install subdirectory,
+   * {@link SzInstallLocations#findLocations()} must throw {@link
+   * IllegalStateException} mentioning the install directory.
    *
    * <p>{@code findLocations()} prints the stack trace to
    * {@link System#err} before rethrowing, so the assertion runs
@@ -234,8 +232,8 @@ public class SzInstallLocationsTest
    * If {@code senzing.support.dir} points at a non-existent directory,
    * {@link SzInstallLocations#findLocations()} must throw
    * {@link IllegalStateException} that names the support directory.
-   * Stderr is captured because {@code findLocations()} prints the
-   * stack trace before rethrowing.
+   * Stderr is captured because {@code findLocations()} prints the stack trace
+   * before rethrowing.
    */
   @Test
   public void findLocationsThrowsWhenSupportDirIsMissing() throws Exception
@@ -255,11 +253,11 @@ public class SzInstallLocationsTest
   }
 
   /**
-   * If {@code senzing.resource.dir} points at a non-existent
-   * directory, {@link SzInstallLocations#findLocations()} must throw
+   * If {@code senzing.resource.dir} points at a non-existent directory, {@link
+   * SzInstallLocations#findLocations()} must throw
    * {@link IllegalStateException} that names the resource directory.
-   * Stderr is captured because {@code findLocations()} prints the
-   * stack trace before rethrowing.
+   * Stderr is captured because {@code findLocations()} prints the stack trace
+   * before rethrowing.
    */
   @Test
   public void findLocationsThrowsWhenResourceDirIsMissing() throws Exception
@@ -282,8 +280,8 @@ public class SzInstallLocationsTest
    * If {@code senzing.config.dir} points at a non-existent directory,
    * {@link SzInstallLocations#findLocations()} must throw
    * {@link IllegalStateException} mentioning the config directory.
-   * Stderr is captured because {@code findLocations()} prints the
-   * stack trace before rethrowing.
+   * Stderr is captured because {@code findLocations()} prints the stack trace
+   * before rethrowing.
    */
   @Test
   public void findLocationsThrowsWhenConfigDirIsMissing() throws Exception
@@ -308,8 +306,8 @@ public class SzInstallLocationsTest
 
   /**
    * {@link SzInstallLocations#toString()} must include each of the
-   * five discovered locations and the development-build flag, per
-   * the format produced by the implementation.
+   * five discovered locations and the development-build flag, per the format
+   * produced by the implementation.
    */
   @Test
   public void toStringIncludesAllPaths() throws Exception
@@ -329,8 +327,8 @@ public class SzInstallLocationsTest
   /**
    * For a regular install (install dir named {@code er}),
    * {@link SzInstallLocations#isDevelopmentBuild()} must return
-   * false. The {@code dist}-named install dir is what flips this to
-   * true; our fixture uses {@code er}.
+   * false. The {@code dist}-named install dir is what flips this to true; our
+   * fixture uses {@code er}.
    */
   @Test
   public void isDevelopmentBuildIsFalseForNormalInstall() throws Exception
@@ -347,9 +345,9 @@ public class SzInstallLocationsTest
   // -------------------------------------------------------------------
 
   /**
-   * If {@code senzing.path} is unset but {@code SENZING_PATH} is set
-   * in the environment, {@code findLocations()} must use the env var
-   * to locate the install.
+   * If {@code senzing.path} is unset but {@code SENZING_PATH} is set in the
+   * environment, {@code findLocations()} must use the env var to locate the
+   * install.
    */
   @Test
   public void findLocationsFromSenzingPathEnvVar() throws Exception

@@ -585,8 +585,8 @@ public class TemporaryDataCacheTest
   }
 
   /**
-   * Skipping a negative amount must return 0 per the implementation
-   * (which short-circuits on {@code n < 0}).
+   * Skipping a negative amount must return 0 per the implementation (which
+   * short-circuits on {@code n < 0}).
    */
   @Test
   public void chainStreamSkipNegativeReturnsZero() throws Exception
@@ -606,9 +606,9 @@ public class TemporaryDataCacheTest
   }
 
   /**
-   * Skipping by N bytes must skip exactly N bytes (or fewer if EOF
-   * is reached) and the next byte read must equal the byte at
-   * position N in the original file.
+   * Skipping by N bytes must skip exactly N bytes (or fewer if EOF is reached)
+   * and the next byte read must equal the byte at position N in the original
+   * file.
    */
   @Test
   public void chainStreamSkipAdvancesByRequestedAmount()
@@ -646,8 +646,8 @@ public class TemporaryDataCacheTest
   }
 
   /**
-   * Calling {@link InputStream#close} twice on the cache's input
-   * stream must be safe (the second close is a no-op).
+   * Calling {@link InputStream#close} twice on the cache's input stream must be
+   * safe (the second close is a no-op).
    */
   @Test
   public void chainStreamDoubleCloseIsSafe() throws Exception
@@ -667,9 +667,9 @@ public class TemporaryDataCacheTest
   }
 
   /**
-   * Reading from the cache's input stream after it has been closed
-   * must throw {@link IOException} per the implementation's
-   * explicit "stream already closed" guard.
+   * Reading from the cache's input stream after it has been closed must throw
+   * {@link IOException} per the implementation's explicit "stream already
+   * closed" guard.
    */
   @Test
   public void chainStreamReadAfterCloseThrowsIoException()
@@ -690,8 +690,8 @@ public class TemporaryDataCacheTest
   }
 
   /**
-   * Skipping on the cache's input stream after it has been closed
-   * must throw {@link IOException}.
+   * Skipping on the cache's input stream after it has been closed must throw
+   * {@link IOException}.
    */
   @Test
   public void chainStreamSkipAfterCloseThrowsIoException()
@@ -774,9 +774,9 @@ public class TemporaryDataCacheTest
   }
 
   /**
-   * Two {@code CacheFilePart} instances with the same offset+length
-   * must be equal even if their underlying {@link File} differs
-   * (only offset/length participate in equals per the impl).
+   * Two {@code CacheFilePart} instances with the same offset+length must be
+   * equal even if their underlying {@link File} differs (only offset/length
+   * participate in equals per the impl).
    */
   @Test
   public void cacheFilePartEqualsByOffsetAndLength() throws Exception
@@ -790,8 +790,8 @@ public class TemporaryDataCacheTest
   }
 
   /**
-   * Two {@code CacheFilePart} instances with different offset must
-   * not be equal.
+   * Two {@code CacheFilePart} instances with different offset must not be
+   * equal.
    */
   @Test
   public void cacheFilePartEqualsDifferentOffsetReturnsFalse()
@@ -803,8 +803,8 @@ public class TemporaryDataCacheTest
   }
 
   /**
-   * Two {@code CacheFilePart} instances with different length must
-   * not be equal.
+   * Two {@code CacheFilePart} instances with different length must not be
+   * equal.
    */
   @Test
   public void cacheFilePartEqualsDifferentLengthReturnsFalse()
@@ -817,8 +817,7 @@ public class TemporaryDataCacheTest
 
   /**
    * {@code CacheFilePart.compareTo} must order by offset first, then
-   * by length (ascending) — and return 0 for matching offset+length
-   * pairs.
+   * by length (ascending) — and return 0 for matching offset+length pairs.
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
   @Test

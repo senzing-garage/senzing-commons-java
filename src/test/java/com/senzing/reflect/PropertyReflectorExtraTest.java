@@ -22,11 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Supplementary {@link PropertyReflector} tests covering the
- * JSON-type dispatch branches in {@code addToJsonArray} (every value
- * type when added as a collection element), the JsonObject/JsonArray
- * cases in {@code buildJsonObject}, the nested-object recursion path,
- * and the circular-reference detection.
+ * Supplementary {@link PropertyReflector} tests covering the JSON-type dispatch
+ * branches in {@code addToJsonArray} (every value type when added as a
+ * collection element), the JsonObject/JsonArray cases in {@code
+ * buildJsonObject}, the nested-object recursion path, and the
+ * circular-reference detection.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -38,18 +38,18 @@ public class PropertyReflectorExtraTest
 
   /**
    * Bean with a single property whose value is a {@code List<Object>}
-   * containing one of every value type the {@code addToJsonArray}
-   * dispatch handles via its switch statement.
+   * containing one of every value type the {@code addToJsonArray} dispatch
+   * handles via its switch statement.
    *
    * <p>Notably absent: JsonObject and JsonArray values. The switch in
    * {@code addToJsonArray} and {@code buildJsonObject} uses
    * {@code propertyValue.getClass().getName()}, which for instances
-   * built via {@code Json.createObjectBuilder()} resolves to the
-   * implementation class (e.g. {@code org.glassfish.json.JsonObjectImpl})
-   * — never to the {@code javax.json.JsonObject} interface name. So
-   * those switch arms are effectively unreachable for ordinary
-   * inputs, and including them as collection elements falls through
-   * to a default-branch bean-reflection path that fails with
+   * built via {@code Json.createObjectBuilder()} resolves to the implementation
+   * class (e.g. {@code org.glassfish.json.JsonObjectImpl}) — never to the
+   * {@code javax.json.JsonObject} interface name. So those switch arms are
+   * effectively unreachable for ordinary inputs, and including them as
+   * collection elements falls through to a default-branch bean-reflection path
+   * that fails with
    * {@code IllegalAccessException} because the glassfish package is
    * not exported.</p>
    */
@@ -98,8 +98,7 @@ public class PropertyReflectorExtraTest
   /**
    * Bean exposing a nested-object property to exercise the
    * {@code default} branch of {@code buildJsonObject}'s switch (where
-   * the value is neither a primitive wrapper nor a Collection nor an
-   * array).
+   * the value is neither a primitive wrapper nor a Collection nor an array).
    */
   public static class NestedBean
   {

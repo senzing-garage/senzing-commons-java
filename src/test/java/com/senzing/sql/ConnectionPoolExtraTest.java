@@ -17,12 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Supplementary {@link ConnectionPool} tests covering the corners
- * not in {@code ConnectionPoolTest}: constructor argument
- * validation, the diagnostic-lease-info helper, the
- * release-already-released warning path, the acquire-after-shutdown
- * error path, and the {@code PooledConnection.setCurrentLeaseHandler}
- * already-leased rejection.
+ * Supplementary {@link ConnectionPool} tests covering the corners not in {@code
+ * ConnectionPoolTest}: constructor argument validation, the
+ * diagnostic-lease-info helper, the release-already-released warning path, the
+ * acquire-after-shutdown error path, and the {@code
+ * PooledConnection.setCurrentLeaseHandler} already-leased rejection.
  *
  * <p>Uses an in-memory SQLite connector throughout — fast, hermetic,
  * and does not require external resources.</p>
@@ -131,11 +130,10 @@ public class ConnectionPoolExtraTest
   // -------------------------------------------------------------------
 
   /**
-   * Releasing a connection that has already been released must print
-   * a warning to {@link System#err} and continue without throwing.
-   * Per the documented contract: "If the specified Connection is
-   * from this pool, but has already been released, then this method
-   * does nothing."
+   * Releasing a connection that has already been released must print a warning
+   * to {@link System#err} and continue without throwing. Per the documented
+   * contract: "If the specified Connection is from this pool, but has already
+   * been released, then this method does nothing."
    */
   @Test
   @Execution(ExecutionMode.SAME_THREAD)
@@ -163,8 +161,8 @@ public class ConnectionPoolExtraTest
   }
 
   /**
-   * Releasing {@code null} must be a no-op per the documented
-   * "allow for easy semantics in finally blocks" contract.
+   * Releasing {@code null} must be a no-op per the documented "allow for easy
+   * semantics in finally blocks" contract.
    */
   @Test
   public void releaseNullIsNoOp() throws Exception
@@ -179,8 +177,8 @@ public class ConnectionPoolExtraTest
   }
 
   /**
-   * Releasing a non-proxy {@link Connection} (one not obtained from
-   * this pool) must throw {@link IllegalArgumentException}.
+   * Releasing a non-proxy {@link Connection} (one not obtained from this pool)
+   * must throw {@link IllegalArgumentException}.
    */
   @Test
   public void releaseNonProxyConnectionThrows() throws Exception
@@ -201,10 +199,9 @@ public class ConnectionPoolExtraTest
   // -------------------------------------------------------------------
 
   /**
-   * After {@link ConnectionPool#shutdown()}, {@link
-   * ConnectionPool#acquire()} must throw {@link SQLException} per
-   * the documented "Unable to obtain a connection because the
-   * connection pool was shutdown" message.
+   * After {@link ConnectionPool#shutdown()}, {@link ConnectionPool#acquire()}
+   * must throw {@link SQLException} per the documented "Unable to obtain a
+   * connection because the connection pool was shutdown" message.
    */
   @Test
   public void acquireAfterShutdownThrows() throws Exception
@@ -224,8 +221,7 @@ public class ConnectionPoolExtraTest
 
   /**
    * {@link ConnectionPool#acquire(long)} with {@code maxWait == 0}
-   * must return {@code null} rather than block when the pool is
-   * exhausted.
+   * must return {@code null} rather than block when the pool is exhausted.
    */
   @Test
   public void acquireNoWaitWhenExhaustedReturnsNull() throws Exception

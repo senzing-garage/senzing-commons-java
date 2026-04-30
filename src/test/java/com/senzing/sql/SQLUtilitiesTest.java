@@ -33,21 +33,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Tests for {@link SQLUtilities}.
  *
  * <p>Each test asserts the documented contract: every {@code close}
- * overload returns {@code null} (and tolerates null / already-closed
- * inputs); {@link SQLUtilities#rollback(Connection)} no-ops on
+ * overload returns {@code null} (and tolerates null / already-closed inputs);
+ * {@link SQLUtilities#rollback(Connection)} no-ops on
  * {@code null} and swallows {@link SQLException} on rollback failures;
- * every {@code getX(rs, index)} and {@code getX(rs, columnName)}
- * helper returns the underlying value when present and {@code null}
- * when {@link ResultSet#wasNull()} reports the column was SQL NULL;
- * and {@link SQLUtilities#main(String[])} runs without throwing for
- * empty input or a valid JDBC URL.
+ * every {@code getX(rs, index)} and {@code getX(rs, columnName)} helper returns
+ * the underlying value when present and {@code null} when {@link
+ * ResultSet#wasNull()} reports the column was SQL NULL; and {@link
+ * SQLUtilities#main(String[])} runs without throwing for empty input or a valid
+ * JDBC URL.
  *
  * <p>A single shared in-memory SQLite database is created in
  * {@link BeforeAll}. It contains a {@code TEST_TYPES} table with two
- * rows: one populated with non-null values for every supported
- * column type, and one with all NULLs. Each {@code getX} test opens
- * a fresh {@link ResultSet} positioned on the relevant row and
- * asserts on the helper's return value.
+ * rows: one populated with non-null values for every supported column type, and
+ * one with all NULLs. Each {@code getX} test opens a fresh {@link ResultSet}
+ * positioned on the relevant row and asserts on the helper's return value.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.SAME_THREAD)
@@ -149,8 +148,8 @@ public class SQLUtilitiesTest
   // -------------------------------------------------------------------
 
   /**
-   * The {@link SQLUtilities#UTC_CALENDAR} static constant must use
-   * the UTC time zone per its javadoc.
+   * The {@link SQLUtilities#UTC_CALENDAR} static constant must use the UTC time
+   * zone per its javadoc.
    */
   @Test
   public void utcCalendarUsesUtcTimeZone()
@@ -252,8 +251,8 @@ public class SQLUtilitiesTest
 
   /**
    * {@code close(CallableStatement)} must tolerate already-closed
-   * inputs without throwing. SQLite has no stored procedures, so
-   * we drive the path with a dynamic-proxy CallableStatement.
+   * inputs without throwing. SQLite has no stored procedures, so we drive the
+   * path with a dynamic-proxy CallableStatement.
    */
   @Test
   public void closeAlreadyClosedCallableStatementReturnsNull()
@@ -292,10 +291,10 @@ public class SQLUtilitiesTest
   }
 
   /**
-   * Every {@code close} overload must swallow exceptions thrown by
-   * the underlying object. Driving each with a proxy that throws
-   * on {@code isClosed()} confirms the catch-and-ignore behavior
-   * documented in the javadoc.
+   * Every {@code close} overload must swallow exceptions thrown by the
+   * underlying object. Driving each with a proxy that throws on {@code
+   * isClosed()} confirms the catch-and-ignore behavior documented in the
+   * javadoc.
    */
   @Test
   public void closeOverloadsSwallowExceptions()
@@ -959,8 +958,7 @@ public class SQLUtilitiesTest
 
   /**
    * {@code SQLUtilities.main(["jdbc:sqlite::memory:"])} must
-   * connect and print a line containing the URL and the database
-   * product name.
+   * connect and print a line containing the URL and the database product name.
    */
   @Test
   public void mainWithSqliteUrlPrintsProductName()
@@ -983,9 +981,9 @@ public class SQLUtilitiesTest
 
   /**
    * {@code SQLUtilities.main(["bad-url"])} must catch the
-   * resulting exception (the implementation prints stack traces
-   * via {@code e.printStackTrace()} but does not rethrow) and
-   * thus not propagate any exception out of {@code main}.
+   * resulting exception (the implementation prints stack traces via {@code
+   * e.printStackTrace()} but does not rethrow) and thus not propagate any
+   * exception out of {@code main}.
    */
   @Test
   public void mainWithBadUrlSwallowsException()
@@ -1007,14 +1005,14 @@ public class SQLUtilitiesTest
   // -------------------------------------------------------------------
 
   /**
-   * Opens a fresh {@link ResultSet} positioned on the row with
-   * the specified ID (1 = populated, 2 = NULLs). The caller must
-   * close the {@link ResultSet}; the underlying
+   * Opens a fresh {@link ResultSet} positioned on the row with the specified ID
+   * (1 = populated, 2 = NULLs). The caller must close the {@link ResultSet};
+   * the underlying
    * {@link PreparedStatement} is closed on result-set close because
-   * SQLite/JDBC ties them together when the statement is created
-   * with try-with-resources, but here we keep the statement alive
-   * for the duration of the result set by leaking it intentionally
-   * (it gets GC'd; this is test code).
+   * SQLite/JDBC ties them together when the statement is created with
+   * try-with-resources, but here we keep the statement alive for the duration
+   * of the result set by leaking it intentionally (it gets GC'd; this is test
+   * code).
    */
   private ResultSet openRow(int id) throws SQLException
   {

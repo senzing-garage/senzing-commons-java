@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the default-method behavior on {@link CommandLineOption}
- * and the accessor / mutator / equals / hashCode / toString methods
- * on {@link CommandLineValue}, neither of which is exercised
- * directly by the parser-driven tests in
+ * Tests for the default-method behavior on {@link CommandLineOption} and the
+ * accessor / mutator / equals / hashCode / toString methods on {@link
+ * CommandLineValue}, neither of which is exercised directly by the
+ * parser-driven tests in
  * {@code CommandLineUtilitiesTest}.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -29,9 +29,8 @@ public class CommandLineOptionAndValueTest
 {
   /**
    * Minimal enum that overrides only {@link
-   * CommandLineOption#getCommandLineFlag()}, leaving every other
-   * method to its default implementation. Used to verify the
-   * default-method behavior.
+   * CommandLineOption#getCommandLineFlag()}, leaving every other method to its
+   * default implementation. Used to verify the default-method behavior.
    */
   enum DefaultsOption
       implements CommandLineOption<DefaultsOption, DefaultsOption>
@@ -56,8 +55,8 @@ public class CommandLineOptionAndValueTest
   /**
    * Enum with a public non-static instance field so that
    * {@link CommandLineOption#isSensitive()}'s reflective field
-   * iteration sees a non-public-static field and exercises the
-   * "skip if not public-static" continue branch.
+   * iteration sees a non-public-static field and exercises the "skip if not
+   * public-static" continue branch.
    */
   enum NonStaticFieldOption
       implements CommandLineOption<NonStaticFieldOption, NonStaticFieldOption>
@@ -65,8 +64,8 @@ public class CommandLineOptionAndValueTest
     ONLY;
 
     /**
-     * A public non-static field on the enum constant. {@code
-     * Class.getFields()} returns this field, but
+     * A public non-static field on the enum constant. {@code Class.getFields()}
+     * returns this field, but
      * {@code isSensitive()} must skip it via the
      * "modifiers & PUBLIC_STATIC == 0" guard.
      */
@@ -80,15 +79,15 @@ public class CommandLineOptionAndValueTest
   }
 
   /**
-   * Non-enum implementation of {@link CommandLineOption} used to
-   * exercise the {@code return false} fall-through in
+   * Non-enum implementation of {@link CommandLineOption} used to exercise the
+   * {@code return false} fall-through in
    * {@link CommandLineOption#isSensitive()} — for a non-enum,
    * {@code Class.getFields()} contains no static field whose value
    * is the instance, so the loop completes without returning.
    *
    * <p>Uses raw types because {@code CommandLineOption}'s generic
-   * type parameter requires {@code T extends Enum<T>}, which a
-   * regular class cannot satisfy.</p>
+   * type parameter requires {@code T extends Enum<T>}, which a regular class
+   * cannot satisfy.</p>
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
   static class NonEnumOption implements CommandLineOption
@@ -201,11 +200,10 @@ public class CommandLineOptionAndValueTest
   }
 
   /**
-   * When the implementing enum has a non-static public instance
-   * field, {@link CommandLineOption#isSensitive()}'s reflective
-   * loop must {@code continue} past it (the "modifiers &
-   * PUBLIC_STATIC == 0" branch) without trying to read it. The
-   * enum constant's own field still drives the result.
+   * When the implementing enum has a non-static public instance field, {@link
+   * CommandLineOption#isSensitive()}'s reflective loop must {@code continue}
+   * past it (the "modifiers & PUBLIC_STATIC == 0" branch) without trying to
+   * read it. The enum constant's own field still drives the result.
    */
   @Test
   public void isSensitiveSkipsNonStaticFields()
@@ -222,8 +220,8 @@ public class CommandLineOptionAndValueTest
    * For a non-enum implementation of {@link CommandLineOption},
    * {@link CommandLineOption#isSensitive()} must reach its
    * {@code return false} fall-through: no static field on the
-   * implementing class equals the instance, so the loop completes
-   * without an inner return.
+   * implementing class equals the instance, so the loop completes without an
+   * inner return.
    */
   @Test
   public void isSensitiveFalseForNonEnumImplementation()

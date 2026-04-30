@@ -12,13 +12,12 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests for the {@link Connector} interface — specifically the static
- * helper {@link Connector#formatConnectionProperties(Map)}.
+ * Tests for the {@link Connector} interface — specifically the static helper
+ * {@link Connector#formatConnectionProperties(Map)}.
  *
  * <p>Each test asserts the documented contract: {@code null} or empty
- * input yields the empty string; a populated map yields a URL-encoded
- * query string with a leading {@code ?} and ampersand-separated
- * key/value pairs.
+ * input yields the empty string; a populated map yields a URL-encoded query
+ * string with a leading {@code ?} and ampersand-separated key/value pairs.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -59,8 +58,8 @@ public class ConnectorTest
   }
 
   /**
-   * Multiple entries must be ampersand-separated, in insertion order
-   * for an order-preserving map ({@link LinkedHashMap}).
+   * Multiple entries must be ampersand-separated, in insertion order for an
+   * order-preserving map ({@link LinkedHashMap}).
    */
   @Test
   public void formatMultipleEntriesUsesAmpersandSeparator()

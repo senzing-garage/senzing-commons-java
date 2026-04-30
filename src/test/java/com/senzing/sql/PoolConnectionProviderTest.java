@@ -19,12 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Tests for {@link PoolConnectionProvider}.
  *
  * <p>Each test asserts the documented contract: both constructors
- * reject a {@code null} pool with {@link NullPointerException}; the
- * single-arg constructor configures the indefinite wait
- * ({@code -1L}); {@link PoolConnectionProvider#getConnection()}
- * returns a usable {@link Connection} from the backing pool when
- * available; and it throws {@link SQLException} when the pool cannot
- * satisfy the request within the configured wait time.
+ * reject a {@code null} pool with {@link NullPointerException}; the single-arg
+ * constructor configures the indefinite wait ({@code -1L}); {@link
+ * PoolConnectionProvider#getConnection()} returns a usable {@link Connection}
+ * from the backing pool when available; and it throws {@link SQLException} when
+ * the pool cannot satisfy the request within the configured wait time.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -35,9 +34,9 @@ public class PoolConnectionProviderTest
   // -------------------------------------------------------------------
 
   /**
-   * The single-arg {@code PoolConnectionProvider(ConnectionPool)}
-   * constructor must configure the maximum wait time as {@code -1L}
-   * per its javadoc ("wait indefinitely for a Connection").
+   * The single-arg {@code PoolConnectionProvider(ConnectionPool)} constructor
+   * must configure the maximum wait time as {@code -1L} per its javadoc ("wait
+   * indefinitely for a Connection").
    */
   @Test
   public void singleArgConstructorSetsIndefiniteWait() throws SQLException
@@ -54,8 +53,8 @@ public class PoolConnectionProviderTest
   }
 
   /**
-   * The two-arg constructor must store the configured maximum wait
-   * time so {@code getMaximumWaitTime()} returns the same value.
+   * The two-arg constructor must store the configured maximum wait time so
+   * {@code getMaximumWaitTime()} returns the same value.
    */
   @Test
   public void twoArgConstructorPropagatesMaxWait() throws SQLException
@@ -77,8 +76,8 @@ public class PoolConnectionProviderTest
   }
 
   /**
-   * The single-arg constructor must throw {@link NullPointerException}
-   * when given a null pool, per its
+   * The single-arg constructor must throw {@link NullPointerException} when
+   * given a null pool, per its
    * {@code @throws NullPointerException} clause.
    */
   @Test
@@ -89,8 +88,8 @@ public class PoolConnectionProviderTest
   }
 
   /**
-   * The two-arg constructor must throw {@link NullPointerException}
-   * when given a null pool, per its javadoc.
+   * The two-arg constructor must throw {@link NullPointerException} when given
+   * a null pool, per its javadoc.
    */
   @Test
   public void twoArgConstructorThrowsNpeForNullPool()
@@ -116,7 +115,8 @@ public class PoolConnectionProviderTest
       PoolConnectionProvider provider = new PoolConnectionProvider(pool);
       try (Connection conn = provider.getConnection();
            Statement stmt = conn.createStatement();
-           ResultSet rs = stmt.executeQuery("SELECT 1")) {
+           ResultSet rs = stmt.executeQuery("SELECT 1"))
+           {
         assertNotNull(conn);
         assertTrue(rs.next());
         assertEquals(1, rs.getInt(1));
@@ -128,9 +128,9 @@ public class PoolConnectionProviderTest
 
   /**
    * {@code getConnection()} must throw {@link SQLException} when the
-   * pool cannot provide a connection within the configured wait time.
-   * Driving this with a single-connection pool whose only connection
-   * is currently leased and a no-wait provider.
+   * pool cannot provide a connection within the configured wait time. Driving
+   * this with a single-connection pool whose only connection is currently
+   * leased and a no-wait provider.
    */
   @Test
   public void getConnectionThrowsSqlExceptionWhenPoolExhausted()
@@ -166,10 +166,9 @@ public class PoolConnectionProviderTest
   // -------------------------------------------------------------------
 
   /**
-   * Builds a {@link ConnectionPool} of the specified size backed by
-   * an in-memory SQLite database. Each call returns a fresh pool;
-   * the caller must invoke {@link ConnectionPool#shutdown()} when
-   * done.
+   * Builds a {@link ConnectionPool} of the specified size backed by an
+   * in-memory SQLite database. Each call returns a fresh pool; the caller must
+   * invoke {@link ConnectionPool#shutdown()} when done.
    */
   private static ConnectionPool newPool(int size) throws SQLException
   {

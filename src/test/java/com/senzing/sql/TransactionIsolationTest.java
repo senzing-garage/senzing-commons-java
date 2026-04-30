@@ -27,17 +27,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * <p>Each test asserts the documented contract from the enum's
  * javadoc: the four enum values map to their corresponding JDBC
  * {@link Connection} integer constants, {@link
- * TransactionIsolation#applyTo(Connection)} sets the isolation level
- * on the connection (when different from the current setting),
- * and {@link SQLException} propagates from the underlying driver.
+ * TransactionIsolation#applyTo(Connection)} sets the isolation level on the
+ * connection (when different from the current setting), and {@link
+ * SQLException} propagates from the underlying driver.
  *
  * <p>Uses an in-memory SQLite connection for the happy-path tests
  * (the xerial sqlite-jdbc driver supports
  * {@link Connection#TRANSACTION_SERIALIZABLE} and
  * {@link Connection#TRANSACTION_READ_UNCOMMITTED}), and a dynamic
- * proxy {@link Connection} for the {@link SQLException} propagation
- * test so the assertion is deterministic regardless of driver
- * behavior.
+ * proxy {@link Connection} for the {@link SQLException} propagation test so the
+ * assertion is deterministic regardless of driver behavior.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -113,8 +112,7 @@ public class TransactionIsolationTest
 
   /**
    * {@link TransactionIsolation#applyTo(Connection)} must set the
-   * connection's transaction isolation when it differs from the
-   * current value.
+   * connection's transaction isolation when it differs from the current value.
    */
   @Test
   public void applyToChangesIsolationWhenDifferent() throws Exception
@@ -133,8 +131,8 @@ public class TransactionIsolationTest
 
   /**
    * {@link TransactionIsolation#applyTo(Connection)} must be a no-op
-   * (no exception, level unchanged) when the connection is already at
-   * the target isolation level.
+   * (no exception, level unchanged) when the connection is already at the
+   * target isolation level.
    */
   @Test
   public void applyToIsNoOpWhenAlreadySet() throws Exception
@@ -175,8 +173,8 @@ public class TransactionIsolationTest
   /**
    * Returns a dynamic-proxy {@link Connection} where
    * {@code getTransactionIsolation()} reports a value distinct from
-   * every {@link TransactionIsolation} constant (so {@code applyTo}
-   * always takes the "different — call setter" branch) and
+   * every {@link TransactionIsolation} constant (so {@code applyTo} always
+   * takes the "different — call setter" branch) and
    * {@code setTransactionIsolation(int)} throws {@link SQLException}.
    */
   private static Connection throwingConnection()
