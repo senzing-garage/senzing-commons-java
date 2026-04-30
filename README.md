@@ -50,8 +50,8 @@ checkout with:
 git submodule update --init --recursive
 ```
 
-CI workflows must check out submodules too — `actions/checkout@v6` with
-`submodules: recursive` (or equivalent for other CI systems).
+CI workflows must check out submodules too — `actions/checkout` with
+`submodules: recursive` (or the equivalent for other CI systems).
 
 If you build without initializing submodules, Maven will fail with an
 "Unable to find configuration file" error from
