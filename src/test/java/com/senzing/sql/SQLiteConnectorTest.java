@@ -288,7 +288,7 @@ public class SQLiteConnectorTest
     try (Connection conn = connector.openConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery("SELECT 1"))
-         {
+    {
       assertTrue(rs.next(), "SELECT 1 must produce a row");
       assertEquals(1, rs.getInt(1));
     }
@@ -307,7 +307,7 @@ public class SQLiteConnectorTest
         tempDir.resolve("pragmas.db").toString());
     try (Connection conn = connector.openConnection();
          Statement stmt = conn.createStatement())
-         {
+    {
       assertEquals(1, queryInt(stmt, "PRAGMA foreign_keys"),
                    "foreign_keys must be ON (1) after openConnection");
       assertEquals("wal", queryString(stmt, "PRAGMA journal_mode"),
@@ -359,7 +359,7 @@ public class SQLiteConnectorTest
     try (Connection conn = connector.openConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery("SELECT 1"))
-         {
+    {
       assertTrue(rs.next());
       assertEquals(1, rs.getInt(1));
     }

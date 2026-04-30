@@ -1342,7 +1342,7 @@ public class ConnectionPool implements Quantified
             int waitCount = 0;
             while (this.availableConnections.size()
                     < this.allConnections.size())
-                    {
+            {
                 try {
                     this.wait(WAIT_TIMEOUT);
                     if (waitCount++ > 2) {

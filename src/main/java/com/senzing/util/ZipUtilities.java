@@ -181,7 +181,7 @@ public class ZipUtilities
         for (int readCount = gzis.read(buffer);
              readCount >= 0;
              readCount = gzis.read(buffer))
-             {
+        {
           baos.write(buffer, 0, readCount);
         }
       }

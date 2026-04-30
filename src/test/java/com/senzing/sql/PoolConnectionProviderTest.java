@@ -116,7 +116,7 @@ public class PoolConnectionProviderTest
       try (Connection conn = provider.getConnection();
            Statement stmt = conn.createStatement();
            ResultSet rs = stmt.executeQuery("SELECT 1"))
-           {
+      {
         assertNotNull(conn);
         assertTrue(rs.next());
         assertEquals(1, rs.getInt(1));

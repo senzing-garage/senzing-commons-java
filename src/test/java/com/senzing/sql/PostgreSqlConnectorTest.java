@@ -82,7 +82,7 @@ public class PostgreSqlConnectorTest
     try (Connection conn = connector.openConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery("SELECT 1"))
-         {
+    {
       assertNotNull(conn);
       assertTrue(rs.next(), "SELECT 1 must produce a row");
       assertEquals(1, rs.getInt(1));
@@ -124,7 +124,7 @@ public class PostgreSqlConnectorTest
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(
              "SELECT current_setting('application_name')"))
-             {
+    {
       assertTrue(rs.next());
       assertEquals("senzing-commons-test", rs.getString(1),
                    "Addl 'ApplicationName' property must be applied to"
