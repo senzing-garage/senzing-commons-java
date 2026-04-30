@@ -90,7 +90,7 @@
     <dependency>
       <groupId>io.zonky.test.postgres</groupId>
       <artifactId>embedded-postgres-binaries-linux-arm64v8</artifactId>
-      <version>14.22.0</version>
+      <version>18.3.0</version>
       <scope>test</scope>
     </dependency>
     <!-- Used programmatically (not via @ExtendWith) for env-var stubbing
