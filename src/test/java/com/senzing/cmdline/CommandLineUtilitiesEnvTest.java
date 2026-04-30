@@ -22,23 +22,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for the environment-variable handling paths in
- * {@link CommandLineUtilities#parseCommandLine}, exercised by
- * stubbing {@link System#getenv} via
- * {@link EnvironmentVariables#execute(uk.org.webcompere.systemstubs.resource.Executable)}.
+ * Tests for the environment-variable handling paths in {@link
+ * CommandLineUtilities#parseCommandLine}, exercised by stubbing {@link
+ * System#getenv} via {@link
+ * EnvironmentVariables#execute(uk.org.webcompere.systemstubs.resource.Executable)}.
  *
  * <p>Each test uses {@code @Execution(SAME_THREAD)} because the
  * {@link EnvironmentVariables} stub mutates the process environment
- * for the duration of its callable; running concurrently with other
- * tests that may read {@code System.getenv} would race.</p>
+ * for the duration of its callable; running concurrently with other tests that
+ * may read {@code System.getenv} would race.</p>
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.SAME_THREAD)
 public class CommandLineUtilitiesEnvTest
 {
   /**
-   * The single-value parameter case: an env-var-supplied value
-   * becomes the {@link CommandLineValue} for the option, with
+   * The single-value parameter case: an env-var-supplied value becomes the
+   * {@link CommandLineValue} for the option, with
    * {@link CommandLineSource#ENVIRONMENT} as the source and the env
    * var name as the specifier.
    */
@@ -65,10 +65,10 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * If the primary env var is unset but a synonym is set, the
-   * synonym's value is used. Per the implementation, synonyms come
-   * from {@link CommandLineOption#getEnvironmentSynonyms()} and are
-   * checked after the primary.
+   * If the primary env var is unset but a synonym is set, the synonym's value
+   * is used. Per the implementation, synonyms come from {@link
+   * CommandLineOption#getEnvironmentSynonyms()} and are checked after the
+   * primary.
    */
   @Test
   public void synonymEnvVarPopulatesOption() throws Exception
@@ -89,8 +89,8 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * Boolean (min=max=0) options: the empty string and "true" both
-   * map to the {@code "true"} parameter; "false" maps to
+   * Boolean (min=max=0) options: the empty string and "true" both map to the
+   * {@code "true"} parameter; "false" maps to
    * {@code "false"}.
    */
   @Test
@@ -142,8 +142,8 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * For a boolean (min=max=0) option, an env value other than
-   * empty / "true" / "false" must throw
+   * For a boolean (min=max=0) option, an env value other than empty / "true" /
+   * "false" must throw
    * {@link IllegalArgumentException} per the documented switch in
    * {@code processEnvironment}.
    */
@@ -161,9 +161,8 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * Multi-value option (max param count &gt; 1) with a JSON-array
-   * env value: the JSON_ARRAY_PATTERN branch parses the array into
-   * a list of strings.
+   * Multi-value option (max param count &gt; 1) with a JSON-array env value:
+   * the JSON_ARRAY_PATTERN branch parses the array into a list of strings.
    */
   @Test
   public void multiValueEnvVarJsonArray() throws Exception
@@ -186,8 +185,8 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * Multi-value option with a comma-separated env value: the
-   * fall-through branch splits on whitespace and/or commas.
+   * Multi-value option with a comma-separated env value: the fall-through
+   * branch splits on whitespace and/or commas.
    */
   @Test
   public void multiValueEnvVarCommaSeparated() throws Exception
@@ -207,8 +206,8 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * Multi-value option with whitespace-separated env value: the
-   * fall-through branch splits on whitespace.
+   * Multi-value option with whitespace-separated env value: the fall-through
+   * branch splits on whitespace.
    */
   @Test
   public void multiValueEnvVarWhitespaceSeparated() throws Exception
@@ -228,8 +227,8 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * Bounded multi-value option (min=2, max=3): supplying fewer than
-   * the minimum via env var must throw
+   * Bounded multi-value option (min=2, max=3): supplying fewer than the minimum
+   * via env var must throw
    * {@link BadOptionParameterCountException}.
    */
   @Test
@@ -246,8 +245,8 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * Bounded multi-value option: supplying more than the maximum
-   * must throw {@link BadOptionParameterCountException}.
+   * Bounded multi-value option: supplying more than the maximum must throw
+   * {@link BadOptionParameterCountException}.
    */
   @Test
   public void multiValueEnvVarAboveMaxThrows() throws Exception
@@ -282,8 +281,8 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * If the option is also specified on the command line, the
-   * env-var value must be ignored — explicit command-line wins.
+   * If the option is also specified on the command line, the env-var value must
+   * be ignored — explicit command-line wins.
    */
   @Test
   public void commandLineWinsOverEnvironment() throws Exception
@@ -305,8 +304,8 @@ public class CommandLineUtilitiesEnvTest
   }
 
   /**
-   * No environment variable set: option does not appear in result
-   * (or appears only as DEFAULT-source value).
+   * No environment variable set: option does not appear in result (or appears
+   * only as DEFAULT-source value).
    */
   @Test
   public void unsetEnvVarLeavesOptionAbsent() throws Exception

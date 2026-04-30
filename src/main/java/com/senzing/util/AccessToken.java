@@ -17,8 +17,7 @@ public final class AccessToken
    * @param obj The reference to the object to compare with.
    * 
    * @return <code>true</code> if the specified parameter is referentially
-   *                           equivalent to this object, otherwise
-   *                           <code>false</code>.
+   *         equivalent to this object, otherwise <code>false</code>.
    */
   public boolean equals(Object obj)
   {
@@ -46,7 +45,7 @@ public final class AccessToken
    * claimed by {@link #claimThreadAccessToken()}.
    *
    * @return The current thread-local {@link AccessToken} for this thread which
-   *             will change once {@link #claimThreadAccessToken()} is called.
+   *         will change once {@link #claimThreadAccessToken()} is called.
    */
   public static AccessToken getThreadAccessToken()
   {
@@ -64,7 +63,7 @@ public final class AccessToken
    * {@link #getThreadAccessToken()} will not return the same value.
    *
    * @return The previous thread-local {@link AccessToken} after changing the
-   *             current thread-local {@link AccessToken}.
+   *         current thread-local {@link AccessToken}.
    */
   public static AccessToken claimThreadAccessToken()
   {

@@ -54,12 +54,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Supplementary tests for {@link JsonUtilities} targeting the corners not
- * covered by {@code JsonUtilitiesTest}: {@link JsonUtilities#jsonEscape},
- * the {@code add()} overloads for typed builders, the {@code addProperty}
- * / {@code addElement} type-dispatch branches, the {@code toJsonObject}
- * / {@code toJsonArray} {@link Map} / {@link java.util.Collection}
- * factories, the reflective {@code getValue} from-Instant and parse
- * fallbacks, and the {@code iniToJson} error path.
+ * covered by {@code JsonUtilitiesTest}: {@link JsonUtilities#jsonEscape}, the
+ * {@code add()} overloads for typed builders, the {@code addProperty} / {@code
+ * addElement} type-dispatch branches, the {@code toJsonObject} / {@code
+ * toJsonArray} {@link Map} / {@link java.util.Collection} factories, the
+ * reflective {@code getValue} from-Instant and parse fallbacks, and the {@code
+ * iniToJson} error path.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)

@@ -17,9 +17,54 @@ classes from [senzing-garage/senzing-api-server].
 ## Dependencies
 
 To build the Senzing Commons Java Library you will need Apache Maven (recommend
-version 3.8.5 or later) as well as OpenJDK version 17.0.x.  All other dependencies
-for `senzing-commons-java` are maintained in the `pom.xml` file. No additional
-dependencies are required.
+version 3.8.5 or later) as well as OpenJDK version 17.0.x.  All other build
+dependencies for `senzing-commons-java` are maintained in the `pom.xml` file.
+
+The Claude Code `PostToolUse` hook configured in `.claude/settings.json`
+parses tool-input JSON with [`jq`](https://jqlang.github.io/jq/) to extract
+the path of the file being edited. Contributors who use Claude Code against
+this repository need `jq` on their `PATH`; everyone else can ignore it.
+Install via Homebrew (`brew install jq`), apt (`sudo apt install jq`), or
+the equivalent for your platform. The hook is silent on missing `jq` (the
+auto-format step is a no-op), so the build still succeeds without it.
+
+## Cloning
+
+This repository uses a git submodule mounted at `.java-coding-standards/`
+that ships the shared formatter profile, checkstyle config, bulk-format
+scripts, and FAQ MCP server consumed by Maven, the IDE, and Claude Code.
+The submodule must be initialized before the build will work — a plain
+`git clone` is not enough.
+
+Either clone with submodules in one step:
+
+```console
+git clone --recurse-submodules https://github.com/senzing-garage/senzing-commons-java.git
+```
+
+Or initialize after a plain clone:
+
+```console
+git clone https://github.com/senzing-garage/senzing-commons-java.git
+cd senzing-commons-java
+git submodule update --init --recursive
+```
+
+After pulling changes that bump the submodule pin, refresh the local
+checkout with:
+
+```console
+git submodule update --init --recursive
+```
+
+CI workflows must check out submodules too — `actions/checkout` with
+`submodules: recursive` (or the equivalent for other CI systems).
+
+If you build without initializing submodules, Maven will fail with an
+"Unable to find configuration file" error from
+`maven-checkstyle-plugin`, the IDE will not pick up the formatter
+profile, and the FAQ MCP server entry in `.mcp.json` will fail to
+start.
 
 ## Building
 

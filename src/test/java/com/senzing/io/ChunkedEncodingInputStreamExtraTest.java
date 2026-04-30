@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Supplementary {@link ChunkedEncodingInputStream} tests covering
- * the malformed-input error paths and the {@code skip} / {@code
- * reset} entry points not in {@code ChunkedEncodingInputStreamTest}.
+ * Supplementary {@link ChunkedEncodingInputStream} tests covering the
+ * malformed-input error paths and the {@code skip} / {@code reset} entry points
+ * not in {@code ChunkedEncodingInputStreamTest}.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -42,8 +42,7 @@ public class ChunkedEncodingInputStreamExtraTest
 
   /**
    * {@link ChunkedEncodingInputStream#skip(long)} must advance past
-   * the requested number of bytes when reading from a chunked
-   * stream.
+   * the requested number of bytes when reading from a chunked stream.
    */
   @Test
   public void skipAdvancesPastRequestedBytes() throws IOException
@@ -67,9 +66,9 @@ public class ChunkedEncodingInputStreamExtraTest
   // -------------------------------------------------------------------
 
   /**
-   * A bare line-feed (not preceded by carriage return) inside the
-   * chunk-size header must trigger an {@link IOException} per the
-   * documented "LF without preceding CR" branch.
+   * A bare line-feed (not preceded by carriage return) inside the chunk-size
+   * header must trigger an {@link IOException} per the documented "LF without
+   * preceding CR" branch.
    */
   @Test
   public void lfWithoutCrInChunkHeaderThrows()
@@ -85,9 +84,9 @@ public class ChunkedEncodingInputStreamExtraTest
   }
 
   /**
-   * A carriage-return not followed by line-feed inside the chunk
-   * header must trigger an {@link IOException} per the documented
-   * "CR without subsequent LF" branch.
+   * A carriage-return not followed by line-feed inside the chunk header must
+   * trigger an {@link IOException} per the documented "CR without subsequent
+   * LF" branch.
    */
   @Test
   public void crWithoutLfInChunkHeaderThrows()
@@ -104,8 +103,8 @@ public class ChunkedEncodingInputStreamExtraTest
   }
 
   /**
-   * EOF before any CR is encountered while reading the chunk-size
-   * header must trigger the documented "Unexpected EOF" branch.
+   * EOF before any CR is encountered while reading the chunk-size header must
+   * trigger the documented "Unexpected EOF" branch.
    */
   @Test
   public void eofBeforeChunkSizeTerminationThrows()
@@ -121,8 +120,8 @@ public class ChunkedEncodingInputStreamExtraTest
   }
 
   /**
-   * Chunk size with a chunk-extension (separated by ';') must be
-   * parsed correctly — the size before the semicolon is what counts.
+   * Chunk size with a chunk-extension (separated by ';') must be parsed
+   * correctly — the size before the semicolon is what counts.
    */
   @Test
   public void chunkSizeWithExtensionParsesCorrectly() throws IOException
@@ -138,9 +137,9 @@ public class ChunkedEncodingInputStreamExtraTest
   }
 
   /**
-   * If the declared chunk size exceeds the bytes actually present
-   * before EOF, the documented "Unexpected EOF while reading chunk"
-   * branch must throw {@link IOException}.
+   * If the declared chunk size exceeds the bytes actually present before EOF,
+   * the documented "Unexpected EOF while reading chunk" branch must throw
+   * {@link IOException}.
    */
   @Test
   public void shortChunkBytesThrows()
@@ -157,8 +156,8 @@ public class ChunkedEncodingInputStreamExtraTest
   }
 
   /**
-   * Missing trailing CRLF after a chunk's data must throw —
-   * specifically the "EOF prior to trailing CR" branch.
+   * Missing trailing CRLF after a chunk's data must throw — specifically the
+   * "EOF prior to trailing CR" branch.
    */
   @Test
   public void missingTrailingCrAfterChunkThrows()
@@ -175,8 +174,8 @@ public class ChunkedEncodingInputStreamExtraTest
   }
 
   /**
-   * A non-CR character where the trailing CR is expected must
-   * throw — the "Expected trailing CR" branch.
+   * A non-CR character where the trailing CR is expected must throw — the
+   * "Expected trailing CR" branch.
    */
   @Test
   public void wrongTrailingCharacterAfterChunkThrows()
@@ -195,8 +194,8 @@ public class ChunkedEncodingInputStreamExtraTest
   }
 
   /**
-   * EOF where the trailing LF is expected must throw — the "EOF
-   * prior to trailing LF" branch.
+   * EOF where the trailing LF is expected must throw — the "EOF prior to
+   * trailing LF" branch.
    */
   @Test
   public void eofBeforeTrailingLfAfterChunkThrows()
@@ -213,8 +212,8 @@ public class ChunkedEncodingInputStreamExtraTest
   }
 
   /**
-   * A non-LF character where the trailing LF is expected must
-   * throw — the "Expected trailing LF" branch.
+   * A non-LF character where the trailing LF is expected must throw — the
+   * "Expected trailing LF" branch.
    */
   @Test
   public void wrongTrailingLfAfterChunkThrows()

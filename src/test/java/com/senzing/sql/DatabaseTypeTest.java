@@ -35,8 +35,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * <p>Each test asserts the documented contract from
  * {@link DatabaseType}'s javadoc: every {@code @throws} clause is
- * exercised, every {@code @return} branch is verified, and the
- * SQLite-specific behaviors of {@link DatabaseType#getTimestampBindingSQL()},
+ * exercised, every {@code @return} branch is verified, and the SQLite-specific
+ * behaviors of {@link DatabaseType#getTimestampBindingSQL()},
  * {@link DatabaseType#setTimestamp(PreparedStatement, int, Timestamp)},
  * {@link DatabaseType#setTimestamp(CallableStatement, int, Timestamp)},
  * {@link DatabaseType#sqlLeast(String, String, String...)}, and
@@ -45,9 +45,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * <p>For statement-level binding the tests use dynamic-proxy
  * {@link PreparedStatement} / {@link CallableStatement} instances that
- * record their invocations, so the assertions describe the documented
- * behavior precisely (which method is called, with which arguments)
- * rather than relying on a real database round-trip.
+ * record their invocations, so the assertions describe the documented behavior
+ * precisely (which method is called, with which arguments) rather than relying
+ * on a real database round-trip.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -96,9 +96,8 @@ public class DatabaseTypeTest
 
   /**
    * {@code detect} on a connection whose product name is
-   * "PostgreSQL" must return {@link DatabaseType#POSTGRESQL}. The
-   * match is case-insensitive per the {@code toUpperCase()} call in
-   * the implementation.
+   * "PostgreSQL" must return {@link DatabaseType#POSTGRESQL}. The match is
+   * case-insensitive per the {@code toUpperCase()} call in the implementation.
    */
   @Test
   public void detectReturnsPostgresForPostgresProductName()
@@ -145,8 +144,7 @@ public class DatabaseTypeTest
 
   /**
    * {@code detect} on a connection whose product name is not
-   * recognized must return {@link DatabaseType#GENERIC} per the
-   * javadoc.
+   * recognized must return {@link DatabaseType#GENERIC} per the javadoc.
    */
   @Test
   public void detectReturnsGenericForUnknownProductName()
@@ -180,8 +178,8 @@ public class DatabaseTypeTest
   // -------------------------------------------------------------------
 
   /**
-   * For {@link DatabaseType#SQLITE} the binding SQL must be the
-   * STRFTIME-based format documented in the implementation.
+   * For {@link DatabaseType#SQLITE} the binding SQL must be the STRFTIME-based
+   * format documented in the implementation.
    */
   @Test
   public void getTimestampBindingSqlForSqliteUsesStrftime()
@@ -191,8 +189,8 @@ public class DatabaseTypeTest
   }
 
   /**
-   * For every non-SQLite database type the binding SQL must be the
-   * default {@code "?"} placeholder.
+   * For every non-SQLite database type the binding SQL must be the default
+   * {@code "?"} placeholder.
    */
   @Test
   public void getTimestampBindingSqlForNonSqliteIsDefaultPlaceholder()
@@ -263,8 +261,8 @@ public class DatabaseTypeTest
 
   /**
    * {@code SQLITE.setTimestamp(cs, ...)} on a {@link CallableStatement}
-   * must call {@link CallableStatement#setString(int, String)} with a
-   * UTC formatted date-time string, and must NOT also call
+   * must call {@link CallableStatement#setString(int, String)} with a UTC
+   * formatted date-time string, and must NOT also call
    * {@link CallableStatement#setTimestamp} (mirroring the
    * {@link PreparedStatement} overload's behavior).
    */
@@ -325,8 +323,8 @@ public class DatabaseTypeTest
   /**
    * {@code sqlLeast(first, null)} must throw
    * {@link NullPointerException} per the javadoc
-   * ({@code @throws NullPointerException If either the first or
-   * second parameters is null.}).
+   * ({@code @throws NullPointerException If either the first or second
+   * parameters is null.}).
    */
   @Test
   public void sqlLeastThrowsNpeForNullSecond()
@@ -369,8 +367,8 @@ public class DatabaseTypeTest
   }
 
   /**
-   * A {@code null} {@code other} array must be tolerated (no NPE)
-   * since the implementation explicitly null-checks it.
+   * A {@code null} {@code other} array must be tolerated (no NPE) since the
+   * implementation explicitly null-checks it.
    */
   @Test
   public void sqlLeastToleratesNullOtherArray()

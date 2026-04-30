@@ -13,11 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Supplementary tests for the {@link ErrorLogSuppressor.Result}
- * inner class — covering equals (identity / null / different-class
- * / value comparison), hashCode consistency, and the {@code toString}
- * format. The default no-arg {@link ErrorLogSuppressor} constructor
- * is exercised here too; the existing
+ * Supplementary tests for the {@link ErrorLogSuppressor.Result} inner class —
+ * covering equals (identity / null / different-class / value comparison),
+ * hashCode consistency, and the {@code toString} format. The default no-arg
+ * {@link ErrorLogSuppressor} constructor is exercised here too; the existing
  * {@code ErrorLogSuppressorTest} covers only the configurable
  * three-arg form.
  */
@@ -102,9 +101,9 @@ public class ErrorLogSuppressorExtraTest
   // -------------------------------------------------------------------
 
   /**
-   * The no-arg {@link ErrorLogSuppressor} constructor delegates to
-   * the three-arg form with the documented defaults. Verify it
-   * constructs successfully and produces a usable instance.
+   * The no-arg {@link ErrorLogSuppressor} constructor delegates to the
+   * three-arg form with the documented defaults. Verify it constructs
+   * successfully and produces a usable instance.
    */
   @Test
   public void defaultConstructorYieldsUsableInstance()

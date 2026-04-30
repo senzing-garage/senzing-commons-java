@@ -2,7 +2,14 @@
   "mcpServers": {
     "senzing-commons-faq": {
       "command": "uv",
-      "args": ["run", "--script", ".claude/faq_server.py"]
+      "args": [
+        "run",
+        "--script",
+        ".java-coding-standards/mcp/faq_server.py",
+        "--server-name=senzing-commons-faq",
+        "--faqs-dir=.claude/faqs",
+        "--shared-faqs-dir=.java-coding-standards/docs/faqs"
+      ]
     }
   }
 }

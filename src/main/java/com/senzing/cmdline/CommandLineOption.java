@@ -28,7 +28,7 @@ public interface CommandLineOption<
    * if no base.
    *
    * @return The base {@link CommandLineOption} type that this one extends, or
-   *             <code>null</code> if there is no base type.
+   *         <code>null</code> if there is no base type.
    */
   default Class<B> getBaseOptionType()
   {
@@ -51,7 +51,7 @@ public interface CommandLineOption<
    * the same option.
    *
    * @return The <b>unmodifiable</b> {@link Set} of {@link String} synonym flags
-   *             for this optional, or an empty set if there are no synonyms.
+   *         for this optional, or an empty set if there are no synonyms.
    */
   default Set<String> getSynonymFlags()
   {
@@ -64,8 +64,8 @@ public interface CommandLineOption<
    * with an environment variable.
    *
    * @return The environment variable that can be used to set the value for this
-   *             option, or <code>null</code> if the value for this option
-   *             cannot be set with an environment variable.
+   *         option, or <code>null</code> if the value for this option cannot be
+   *         set with an environment variable.
    */
   default String getEnvironmentVariable()
   {
@@ -84,7 +84,7 @@ public interface CommandLineOption<
    * in returned {@link Set} in order).
    *
    * @return The <b>unmodifiable</b> {@link Set} of {@link String} synonym flags
-   *             for this optional, or an empty set if there are no synonyms.
+   *         for this optional, or an empty set if there are no synonyms.
    *
    */
   default Set<String> getEnvironmentSynonyms()
@@ -102,7 +102,7 @@ public interface CommandLineOption<
    * checked until the first is found.
    *
    * @return The ordered {@link List} of {@link String} fall-back environment
-   *             variables.
+   *         variables.
    */
   default List<String> getEnvironmentFallbacks()
   {
@@ -125,7 +125,7 @@ public interface CommandLineOption<
    * {@link Set} instances must be satisfied for this option to be used.
    *
    * @return The {@link Set} of {@link Set} instances describing combinations of
-   *             sets of options that this option depends on.
+   *         sets of options that this option depends on.
    */
   default Set<Set<CommandLineOption>> getDependencies()
   {
@@ -137,7 +137,7 @@ public interface CommandLineOption<
    * deprecated option.
    *
    * @return The {@link Set} of alternative options to use in place of a
-   *             deprecated option.
+   *         deprecated option.
    */
   default Set<T> getDeprecationAlternatives()
   {
@@ -151,7 +151,7 @@ public interface CommandLineOption<
    * option.
    *
    * @return <code>true</code> if this option is a primary option, otherwise
-   *                           <code>false</code>.
+   *         <code>false</code>.
    */
   default boolean isPrimary()
   {
@@ -162,7 +162,7 @@ public interface CommandLineOption<
    * Checks if this command line option is deprecated.
    *
    * @return <code>true</code> if this option is deprecated, otherwise
-   *                           <code>false</code>.
+   *         <code>false</code>.
    */
   default boolean isDeprecated()
   {
@@ -174,7 +174,7 @@ public interface CommandLineOption<
    * and should not be logged.
    *
    * @return <code>true</code> if the option's value is considered sensitive,
-   *                           and <code>false</code>
+   *         and <code>false</code>
    */
   default boolean isSensitive()
   {
@@ -206,7 +206,7 @@ public interface CommandLineOption<
    * this many parameters will be consumed. By default this returns zero (0).
    *
    * @return The minimum number of additional parameters that should follow this
-   *             command line option.
+   *         command line option.
    */
   default int getMinimumParameterCount()
   {
@@ -221,9 +221,9 @@ public interface CommandLineOption<
    * parameters}. By default this returns negative one (-1).
    *
    * @return The maximum number of additional parameters that should follow this
-   *             command line option, or a negative number to indicate that
-   *             parameters should be read until the next recognized command
-   *             line option is read.
+   *         command line option, or a negative number to indicate that
+   *         parameters should be read until the next recognized command line
+   *         option is read.
    */
   default int getMaximumParameterCount()
   {

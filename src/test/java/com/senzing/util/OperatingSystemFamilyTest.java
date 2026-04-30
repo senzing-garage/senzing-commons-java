@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <p>Each test asserts the documented contract from the enum's javadoc:
  * the three is-predicate methods reflect the enum identity, the three
  * predicates are mutually exclusive, and {@link
- * OperatingSystemFamily#RUNTIME_OS_FAMILY} is initialized non-null and
- * matches the JVM's {@code os.name} system property.
+ * OperatingSystemFamily#RUNTIME_OS_FAMILY} is initialized non-null and matches
+ * the JVM's {@code os.name} system property.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -33,8 +33,8 @@ public class OperatingSystemFamilyTest
   // -------------------------------------------------------------------
 
   /**
-   * The enum must declare exactly three constants per its public
-   * javadoc: {@code WINDOWS}, {@code MAC_OS}, {@code UNIX}.
+   * The enum must declare exactly three constants per its public javadoc:
+   * {@code WINDOWS}, {@code MAC_OS}, {@code UNIX}.
    */
   @Test
   public void enumDeclaresThreeConstants()

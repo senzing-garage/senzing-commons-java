@@ -140,7 +140,7 @@ public class PropertyReflector<T>
    * {@link Method} values for that respective property.
    *
    * @return The {@link Map} of {@link String} property names too the accessor
-   *             {@link Method} values for that respective property.
+   *         {@link Method} values for that respective property.
    */
   public Map<String, Method> getAccessors()
   {
@@ -153,8 +153,8 @@ public class PropertyReflector<T>
    * respective property.
    *
    * @return The {@link Map} of {@link String} property names to the
-   *             <b>unmodifiable</b> {@link List} of mutator {@link Method}
-   *             values for that respective property.
+   *         <b>unmodifiable</b> {@link List} of mutator {@link Method} values
+   *         for that respective property.
    */
   public Map<String, List<Method>> getMutators()
   {
@@ -169,7 +169,7 @@ public class PropertyReflector<T>
    * @param propertyKey The property key for the property being requested.
    *
    * @return The property value for the specified property key from the
-   *             specified target object.
+   *         specified target object.
    *
    * @throws IllegalArgumentException If the property key is not recognized.
    *
@@ -338,8 +338,8 @@ public class PropertyReflector<T>
    * @param propertyValue The property value to pass as a parameter.
    *
    * @return <code>true</code> if the {@link Method} was found and invoked, and
-   *                           <code>false</code> if no {@link Method} was found
-   *                           to satisfy the {@link Predicate}.
+   *         <code>false</code> if no {@link Method} was found to satisfy the
+   *         {@link Predicate}.
    */
   private static boolean findAndInvokeMutator(List<Method> methods,
       Predicate<Class> predicate,

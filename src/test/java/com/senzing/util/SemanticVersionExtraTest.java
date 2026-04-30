@@ -16,21 +16,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Supplementary {@link SemanticVersion} tests targeting the corners
- * not covered by {@code SemanticVersionTest}: negative-version-part
- * rejection, trailing-zero normalization in {@link
- * SemanticVersion#toString(boolean)}, the equals self-reference
- * short-circuit, and the {@link SemanticVersion#main} smoke driver.
+ * Supplementary {@link SemanticVersion} tests targeting the corners not covered
+ * by {@code SemanticVersionTest}: negative-version-part rejection,
+ * trailing-zero normalization in {@link SemanticVersion#toString(boolean)}, the
+ * equals self-reference short-circuit, and the {@link SemanticVersion#main}
+ * smoke driver.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 public class SemanticVersionExtraTest
 {
   /**
-   * Per the constructor's javadoc, a negative version part must be
-   * rejected with {@link IllegalArgumentException} (wrapped as the
-   * top-level "Invalid semantic version string" message — the
-   * implementation rethrows any exception from parsing).
+   * Per the constructor's javadoc, a negative version part must be rejected
+   * with {@link IllegalArgumentException} (wrapped as the top-level "Invalid
+   * semantic version string" message — the implementation rethrows any
+   * exception from parsing).
    */
   @Test
   public void negativeVersionPartIsRejected()
@@ -67,8 +67,8 @@ public class SemanticVersionExtraTest
   }
 
   /**
-   * Normalized form of an all-zero version is the empty string —
-   * the trailing-zero loop strips every part.
+   * Normalized form of an all-zero version is the empty string — the
+   * trailing-zero loop strips every part.
    */
   @Test
   public void toStringNormalizedAllZeroesEmptyString()
@@ -78,8 +78,8 @@ public class SemanticVersionExtraTest
   }
 
   /**
-   * Normalized form preserves leading non-zero parts and only
-   * strips trailing zeros.
+   * Normalized form preserves leading non-zero parts and only strips trailing
+   * zeros.
    */
   @Test
   public void toStringNormalizedPreservesLeadingNonZero()
@@ -90,8 +90,8 @@ public class SemanticVersionExtraTest
   }
 
   /**
-   * Pre-release suffix is preserved through both normalized and
-   * non-normalized forms.
+   * Pre-release suffix is preserved through both normalized and non-normalized
+   * forms.
    */
   @Test
   public void toStringPreservesPreReleaseSuffix()
@@ -133,10 +133,10 @@ public class SemanticVersionExtraTest
    * {@link SemanticVersion#main} with no arguments prints a USAGE
    * message to stderr and exits with status 1. Run inside a
    * {@link SystemErr} stub to capture the message; we cannot
-   * actually invoke {@code System.exit} from a test, so we wrap with
-   * an {@link AssertionError}-throwing security manager substitute
-   * — instead, the test simply verifies that the no-arg branch
-   * prints the expected diagnostic before the {@code System.exit}.
+   * actually invoke {@code System.exit} from a test, so we wrap with an {@link
+   * AssertionError}-throwing security manager substitute — instead, the test
+   * simply verifies that the no-arg branch prints the expected diagnostic
+   * before the {@code System.exit}.
    */
   @Test
   @Execution(ExecutionMode.SAME_THREAD)
@@ -169,8 +169,8 @@ public class SemanticVersionExtraTest
 
   /**
    * {@link SemanticVersion#main} with a single version argument
-   * prints the version and its normalized form to stdout. Run inside
-   * a {@link SystemOut} stub to capture output; tagged
+   * prints the version and its normalized form to stdout. Run inside a {@link
+   * SystemOut} stub to capture output; tagged
    * {@link Execution} {@code SAME_THREAD} because the redirect
    * affects the JVM-wide stdout.
    */
@@ -191,8 +191,8 @@ public class SemanticVersionExtraTest
 
   /**
    * {@link SemanticVersion#main} with two version arguments
-   * additionally prints comparison results (compareTo, equals,
-   * hash, hash-equality) for each pair beyond the first.
+   * additionally prints comparison results (compareTo, equals, hash,
+   * hash-equality) for each pair beyond the first.
    */
   @Test
   @Execution(ExecutionMode.SAME_THREAD)

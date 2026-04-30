@@ -51,8 +51,7 @@ public class SzUtilities
      * 
      * @param text The text to check.
      * @return <code>true</code> if the specified text starts with a legal
-     *                           database URI prefix, otherwise
-     *                           <code>false</code>.
+     *         database URI prefix, otherwise <code>false</code>.
      */
     public static boolean startsWithDatabaseUriPrefix(String text)
     {
@@ -128,7 +127,7 @@ public class SzUtilities
      * </ul>
      * 
      * @return The bootstrap Senzing settings created using {@link
-     *             SzInstallLocations}.
+     *         SzInstallLocations}.
      * 
      * @throws IllegalStateException If the Senzing installation cannot be
      *                               found.
@@ -205,7 +204,7 @@ public class SzUtilities
      * @param uri The database URI to use for the settings.
      * 
      * @return The basic Senzing settings created from the specified database
-     *             URI.
+     *         URI.
      *
      * @throws NullPointerException If the specified URI is <code>null</code>.
      * @throws IllegalArgumentException If the specified URI does not begin with
@@ -248,7 +247,7 @@ public class SzUtilities
      *                      <code>LICENSESTRINGBASE64</code> is to be excluded.
      * 
      * @return The basic Senzing settings created from the specified database
-     *             URI and base-64 encoded license string.
+     *         URI and base-64 encoded license string.
      *
      * @throws NullPointerException If the specified URI is <code>null</code>.
      * @throws IllegalArgumentException If the specified URI does not begin with
@@ -292,7 +291,7 @@ public class SzUtilities
      *                    excluded.
      * 
      * @return The basic Senzing settings created from the specified database
-     *             URI and base-64 encoded license string.
+     *         URI and base-64 encoded license string.
      *
      * @throws NullPointerException If the specified URI is <code>null</code>.
      * @throws IllegalArgumentException If the specified URI does not begin with
@@ -324,8 +323,8 @@ public class SzUtilities
      *                    excluded.
      * 
      * @return The basic Senzing settings created from the specified database
-     *             URI and base-64 encoded license string, or bootstrap settings
-     *             if the URI is <code>null</code>.
+     *         URI and base-64 encoded license string, or bootstrap settings if
+     *         the URI is <code>null</code>.
      *
      * @throws IllegalArgumentException If the specified URI is non-null and
      *                                  does not begin with a legal prefix for a
@@ -429,8 +428,8 @@ public class SzUtilities
      * @param conn The non-null {@link Connection} to a SQLite database.
      * 
      * @return <code>true</code> if the schema was created, or
-     *                           <code>false</code> if the schema was detected
-     *                           and no changes were made.
+     *         <code>false</code> if the schema was detected and no changes were
+     *         made.
      * 
      * @throws SQLException If a JDBC failure occurs.
      * 

@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Test enum used by {@link CommandLineUtilitiesFallbackTest} to
- * exercise {@code CommandLineUtilities.processEnvironment}'s
- * primary-option fallback path. The single option is marked
+ * Test enum used by {@link CommandLineUtilitiesFallbackTest} to exercise {@code
+ * CommandLineUtilities.processEnvironment}'s primary-option fallback path. The
+ * single option is marked
  * {@linkplain CommandLineOption#isPrimary() primary} so the
  * fallback-env-var loop runs.
  */

@@ -34,11 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * {@code false} otherwise; the JSON-building helpers
  * ({@link SzUtilities#bootstrapSettings()},
  * {@link SzUtilities#basicSettingsFromDatabaseUri(String)} and the
- * licensed overloads) produce the documented JSON shape, validate
- * their inputs, and reject illegal URIs; and
+ * licensed overloads) produce the documented JSON shape, validate their inputs,
+ * and reject illegal URIs; and
  * {@link SzUtilities#ensureSenzingSQLiteSchema(Connection)} is
- * idempotent, validates the connection type, and locates the schema
- * file via the install discovery.
+ * idempotent, validates the connection type, and locates the schema file via
+ * the install discovery.
  *
  * <p>Shares the {@link FakeSenzingInstall} fixture with
  * {@link SzInstallLocationsTest} via the
@@ -123,8 +123,8 @@ public class SzUtilitiesTest
   }
 
   /**
-   * The URI prefix list must contain exactly the six documented
-   * prefixes, unmodifiable.
+   * The URI prefix list must contain exactly the six documented prefixes,
+   * unmodifiable.
    */
   @Test
   public void databaseUriPrefixesContainsExpectedSet()
@@ -147,11 +147,11 @@ public class SzUtilitiesTest
   // -------------------------------------------------------------------
 
   /**
-   * With a discoverable install, {@link SzUtilities#bootstrapSettings()}
-   * must return JSON containing only the {@code PIPELINE} object with
+   * With a discoverable install, {@link SzUtilities#bootstrapSettings()} must
+   * return JSON containing only the {@code PIPELINE} object with
    * {@code SUPPORTPATH}, {@code CONFIGPATH}, and {@code RESOURCEPATH}
-   * entries — and no {@code SQL} section since the bootstrap variant
-   * does not include a database URI.
+   * entries — and no {@code SQL} section since the bootstrap variant does not
+   * include a database URI.
    */
   @Test
   public void bootstrapSettingsProducesPipelineOnlyJson() throws Exception
@@ -180,8 +180,7 @@ public class SzUtilitiesTest
 
   /**
    * {@link SzUtilities#basicSettingsFromDatabaseUri(String)} with a
-   * null URI must throw {@link NullPointerException} per the
-   * javadoc.
+   * null URI must throw {@link NullPointerException} per the javadoc.
    */
   @Test
   public void basicSettingsFromDatabaseUriThrowsNpeForNullUri()
@@ -205,8 +204,8 @@ public class SzUtilitiesTest
   }
 
   /**
-   * With a legal prefix and a discoverable install, the JSON must
-   * contain both the {@code PIPELINE} object and the
+   * With a legal prefix and a discoverable install, the JSON must contain both
+   * the {@code PIPELINE} object and the
    * {@code SQL.CONNECTION} entry set to the supplied URI.
    */
   @Test
@@ -342,9 +341,9 @@ public class SzUtilitiesTest
   }
 
   /**
-   * Idempotency: a second call against the same database must
-   * detect the existing fixture table and return {@code false}
-   * without re-running the schema.
+   * Idempotency: a second call against the same database must detect the
+   * existing fixture table and return {@code false} without re-running the
+   * schema.
    */
   @Test
   public void ensureSenzingSqliteSchemaIsIdempotent(
@@ -377,9 +376,8 @@ public class SzUtilitiesTest
   /**
    * Returns a dynamic-proxy {@link Connection} whose
    * {@link DatabaseMetaData#getDatabaseProductName()} reports
-   * "PostgreSQL" so {@link com.senzing.sql.DatabaseType#detect}
-   * yields a non-SQLITE type. All other methods return null /
-   * default values.
+   * "PostgreSQL" so {@link com.senzing.sql.DatabaseType#detect} yields a
+   * non-SQLITE type. All other methods return null / default values.
    */
   private static Connection nonSqliteConnectionProxy()
   {

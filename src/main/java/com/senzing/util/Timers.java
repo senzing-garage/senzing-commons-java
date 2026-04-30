@@ -163,7 +163,7 @@ public class Timers
      * @param timerName The name of the timer.
      *
      * @return <code>true</code> if the timer exists and is paused, otherwise
-     *                           <code>false</code>.
+     *         <code>false</code>.
      */
     public boolean isPaused(String timerName)
     {
@@ -177,7 +177,7 @@ public class Timers
      * @param timerName The name of the timer.
      *
      * @return <code>true</code> if the timer exists and is running, otherwise
-     *                           <code>false</code>.
+     *         <code>false</code>.
      */
     public boolean isRunning(String timerName)
     {
@@ -192,8 +192,8 @@ public class Timers
      * @param timerName The name of the timer being requested.
      *
      * @return The accumulated elapsed number of milliseconds for the timer with
-     *             the specified name or negative-one (-1) if the specified
-     *             timer name is not recognized.
+     *         the specified name or negative-one (-1) if the specified timer
+     *         name is not recognized.
      */
     public long getElapsedTime(String timerName)
     {
@@ -214,7 +214,7 @@ public class Timers
      *                       start time.
      *
      * @return The number of timer names that were for new timers that were
-     *             created.
+     *         created.
      */
     public int start(String timerName, String... moreTimerNames)
     {
@@ -283,10 +283,9 @@ public class Timers
      * @param moreTimerNames Additional timer names to pause at the same time.
      *
      * @return <code>null</code> if the timer name is not recognized,
-     *                           <code>false</code> if the timer is found, but
-     *                           was already running, and <code>true</code> if
-     *                           the timer is found and was paused and was
-     *                           successfully resumed.
+     *         <code>false</code> if the timer is found, but was already
+     *         running, and <code>true</code> if the timer is found and was
+     *         paused and was successfully resumed.
      */
     public int resume(String timerName, String... moreTimerNames)
     {
@@ -312,7 +311,7 @@ public class Timers
      * that were running that were successfully paused.
      *
      * @return The number of timers that were running and were successfully
-     *             paused.
+     *         paused.
      */
     public int pauseAll()
     {
@@ -330,7 +329,7 @@ public class Timers
      * that were paused that were successfully resumed.
      *
      * @return The number of timers that were paused and were successfully
-     *             resumed.
+     *         resumed.
      */
     public int resumeAll()
     {
@@ -351,7 +350,7 @@ public class Timers
      * at the time it was paused is returned.
      *
      * @return A {@link Map} of {@link String} timer name keys to {@link Long}
-     *           values representing the current timings.
+     *         values representing the current timings.
      */
     public Map<String, Long> getTimings()
     {

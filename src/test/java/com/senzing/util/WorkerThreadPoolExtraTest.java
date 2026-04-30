@@ -17,11 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Supplementary {@link WorkerThreadPool} tests covering the corners
- * not in {@code WorkerThreadPoolTest}: constructor argument
- * validation, base-name suffix trimming, close-then-execute error
- * path, the pause/resume {@link AccessToken} flow, task-failure
- * propagation, and the {@link WorkerThreadPool#main} smoke driver.
+ * Supplementary {@link WorkerThreadPool} tests covering the corners not in
+ * {@code WorkerThreadPoolTest}: constructor argument validation, base-name
+ * suffix trimming, close-then-execute error path, the pause/resume {@link
+ * AccessToken} flow, task-failure propagation, and the {@link
+ * WorkerThreadPool#main} smoke driver.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)

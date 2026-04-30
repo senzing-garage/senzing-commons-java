@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Supplementary {@link Timers} tests covering the corners not in
  * {@code TimersTest}: behavior when a timer name is unknown,
- * idempotent pause/resume on already-paused/running timers,
- * multi-name start/pause/resume return counts, the all-timer
- * variants, the {@link Timers#mergeWith} merge logic, and the
- * default {@link Timers#Timers()} constructor.
+ * idempotent pause/resume on already-paused/running timers, multi-name
+ * start/pause/resume return counts, the all-timer variants, the {@link
+ * Timers#mergeWith} merge logic, and the default {@link Timers#Timers()}
+ * constructor.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)

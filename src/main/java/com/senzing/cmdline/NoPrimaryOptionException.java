@@ -56,8 +56,7 @@ public class NoPrimaryOptionException extends CommandLineException
    * instances representing the primary options that could be specified.
    *
    * @return The <b>unmodifiable</b> {@link Set} of {@link CommandLineOption}
-   *             instances representing the primary options that could be
-   *             specified.
+   *         instances representing the primary options that could be specified.
    */
   public Set<CommandLineOption> getPrimaryOptions()
   {

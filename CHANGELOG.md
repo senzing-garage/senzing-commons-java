@@ -6,6 +6,82 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [markdownlint](https://dlaa.me/markdownlint/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+**Migration note:** This release adopts a git submodule at
+`.java-coding-standards/`. After pulling, contributors must run
+`git submodule update --init --recursive` (or clone with
+`--recurse-submodules`) before the build will work — without it,
+checkstyle config, formatter profile, and the FAQ MCP server source
+will be missing and `mvn -Pcheckstyle validate` will fail with
+"Unable to find configuration file". CI workflows must use
+`submodules: recursive` (or equivalent) on checkout. Contributors
+who use Claude Code against this repository also need
+[`jq`](https://jqlang.github.io/jq/) on their `PATH` for the
+`PostToolUse` auto-format hook to function — see README
+"Dependencies".
+
+### Changed
+
+- Adopted `senzing-garage/java-coding-standards` as a git submodule
+  mounted at `.java-coding-standards/`. The shared rules document,
+  Eclipse JDT formatter profile, checkstyle config, bulk-format
+  Python scripts, FAQ MCP server, and shared FAQ corpus now live in
+  the submodule and are referenced from there rather than copied
+  into this repository.
+- `pom.xml` checkstyle profile updated: `<configLocation>` and
+  `<suppressionsLocation>` now point at the submodule
+  (`.java-coding-standards/checkstyle/...`).
+- `.mcp.json` updated: the `senzing-commons-faq` MCP server is now
+  invoked from the submodule
+  (`.java-coding-standards/mcp/faq_server.py`) with explicit
+  `--server-name`, `--faqs-dir`, `--shared-faqs-dir` arguments. The
+  server merges the four shared standards FAQs with this project's
+  local FAQs in a single BM25-ranked search index.
+- `.vscode/settings.json` updated: `java.format.settings.url` now
+  references the submodule's formatter profile. Added an
+  `emeraldwalk.runonsave` block that invokes the standards
+  bulk-format orchestrator on every Java save (requires the
+  `emeraldwalk.runonsave` extension, which is recommended via
+  `.vscode/extensions.json`).
+- `.claude/CLAUDE.md` updated: the "Java Coding Standards", "FAQ
+  MCP Server", and "Testing Configuration" sections now reference
+  the submodule paths. Project-specific sections (Workflow
+  Preferences, Project Overview, Architecture Overview,
+  Development Notes, Code Patterns, Release Process, etc.) are
+  unchanged.
+
+### Added
+
+- `.gitmodules` recording the submodule pin.
+- `.vscode/tasks.json` with two on-demand single-file format tasks
+  (used by an optional Ctrl+Alt+S keybinding — see
+  `.java-coding-standards/adoption/claude-md-templates/keybindings-template.json`).
+- `.vscode/extensions.json` recommending `redhat.java`,
+  `emeraldwalk.runonsave`, and `esbenp.prettier-vscode`.
+- `.claude/settings.json` with three Claude Code hooks:
+  `PostToolUse` auto-formats every Java file Claude edits;
+  `Stop` runs `mvn -Pcheckstyle validate` after Claude finishes;
+  `SessionStart` warns when the submodule pin is behind upstream.
+- `.claude/commands/init-java.md` slash command for re-running the
+  adoption flow against the latest standards-repo pin.
+
+### Removed
+
+- Local copies of the standards artifacts that now live in the
+  submodule (no longer needed; deleted to avoid drift):
+  - `.claude/scripts/fix_*.py` (5 bulk-format scripts).
+  - `.claude/faq_server.py`.
+  - `.claude/java-coding-standards.md`.
+  - The four shared FAQs under `.claude/faqs/building/`,
+    `.claude/faqs/conventions/adding-new-faqs.md`, and
+    `.claude/faqs/testing/system-stubs-and-output-capture.md`.
+  - `.vscode/java-formatter.xml`.
+  - `checkstyle.xml` and `checkstyle-suppressions.xml`.
+- The project-local `.claude/faqs/conventions/source-edit-policy.md`
+  is preserved (it's a project-specific workflow rule, not part of
+  the shared standards).
+
 ## [4.0.0] - 2026-04-28
 
 ### Changed in 4.0.0

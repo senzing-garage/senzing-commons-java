@@ -25,15 +25,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Tests for {@link PostgreSqlConnector}.
  *
  * <p>Each test asserts the documented contract: the JDBC URL is
- * built from {@code host:port/database}, the connection {@link
- * Properties} carry {@code user}/{@code password} (and any
+ * built from {@code host:port/database}, the connection {@link Properties}
+ * carry {@code user}/{@code password} (and any
  * {@code addlProperties}), and {@link
  * PostgreSqlConnector#openConnection()} produces a usable
  * {@link Connection} with auto-commit disabled.
  *
  * <p>Uses {@link EmbeddedPostgres} (Zonky IO) to spin up a real
- * in-process PostgreSQL once per test class so connection-level
- * behavior is verified against the actual driver rather than mocks.
+ * in-process PostgreSQL once per test class so connection-level behavior is
+ * verified against the actual driver rather than mocks.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
@@ -81,7 +81,8 @@ public class PostgreSqlConnectorTest
         "localhost", port, "postgres", "postgres", "");
     try (Connection conn = connector.openConnection();
          Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery("SELECT 1")) {
+         ResultSet rs = stmt.executeQuery("SELECT 1"))
+    {
       assertNotNull(conn);
       assertTrue(rs.next(), "SELECT 1 must produce a row");
       assertEquals(1, rs.getInt(1));
@@ -105,8 +106,8 @@ public class PostgreSqlConnectorTest
   }
 
   /**
-   * The six-arg constructor must merge {@code addlProperties} into
-   * the connection {@link Properties} so they affect the resulting
+   * The six-arg constructor must merge {@code addlProperties} into the
+   * connection {@link Properties} so they affect the resulting
    * {@link Connection}. Verified by passing a non-default
    * {@code application_name} and reading it back via
    * {@code current_setting()}.
@@ -122,7 +123,8 @@ public class PostgreSqlConnectorTest
     try (Connection conn = connector.openConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(
-             "SELECT current_setting('application_name')")) {
+             "SELECT current_setting('application_name')"))
+    {
       assertTrue(rs.next());
       assertEquals("senzing-commons-test", rs.getString(1),
                    "Addl 'ApplicationName' property must be applied to"
@@ -133,11 +135,11 @@ public class PostgreSqlConnectorTest
   /**
    * When {@code addlProperties} contains a {@code user} (or
    * {@code password}) entry, the explicit {@code user}/{@code
-   * password} arguments to the six-arg constructor must win because
-   * they are {@code put} after the {@code putAll} of
+   * password} arguments to the six-arg constructor must win because they are
+   * {@code put} after the {@code putAll} of
    * {@code addlProperties} per the implementation. Verified by
-   * connecting with a valid {@code user} argument despite an
-   * intentionally invalid {@code user} key in
+   * connecting with a valid {@code user} argument despite an intentionally
+   * invalid {@code user} key in
    * {@code addlProperties}.
    */
   @Test

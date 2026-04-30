@@ -276,8 +276,7 @@ public class ZipUtilitiesTest
   /**
    * {@link ZipUtilities#zip(byte[])} followed by
    * {@link ZipUtilities#unzip(byte[])} must produce a byte-for-byte
-   * identical result (round-trip identity per the deflate / inflate
-   * contract).
+   * identical result (round-trip identity per the deflate / inflate contract).
    */
   @Test
   public void zipUnzipByteArrayRoundTrip()
@@ -290,9 +289,8 @@ public class ZipUtilitiesTest
   }
 
   /**
-   * For non-empty input, {@link ZipUtilities#zip(byte[])} must
-   * produce a non-zero-length output (it includes the deflate
-   * header/footer at minimum).
+   * For non-empty input, {@link ZipUtilities#zip(byte[])} must produce a
+   * non-zero-length output (it includes the deflate header/footer at minimum).
    */
   @Test
   public void zipProducesNonEmptyOutputForNonEmptyInput()
@@ -304,8 +302,8 @@ public class ZipUtilitiesTest
   }
 
   /**
-   * Empty input to {@link ZipUtilities#zip(byte[])} must produce a
-   * deflate output that round-trips back to an empty byte array.
+   * Empty input to {@link ZipUtilities#zip(byte[])} must produce a deflate
+   * output that round-trips back to an empty byte array.
    */
   @Test
   public void zipUnzipByteArrayEmptyInputRoundTrips()
@@ -396,8 +394,8 @@ public class ZipUtilitiesTest
   }
 
   /**
-   * GZip output must include the standard GZip magic bytes
-   * ({@code 0x1F 0x8B}) at the start of the byte stream.
+   * GZip output must include the standard GZip magic bytes ({@code 0x1F 0x8B})
+   * at the start of the byte stream.
    */
   @Test
   public void gzipOutputIncludesMagicHeader()
@@ -497,9 +495,9 @@ public class ZipUtilitiesTest
 
   /**
    * {@code ZipUtilities.main} with one or more text arguments (none
-   * of which are existing files) must run the deflate/gzip
-   * round-trip diagnostics and report success on stdout without
-   * throwing or calling {@link System#exit}.
+   * of which are existing files) must run the deflate/gzip round-trip
+   * diagnostics and report success on stdout without throwing or calling {@link
+   * System#exit}.
    */
   @Test
   @Execution(ExecutionMode.SAME_THREAD)
@@ -526,8 +524,8 @@ public class ZipUtilitiesTest
 
   /**
    * {@code ZipUtilities.main} with two arguments where the first is
-   * an existing directory and the second is a {@code .zip} target
-   * path must produce a valid ZIP file at the target location.
+   * an existing directory and the second is a {@code .zip} target path must
+   * produce a valid ZIP file at the target location.
    */
   @Test
   public void mainWithDirAndZipTargetCreatesArchive() throws Exception
@@ -552,9 +550,9 @@ public class ZipUtilitiesTest
 
   /**
    * {@code ZipUtilities.main} with two arguments where the first
-   * is an existing {@code .zip} file and the second is an existing
-   * directory must extract the archive into the directory (the
-   * unzip branch of main's args==2 logic).
+   * is an existing {@code .zip} file and the second is an existing directory
+   * must extract the archive into the directory (the unzip branch of main's
+   * args==2 logic).
    */
   @Test
   public void mainWithZipSourceAndDirTargetExtractsArchive()
@@ -592,8 +590,8 @@ public class ZipUtilitiesTest
 
   /**
    * {@code ZipUtilities.main} with multiple text arguments must
-   * iterate through each, printing both the zip and gzip
-   * round-trip diagnostics for every argument.
+   * iterate through each, printing both the zip and gzip round-trip diagnostics
+   * for every argument.
    */
   @Test
   @Execution(ExecutionMode.SAME_THREAD)
@@ -638,9 +636,9 @@ public class ZipUtilitiesTest
   // -------------------------------------------------------------------
 
   /**
-   * Returns a non-trivial byte payload that compresses well — repeats
-   * one of the test sentences enough times that compression provides
-   * a meaningful size reduction in the assertions above.
+   * Returns a non-trivial byte payload that compresses well — repeats one of
+   * the test sentences enough times that compression provides a meaningful size
+   * reduction in the assertions above.
    */
   private static byte[] repeatedTextBytes()
   {

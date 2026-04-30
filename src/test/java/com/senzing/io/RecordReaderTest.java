@@ -421,8 +421,8 @@ public class RecordReaderTest
 
   /**
    * {@link RecordReader.Format#fromMediaType(String)} must return
-   * the matching enum for each documented media type and must
-   * apply trim/lowercase normalization.
+   * the matching enum for each documented media type and must apply
+   * trim/lowercase normalization.
    */
   @Test
   public void fromMediaTypeReturnsExpectedEnumForKnownMediaTypes()
@@ -451,8 +451,8 @@ public class RecordReaderTest
   }
 
   /**
-   * Each {@link RecordReader.Format} value must report its
-   * media type and simple name per the constructor arguments.
+   * Each {@link RecordReader.Format} value must report its media type and
+   * simple name per the constructor arguments.
    */
   @Test
   public void formatAccessorsReturnConstructorValues()
@@ -476,8 +476,8 @@ public class RecordReaderTest
   // -------------------------------------------------------------------
 
   /**
-   * When the input stream contains only whitespace (no
-   * format-determining character), the constructor must default to
+   * When the input stream contains only whitespace (no format-determining
+   * character), the constructor must default to
    * {@link RecordReader.Format#JSON_LINES} per the implementation's
    * fallback comment.
    */
@@ -492,8 +492,8 @@ public class RecordReaderTest
   }
 
   /**
-   * Auto-detect must skip leading whitespace before sniffing the
-   * first non-whitespace character.
+   * Auto-detect must skip leading whitespace before sniffing the first
+   * non-whitespace character.
    */
   @Test
   public void autoDetectSkipsLeadingWhitespace() throws IOException
@@ -508,8 +508,8 @@ public class RecordReaderTest
   // -------------------------------------------------------------------
 
   /**
-   * The JSON-Lines provider must skip blank lines per the
-   * implementation comment.
+   * The JSON-Lines provider must skip blank lines per the implementation
+   * comment.
    */
   @Test
   public void jsonLinesSkipsBlankLines() throws IOException
@@ -555,8 +555,8 @@ public class RecordReaderTest
   }
 
   /**
-   * A JSON-Lines line that does not start with {@code "{"} must
-   * cause {@code readRecord()} to throw
+   * A JSON-Lines line that does not start with {@code "{"} must cause {@code
+   * readRecord()} to throw
    * {@link IllegalStateException} per the explicit check in the
    * provider.
    */
@@ -571,9 +571,8 @@ public class RecordReaderTest
   }
 
   /**
-   * A JSON-Lines line with unparseable JSON must record the line
-   * number on the {@link RecordReader} and rethrow the parse
-   * exception.
+   * A JSON-Lines line with unparseable JSON must record the line number on the
+   * {@link RecordReader} and rethrow the parse exception.
    */
   @Test
   public void jsonLinesCapturesErrorLineNumberOnParseFailure()
@@ -600,9 +599,8 @@ public class RecordReaderTest
   // -------------------------------------------------------------------
 
   /**
-   * A JSON array containing malformed JSON must surface a
-   * non-null error line number on {@link RecordReader} after
-   * the failing {@code readRecord} call.
+   * A JSON array containing malformed JSON must surface a non-null error line
+   * number on {@link RecordReader} after the failing {@code readRecord} call.
    */
   @Test
   @Execution(ExecutionMode.SAME_THREAD)
@@ -656,8 +654,8 @@ public class RecordReaderTest
   // -------------------------------------------------------------------
 
   /**
-   * The 4-arg constructor must tolerate a null {@code dataSourceMap}
-   * by treating it as the empty map (no remapping).
+   * The 4-arg constructor must tolerate a null {@code dataSourceMap} by
+   * treating it as the empty map (no remapping).
    */
   @Test
   public void constructorToleratesNullDataSourceMap() throws IOException
@@ -673,9 +671,8 @@ public class RecordReaderTest
   }
 
   /**
-   * Empty / whitespace-only sourceId must be normalized to null
-   * (no SOURCE_ID added to records) per the constructor's
-   * post-processing.
+   * Empty / whitespace-only sourceId must be normalized to null (no SOURCE_ID
+   * added to records) per the constructor's post-processing.
    */
   @Test
   public void constructorNormalizesEmptySourceIdToNull() throws IOException

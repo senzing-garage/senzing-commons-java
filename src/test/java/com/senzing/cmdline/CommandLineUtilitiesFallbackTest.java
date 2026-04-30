@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class CommandLineUtilitiesFallbackTest
 {
   /**
-   * When a primary option's primary and synonym env vars are
-   * unset but its fallback env var is set, the fallback env var
-   * value must populate the option as the
+   * When a primary option's primary and synonym env vars are unset but its
+   * fallback env var is set, the fallback env var value must populate the
+   * option as the
    * {@link CommandLineSource#ENVIRONMENT} source.
    */
   @Test
@@ -54,8 +54,8 @@ public class CommandLineUtilitiesFallbackTest
   }
 
   /**
-   * When the primary env var IS set, the fallback path must be
-   * skipped — primary takes precedence.
+   * When the primary env var IS set, the fallback path must be skipped —
+   * primary takes precedence.
    */
   @Test
   public void primaryEnvVarTakesPrecedenceOverFallback() throws Exception

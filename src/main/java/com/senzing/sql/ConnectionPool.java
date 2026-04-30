@@ -96,7 +96,7 @@ public class ConnectionPool implements Quantified
          * {@link Connection} thus far.
          *
          * @return The lifespan (in milliseconds) of the associated {@link
-         *             Connection} thus far.
+         *         Connection} thus far.
          */
         public long getLifespan()
         {
@@ -108,7 +108,7 @@ public class ConnectionPool implements Quantified
          * returns <code>null</code> if not currently leased.
          *
          * @return The {@link PooledConnectionHandler} for the current lease, or
-         *             <code>null</code> if not currently leased.
+         *         <code>null</code> if not currently leased.
          */
         public PooledConnectionHandler getCurrentLeaseHandler()
         {
@@ -827,8 +827,8 @@ public class ConnectionPool implements Quantified
      * <code>null</code> if no isolation level is being enforced.
      *
      * @return The {@link TransactionIsolation} level that is ensured on the
-     *             {@link Connection} instances when they are acquired, or
-     *             <code>null</code> if none is enforced.
+     *         {@link Connection} instances when they are acquired, or
+     *         <code>null</code> if none is enforced.
      */
     public TransactionIsolation getIsolationLevel()
     {
@@ -840,7 +840,7 @@ public class ConnectionPool implements Quantified
      * obtained and the state of the current lease holder threads.
      * 
      * @return The diagnostic {@link String} describing the state of this
-     *             instance.
+     *         instance.
      */
     public synchronized String getDiagnosticLeaseInfo()
     {
@@ -862,7 +862,7 @@ public class ConnectionPool implements Quantified
      * keys to {@link Number} values.
      *
      * @return The statistics for this instance as a {@link Map} of {@link Stat}
-     *             keys to {@link Number} values.
+     *         keys to {@link Number} values.
      */
     public Map<Statistic, Number> getStatistics()
     {
@@ -970,8 +970,8 @@ public class ConnectionPool implements Quantified
      *                maximum wait time and willing to wait indefinitely.
      *
      * @return The {@link Connection} acquired from the pool, or
-     *             <code>null</code> if a connection could not be obtained
-     *             within the time allotted.
+     *         <code>null</code> if a connection could not be obtained within
+     *         the time allotted.
      *
      * @throws SQLException If a failure occurs.
      */
@@ -1308,7 +1308,7 @@ public class ConnectionPool implements Quantified
      * Checks if this {@link ConnectionPool} has been shutdown.
      *
      * @return <code>true</code> if this {@link ConnectionPool} has been
-     *                           shutdown, otherwise <code>false</code>.
+     *         shutdown, otherwise <code>false</code>.
      */
     public synchronized boolean isShutdown()
     {
@@ -1341,7 +1341,8 @@ public class ConnectionPool implements Quantified
         synchronized (this) {
             int waitCount = 0;
             while (this.availableConnections.size()
-                    < this.allConnections.size()) {
+                    < this.allConnections.size())
+            {
                 try {
                     this.wait(WAIT_TIMEOUT);
                     if (waitCount++ > 2) {
@@ -1378,7 +1379,7 @@ public class ConnectionPool implements Quantified
      * by this {@link ConnectionPool}.
      *
      * @return The minimum number of {@link Connection} instances to be
-     *             maintained by this {@link ConnectionPool}.
+     *         maintained by this {@link ConnectionPool}.
      */
     public int getMinimumSize()
     {
@@ -1390,7 +1391,7 @@ public class ConnectionPool implements Quantified
      * {@link ConnectionPool} can grow.
      *
      * @return The maximum number of {@link Connection} instances to which this
-     *             {@link ConnectionPool} can grow.
+     *         {@link ConnectionPool} can grow.
      */
     public int getMaximumSize()
     {
@@ -1403,8 +1404,8 @@ public class ConnectionPool implements Quantified
      * <code>null</code> if no maximum lifespan is configured for this pool.
      *
      * @return The maximum number of milliseconds a {@link Connection} in this
-     *             pool will be used before it is closed and replaced, or
-     *             <code>null</code> if no maximum is configured.
+     *         pool will be used before it is closed and replaced, or
+     *         <code>null</code> if no maximum is configured.
      */
     public Long getExpireTime()
     {
@@ -1422,9 +1423,8 @@ public class ConnectionPool implements Quantified
      * pool.
      *
      * @return The maximum number of times a {@link Connection} will be leased
-     *             from this pool before it is closed and replaced, or
-     *             <code>null</code> if no maximum number of leases is
-     *             configured.
+     *         from this pool before it is closed and replaced, or
+     *         <code>null</code> if no maximum number of leases is configured.
      */
     public Integer getRetireLimit()
     {
@@ -1441,8 +1441,8 @@ public class ConnectionPool implements Quantified
      * <code>null</code> if no connections have been leased.
      *
      * @return The greatest number of {@link Connection} instances that have
-     *             been concurrently leased from the pool at any given time, or
-     *             <code>null</code> if none have ever been leased.
+     *         been concurrently leased from the pool at any given time, or
+     *         <code>null</code> if none have ever been leased.
      */
     public Integer getGreatestLeasedCount()
     {
@@ -1465,9 +1465,9 @@ public class ConnectionPool implements Quantified
      * this returns <code>null</code>.
      *
      * @return The average number of {@link Connection} instances that have been
-     *             acquired from the pool at each time when a {@link Connection}
-     *             is acquired or released, or <code>null</code> if none have
-     *             been acquired.
+     *         acquired from the pool at each time when a {@link Connection} is
+     *         acquired or released, or <code>null</code> if none have been
+     *         acquired.
      */
     public Double getAverageLeasedCount()
     {
@@ -1488,7 +1488,7 @@ public class ConnectionPool implements Quantified
      * returns zero (0).
      *
      * @return The greatest number of connections that the pool has grown to
-     *             over its lifespan.
+     *         over its lifespan.
      */
     public Integer getGreatestPoolSize()
     {
@@ -1503,8 +1503,8 @@ public class ConnectionPool implements Quantified
      * limit}. This returns <code>null</code> if no such maximum limits is set.
      *
      * @return The number of {@link Connection} instances that have been
-     *             expired, or <code>null</code> if connections are not being
-     *             expired.
+     *         expired, or <code>null</code> if connections are not being
+     *         expired.
      */
     public Integer getExpiredConnectionCount()
     {
@@ -1523,8 +1523,8 @@ public class ConnectionPool implements Quantified
      * This returns <code>null</code> if no such maximum limit is set.
      *
      * @return The number of {@link Connection} instances that have been
-     *             retired, or <code>null</code> if connections are not being
-     *             retired.
+     *         retired, or <code>null</code> if connections are not being
+     *         retired.
      */
     public Integer getRetiredConnectionCount()
     {
@@ -1544,8 +1544,8 @@ public class ConnectionPool implements Quantified
      * <code>null</code> if no connections have been acquired.
      *
      * @return The average amount of time in milliseconds that it takes to
-     *             acquire a connection from the pool, or <code>null</code> if
-     *             no connections have been acquired.
+     *         acquire a connection from the pool, or <code>null</code> if no
+     *         connections have been acquired.
      */
     public Double getAverageAcquisitionTime()
     {
@@ -1566,8 +1566,8 @@ public class ConnectionPool implements Quantified
      * connections have been acquired.
      *
      * @return The greatest amount of time in milliseconds that it has taken to
-     *             acquire a connection from the pool, or <code>null</code> if
-     *             no connections have been acquired.
+     *         acquire a connection from the pool, or <code>null</code> if no
+     *         connections have been acquired.
      */
     public Long getGreatestAcquisitionTime()
     {
@@ -1588,8 +1588,8 @@ public class ConnectionPool implements Quantified
      * from this pool instance, then <code>null</code> is returned.
      *
      * @return The greatest amount of time that a connection has been leased, or
-     *             <code>null</code> if no connections have been leased from
-     *             this pool.
+     *         <code>null</code> if no connections have been leased from this
+     *         pool.
      */
     public Long getGreatestLeaseTime()
     {
@@ -1620,8 +1620,8 @@ public class ConnectionPool implements Quantified
      * <code>null</code> is returned.
      *
      * @return The average amount of time it has taken to complete a connection
-     *             lease, or <code>null</code> if no connection leases have
-     *             completed.
+     *         lease, or <code>null</code> if no connection leases have
+     *         completed.
      */
     public Double getAverageLeaseTime()
     {
@@ -1641,7 +1641,7 @@ public class ConnectionPool implements Quantified
      * {@link ConnectionPool} instance.
      *
      * @return The current total number of {@link Connection} instances in this
-     *             {@link ConnectionPool} instance.
+     *         {@link ConnectionPool} instance.
      */
     public int getCurrentPoolSize()
     {
@@ -1655,7 +1655,7 @@ public class ConnectionPool implements Quantified
      * {@link ConnectionPool} instance.
      *
      * @return The current number of available {@link Connection} instances in
-     *             this {@link ConnectionPool} instance.
+     *         this {@link ConnectionPool} instance.
      */
     public int getAvailableConnectionCount()
     {
@@ -1669,7 +1669,7 @@ public class ConnectionPool implements Quantified
      * this {@link ConnectionPool} is waiting.
      *
      * @return The current number of outstanding {@link Connection} leases on
-     *             which this {@link ConnectionPool} is waiting.
+     *         which this {@link ConnectionPool} is waiting.
      */
     public int getOutstandingLeaseCount()
     {
@@ -1683,8 +1683,7 @@ public class ConnectionPool implements Quantified
      * <code>null</code> if there are currently no outstanding leases.
      *
      * @return The longest outstanding lease time in milliseconds, or
-     *             <code>null</code> if there are currently no outstanding
-     *             leases.
+     *         <code>null</code> if there are currently no outstanding leases.
      */
     public Long getGreatestOutstandingLeaseTime()
     {
@@ -1707,8 +1706,7 @@ public class ConnectionPool implements Quantified
      * <code>null</code> if there are currently no outstanding leases.
      *
      * @return The average outstanding lease time in milliseconds, or
-     *             <code>null</code> if there are currently no outstanding
-     *             leases.
+     *         <code>null</code> if there are currently no outstanding leases.
      */
     public Double getAverageOutstandingLeaseTime()
     {
@@ -1730,9 +1728,9 @@ public class ConnectionPool implements Quantified
      * been requested.
      *
      * @return The number of milliseconds that have past since the last {@link
-     *             Connection} lease was requested, or the number of
-     *             milliseconds since construction if a {@link Connection} lease
-     *             has never been requested.
+     *         Connection} lease was requested, or the number of milliseconds
+     *         since construction if a {@link Connection} lease has never been
+     *         requested.
      */
     public long getIdleTime()
     {
@@ -1746,7 +1744,7 @@ public class ConnectionPool implements Quantified
      * of this {@link ConnectionPool}.
      *
      * @return The total number of leases that have been granted over the
-     *             lifetime of this {@link ConnectionPool}.
+     *         lifetime of this {@link ConnectionPool}.
      */
     public long getLifetimeLeaseCount()
     {

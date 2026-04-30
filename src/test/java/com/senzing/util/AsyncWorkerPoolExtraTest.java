@@ -13,9 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Supplementary {@link AsyncWorkerPool.AsyncResult} tests covering
- * the failure-propagation branch in {@link AsyncResult#getValue()}
- * and the failure-formatting branch in
+ * Supplementary {@link AsyncWorkerPool.AsyncResult} tests covering the
+ * failure-propagation branch in {@link AsyncResult#getValue()} and the
+ * failure-formatting branch in
  * {@link AsyncResult#toString()} — both unreachable from the
  * happy-path tasks in {@code AsyncWorkerPoolTest}.
  */
@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class AsyncWorkerPoolExtraTest
 {
   /**
-   * If a task throws, {@link AsyncResult#getValue()} must rethrow
-   * that exception verbatim per the documented contract.
+   * If a task throws, {@link AsyncResult#getValue()} must rethrow that
+   * exception verbatim per the documented contract.
    */
   @Test
   public void asyncResultGetValueRethrowsTaskFailure()
@@ -91,8 +91,8 @@ public class AsyncWorkerPoolExtraTest
 
   /**
    * {@link AsyncResult#toString()} must NOT include a {@code
-   * failure=} segment for a successful task — the failure-segment
-   * is appended only when {@code failure != null}.
+   * failure=} segment for a successful task — the failure-segment is appended
+   * only when {@code failure != null}.
    */
   @Test
   public void asyncResultToStringOmitsFailureSegmentForSuccess()

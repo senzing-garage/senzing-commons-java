@@ -272,8 +272,7 @@ public class IOUtilities
    * @param dir The {@link File} representing the directory.
    *
    * @return <code>true</code> if the directory was created and
-   *                           <code>false</code> if the directory already
-   *                           existed.
+   *         <code>false</code> if the directory already existed.
    *
    * @throws IOException If a failure occurs creating the directory or if the
    *                     named directory exists but is not a directory.
@@ -439,8 +438,8 @@ public class IOUtilities
    * @param inputStream The backing input stream to wrap.
    *
    * @return The {@link InputStream} that is backed by the specified {@link
-   *             InputStream}, but will not close the backing {@link
-   *             InputStream} when closed.
+   *         InputStream}, but will not close the backing {@link InputStream}
+   *         when closed.
    */
   public static InputStream nonClosingWrapper(InputStream inputStream)
   {
@@ -457,8 +456,8 @@ public class IOUtilities
    * @param outputStream The backing output stream to wrap.
    *
    * @return The {@link OutputStream} that is backed by the specified {@link
-   *             OutputStream}, but will not close the backing {@link
-   *             OutputStream} when closed.
+   *         OutputStream}, but will not close the backing {@link OutputStream}
+   *         when closed.
    */
   public static OutputStream nonClosingWrapper(OutputStream outputStream)
   {
@@ -474,7 +473,7 @@ public class IOUtilities
    * @param reader The backing reader to wrap.
    *
    * @return The {@link Reader} that is backed by the specified {@link Reader},
-   *             but will not close the backing {@link Reader} when closed.
+   *         but will not close the backing {@link Reader} when closed.
    */
   public static Reader nonClosingWrapper(Reader reader)
   {
@@ -490,7 +489,7 @@ public class IOUtilities
    * @param writer The backing output stream to wrap.
    *
    * @return The {@link Writer} that is backed by the specified {@link Writer},
-   *             but will not close the backing {@link Writer} when closed.
+   *         but will not close the backing {@link Writer} when closed.
    */
   public static Writer nonClosingWrapper(Writer writer)
   {

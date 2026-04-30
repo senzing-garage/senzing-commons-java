@@ -19,26 +19,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Supplementary tests for {@link TemporaryDataCache} targeting the
- * paths in {@code ChainFileInputStream} that the existing
+ * Supplementary tests for {@link TemporaryDataCache} targeting the paths in
+ * {@code ChainFileInputStream} that the existing
  * {@code TemporaryDataCacheTest} does not exercise:
  * skip-across-multiple-file-parts, the debug-logging branch in
  * {@code attachStream}, and the deleted-while-reading error path.
  *
  * <p>The first file part is sized at 1 KiB, growing 16x per
- * completed part up to 4 MiB. Inputs larger than ~1 KiB therefore
- * produce multi-part caches that exercise the skip / read paths
- * across part boundaries.</p>
+ * completed part up to 4 MiB. Inputs larger than ~1 KiB therefore produce
+ * multi-part caches that exercise the skip / read paths across part
+ * boundaries.</p>
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Execution(ExecutionMode.CONCURRENT)
 public class TemporaryDataCacheExtraTest
 {
   /**
-   * Builds a 200 KiB byte array of repeating digits — large enough
-   * that the cache's first file part (1 KiB) and second file part
-   * (16 KiB) are both filled and a third part is begun, ensuring
-   * any read or skip operation crosses at least two part boundaries.
+   * Builds a 200 KiB byte array of repeating digits — large enough that the
+   * cache's first file part (1 KiB) and second file part (16 KiB) are both
+   * filled and a third part is begun, ensuring any read or skip operation
+   * crosses at least two part boundaries.
    */
   private static byte[] largeBytes()
   {
@@ -50,9 +50,9 @@ public class TemporaryDataCacheExtraTest
   }
 
   /**
-   * Drains an input stream completely, returning the byte count.
-   * Used to wait until the consumer thread has finished writing
-   * before performing teardown actions.
+   * Drains an input stream completely, returning the byte count. Used to wait
+   * until the consumer thread has finished writing before performing teardown
+   * actions.
    */
   private static long drain(InputStream is) throws IOException
   {
@@ -239,9 +239,8 @@ public class TemporaryDataCacheExtraTest
 
   /**
    * {@link TemporaryDataCache#waitUntilAppendingComplete(long)} with
-   * a positive {@code maxWait} must return {@code true} when the
-   * consumer thread completes within the budget, exercising the
-   * bounded-wait branch.
+   * a positive {@code maxWait} must return {@code true} when the consumer
+   * thread completes within the budget, exercising the bounded-wait branch.
    */
   @Test
   public void waitUntilAppendingCompleteWithMaxWaitReturnsTrue()
@@ -291,8 +290,8 @@ public class TemporaryDataCacheExtraTest
   /**
    * {@link TemporaryDataCache#getInputStream(boolean)} with
    * {@code consume == true} must return a stream that deletes each
-   * file part as it is fully read. After draining, all backing
-   * files should be gone.
+   * file part as it is fully read. After draining, all backing files should be
+   * gone.
    */
   @Test
   public void consumingInputStreamDeletesFilePartsAsRead()
@@ -326,9 +325,9 @@ public class TemporaryDataCacheExtraTest
   // -------------------------------------------------------------------
 
   /**
-   * If the source {@link InputStream} throws on read, the consumer
-   * thread must record the failure via {@code setFailure}, and the
-   * next reader-side method must rethrow it via {@code checkFailure}.
+   * If the source {@link InputStream} throws on read, the consumer thread must
+   * record the failure via {@code setFailure}, and the next reader-side method
+   * must rethrow it via {@code checkFailure}.
    *
    * <p>The {@code ConsumerThread} rethrows the wrapped
    * {@link RuntimeException} after recording the failure, which the
@@ -387,8 +386,8 @@ public class TemporaryDataCacheExtraTest
   // -------------------------------------------------------------------
 
   /**
-   * If {@link TemporaryDataCache#delete()} is called while a
-   * consumer stream is open between reads, the next read must throw
+   * If {@link TemporaryDataCache#delete()} is called while a consumer stream is
+   * open between reads, the next read must throw
    * {@link IOException} per the documented "Backing files deleted"
    * branch.
    */

@@ -7,8 +7,8 @@ import java.nio.file.Path;
 import java.util.Comparator;
 
 /**
- * Test-only fixture: builds a fake Senzing installation tree on disk
- * for use by tests of {@link SzInstallLocations} and
+ * Test-only fixture: builds a fake Senzing installation tree on disk for use by
+ * tests of {@link SzInstallLocations} and
  * {@link SzUtilities}.
  *
  * <p>Layout produced by {@link #build()}:
@@ -23,9 +23,9 @@ import java.util.Comparator;
  * </pre>
  *
  * <p>Use {@link #build()} from a {@code @BeforeAll} method, then point
- * the {@code senzing.path} system property at {@link #root()} for
- * each test that needs the install discoverable. {@link #close()}
- * recursively deletes the fixture and is intended to be called from
+ * the {@code senzing.path} system property at {@link #root()} for each test
+ * that needs the install discoverable. {@link #close()} recursively deletes the
+ * fixture and is intended to be called from
  * {@code @AfterAll}.
  */
 final class FakeSenzingInstall implements AutoCloseable
@@ -33,9 +33,9 @@ final class FakeSenzingInstall implements AutoCloseable
   private final Path root;
 
   /**
-   * Builds a fresh fake-install fixture under a unique temp directory
-   * and returns the handle. Throws {@link IOException} only if the
-   * temp tree could not be created.
+   * Builds a fresh fake-install fixture under a unique temp directory and
+   * returns the handle. Throws {@link IOException} only if the temp tree could
+   * not be created.
    */
   static FakeSenzingInstall build() throws IOException
   {

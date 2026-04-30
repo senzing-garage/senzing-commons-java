@@ -19,25 +19,39 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## FAQ MCP Server
 
-This project ships a local FAQ MCP server registered in `.mcp.json` under the
-name `senzing-commons-faq`. Source: `.claude/faq_server.py`; content:
-`.claude/faqs/<category>/<topic>.md`.
+This project ships a local FAQ MCP server registered in `.mcp.json` under
+the name `senzing-commons-faq`. It serves both:
+
+- **Shared FAQs** from the standards-repo submodule
+  (`.java-coding-standards/docs/faqs/`) — coding standards, javadoc reflow
+  rules, system-stubs/ResourceLock test pattern, FAQ-authoring conventions.
+- **Project-local FAQs** from `.claude/faqs/<category>/<topic>.md` —
+  project-specific architecture, conventions, build/release notes,
+  troubleshooting (including this project's `source-edit-policy` rule).
+
+The server merges both into one BM25-ranked search index. Tool surface:
+
+- `mcp__senzing-commons-faq__get_faq_categories`
+- `mcp__senzing-commons-faq__search_faqs(query=...)`
+- `mcp__senzing-commons-faq__get_faq(title=...)`
 
 **Use it BEFORE making design assumptions or troubleshooting.** Specifically:
 
 - Before changing build, test, or release configuration (`pom.xml`, surefire,
-  GPG, `release` profile), call `search_faqs` for relevant topics.
+  checkstyle, jacoco, spotbugs, GPG, `release` profile), call `search_faqs`
+  for relevant topics.
 - Before modifying public APIs in `cmdline`, `io`, `sql`, `util`, etc., search
   for any documented invariants or rationale.
 - When a build, test, or dependency issue surfaces, search the
   `troubleshooting` category first.
 - When unsure what is documented, call `get_faq_categories` to enumerate
-  categories and titles.
+  what's available.
 
 **After resolving a non-obvious issue**, ask the user whether to capture the
-solution as a new FAQ under `.claude/faqs/<category>/<topic>.md`. The
-filename (dashes → spaces) becomes the searchable title. Restart the session
-so the server re-indexes.
+solution as a new FAQ. Project-specific lessons go in
+`.claude/faqs/<category>/<topic>.md`. Lessons about the standards themselves
+go via PR to `senzing-garage/java-coding-standards`. Restart the session so
+the server re-indexes.
 
 FAQs are pulled on demand, so detail is cheap there. Keep CLAUDE.md lean and
 push operational/troubleshooting depth into FAQ files.
@@ -165,44 +179,42 @@ Notable utilities:
 
 ### Testing Configuration
 
-Tests use JUnit Jupiter 6 with parallel execution enabled:
+Tests use JUnit Jupiter 6 with parallel execution enabled (configured in
+`pom.xml` surefire plugin):
 
-- Classes run concurrently (configured in pom.xml surefire plugin)
-- Methods within a class run in same thread
-- Dynamic parallelism factor (1x number of cores)
-- System property `project.build.directory` available in tests
+- Classes run concurrently.
+- Methods within a class run in same thread (default).
+- Dynamic parallelism factor (1x number of cores).
+- System property `project.build.directory` available in tests.
 
 #### System Stubs, ExecutionMode, and ResourceLock
 
 Tests that **stub environment variables** or **capture stdout / stderr**
-must follow the project's `system-stubs` +
-`@Execution(SAME_THREAD)` + `@ResourceLock` pattern to avoid
-build-log noise and inter-class capture races. Before writing such a
-test, search the FAQ:
+must follow the project's `system-stubs` + `@Execution(SAME_THREAD)` +
+`@ResourceLock` pattern to avoid build-log noise and inter-class capture
+races. Before writing such a test, search the FAQ:
 `mcp__senzing-commons-faq__search_faqs(query="system stubs")`.
 
 Headline rules:
 
 - Use `system-stubs-jupiter` **programmatically at the method level**
-  (`new EnvironmentVariables(...).execute(...)`, `new SystemOut()
-  .execute(...)`, `new SystemErr().execute(...)`) — never the
-  `@ExtendWith` annotation form.
-- Tag the test (or the class) with
-  `@Execution(ExecutionMode.SAME_THREAD)` — `System.setOut` /
-  `setErr` are JVM-wide, so concurrent redirects race.
+  (`new EnvironmentVariables(...).execute(...)`, `new SystemOut().execute(...)`,
+  `new SystemErr().execute(...)`) — never the `@ExtendWith` annotation form.
+- Tag the test (or the class) with `@Execution(ExecutionMode.SAME_THREAD)`
+  — `System.setOut` / `setErr` are JVM-wide, so concurrent redirects race.
 - Add `@ResourceLock(Resources.SYSTEM_OUT)` and/or
-  `@ResourceLock(Resources.SYSTEM_ERR)` for cross-class mutual
-  exclusion. When both are present, **always declare
-  `SYSTEM_OUT` first, `SYSTEM_ERR` second** to avoid deadlock.
-- `LoggingUtilities.logDebug` writes to **`System.out`** (not
-  stderr); use `SystemOut` to capture it.
-- If the production code starts a background thread in its
-  constructor, place the `new ...()` call **inside** the
-  `stub.execute(...)` lambda so the redirect is active before the
-  thread starts.
+  `@ResourceLock(Resources.SYSTEM_ERR)` for cross-class mutual exclusion.
+  When both are present, **always declare `SYSTEM_OUT` first, `SYSTEM_ERR`
+  second** to avoid deadlock.
+- `LoggingUtilities.logDebug` writes to **`System.out`** (not stderr); use
+  `SystemOut` to capture it.
+- If the production code starts a background thread in its constructor,
+  place the `new ...()` call **inside** the `stub.execute(...)` lambda so
+  the redirect is active before the thread starts.
 
-Full pattern, examples, and the JVM-warning suppression details
-are in the `testing/system-stubs-and-output-capture` FAQ.
+Full pattern, examples, and the JVM-warning suppression details are in the
+shared `testing/system-stubs-and-output-capture` FAQ (loaded automatically
+by the FAQ MCP server from the submodule).
 
 ## Development Notes
 
@@ -281,42 +293,41 @@ The main branch for pull requests is `main`.
 
 ## Java Coding Standards
 
-**IMPORTANT — apply when generating or modifying Java code:** All Java
-code (new and existing) in this repository must conform to the formatting
-rules in `.claude/java-coding-standards.md`. Apply these rules **from
-the start** — do not write code first and reformat afterward. When in
+**IMPORTANT — apply when generating or modifying Java code:** All Java code
+(new and existing) in this repository must conform to the formatting rules in
+`.java-coding-standards/docs/java-coding-standards.md`. Apply these rules
+**from the start** — do not write code first and reformat afterward. When in
 doubt about a specific case (parameter alignment, method continuation,
-ternary tier, javadoc reflow), read the full standards document or
-search the FAQ:
+ternary tier, javadoc reflow), read the full standards document or search
+the FAQ:
 `mcp__senzing-commons-faq__search_faqs(query="java formatting")`.
 
 ### Quick reference
 
 - **80-character line limit** (enforced by checkstyle via `-Pcheckstyle`).
   Lines beyond 80 chars must be wrapped.
-- **Allman braces** for class/interface/enum/method/constructor
-  definitions (opening `{` on its own line, left-aligned with the
-  declaration).
-- **Same-line braces** for control flow: `if`/`else`/`for`/`while`/
-  `do`/`try`/`catch`/`finally`/`switch`/`synchronized`, lambdas, array
+- **Allman braces** for class/interface/enum/method/constructor definitions
+  (opening `{` on its own line, left-aligned with the declaration).
+- **Same-line braces** for control flow: `if`/`else`/`for`/`while`/`do`/
+  `try`/`catch`/`finally`/`switch`/`synchronized`, lambdas, array
   initializers, static init blocks.
-- **Multi-line conditions**: when an `if`/`catch`/etc. condition wraps
-  to multiple lines, the opening brace goes on its own line (Allman) to
+- **Multi-line conditions**: when an `if`/`catch`/etc. condition wraps to
+  multiple lines, the opening brace goes on its own line (Allman) to
   visually separate condition from body.
-- **Method parameters** (priority order): single line if it fits;
-  otherwise paren-aligned with types/names columnized; otherwise
-  next-line double-indented.
+- **Method parameters** (priority order): single line if it fits; otherwise
+  paren-aligned with types/names aligned in columns; otherwise next-line
+  double-indented.
 - **`throws` clauses** go on their own line, single-indented.
 - **Continuation indentation**: 8 spaces (double indent).
-- **Operators on continuation lines**: break **before** `+`, `&&`, `||`,
-  `?`, `:`, `.` (the operator starts the continuation line).
+- **Operators on continuation lines**: break **before** `+`, `&&`, `||`, `?`,
+  `:`, `.` (the operator starts the continuation line).
 - **Short-circuit `if`**: `if (cond) statement;` on one line is preferred
   (Tier 1) when it fits; otherwise add braces.
-- **Javadoc**: reflow prose and `@param`/`@return`/`@throws` to fill
-  lines near 80 chars; do not leave 1-3 orphan words on a line.
+- **Javadoc**: reflow prose and `@param`/`@return`/`@throws` to fill lines
+  near 80 chars; do not leave 1-3 orphan words on a line.
 - **CSOFF/CSON**: only for deliberately aligned multi-line output
-  (column-formatted diagnostics, ASCII art, SQL DDL with aligned
-  clauses) — never a general escape hatch.
+  (column-formatted diagnostics, ASCII art, SQL DDL with aligned clauses)
+  — never a general escape hatch.
 
 ### Verification
 
@@ -325,23 +336,28 @@ before opening a PR).
 
 ### Bulk formatting scripts
 
-Five scripts in `.claude/scripts/` (run from project root) automate
-common reformat passes — useful when reformatting existing files but
-**not a substitute** for writing compliant code in the first place:
+Five scripts in `.java-coding-standards/tooling/scripts/` (run from project
+root) automate common reformat passes — useful for legacy code or batch
+updates, **not a substitute** for writing compliant code in the first
+place:
 
-- `python3 .claude/scripts/fix_allman_braces.py` — brace placement.
-- `python3 .claude/scripts/fix_javadoc_reflow.py` — javadoc prose
-  reflow.
-- `python3 .claude/scripts/fix_javadoc_inline_tags.py` — javadoc
-  reflow for paragraphs containing `{@link}`/`<code>` (cases the
-  base reflow script skips).
-- `python3 .claude/scripts/fix_javadoc_tags.py` — `@param`/`@return`/
-  `@throws` description reflow.
-- `python3 .claude/scripts/fix_need_braces.py` — collapses
-  short-circuit `if`/`else` to single-line (Tier 1) when it fits,
-  else adds braces (Tier 2).
+- `python3 .java-coding-standards/tooling/scripts/fix_allman_braces.py`
+- `python3 .java-coding-standards/tooling/scripts/fix_javadoc_reflow.py`
+- `python3 .java-coding-standards/tooling/scripts/fix_javadoc_inline_tags.py`
+- `python3 .java-coding-standards/tooling/scripts/fix_javadoc_tags.py`
+- `python3 .java-coding-standards/tooling/scripts/fix_need_braces.py`
 
-VSCode formatter config (`.vscode/java-formatter.xml`) handles Allman
-for methods/types and same-line for control flow but cannot fully
-enforce all rules. The `building/java-formatting-standards` FAQ
+For single-file reformatting (used by the VSCode keybinding and the Claude
+Code `PostToolUse` hook):
+
+```bash
+python3 .java-coding-standards/tooling/scripts/format_file.py path/to/File.java
+```
+
+The orchestrator runs all five scripts in canonical order against the
+single file.
+
+VSCode formatter config (`.java-coding-standards/tooling/ide/java-formatter.xml`)
+handles Allman for methods/types and same-line for control flow but cannot
+fully enforce all rules. The `building/java-formatting-standards` FAQ
 summarizes day-to-day usage.

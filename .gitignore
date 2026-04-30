@@ -32,8 +32,10 @@ target
 # Visual Studio code
 .vscode/*
 !.vscode/cspell.json
+!.vscode/extensions.json
 !.vscode/settings.json
 !.vscode/java-formatter.xml
 !.vscode/jdt-prefs.epf
+!.vscode/tasks.json
 *.code-workspace
 .history

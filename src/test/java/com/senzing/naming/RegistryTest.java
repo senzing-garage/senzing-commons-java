@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * <p>Each test asserts the documented contract from {@link Registry}'s
  * javadoc — exception conditions on every {@code @throws} clause, the
- * return-value rules in each {@code @return}, and the cross-method
- * invariants such as the {@link AccessToken} authorization on
+ * return-value rules in each {@code @return}, and the cross-method invariants
+ * such as the {@link AccessToken} authorization on
  * {@link Registry#unbind(String, AccessToken)}.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -36,8 +36,8 @@ public class RegistryTest
   // -------------------------------------------------------------------
 
   /**
-   * The default {@code Registry()} constructor must produce an instance
-   * that disallows {@code null} bindings, per the constructor's javadoc.
+   * The default {@code Registry()} constructor must produce an instance that
+   * disallows {@code null} bindings, per the constructor's javadoc.
    */
   @Test
   public void defaultConstructorDisallowsNullBindings()
@@ -181,8 +181,8 @@ public class RegistryTest
 
   /**
    * {@code lookup(null)} must throw {@link NullPointerException} per
-   * the javadoc {@code @throws NullPointerException If the specified
-   * name is null.}
+   * the javadoc {@code @throws NullPointerException If the specified name is
+   * null.}
    */
   @Test
   public void lookupThrowsNpeForNullName()
@@ -329,8 +329,8 @@ public class RegistryTest
   }
 
   /**
-   * After a successful {@code unbind}, the same name must be
-   * re-bindable with a fresh value and a fresh {@link AccessToken}.
+   * After a successful {@code unbind}, the same name must be re-bindable with a
+   * fresh value and a fresh {@link AccessToken}.
    */
   @Test
   public void rebindAfterUnbindSucceeds() throws Exception
@@ -346,8 +346,8 @@ public class RegistryTest
   }
 
   /**
-   * After unbind + rebind, the original (now-stale) token must not
-   * authorize a subsequent unbind — it should throw
+   * After unbind + rebind, the original (now-stale) token must not authorize a
+   * subsequent unbind — it should throw
    * {@link NoPermissionException}.
    */
   @Test

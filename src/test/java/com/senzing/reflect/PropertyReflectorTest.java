@@ -614,8 +614,8 @@ public class PropertyReflectorTest
 
   /**
    * Bean with a boolean property exposed via the {@code isXxx} naming
-   * convention rather than {@code getXxx}. Used to exercise the
-   * is-prefix accessor branch in the PropertyReflector constructor.
+   * convention rather than {@code getXxx}. Used to exercise the is-prefix
+   * accessor branch in the PropertyReflector constructor.
    */
   protected static class BoolBean
   {
@@ -629,9 +629,9 @@ public class PropertyReflectorTest
   }
 
   /**
-   * Bean with a property that has only a setter (write-only property).
-   * Used to exercise the {@code getPropertyValue} branch where the
-   * key exists in the mutator map but not the accessor map.
+   * Bean with a property that has only a setter (write-only property). Used to
+   * exercise the {@code getPropertyValue} branch where the key exists in the
+   * mutator map but not the accessor map.
    */
   protected static class WriteOnlyBean
   {
@@ -644,8 +644,8 @@ public class PropertyReflectorTest
   }
 
   /**
-   * Bean with a property that has overloaded setters of different
-   * argument types. Used to exercise the type-matching branches in
+   * Bean with a property that has overloaded setters of different argument
+   * types. Used to exercise the type-matching branches in
    * {@code setPropertyValue}: exact-type match, primitive
    * promotion, and assignable-from fallback.
    */
@@ -661,9 +661,9 @@ public class PropertyReflectorTest
   }
 
   /**
-   * Bean with a single non-primitive property mutator. Used to
-   * verify that {@code setPropertyValue(target, key, null)}
-   * succeeds when the (only) mutator accepts a non-primitive type.
+   * Bean with a single non-primitive property mutator. Used to verify that
+   * {@code setPropertyValue(target, key, null)} succeeds when the (only)
+   * mutator accepts a non-primitive type.
    */
   protected static class NullableSetterBean
   {
@@ -690,8 +690,8 @@ public class PropertyReflectorTest
   /**
    * Bean exercising every {@code switch} case in
    * {@code PropertyReflector.buildJsonObject} for the JSON-type
-   * dispatch — Integer / Short / Long / Float / Double / Boolean /
-   * BigDecimal / BigInteger / String / Collection / array.
+   * dispatch — Integer / Short / Long / Float / Double / Boolean / BigDecimal /
+   * BigInteger / String / Collection / array.
    */
   protected static class TypedBean
   {
@@ -755,9 +755,8 @@ public class PropertyReflectorTest
    * For a read-only property (no setter),
    * {@link PropertyReflector#setPropertyValue} must throw
    * {@link UnsupportedOperationException} per the existing
-   * Rectangle "area"/"perimeter" cases. Adds a regression-style
-   * assertion using the dedicated {@code Address} fixture which is
-   * already entirely read-only.
+   * Rectangle "area"/"perimeter" cases. Adds a regression-style assertion using
+   * the dedicated {@code Address} fixture which is already entirely read-only.
    */
   @Test
   public void setPropertyValueThrowsUnsupportedForReadOnlyProperty()
@@ -774,8 +773,8 @@ public class PropertyReflectorTest
   // -------------------------------------------------------------------
 
   /**
-   * When multiple setters are available and the value type is an
-   * exact match for one of them, that setter must be selected.
+   * When multiple setters are available and the value type is an exact match
+   * for one of them, that setter must be selected.
    */
   @Test
   public void setPropertyValueExactTypeMatchSelectsCorrectOverload()
@@ -789,9 +788,8 @@ public class PropertyReflectorTest
   }
 
   /**
-   * When the value is a boxed type (Integer) and there's a primitive
-   * overload (int), the primitive-promotion fallback must select
-   * the int overload.
+   * When the value is a boxed type (Integer) and there's a primitive overload
+   * (int), the primitive-promotion fallback must select the int overload.
    */
   @Test
   public void setPropertyValuePrimitivePromotionSelectsIntOverload()
@@ -807,9 +805,9 @@ public class PropertyReflectorTest
 
   /**
    * When neither exact match nor primitive promotion applies, the
-   * isAssignableFrom fallback must select an overload whose
-   * parameter type is a supertype of the value's type — here,
-   * passing a {@link Date} to a class that has only
+   * isAssignableFrom fallback must select an overload whose parameter type is a
+   * supertype of the value's type — here, passing a {@link Date} to a class
+   * that has only
    * {@code setTag(String)}, {@code setTag(int)}, and
    * {@code setTag(Object)} must select the Object overload.
    */
@@ -827,9 +825,9 @@ public class PropertyReflectorTest
   }
 
   /**
-   * Setting {@code null} on a property whose mutator accepts a
-   * non-primitive type must succeed and the value must be
-   * observable as {@code null} via {@code getPropertyValue}.
+   * Setting {@code null} on a property whose mutator accepts a non-primitive
+   * type must succeed and the value must be observable as {@code null} via
+   * {@code getPropertyValue}.
    */
   @Test
   public void setPropertyValueAcceptsNullForNonPrimitiveSetter()
@@ -846,10 +844,9 @@ public class PropertyReflectorTest
   }
 
   /**
-   * Setting {@code null} on a property whose only mutator accepts a
-   * primitive type must throw {@link NullPointerException} with a
-   * descriptive message (per the implementation's comment "no
-   * primitives allowed").
+   * Setting {@code null} on a property whose only mutator accepts a primitive
+   * type must throw {@link NullPointerException} with a descriptive message
+   * (per the implementation's comment "no primitives allowed").
    */
   @Test
   public void setPropertyValueRejectsNullForPrimitiveOnlySetter()
@@ -874,11 +871,11 @@ public class PropertyReflectorTest
 
   /**
    * {@link PropertyReflector#toJsonObject(Object)} on a Java-bean
-   * with one accessor per documented {@code switch} case must
-   * produce a JSON object whose keys are the property names and
-   * whose values match the corresponding JSON-type representation
-   * for each Java type (Integer, Short, Long, Float, Double,
-   * Boolean, BigDecimal, BigInteger, String, Collection, array).
+   * with one accessor per documented {@code switch} case must produce a JSON
+   * object whose keys are the property names and whose values match the
+   * corresponding JSON-type representation for each Java type (Integer, Short,
+   * Long, Float, Double, Boolean, BigDecimal, BigInteger, String, Collection,
+   * array).
    */
   @Test
   public void toJsonObjectDispatchesEveryDocumentedType()
@@ -929,11 +926,11 @@ public class PropertyReflectorTest
   }
 
   /**
-   * A {@link Map} input with non-String keys must NOT be treated as
-   * a key/value JSON object — instead, the implementation falls
-   * through to bean reflection on the {@link Map} class itself
-   * (which produces an empty/near-empty result, since {@link Map}'s
-   * own getters are inherited from {@link Object} and skipped).
+   * A {@link Map} input with non-String keys must NOT be treated as a key/value
+   * JSON object — instead, the implementation falls through to bean reflection
+   * on the {@link Map} class itself (which produces an empty/near-empty result,
+   * since {@link Map}'s own getters are inherited from {@link Object} and
+   * skipped).
    */
   @Test
   public void toJsonObjectFallsBackToBeanReflectionForNonStringMap()
