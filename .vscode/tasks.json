@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Format Java file to Senzing standards",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/.java-coding-standards/tooling/scripts/format_file.py",
+        "${file}"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Format and reload Java file (Senzing standards)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Format Java file to Senzing standards"
+      ],
+      "command": "${command:workbench.action.files.revert}",
+      "problemMatcher": []
+    }
+  ]
+}
