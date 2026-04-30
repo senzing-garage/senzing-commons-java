@@ -21,6 +21,44 @@ version 3.8.5 or later) as well as OpenJDK version 17.0.x.  All other dependenci
 for `senzing-commons-java` are maintained in the `pom.xml` file. No additional
 dependencies are required.
 
+## Cloning
+
+This repository uses a git submodule mounted at `.java-coding-standards/`
+that ships the shared formatter profile, checkstyle config, bulk-format
+scripts, and FAQ MCP server consumed by Maven, the IDE, and Claude Code.
+The submodule must be initialized before the build will work — a plain
+`git clone` is not enough.
+
+Either clone with submodules in one step:
+
+```console
+git clone --recurse-submodules https://github.com/senzing-garage/senzing-commons-java.git
+```
+
+Or initialize after a plain clone:
+
+```console
+git clone https://github.com/senzing-garage/senzing-commons-java.git
+cd senzing-commons-java
+git submodule update --init --recursive
+```
+
+After pulling changes that bump the submodule pin, refresh the local
+checkout with:
+
+```console
+git submodule update --init --recursive
+```
+
+CI workflows must check out submodules too — `actions/checkout@v6` with
+`submodules: recursive` (or equivalent for other CI systems).
+
+If you build without initializing submodules, Maven will fail with an
+"Unable to find configuration file" error from
+`maven-checkstyle-plugin`, the IDE will not pick up the formatter
+profile, and the FAQ MCP server entry in `.mcp.json` will fail to
+start.
+
 ## Building
 
 This is a Maven project and as such standard Maven commands are used to build it:
