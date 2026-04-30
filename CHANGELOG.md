@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+**Migration note:** This release adopts a git submodule at
+`.java-coding-standards/`. After pulling, contributors must run
+`git submodule update --init --recursive` (or clone with
+`--recurse-submodules`) before the build will work — without it,
+checkstyle config, formatter profile, and the FAQ MCP server source
+will be missing and `mvn -Pcheckstyle validate` will fail with
+"Unable to find configuration file". CI workflows must use
+`submodules: recursive` (or equivalent) on checkout. Contributors
+who use Claude Code against this repository also need
+[`jq`](https://jqlang.github.io/jq/) on their `PATH` for the
+`PostToolUse` auto-format hook to function — see README
+"Dependencies".
+
 ### Changed
 
 - Adopted `senzing-garage/java-coding-standards` as a git submodule
@@ -68,23 +81,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The project-local `.claude/faqs/conventions/source-edit-policy.md`
   is preserved (it's a project-specific workflow rule, not part of
   the shared standards).
-
-### Migration
-
-After pulling this change, contributors must initialize the new
-submodule before the build will work:
-
-```bash
-git pull
-git submodule update --init --recursive
-```
-
-A clone done without `--recurse-submodules` will be missing the
-checkstyle config, formatter profile, and FAQ-server source — the
-build will fail until `git submodule update --init` is run.
-
-CI workflows that already do `submodules: recursive` on checkout
-need no change. Workflows that don't must add it.
 
 ## [4.0.0] - 2026-04-28
 

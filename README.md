@@ -17,9 +17,16 @@ classes from [senzing-garage/senzing-api-server].
 ## Dependencies
 
 To build the Senzing Commons Java Library you will need Apache Maven (recommend
-version 3.8.5 or later) as well as OpenJDK version 17.0.x.  All other dependencies
-for `senzing-commons-java` are maintained in the `pom.xml` file. No additional
-dependencies are required.
+version 3.8.5 or later) as well as OpenJDK version 17.0.x.  All other build
+dependencies for `senzing-commons-java` are maintained in the `pom.xml` file.
+
+The Claude Code `PostToolUse` hook configured in `.claude/settings.json`
+parses tool-input JSON with [`jq`](https://jqlang.github.io/jq/) to extract
+the path of the file being edited. Contributors who use Claude Code against
+this repository need `jq` on their `PATH`; everyone else can ignore it.
+Install via Homebrew (`brew install jq`), apt (`sudo apt install jq`), or
+the equivalent for your platform. The hook is silent on missing `jq` (the
+auto-format step is a no-op), so the build still succeeds without it.
 
 ## Cloning
 
