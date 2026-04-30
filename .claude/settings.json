@@ -26,7 +26,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}/.java-coding-standards\" 2>/dev/null && git fetch -q origin main 2>/dev/null && [[ $(git rev-list --count HEAD..origin/main) -gt 0 ]] && echo \"NOTE: .java-coding-standards is $(git rev-list --count HEAD..origin/main) commits behind upstream/main. Run /init-java to refresh.\" || true'"
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}/.java-coding-standards\" 2>/dev/null && git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=3 fetch -q origin main 2>/dev/null && [[ $(git rev-list --count HEAD..origin/main) -gt 0 ]] && echo \"NOTE: .java-coding-standards is $(git rev-list --count HEAD..origin/main) commits behind upstream/main. Run /init-java to refresh.\" || true'"
           }
         ]
       }
