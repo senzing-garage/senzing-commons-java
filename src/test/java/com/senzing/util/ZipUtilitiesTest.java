@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import static org.junit.jupiter.api.Assertions.*;
@@ -614,6 +615,41 @@ public class ZipUtilitiesTest
         } finally {
             System.setOut(originalOut);
         }
+    }
+
+    @Test
+    public void unzipRejectsZipSlipTraversal()
+        throws IOException
+    {
+        // Construct a ZIP carrying a single entry whose name escapes
+        // the target directory via `..`. unzip() must refuse to
+        // extract it; the file must never appear on disk outside
+        // the target. CWE-22 / Snyk "Zip Slip".
+        File targetDir = tempDirectory();
+        File zipFile = File.createTempFile("zipslip-", ".zip");
+        zipFile.deleteOnExit();
+        try (ZipOutputStream zos = new ZipOutputStream(
+            new FileOutputStream(zipFile))) {
+            zos.putNextEntry(new ZipEntry("../escape.txt"));
+            zos.write("pwned".getBytes(StandardCharsets.UTF_8));
+            zos.closeEntry();
+        }
+        try (ZipInputStream zis = new ZipInputStream(
+            new FileInputStream(zipFile))) {
+            IOException ex = assertThrows(
+                IOException.class,
+                () -> ZipUtilities.unzip(zis, targetDir),
+                "unzip() must refuse a Zip Slip traversal entry");
+            assertTrue(
+                ex.getMessage().contains("outside target"),
+                "exception message should explain the refusal; "
+                + "got: " + ex.getMessage());
+        }
+        File escaped = new File(targetDir.getParentFile(), "escape.txt");
+        assertFalse(
+            escaped.exists(),
+            "Zip Slip target should never have been created: "
+            + escaped);
     }
 
     private static int countOccurrences(String haystack, String needle)

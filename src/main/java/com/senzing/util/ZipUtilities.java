@@ -379,10 +379,11 @@ public class ZipUtilities
     public static void unzip(ZipInputStream zipStream, File targetDirectory)
         throws IOException
     {
+        File canonicalTargetDir = targetDirectory.getCanonicalFile();
         byte[] buffer = new byte[8192];
         for (ZipEntry zipEntry = zipStream.getNextEntry();
-         zipEntry != null;
-         zipEntry = zipStream.getNextEntry())
+             zipEntry != null;
+             zipEntry = zipStream.getNextEntry())
         {
             String name = zipEntry.getName();
             long size = zipEntry.getSize();
@@ -390,14 +391,33 @@ public class ZipUtilities
             if (File.separatorChar != '/') {
                 name = name.replace('/', File.separatorChar);
             }
-            File targetFile = new File(targetDirectory, name);
+            File targetFile = new File(canonicalTargetDir, name);
+            // Zip Slip guard: refuse any entry whose resolved path
+            // lands outside the target directory. Canonical-path
+            // comparison defeats `..` segments and symlink games
+            // embedded in the entry name.
+            File canonicalTarget = targetFile.getCanonicalFile();
+            if (!canonicalTarget.toPath().startsWith(
+                canonicalTargetDir.toPath())) {
+                throw new IOException(
+                    "Refusing to extract zip entry outside target "
+                    + "directory: " + zipEntry.getName());
+            }
             if (directory) {
                 targetFile.mkdirs();
             } else {
+                // Some archive writers omit standalone directory
+                // entries, so the parent of a file entry may not
+                // exist yet on disk — create it here so the
+                // FileOutputStream open below does not fail.
+                File parent = targetFile.getParentFile();
+                if (parent != null && !parent.isDirectory()) {
+                    parent.mkdirs();
+                }
                 try (FileOutputStream fos = new FileOutputStream(targetFile)) {
                     for (int count = zipStream.read(buffer);
-               count >= 0;
-               count = zipStream.read(buffer))
+                         count >= 0;
+                         count = zipStream.read(buffer))
                     {
                         fos.write(buffer, 0, count);
                     }

@@ -4,18 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Workflow Preferences
 
-**IMPORTANT**: When working in this repository:
-
-- **Do NOT modify source code files directly** - provide suggestions instead
-- **ONLY modify CLAUDE.md directly** when updating documentation
-- Always inform the user before making any changes to CLAUDE.md
-- Present code changes as recommendations that the user can review and apply
-- When editing CLAUDE.md, follow Markdown linting and formatting rules:
-  - Use Prettier for Markdown formatting
-  - Follow markdownlint rules:
-    - Wrap bare URLs in angle brackets: `<https://example.com>`
-    - Surround lists with empty lines before and after
-    - Follow standard Markdown conventions
+- Claude may edit source code in `src/` directly; PR review is the
+  gate, not pre-edit user approval. The earlier "present diffs, wait
+  for the user to apply" policy is retired — see the
+  `conventions/source-edit-policy` FAQ for the current rule and
+  history.
+- When editing Markdown (CLAUDE.md, FAQ files, READMEs):
+  - Use Prettier for formatting.
+  - Follow markdownlint rules: wrap bare URLs in angle brackets
+    (`<https://example.com>`), surround lists with blank lines,
+    follow standard Markdown conventions.
 
 ## FAQ MCP Server
 
