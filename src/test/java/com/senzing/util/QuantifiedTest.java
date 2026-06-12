@@ -4,10 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-
 import java.util.Collections;
 import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -25,59 +23,59 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 @Execution(ExecutionMode.CONCURRENT)
 public class QuantifiedTest
 {
-  /**
-   * Test fixture: an enum nested inside this test class implementing
-   * {@link Quantified.Statistic}. Its enclosing class is
-   * {@code QuantifiedTest}, so the default {@code getName()} must
-   * return {@code "QuantifiedTest:&lt;name&gt;"}.
-   */
-  protected enum FixtureStat implements Quantified.Statistic
-  {
-    HITS,
-    MISSES;
-
-    @Override
-    public String getUnits()
+    /**
+     * Test fixture: an enum nested inside this test class implementing
+     * {@link Quantified.Statistic}. Its enclosing class is
+     * {@code QuantifiedTest}, so the default {@code getName()} must
+     * return {@code "QuantifiedTest:&lt;name&gt;"}.
+     */
+    protected enum FixtureStat implements Quantified.Statistic
     {
-      return "count";
+        HITS,
+        MISSES;
+
+        @Override
+        public String getUnits()
+        {
+            return "count";
+        }
     }
-  }
 
-  /**
-   * The default {@link Quantified.Statistic#getName()} must produce
-   * {@code "<EnclosingClass>:<toString()>"} when the implementing
-   * class has an enclosing class — verified for the nested
-   * {@link FixtureStat} enum.
-   */
-  @Test
-  public void defaultGetNameUsesEnclosingClassPrefix()
-  {
-    assertEquals("QuantifiedTest:HITS", FixtureStat.HITS.getName());
-    assertEquals("QuantifiedTest:MISSES",
+    /**
+     * The default {@link Quantified.Statistic#getName()} must produce
+     * {@code "<EnclosingClass>:<toString()>"} when the implementing
+     * class has an enclosing class — verified for the nested
+     * {@link FixtureStat} enum.
+     */
+    @Test
+    public void defaultGetNameUsesEnclosingClassPrefix()
+    {
+        assertEquals("QuantifiedTest:HITS", FixtureStat.HITS.getName());
+        assertEquals("QuantifiedTest:MISSES",
                  FixtureStat.MISSES.getName());
-  }
+    }
 
-  /**
-   * The abstract {@link Quantified.Statistic#getUnits()} method must dispatch
-   * to the implementation's value.
-   */
-  @Test
-  public void getUnitsReturnsImplementationValue()
-  {
-    assertEquals("count", FixtureStat.HITS.getUnits());
-  }
+    /**
+     * The abstract {@link Quantified.Statistic#getUnits()} method must dispatch
+     * to the implementation's value.
+     */
+    @Test
+    public void getUnitsReturnsImplementationValue()
+    {
+        assertEquals("count", FixtureStat.HITS.getUnits());
+    }
 
-  /**
-   * The abstract {@link Quantified#getStatistics()} method must be dispatched
-   * correctly to a lambda implementation. Exercises the outer-interface
-   * contract to give it line coverage and to confirm the abstract-method shape
-   * works with a method-reference style impl.
-   */
-  @Test
-  public void getStatisticsDispatchesToImplementation()
-  {
-    Map<Quantified.Statistic, Number> sample = Collections.emptyMap();
-    Quantified q = () -> sample;
-    assertSame(sample, q.getStatistics());
-  }
+    /**
+     * The abstract {@link Quantified#getStatistics()} method must be dispatched
+     * correctly to a lambda implementation. Exercises the outer-interface
+     * contract to give it line coverage and to confirm the abstract-method
+     * shape works with a method-reference style impl.
+     */
+    @Test
+    public void getStatisticsDispatchesToImplementation()
+    {
+        Map<Quantified.Statistic, Number> sample = Collections.emptyMap();
+        Quantified q = () -> sample;
+        assertSame(sample, q.getStatistics());
+    }
 }

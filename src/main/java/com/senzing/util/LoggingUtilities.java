@@ -39,7 +39,7 @@ public class LoggingUtilities
      * Thread-local {@link Boolean} flag controlling debug logging for a
      * specific thread.
      */
-    private static final ThreadLocal<Stack<Boolean>> THREAD_DEBUG_LOGGING 
+    private static final ThreadLocal<Stack<Boolean>> THREAD_DEBUG_LOGGING
         = new ThreadLocal<>();
 
     /**
@@ -47,8 +47,7 @@ public class LoggingUtilities
      * LocalDateTime instance.
      */
     private static final DateTimeFormatter LOG_DATE_FORMATTER
-            = DateTimeFormatter.ofPattern(LOG_DATE_PATTERN)
-                    .withZone(LOG_DATE_ZONE);
+        = DateTimeFormatter.ofPattern(LOG_DATE_PATTERN).withZone(LOG_DATE_ZONE);
 
     /**
      * The base product ID to log with if the calling package is not overridden.
@@ -63,12 +62,14 @@ public class LoggingUtilities
     /**
      * The last logged exception in this thread.
      */
-    private static final ThreadLocal<Long> LAST_LOGGED_EXCEPTION = new ThreadLocal<>();
+    private static final ThreadLocal<Long> LAST_LOGGED_EXCEPTION
+        = new ThreadLocal<>();
 
     /**
      * The {@link Map} of package prefixes to product ID's.
      */
-    private static final Map<String, String> PRODUCT_ID_MAP = new LinkedHashMap<>();
+    private static final Map<String, String> PRODUCT_ID_MAP
+        = new LinkedHashMap<>();
 
     /**
      * Private default constructor
@@ -83,7 +84,7 @@ public class LoggingUtilities
      * specified package name.
      *
      * @param packageName The package name.
-     * @param productId   The product ID to use for the package.
+     * @param productId The product ID to use for the package.
      */
     public static void setProductIdForPackage(String packageName,
             String productId)
@@ -114,7 +115,7 @@ public class LoggingUtilities
                 // with com.senzing and get next part
                 int prefixLength = "com.senzing.".length();
                 if (packageName.startsWith("com.senzing.")
-                        && packageName.length() > prefixLength) {
+                    && packageName.length() > prefixLength) {
                     int index = packageName.indexOf(".", prefixLength);
                     if (index < 0) {
                         index = packageName.length();
@@ -127,9 +128,8 @@ public class LoggingUtilities
                 if (index <= 0) break;
                 if (index == (packageName.length() - 1)) break;
                 packageName = packageName.substring(0, index);
-
-            } while (packageName.length() > 0
-                    && !packageName.equals("com.senzing"));
+            } while (packageName.length() > 0 && !packageName.equals(
+                "com.senzing"));
 
             // return the base product ID if we get here
             return BASE_PRODUCT_ID;
@@ -144,10 +144,10 @@ public class LoggingUtilities
      * <p>
      * <b>NOTE:</b> Calls to this function should be balanced
      * with a call to {@link #clearDebugOverride()} in a finally block.
-     * 
+     *
      * @param debug <code>true</code> if this thread should enable debug
      *              logging, otherwise <code>false</code>.
-     * 
+     *
      * @see #clearDebugOverride()
      */
     public static void overrideDebugLogging(boolean debug)
@@ -162,7 +162,7 @@ public class LoggingUtilities
 
     /**
      * Clears a previous debug logging override.
-     * 
+     *
      * @see #overrideDebugLogging(boolean)
      */
     public static void clearDebugOverride()
@@ -179,7 +179,7 @@ public class LoggingUtilities
      * Checks if debug logging is enabled.
      *
      * @return <code>true</code> if debug logging is enabled, and
-     *                           <code>false</code> if not.
+     *         <code>false</code> if not.
      */
     public static boolean isDebugLogging()
     {
@@ -214,8 +214,8 @@ public class LoggingUtilities
      *
      * @param throwable The {@link Throwable} whose stack trace should be
      *                  logged.
-     * @param lines     The lines of text to log, which may be objects that will
-     *                  be converted to text via {@link Object#toString()}.
+     * @param lines The lines of text to log, which may be objects that will be
+     *              converted to text via {@link Object#toString()}.
      */
     public static void logError(Throwable throwable, Object... lines)
     {
@@ -241,8 +241,8 @@ public class LoggingUtilities
      *
      * @param throwable The {@link Throwable} whose stack trace should be
      *                  logged.
-     * @param lines     The lines of text to log, which may be objects that will
-     *                  be converted to text via {@link Object#toString()}.
+     * @param lines The lines of text to log, which may be objects that will be
+     *              converted to text via {@link Object#toString()}.
      */
     public static void logWarning(Throwable throwable, Object... lines)
     {
@@ -280,12 +280,12 @@ public class LoggingUtilities
      * timestamp using the specified {@link PrintStream}, {@link Object} to
      * synchronize on, {@link String} log type and lines of text to log.
      *
-     * @param ps        The {@link PrintStream} to write to.
-     * @param monitor   The {@link Object} to synchronize on when writing and
-     *                  flushing the {@link PrintStream}.
-     * @param logType   The logging type such as <code>"DEBUG"</code> or
-     *                  <code>"ERROR"</code>.
-     * @param lines     The lines of text to log.
+     * @param ps The {@link PrintStream} to write to.
+     * @param monitor The {@link Object} to synchronize on when writing and
+     *                flushing the {@link PrintStream}.
+     * @param logType The logging type such as <code>"DEBUG"</code> or
+     *                <code>"ERROR"</code>.
+     * @param lines The lines of text to log.
      * @param throwable The exception to log.
      */
     private static void log(PrintStream ps,
@@ -308,13 +308,22 @@ public class LoggingUtilities
         StringBuilder sb = new StringBuilder();
         String timestamp = LOG_DATE_FORMATTER.format(
                 Instant.now().atZone(LOG_DATE_ZONE));
-        sb.append(timestamp).append(" senzing-").append(productId)
-                .append(" (").append(logType).append(")")
-                .append(" [").append(Thread.currentThread().getId())
-                .append("|").append(callingClass).append(".")
-                .append(caller.getMethodName()).append(":")
-                .append(caller.getLineNumber()).append("] ")
-                .append(multilineFormat(lines));
+        sb.append(timestamp)
+          .append(" senzing-")
+          .append(productId)
+          .append(" (")
+          .append(logType)
+          .append(")")
+          .append(" [")
+          .append(Thread.currentThread().getId())
+          .append("|")
+          .append(callingClass)
+          .append(".")
+          .append(caller.getMethodName())
+          .append(":")
+          .append(caller.getLineNumber())
+          .append("] ")
+          .append(multilineFormat(lines));
 
         // handle the stack trace if a throwable is provided
         if (throwable != null) {
@@ -333,13 +342,13 @@ public class LoggingUtilities
     /**
      * Formats an array of {@link StackTraceElement} instances using {@link
      * #formatStackTrace(StackTraceElement)} with a single element per line.
-     * 
+     *
      * @param stackTrace The array of {@link StackTraceElement} instances to
      *                   format.
-     * 
+     *
      * @return The formatted {@link String} describing the array of {@link
-     *             StackTraceElement} instances or <code>null</code> if the
-     *             specified array is <code>null</code>.
+     *         StackTraceElement} instances or <code>null</code> if the
+     *         specified array is <code>null</code>.
      */
     public static String formatStackTrace(StackTraceElement[] stackTrace)
     {
@@ -356,11 +365,11 @@ public class LoggingUtilities
      * Formats a single {@link StackTraceElement} in the same format as they
      * would appear in an exception stack trace with the prefixing and
      * indentation.
-     * 
+     *
      * @param elem The {@link StackTraceElement} to format.
-     * 
+     *
      * @return The formatted {@link String} describing the {@link
-     *             StackTraceElement}.
+     *         StackTraceElement}.
      */
     public static String formatStackTrace(StackTraceElement elem)
     {
@@ -373,11 +382,11 @@ public class LoggingUtilities
      * Formats a single {@link StackTraceElement} in the same format as they
      * would appear in an exception stack trace sans the prefixing and
      * indentation.
-     * 
+     *
      * @param elem The {@link StackTraceElement} to format.
-     * 
+     *
      * @return The formatted {@link String} describing the {@link
-     *             StackTraceElement}.
+     *         StackTraceElement}.
      */
     public static String formatStackFrame(StackTraceElement elem)
     {
@@ -389,15 +398,15 @@ public class LoggingUtilities
      * Formats a single {@link StackTraceElement} in the same format as they
      * would appear in an exception stack trace sans the prefixing and
      * indentation.
-     * 
-     * @param sb   The optional {@link StringBuilder} to which the message will
-     *             be appended, or <code>null</code> if a new {@link
-     *             StringBuilder} should be created and returned.
-     * 
+     *
+     * @param sb The optional {@link StringBuilder} to which the message will be
+     *           appended, or <code>null</code> if a new {@link StringBuilder}
+     *           should be created and returned.
+     *
      * @param elem The {@link StackTraceElement} to format.
-     * 
+     *
      * @return The specified {@link StringBuilder} if not <code>null</code>,
-     *             otherwise the {@link StringBuilder} that was created.
+     *         otherwise the {@link StringBuilder} that was created.
      */
     public static StringBuilder formatStackFrame(StringBuilder sb,
             StackTraceElement elem)
@@ -451,7 +460,7 @@ public class LoggingUtilities
     /**
      * Convert a throwable to a {@link Long} value so we don't keep a reference
      * to what could be a complex exception object.
-     * 
+     *
      * @param t The throwable to convert.
      * @return The long hash representation to identify the throwable instance.
      */
@@ -476,10 +485,10 @@ public class LoggingUtilities
      * and it has a {@linkplain Throwable#getCause()} then if the cause is the
      * last logged exception. This is handy for telling if the exception has
      * already been logged by a deeper level of the stack trace.
-     * 
+     *
      * @param t The {@link Throwable} to check.
      * @return <code>true</code> if it is the last logged exception, otherwise
-     *                           <code>false</code>.
+     *         <code>false</code>.
      */
     public static boolean isLastLoggedException(Throwable t)
     {
@@ -503,13 +512,13 @@ public class LoggingUtilities
 
     /**
      * Sets the last logged exception and rethrows the specified exception.
-     * 
+     *
      * @param t The {@link Throwable} describing the exception.
      * @throws T To rethrow the specified exception.
      * @param <T> The type of the specified exception which is then thrown.
      */
     public static <T extends Throwable> void setLastLoggedAndThrow(T t)
-            throws T
+        throws T
     {
         setLastLoggedException(t);
         throw t;
@@ -526,12 +535,13 @@ public class LoggingUtilities
      * @param <T> The type of the specified exception which is then thrown.
      */
     public static <T extends Throwable> T logOnceAndThrow(T t)
-            throws T
+        throws T
     {
         if (!isLastLoggedException(t)) {
             t.printStackTrace();
         }
         setLastLoggedAndThrow(t);
-        return null; // we never get here
+        return null;
+        // we never get here
     }
 }

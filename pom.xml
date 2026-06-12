@@ -236,7 +236,6 @@
               <consoleOutput>true</consoleOutput>
               <failsOnError>true</failsOnError>
               <linkXRef>false</linkXRef>
-              <suppressionsLocation>${project.basedir}/.java-coding-standards/checkstyle/senzing-checkstyle-suppressions.xml</suppressionsLocation>
             </configuration>
             <executions>
               <execution>

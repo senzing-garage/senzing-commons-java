@@ -63,14 +63,14 @@ public class SemanticVersion implements Comparable<SemanticVersion>
      *
      * @param versionString The version string with which to construct.
      *
-     * @throws NullPointerException     If the specified parameter is
-     *                                  <code>null</code>.
+     * @throws NullPointerException If the specified parameter is
+     *                              <code>null</code>.
      *
      * @throws IllegalArgumentException If the specified parameter is not
      *                                  properly formatted.
      */
     public SemanticVersion(String versionString)
-            throws NullPointerException, IllegalArgumentException
+        throws NullPointerException, IllegalArgumentException
     {
         Objects.requireNonNull(
                 versionString, "Version string cannot be null");
@@ -81,7 +81,8 @@ public class SemanticVersion implements Comparable<SemanticVersion>
             boolean hasSuffix = false;
             for (String token : tokens) {
                 String lowerToken = token.toLowerCase();
-                switch (lowerToken) {
+                switch (lowerToken)
+                {
                     case "alpha":
                     case "beta":
                     case "rc":
@@ -129,7 +130,6 @@ public class SemanticVersion implements Comparable<SemanticVersion>
             // set the version strings
             this.versionString = buildVersionString(this.versionParts);
             this.normalizedString = buildVersionString(normalized);
-
         } catch (Exception e) {
             throw new IllegalArgumentException(
                     "Invalid semantic version string: " + versionString);
@@ -168,7 +168,7 @@ public class SemanticVersion implements Comparable<SemanticVersion>
      * @param object The object to compare with.
      *
      * @return <code>true</code> if the objects are equal, otherwise
-     *                           <code>false</code>
+     *         <code>false</code>
      */
     @Override
     public boolean equals(Object object)
@@ -242,7 +242,7 @@ public class SemanticVersion implements Comparable<SemanticVersion>
      *                   stripped, otherwise <code>false</code>.
      *
      * @return A {@link String} representation of this instance that is
-     *           optionally normalized to remove trailing zeroes.
+     *         optionally normalized to remove trailing zeroes.
      */
     public String toString(boolean normalized)
     {
@@ -251,7 +251,7 @@ public class SemanticVersion implements Comparable<SemanticVersion>
 
     /**
      * Provides a test main method.
-     * 
+     *
      * @param args The command-line arguments.
      */
     public static void main(String[] args)
