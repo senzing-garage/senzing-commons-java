@@ -6,9 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import com.senzing.util.LoggingUtilities;
-
 import java.io.StringWriter;
 import java.io.PrintWriter;
 
@@ -78,7 +76,7 @@ class PooledConnectionHandler implements InvocationHandler
      * {@link Connection] which can be obtained via {@link
      * #getProxiedConnection()}.
      *
-     * @param pool              The backing {@link ConnectionPool}.
+     * @param pool The backing {@link ConnectionPool}.
      * @param backingConnection The backing {@link Connection}.
      */
     PooledConnectionHandler(ConnectionPool pool,
@@ -136,7 +134,7 @@ class PooledConnectionHandler implements InvocationHandler
      * instance was constructed.
      *
      * @return The proxied {@link Connection} that was created when this
-     *             instance was constructed.
+     *         instance was constructed.
      */
     Connection getProxiedConnection()
     {
@@ -148,17 +146,17 @@ class PooledConnectionHandler implements InvocationHandler
      *
      * @return <code>true</code> if closed, otherwise <code>false</code>.
      */
-    synchronized boolean isClosed() {
+    synchronized boolean isClosed()
+    {
         return this.closed;
     }
 
     /**
      * Sets this instance as closed.
      */
-    synchronized void markClosed() {
-        if (this.closed) {
-            return;
-        }
+    synchronized void markClosed()
+    {
+        if (this.closed) return;
         this.closed = true;
         this.closedTimeNanos = System.nanoTime();
     }
@@ -171,9 +169,10 @@ class PooledConnectionHandler implements InvocationHandler
      * {@link Connection}, but it is not yet closed, it returns the time so far.
      *
      * @return The {@link Connection} lease time if known, otherwise
-     *             <code>null</code>.
+     *         <code>null</code>.
      */
-    synchronized Long getLeaseTime() {
+    synchronized Long getLeaseTime()
+    {
         // check if closing has been recorded
         if (this.closedTimeNanos > 0L) {
             return (this.closedTimeNanos - this.createdTimeNanos) / ONE_MILLION;
@@ -195,15 +194,15 @@ class PooledConnectionHandler implements InvocationHandler
      * closed then the backing {@link Connection} is returned to the backing
      * {@link ConnectionPool}.
      *
-     * @param proxy  The proxy object.
+     * @param proxy The proxy object.
      * @param method The {@link Method} being invoked.
-     * @param args   The arguments to the method invocation.
+     * @param args The arguments to the method invocation.
      * @return The result from invoking the method.
      * @throws Throwable If a failure occurs.
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args)
-            throws Throwable
+        throws Throwable
     {
         // initialize the result
         Object result = null;
@@ -214,7 +213,8 @@ class PooledConnectionHandler implements InvocationHandler
             boolean open = (!this.isClosed());
 
             String methodName = method.getName();
-            switch (methodName) {
+            switch (methodName)
+            {
                 case "close":
                     // check if already closed
                     if (!open) return null;
@@ -222,7 +222,7 @@ class PooledConnectionHandler implements InvocationHandler
                     // release the connection back to the
                     // pool -- noop if already released
                     this.pool.release(this.proxiedConnection);
-                    
+
                     // update the state
                     this.markClosed();
 
@@ -257,14 +257,12 @@ class PooledConnectionHandler implements InvocationHandler
         }
 
         // check the result
-        if (result == this.backingConnection) {
-            return this.proxiedConnection;
-        }
+        if (result == this.backingConnection) return this.proxiedConnection;
 
         // check if the return type is an interface
         Class returnType = method.getReturnType();
-        if (returnType.isInterface()
-                && "java.sql".equals(returnType.getPackageName())) {
+        if (returnType.isInterface() && "java.sql".equals(
+            returnType.getPackageName())) {
             // create a sub-handler to handle the proxying the result
             InvocationHandler subHandler
                 = new PooledConnectionHandler(this, result);
@@ -292,12 +290,14 @@ class PooledConnectionHandler implements InvocationHandler
         PrintWriter pw = new PrintWriter(sw);
 
         // CSOFF
-        pw.println("-----------------------------------------------------------");
+        pw.println(
+            "-----------------------------------------------------------");
         pw.println("LEASE DURATION: " + duration + " nanoseconds");
         pw.println();
         pw.println("LEASE OBTAINED AT: ");
         pw.println(LoggingUtilities.formatStackTrace(this.stackTrace));
-        pw.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        pw.println(
+            "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         pw.println("LEASE-HOLDER CURRENT STACK TRACE: ");
         pw.println(LoggingUtilities.formatStackTrace(
                 this.thread.getStackTrace()));

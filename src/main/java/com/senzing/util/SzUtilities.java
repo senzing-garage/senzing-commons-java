@@ -1,7 +1,6 @@
 package com.senzing.util;
 
 import static com.senzing.io.IOUtilities.UTF_8_CHARSET;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -16,11 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-
 import com.senzing.sql.DatabaseType;
 
 /**
@@ -36,7 +33,7 @@ public class SzUtilities
     public static final Set<String> DATABASE_URI_PREFIXES = Set.of(
         "sqlite3://", "postgresql://", "mysql://", "db2://", "oci://",
         "mssql://");
-    
+
     /**
      * Private default constructor.
      */
@@ -48,7 +45,7 @@ public class SzUtilities
     /**
      * Checks if the specified text appears to be a database URI for the Senzing
      * repository.
-     * 
+     *
      * @param text The text to check.
      * @return <code>true</code> if the specified text starts with a legal
      *         database URI prefix, otherwise <code>false</code>.
@@ -56,9 +53,7 @@ public class SzUtilities
     public static boolean startsWithDatabaseUriPrefix(String text)
     {
         for (String prefix : DATABASE_URI_PREFIXES) {
-            if (text.startsWith(prefix)) {
-                return true;
-            }
+            if (text.startsWith(prefix)) return true;
         }
         return false;
     }
@@ -125,14 +120,15 @@ public class SzUtilities
      *      </ol>
      *  </li>
      * </ul>
-     * 
+     *
      * @return The bootstrap Senzing settings created using {@link
      *         SzInstallLocations}.
-     * 
+     *
      * @throws IllegalStateException If the Senzing installation cannot be
      *                               found.
      */
-    public static String bootstrapSettings() throws IllegalStateException
+    public static String bootstrapSettings()
+        throws IllegalStateException
     {
         return basicSettingsFromDatabaseUri(null, null, null);
     }
@@ -200,9 +196,9 @@ public class SzUtilities
      *      </ol>
      *  </li>
      * </ul>
-     * 
+     *
      * @param uri The database URI to use for the settings.
-     * 
+     *
      * @return The basic Senzing settings created from the specified database
      *         URI.
      *
@@ -239,13 +235,13 @@ public class SzUtilities
      *          }
      *      }
      * </pre>
-     * 
+     *
      * @param uri The database URI to use for the settings.
-     * 
+     *
      * @param licenseBase64 The optional base-64 encoded Senzing license string,
      *                      or <code>null</code> if
      *                      <code>LICENSESTRINGBASE64</code> is to be excluded.
-     * 
+     *
      * @return The basic Senzing settings created from the specified database
      *         URI and base-64 encoded license string.
      *
@@ -283,13 +279,13 @@ public class SzUtilities
      *          }
      *      }
      * </pre>
-     * 
+     *
      * @param uri The database URI to use for the settings.
-     * 
+     *
      * @param licenseFile The optional Senzing license file, or
      *                    <code>null</code> if <code>LICENSEFILE</code> is to be
      *                    excluded.
-     * 
+     *
      * @return The basic Senzing settings created from the specified database
      *         URI and base-64 encoded license string.
      *
@@ -306,22 +302,22 @@ public class SzUtilities
         Objects.requireNonNull(uri, "The database URI cannot be null");
         return basicSettingsFromDatabaseUri(uri, null, licenseFile);
     }
-    
+
     /**
      * Internal method to produce the Senzing settings with either an optional
      * <code>LICENSESTRINGBASE64</code> or <code>LICENSEFILE</code> property
      * (but not both).
-     * 
+     *
      * @param uri The database URI to use for the settings.
-     * 
+     *
      * @param licenseBase64 The optional base-64 encoded Senzing license string,
      *                      or <code>null</code> if
      *                      <code>LICENSESTRINGBASE64</code> is to be excluded.
-     * 
+     *
      * @param licenseFile The optional Senzing license file, or
      *                    <code>null</code> if <code>LICENSEFILE</code> is to be
      *                    excluded.
-     * 
+     *
      * @return The basic Senzing settings created from the specified database
      *         URI and base-64 encoded license string, or bootstrap settings if
      *         the URI is <code>null</code>.
@@ -356,9 +352,9 @@ public class SzUtilities
             JsonObjectBuilder pipelineBuilder = Json.createObjectBuilder();
             JsonObjectBuilder sqlBuilder
                 = (uri == null) ? null : Json.createObjectBuilder();
-            
+
             SzInstallLocations locations = SzInstallLocations.findLocations();
-            
+
             pipelineBuilder.add("SUPPORTPATH",
                 locations.getSupportDirectory().getCanonicalPath());
             pipelineBuilder.add("CONFIGPATH",
@@ -419,26 +415,26 @@ public class SzUtilities
      * <code>resources/schema</code> files are only present if you have
      * installed the <code>senzingsdk-setup</code> package.  They are not
      * available with the <code>senzingsdk-runtime</code>.
-     * 
+     *
      * <p>
-     * <b>ALSO NOTE:</b> If this method determines that the Senzing SQLite 
+     * <b>ALSO NOTE:</b> If this method determines that the Senzing SQLite
      * schema is already setup in the connected database, then this method will
      * do nothing.
-     * 
+     *
      * @param conn The non-null {@link Connection} to a SQLite database.
-     * 
+     *
      * @return <code>true</code> if the schema was created, or
      *         <code>false</code> if the schema was detected and no changes were
      *         made.
-     * 
+     *
      * @throws SQLException If a JDBC failure occurs.
-     * 
+     *
      * @throws NullPointerException If the specified {@link Connection} is
      *                              <code>null</code>.
-     * 
+     *
      * @throws IllegalArgumentException If the specified {@link Connection} is
      *                                  not connected to a SQLite database.
-     * 
+     *
      * @throws IllegalStateException If the schema file cannot be found.
      */
     public static boolean ensureSenzingSQLiteSchema(Connection conn)
@@ -455,7 +451,7 @@ public class SzUtilities
         // first find the file
         SzInstallLocations installLocations
             = SzInstallLocations.findLocations();
-        
+
         // get the resource directory
         File resourceDir = installLocations.getResourceDirectory();
         File schemaDir = new File(resourceDir, "schema");
@@ -471,10 +467,9 @@ public class SzUtilities
 
         // get the set of known tables
         Set<String> knownTables = new HashSet<>();
-        String[] dbTypes = {"TABLE"};
+        String[] dbTypes = { "TABLE" };
         DatabaseMetaData metaData = conn.getMetaData();
-        try (ResultSet rs = metaData.getTables(null, null, "%", dbTypes))
-        {
+        try (ResultSet rs = metaData.getTables(null, null, "%", dbTypes)) {
             while (rs.next()) {
                 String tableName = rs.getString("TABLE_NAME");
                 knownTables.add(tableName.toUpperCase());
@@ -485,7 +480,7 @@ public class SzUtilities
         // while looking for table names that already exist
         List<String> statements = new LinkedList<>();
         try (FileReader reader = new FileReader(sqlFile, UTF_8_CHARSET);
-                BufferedReader br = new BufferedReader(reader))
+             BufferedReader br = new BufferedReader(reader))
         {
             int lineNumber = 0;
             for (String sql = br.readLine(); sql != null; sql = br.readLine())
@@ -495,9 +490,7 @@ public class SzUtilities
                 sql = sql.trim();
 
                 // check if empty
-                if (sql.length() == 0) {
-                    continue;
-                }
+                if (sql.length() == 0) continue;
 
                 // check if this is a CREATE TABLE statement
                 if (sql.toUpperCase().startsWith("CREATE TABLE ")) {
@@ -511,14 +504,11 @@ public class SzUtilities
                             + lineNumber + "): "
                             + sql);
                     }
-                    String tableName
-                        = suffix.substring(0, space).toUpperCase();
+                    String tableName = suffix.substring(0, space).toUpperCase();
 
                     // if the table already exists then
                     // cowardly refuse to proceed
-                    if (knownTables.contains(tableName)) {
-                        return false;
-                    }
+                    if (knownTables.contains(tableName)) return false;
                 }
 
                 // store the non-empty SQL statement so we can execute later

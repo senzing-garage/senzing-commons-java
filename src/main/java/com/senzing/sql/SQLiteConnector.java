@@ -8,10 +8,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
-// NOTE: these imports require that we make SQLite JDBC driver a 
+// NOTE: these imports require that we make SQLite JDBC driver a
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteOpenMode;
-
 import static com.senzing.sql.Connector.formatConnectionProperties;
 
 /**
@@ -34,7 +33,8 @@ public class SQLiteConnector implements Connector
      * Setup the {@link SQLiteConfig} for multi-threaded access.
      */
     private static final Properties SQLITE_CONFIG_PROPERTIES;
-    static {
+    static
+    {
         SQLiteConfig config = new SQLiteConfig();
         // NOTE: We want to use SQLite in multi-thread mode since this
         // is typically used with a connection pool and therefore we do
@@ -59,12 +59,14 @@ public class SQLiteConnector implements Connector
      * </ol>
      */
     // CSOFF
-    public static final List<String> DEFAULT_PRAGMA_FEATURES_LIST = List.of(
+    public static final List<String> DEFAULT_PRAGMA_FEATURES_LIST
+        = List.of(
             "PRAGMA foreign_keys = ON;",    // enable foreign keys
             "PRAGMA journal_mode = WAL;",   // use journal to recover in case of failure
             "PRAGMA synchronous = 1;",      // normal data durability since we use journal
             "PRAGMA secure_delete = 0;",    // we don't need secure deletion
-            "PRAGMA automatic_index = 0;"); // don't create temporary indexes
+            "PRAGMA automatic_index = 0;");
+    // don't create temporary indexes
     // CSON
 
     /**
@@ -80,7 +82,6 @@ public class SQLiteConnector implements Connector
             File file = File.createTempFile("sqlite-", ".db");
             file.deleteOnExit();
             return file;
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -99,8 +100,8 @@ public class SQLiteConnector implements Connector
     private static File newFile(String              filePath,
                                 Map<String, String> connProperties)
     {
-        if (connProperties != null
-                && MEMORY_MODE.equals(connProperties.get(MODE_KEY))) {
+        if (connProperties != null && MEMORY_MODE.equals(connProperties.get(
+            MODE_KEY))) {
             return (filePath == null) ? null : new File(filePath);
         }
 
@@ -136,11 +137,11 @@ public class SQLiteConnector implements Connector
 
     /**
      * Constructs with the specified file name.
-     * 
+     *
      * @param filePath The file path for the SQLite file.
-     * 
-     * @throws NullPointerException     If the specified file path is
-     *                                  <code>null</code>.
+     *
+     * @throws NullPointerException If the specified file path is
+     *                              <code>null</code>.
      * @throws IllegalArgumentException If the specified file path describes a
      *                                  path to an existing directory.
      */
@@ -154,10 +155,10 @@ public class SQLiteConnector implements Connector
      * file.
      *
      * @param file The {@link File} for the SQLite database file.
-     * 
-     * @throws NullPointerException     If the specified file path is
-     *                                  <code>null</code> when not using
-     *                                  in-memory mode.
+     *
+     * @throws NullPointerException If the specified file path is
+     *                              <code>null</code> when not using in-memory
+     *                              mode.
      * @throws IllegalArgumentException If the specified file path describes a
      *                                  path to an existing directory.
      */
@@ -168,13 +169,13 @@ public class SQLiteConnector implements Connector
 
     /**
      * Constructs with the specified file name and connection properties.
-     * 
+     *
      * @param filePath The file path for the SQLite file.
      * @param connProperties The {@link Map} of {@link String} keys to {@link
      *                       String} values for the connection properties.
-     * @throws NullPointerException     If the specified file path is
-     *                                  <code>null</code> when not using
-     *                                  in-memory mode.
+     * @throws NullPointerException If the specified file path is
+     *                              <code>null</code> when not using in-memory
+     *                              mode.
      * @throws IllegalArgumentException If the specified file path describes a
      *                                  path to an existing directory.
      */
@@ -185,21 +186,20 @@ public class SQLiteConnector implements Connector
 
     /**
      * Constructs with the specified {@link File} and connection properties.
-     * 
+     *
      * @param file The {@link File} for the SQLite database file.
      * @param connProperties The {@link Map} of {@link String} keys to {@link
      *                       String} values for the connection properties.
-     * @throws NullPointerException     If the specified file path is
-     *                                  <code>null</code> when not using
-     *                                  in-memory mode.
+     * @throws NullPointerException If the specified file path is
+     *                              <code>null</code> when not using in-memory
+     *                              mode.
      * @throws IllegalArgumentException If the specified file path describes a
      *                                  path to an existing directory.
      */
     public SQLiteConnector(File file, Map<String, String> connProperties)
     {
-        if (connProperties == null
-                || !MEMORY_MODE.equals(connProperties.get(MODE_KEY)))
-        {
+        if (connProperties == null || !MEMORY_MODE.equals(connProperties.get(
+            MODE_KEY))) {
             Objects.requireNonNull(
                     file, "The specified file cannot be null");
             if (file.exists() && file.isDirectory()) {
@@ -217,7 +217,7 @@ public class SQLiteConnector implements Connector
      * by this instance.
      *
      * @return The {@link File} instance describing the SQLite database file
-     *             used by this instance.
+     *         used by this instance.
      */
     public File getSqliteFile()
     {
@@ -230,7 +230,7 @@ public class SQLiteConnector implements Connector
      * establishing the {@link Connection} this {@link Connector} will
      * initialize it with the <code>PRAGMA</code> features defined by the
      * {@link #getPragmaFeatureStatements()}.
-     * 
+     *
      * <p>
      * <b>WARNING:</b> The returned {@link Connection} is appropriate to use
      * in a {@link ConnectionPool} with {@link Connection}'s being acquired from
@@ -254,8 +254,8 @@ public class SQLiteConnector implements Connector
     public Connection openConnection()
         throws SQLException
     {
-        boolean memoryMode = this.connProperties != null 
-            && "memory".equals(this.connProperties.get("mode"));
+        boolean memoryMode = this.connProperties != null && "memory".equals(
+            this.connProperties.get("mode"));
 
         // SQLite URI parameters (e.g. `?mode=memory`) require the
         // `file:` URI scheme. Without it, `:memory:?mode=memory` is
@@ -281,12 +281,10 @@ public class SQLiteConnector implements Connector
             for (String sql : this.getPragmaFeatureStatements()) {
                 statement.execute(sql);
             }
-
         } catch (SQLException e) {
             statement = SQLUtilities.close(statement);
             conn = SQLUtilities.close(conn);
             throw e;
-
         } finally {
             statement = SQLUtilities.close(statement);
         }
@@ -303,7 +301,7 @@ public class SQLiteConnector implements Connector
      * session after opening a {@link Connection}.
      *
      * @return The {@link List} of {@link String} SQL statements to run on a
-     *             newly established SQLite JDBC {@link Connection}.
+     *         newly established SQLite JDBC {@link Connection}.
      */
     protected List<String> getPragmaFeatureStatements()
     {

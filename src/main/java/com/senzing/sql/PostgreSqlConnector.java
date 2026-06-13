@@ -24,11 +24,10 @@ public class PostgreSqlConnector implements Connector
     /**
      * Constructs with the specified connection parameters.
      *
-     * @param host     The host name or IP address of the database server.
-     * @param port     The port number for the database server.
+     * @param host The host name or IP address of the database server.
+     * @param port The port number for the database server.
      * @param database The name of the PostgreSql database.
-     * @param user     The user name for authentication with the PostgreSql
-     *                 server.
+     * @param user The user name for authentication with the PostgreSql server.
      * @param password The password for authentication with the PostgreSql
      *                 server.
      */
@@ -38,8 +37,8 @@ public class PostgreSqlConnector implements Connector
             String user,
             String password)
     {
-        this.jdbcUrl
-            = "jdbc:postgresql://" + host + ":" + port + "/" + database;
+        this.jdbcUrl = "jdbc:postgresql://"
+            + host + ":" + port + "/" + database;
         this.properties = new Properties();
         this.properties.put("user", user);
         this.properties.put("password", password);
@@ -48,13 +47,12 @@ public class PostgreSqlConnector implements Connector
     /**
      * Constructs with the specified connection parameters.
      *
-     * @param host           The host name or IP address of the database server.
-     * @param port           The port number for the database server.
-     * @param database       The name of the PostgreSql database.
-     * @param user           The user name for authentication with the
-     *                       PostgreSql server.
-     * @param password       The password for authentication with the PostgreSql
-     *                       server.
+     * @param host The host name or IP address of the database server.
+     * @param port The port number for the database server.
+     * @param database The name of the PostgreSql database.
+     * @param user The user name for authentication with the PostgreSql server.
+     * @param password The password for authentication with the PostgreSql
+     *                 server.
      * @param addlProperties The additional properties for connecting to the
      *                       database.
      */
@@ -65,8 +63,8 @@ public class PostgreSqlConnector implements Connector
             String password,
             Properties addlProperties)
     {
-        this.jdbcUrl
-            = "jdbc:postgresql://" + host + ":" + port + "/" + database;
+        this.jdbcUrl = "jdbc:postgresql://"
+            + host + ":" + port + "/" + database;
         this.properties = new Properties();
         this.properties.putAll(addlProperties);
         this.properties.put("user", user);
@@ -81,7 +79,6 @@ public class PostgreSqlConnector implements Connector
                 this.properties);
         try {
             conn.setAutoCommit(false);
-
         } catch (SQLException e) {
             SQLUtilities.close(conn);
             throw e;

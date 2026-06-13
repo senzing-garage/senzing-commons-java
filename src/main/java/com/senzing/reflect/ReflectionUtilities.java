@@ -38,7 +38,8 @@ public class ReflectionUtilities
      */
     private static final Map<Class, Class> PRIMITIVE_TYPE_MAP;
 
-    static {
+    static
+    {
         Map<Class, Class> primitiveMap = new LinkedHashMap<>();
         Map<Class, Class> promotedMap = new LinkedHashMap<>();
         try {
@@ -65,7 +66,6 @@ public class ReflectionUtilities
                     promotedMap.put(keyType, keyType);
                 }
             });
-
         } finally {
             PROMOTED_TYPE_MAP = Collections.unmodifiableMap(promotedMap);
             PRIMITIVE_TYPE_MAP = Collections.unmodifiableMap(primitiveMap);
@@ -95,7 +95,7 @@ public class ReflectionUtilities
          * on the proxy object that is passed to
          * {@link #invoke(Object, Method, Object[]))}.
          *
-         * @param target  The target object to invoke the methods on.
+         * @param target The target object to invoke the methods on.
          * @param monitor The object to synchronize on, or <code>null</code> if
          *                the constructed instance should synchronize on the
          *                proxy object that is passed to {@link #invoke(Object,
@@ -112,10 +112,10 @@ public class ReflectionUtilities
          * calling the specified {@link Method} on the underlying target object
          * with the specified arguments.
          *
-         * @param proxy  The proxy object to synchronize on.
+         * @param proxy The proxy object to synchronize on.
          * @param method The {@link Method} to invoke on the underlying target
          *               object.
-         * @param args   The arguments to invoke the method with.
+         * @param args The arguments to invoke the method with.
          * @return The result from invoking the method.
          */
         @Override
@@ -126,7 +126,6 @@ public class ReflectionUtilities
             synchronized (monitor) {
                 try {
                     return method.invoke(this.target, args);
-
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
@@ -145,8 +144,8 @@ public class ReflectionUtilities
      *                     being requested.
      *
      * @return The primitive type corresponding to the specified promoted type,
-     *             or <code>null</code> if the specified type does not have a
-     *             corresponding primitive type.
+     *         or <code>null</code> if the specified type does not have a
+     *         corresponding primitive type.
      */
     public static Class<?> getPrimitiveType(Class<?> promotedType)
     {
@@ -162,8 +161,8 @@ public class ReflectionUtilities
      *                      type is being requested.
      *
      * @return The primitive type corresponding to the specified promoted type,
-     *             or <code>null</code> if the specified type does not have a
-     *             corresponding primitive type.
+     *         or <code>null</code> if the specified type does not have a
+     *         corresponding primitive type.
      */
     public static Class<?> getPromotedType(Class<?> primitiveType)
     {
@@ -178,14 +177,14 @@ public class ReflectionUtilities
      * invoke methods by reflection. If the specified value is <code>null</code>
      * then <code>null</code> is returned.
      *
-     * @param value   The value to be converted.
+     * @param value The value to be converted.
      * @param numType The {@link Class} indicating the type of primitive number
      *                to convert to which must be associated with a primitive
      *                numeric type.
      * @return The converted value or <code>null</code> if the specified value
-     *             was <code>null</code>.
-     * @throws NullPointerException     If the specified numeric type is
-     *                                  <code>null</code>.
+     *         was <code>null</code>.
+     * @throws NullPointerException If the specified numeric type is
+     *                              <code>null</code>.
      * @throws IllegalArgumentException If an illegal numeric type is specified.
      */
     public static Number convertPrimitiveNumber(Number value, Class<?> numType)
@@ -197,8 +196,8 @@ public class ReflectionUtilities
             numType = getPromotedType(numType);
         }
 
-        if (!Number.class.isAssignableFrom(numType)
-                || (getPrimitiveType(numType) == null)) {
+        if (!Number.class.isAssignableFrom(numType) || (getPrimitiveType(
+            numType) == null)) {
             throw new IllegalArgumentException(
                     "The specified target number type must extend "
                             + "java.lang.Number and have a corresponding "
@@ -212,7 +211,8 @@ public class ReflectionUtilities
         numType = getPromotedType(numType);
 
         // switch on the target type name
-        switch (numType.getName()) {
+        switch (numType.getName())
+        {
             case "java.lang.Byte":
                 return value.byteValue();
             case "java.lang.Short":
@@ -239,7 +239,7 @@ public class ReflectionUtilities
      *
      * @param proxyInterface The interface that the returned synchronized proxy
      *                       will implement.
-     * @param targetObject   The target object to wrap with the proxy.
+     * @param targetObject The target object to wrap with the proxy.
      *
      * @return The synchronized proxy wrapper.
      * @param <I> The interface for the return value.
@@ -247,7 +247,7 @@ public class ReflectionUtilities
      *            interface &lt;I&gt;
      */
     public static <I, T extends I> I synchronizedProxy(Class<I> proxyInterface,
-                                                       T targetObject) 
+                                                       T targetObject)
     {
         return synchronizedProxy(proxyInterface, targetObject, null);
     }
@@ -261,8 +261,8 @@ public class ReflectionUtilities
      *
      * @param proxyInterface The interface that the returned synchronized proxy
      *                       will implement.
-     * @param targetObject   The target object to wrap with the proxy.
-     * @param monitor        The monitor object to synchronize on.
+     * @param targetObject The target object to wrap with the proxy.
+     * @param monitor The monitor object to synchronize on.
      *
      * @return The synchronized proxy wrapper.
      * @param <I> The interface for the return value.
@@ -324,21 +324,21 @@ public class ReflectionUtilities
         private RestrictedHandler(Object       targetObject,
                                   Set<Method>  restrictedMethods)
         {
-            this.targetObject       = targetObject;
-            this.restrictedMethods
-                = Collections.unmodifiableSet(restrictedMethods);
+            this.targetObject = targetObject;
+            this.restrictedMethods = Collections.unmodifiableSet(
+                restrictedMethods);
         }
 
         /**
          * Implemented to invoke the method on the underlying target object,
-         * disallowing access to restricted methods by throwing {@link 
+         * disallowing access to restricted methods by throwing {@link
          * UnsupportedOperationException} in those cases.
          * <p>
          * {@inheritDoc}
          */
         @Override
         public Object invoke(Object proxy, Method method, Object[] args)
-            throws Throwable 
+            throws Throwable
         {
             if (this.restrictedMethods.contains(method)) {
                 throw new UnsupportedOperationException(
@@ -346,10 +346,8 @@ public class ReflectionUtilities
             }
             try {
                 return method.invoke(this.targetObject, args);
-
             } catch (InvocationTargetException e) {
                 throw e.getCause();
-
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -358,11 +356,11 @@ public class ReflectionUtilities
         /**
          * Checks if this handler is restricting the specified
          * {@link Method}.
-         * 
+         *
          * @param method The {@link Method} to check for restriction.
-         * 
+         *
          * @return <code>true</code> if the specified method is being
-         *                           restricted, otherwise <code>false</code>.
+         *         restricted, otherwise <code>false</code>.
          */
         private boolean isRestricting(Method method)
         {
@@ -392,15 +390,11 @@ public class ReflectionUtilities
         public int compare(Method m1, Method m2)
         {
             // if methods are equal return zero
-            if (m1.equals(m2)) {
-                return 0;
-            }
+            if (m1.equals(m2)) return 0;
 
             // get the difference in method names
             int diff = m1.getName().compareTo(m2.getName());
-            if (diff != 0) {
-                return diff;
-            }
+            if (diff != 0) return diff;
 
             // check the return types
             Class<?> r1 = m1.getReturnType();
@@ -410,14 +404,12 @@ public class ReflectionUtilities
             if (!r1.equals(r2)) {
                 // get the difference in the name
                 diff = r1.getName().compareTo(r2.getName());
-                if (diff != 0) {
-                    return diff;
-                }
+                if (diff != 0) return diff;
 
                 // we know they differ even if the name
                 // is the same, so force difference
-                diff = System.identityHashCode(r1)
-                    - System.identityHashCode(r2);
+                diff = System.identityHashCode(r1) - System.identityHashCode(
+                    r2);
                 return diff;
             }
 
@@ -427,10 +419,8 @@ public class ReflectionUtilities
 
             // check if the number of parameters differ
             diff = params1.length - params2.length;
-            if (diff != 0) {
-                return diff;
-            }
-            
+            if (diff != 0) return diff;
+
             // loop through the parameter types
             for (int index = 0; index < params1.length; index++) {
                 Class<?> p1 = params1[index];
@@ -439,9 +429,7 @@ public class ReflectionUtilities
                 if (!p1.equals(p2)) {
                     // get the difference in the name
                     diff = p1.getName().compareTo(p2.getName());
-                    if (diff != 0) {
-                        return diff;
-                    }
+                    if (diff != 0) return diff;
 
                     // we know they differ even if the
                     // name is the same, so force difference
@@ -468,17 +456,17 @@ public class ReflectionUtilities
      * interfaces implemented by the specified object, but restricting access to
      * the specified methods by causing them to throw an
      * {@link UnsupportedOperationException}.
-     * 
+     *
      * @param targetObject The target object to execute methods against.
      * @param restrictedMethods The zero or more {@link Method} instances that
      *                          are to be restricted.
-     * 
+     *
      * @return The restricted proxy of the specified target object.
-     * 
+     *
      * @throws NullPointerException If the specified target object or any of the
      *                              specified {@link Method} instances is
      *                              <code>null</code>.
-     * 
+     *
      * @throws IllegalArgumentException If the specified target object does not
      *                                  implement any interfaces <b>OR</b> if
      *                                  any of the restricted methods are
@@ -486,7 +474,7 @@ public class ReflectionUtilities
      *                                  the target object.
      */
     public static Object restrictedProxy(Object     targetObject,
-                                         Method...  restrictedMethods) 
+                                         Method...  restrictedMethods)
     {
         Objects.requireNonNull(targetObject, 
                 "The target object cannot be null");
@@ -503,18 +491,18 @@ public class ReflectionUtilities
      * interfaces implemented by the specified object, but restricting access to
      * the specified methods by causing them to throw an
      * {@link UnsupportedOperationException}.
-     * 
+     *
      * @param classLoader The {@link ClassLoader} to use.
      * @param targetObject The target object to execute methods against.
      * @param restrictedMethods The zero or more {@link Method} instances that
      *                          are to be restricted.
-     * 
+     *
      * @return The restricted proxy of the specified target object.
-     * 
+     *
      * @throws NullPointerException If the specified target object or any of the
      *                              specified {@link Method} instances is
      *                              <code>null</code>.
-     * 
+     *
      * @throws IllegalArgumentException If the specified target object does not
      *                                  implement any interfaces <b>OR</b> if
      *                                  any of the restricted methods are
@@ -523,14 +511,14 @@ public class ReflectionUtilities
      */
     public static Object restrictedProxy(ClassLoader    classLoader,
                                          Object         targetObject,
-                                         Method...      restrictedMethods) 
+                                         Method...      restrictedMethods)
     {
         // check the target object
         Objects.requireNonNull(targetObject, 
                        "The target object cannot be null");
         Objects.requireNonNull(classLoader,
                                 "The class loader cannot be null");
-        
+
         // check the methods
         for (Method method : restrictedMethods) {
             // ensure the method is not null
@@ -542,13 +530,13 @@ public class ReflectionUtilities
             // get the invocation handler
             InvocationHandler handler
                 = Proxy.getInvocationHandler(targetObject);
-            
+
             // check if the handler is a RestrictedHandler
             if (handler instanceof RestrictedHandler) {
                 // down-cast and check if all methods are already restricted
                 RestrictedHandler restrictedHandler
                     = (RestrictedHandler) handler;
-                
+
                 // check each method and see if it is already restricted
                 boolean allRestricted = true;
                 for (Method method : restrictedMethods) {
@@ -587,15 +575,15 @@ public class ReflectionUtilities
                 + " ], targetObject=[ " + targetObject + " ]");
         }
         interfaces = interfaceSet.toArray(interfaces);
-        
+
         // create a set of the methods
         Set<Method> methodSet = new TreeSet<>(METHOD_COMPARATOR);
-        
+
         for (Method method : restrictedMethods) {
             // add the method to the set
             methodSet.add(method);
         }
-        
+
         // create restricted handler
         RestrictedHandler handler
             = new RestrictedHandler(targetObject, methodSet);
@@ -603,5 +591,4 @@ public class ReflectionUtilities
         // create the proxy
         return Proxy.newProxyInstance(classLoader, interfaces, handler);
     }
-
 }

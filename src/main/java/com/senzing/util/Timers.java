@@ -113,13 +113,13 @@ public class Timers
      *                      <code>null</code> array is treated like an empty
      *                      array.
      *
-     * @throws NullPointerException     If any of the specified parameters are
-     *                                  <code>null</code>.
+     * @throws NullPointerException If any of the specified parameters are
+     *                              <code>null</code>.
      * @throws IllegalArgumentException If any of the specified timer names is
      *                                  duplicated.
      */
     public Timers(String... initialTimers)
-            throws NullPointerException, IllegalArgumentException
+        throws NullPointerException, IllegalArgumentException
     {
         this.timerInfos = new LinkedHashMap<>();
         long startTime = now();
@@ -208,7 +208,7 @@ public class Timers
      * skipped (ignored). If it exists and is paused then it is resumed. This
      * method returns the number of timers that were created or resumed.
      *
-     * @param timerName      The name of the first timer to start.
+     * @param timerName The name of the first timer to start.
      *
      * @param moreTimerNames Additional timer names to be started with the same
      *                       start time.
@@ -248,7 +248,7 @@ public class Timers
      * is not running it is skipped. This method returns the number of timers
      * that were found and in a running state and therefore successfully paused.
      *
-     * @param timerName      The name of the timer.
+     * @param timerName The name of the timer.
      *
      * @param moreTimerNames Additional timer names to pause at the same time.
      *
@@ -278,7 +278,7 @@ public class Timers
      * is not paused it is skipped. This method returns the number of timers
      * that were found in a paused state and therefore successfully resumed.
      *
-     * @param timerName      The name of the timer.
+     * @param timerName The name of the timer.
      *
      * @param moreTimerNames Additional timer names to pause at the same time.
      *

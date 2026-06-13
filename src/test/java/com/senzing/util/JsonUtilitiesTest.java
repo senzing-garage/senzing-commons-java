@@ -7,9 +7,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
 import com.senzing.text.TextUtilities;
-
 import javax.json.*;
 import java.io.*;
 import java.lang.reflect.Array;
@@ -19,7 +17,6 @@ import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-
 import static com.senzing.util.JsonUtilities.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -32,7 +29,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 @Execution(ExecutionMode.CONCURRENT)
 public class JsonUtilitiesTest
 {
-
     public List<Arguments> provideGetStringFromObjectParams()
     {
         List<Arguments> result = new LinkedList<>();
@@ -71,7 +67,6 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonObj, "vip", "false", "true", null));
         result.add(arguments(jsonObj, "vegetarian", "false", "false", null));
         return result;
-
     }
 
     @ParameterizedTest
@@ -86,9 +81,15 @@ public class JsonUtilitiesTest
             String result = getString(jsonObject, key, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -103,19 +104,28 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonObject=[ " + jsonObject
                                 + " ], key=[ " + key + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -153,7 +163,6 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonArr, 4, "true", "false", null));
         result.add(arguments(jsonArr, 5, null, spouseText, null));
         return result;
-
     }
 
     @ParameterizedTest
@@ -168,9 +177,15 @@ public class JsonUtilitiesTest
             String result = getString(jsonArray, index, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -185,14 +200,18 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonArray=[ " + jsonArray
                                 + " ], index=[ " + index + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -230,7 +249,6 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonObj, "child", null, classCast));
 
         return result;
-
     }
 
     @ParameterizedTest
@@ -244,26 +262,41 @@ public class JsonUtilitiesTest
             JsonArray result = getJsonArray(jsonObject, key);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
                     "Unexpected result.  jsonObject=[ " + jsonObject
                             + " ], key=[ " + key + " ]");
-
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -293,7 +326,6 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonArr, 2, null, classCast));
 
         return result;
-
     }
 
     @ParameterizedTest
@@ -307,21 +339,31 @@ public class JsonUtilitiesTest
             JsonArray result = getJsonArray(jsonArray, index);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
                     "Unexpected result.  jsonArray=[ " + jsonArray
                             + " ], index=[ " + index + " ]");
-
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -408,9 +450,15 @@ public class JsonUtilitiesTest
             List<String> result = getStrings(jsonObject, key, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -425,20 +473,28 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonObject=[ " + jsonObject
                                 + " ], key=[ " + key + " ]");
-
             }
-
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -514,9 +570,15 @@ public class JsonUtilitiesTest
             List<String> result = getStrings(jsonArray, index, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -531,15 +593,18 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonArray=[ " + jsonArray
                                 + " ], index=[ " + index + " ]");
-
             }
-
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -597,7 +662,6 @@ public class JsonUtilitiesTest
         result.add(arguments(null, null, 15, 15, null));
 
         return result;
-
     }
 
     @ParameterizedTest
@@ -612,9 +676,15 @@ public class JsonUtilitiesTest
             Integer result = getInteger(jsonObject, key, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -629,19 +699,28 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonObject=[ " + jsonObject
                                 + " ], key=[ " + key + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -650,18 +729,30 @@ public class JsonUtilitiesTest
     {
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        builder.add("ABC"); // 0
-        builder.add(true); // 1
-        builder.add(false); // 2
-        builder.addNull(); // 3
-        builder.add(0); // 4
-        builder.add(1); // 5
-        builder.add(10); // 6
-        builder.add(((long) Integer.MAX_VALUE) + 1L); // 7
-        builder.add(10.0); // 8
-        builder.add(10.5); // 9
-        builder.add(20.0F); // 10
-        builder.add(20.5F); // 11
+        builder.add("ABC");
+        // 0
+        builder.add(true);
+        // 1
+        builder.add(false);
+        // 2
+        builder.addNull();
+        // 3
+        builder.add(0);
+        // 4
+        builder.add(1);
+        // 5
+        builder.add(10);
+        // 6
+        builder.add(((long) Integer.MAX_VALUE) + 1L);
+        // 7
+        builder.add(10.0);
+        // 8
+        builder.add(10.5);
+        // 9
+        builder.add(20.0F);
+        // 10
+        builder.add(20.5F);
+        // 11
         JsonArray jsonArr = builder.build();
 
         Class classCast = ClassCastException.class;
@@ -691,7 +782,6 @@ public class JsonUtilitiesTest
         result.add(arguments(null, 0, 15, 15, null));
 
         return result;
-
     }
 
     @ParameterizedTest
@@ -706,9 +796,15 @@ public class JsonUtilitiesTest
             Integer result = getInteger(jsonArray, index, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -723,14 +819,18 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonArray=[ " + jsonArray
                                 + " ], index=[ " + index + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -789,7 +889,6 @@ public class JsonUtilitiesTest
         result.add(arguments(null, null, 15L, 15L, null));
 
         return result;
-
     }
 
     @ParameterizedTest
@@ -804,9 +903,15 @@ public class JsonUtilitiesTest
             Long result = getLong(jsonObject, key, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -821,19 +926,28 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonObject=[ " + jsonObject
                                 + " ], key=[ " + key + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -843,18 +957,30 @@ public class JsonUtilitiesTest
         final long maxIntPlus1 = ((long) Integer.MAX_VALUE) + 1L;
         List<Arguments> result = new LinkedList<>();
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        builder.add("ABC"); // 0
-        builder.add(true); // 1
-        builder.add(false); // 2
-        builder.addNull(); // 3
-        builder.add(0L); // 4
-        builder.add(1L); // 5
-        builder.add(10L); // 6
-        builder.add(maxIntPlus1); // 7
-        builder.add(10.0); // 8
-        builder.add(10.5); // 9
-        builder.add(20.0F); // 10
-        builder.add(20.5F); // 11
+        builder.add("ABC");
+        // 0
+        builder.add(true);
+        // 1
+        builder.add(false);
+        // 2
+        builder.addNull();
+        // 3
+        builder.add(0L);
+        // 4
+        builder.add(1L);
+        // 5
+        builder.add(10L);
+        // 6
+        builder.add(maxIntPlus1);
+        // 7
+        builder.add(10.0);
+        // 8
+        builder.add(10.5);
+        // 9
+        builder.add(20.0F);
+        // 10
+        builder.add(20.5F);
+        // 11
         JsonArray jsonArr = builder.build();
 
         Class classCast = ClassCastException.class;
@@ -884,7 +1010,6 @@ public class JsonUtilitiesTest
         result.add(arguments(null, 0, 15L, 15L, null));
 
         return result;
-
     }
 
     @ParameterizedTest
@@ -899,9 +1024,15 @@ public class JsonUtilitiesTest
             Long result = getLong(jsonArray, index, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -916,14 +1047,18 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonArray=[ " + jsonArray
                                 + " ], index=[ " + index + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -966,8 +1101,10 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonObj, "one", 15.0, 1.0, null));
         result.add(arguments(jsonObj, "ten", null, 10.0, null));
         result.add(arguments(jsonObj, "ten", 15.0, 10.0, null));
-        result.add(arguments(jsonObj, "long", null, ((double) maxIntPlus1), null));
-        result.add(arguments(jsonObj, "long", 15.0, ((double) maxIntPlus1), null));
+        result.add(arguments(jsonObj, "long", null, ((double) maxIntPlus1),
+                             null));
+        result.add(arguments(jsonObj, "long", 15.0, ((double) maxIntPlus1),
+                             null));
         result.add(arguments(jsonObj, "ten.zero", null, 10.0, null));
         result.add(arguments(jsonObj, "ten.zero", 15.0, 10.0, null));
         result.add(arguments(jsonObj, "ten.five", null, 10.5, null));
@@ -996,9 +1133,15 @@ public class JsonUtilitiesTest
             Double result = getDouble(jsonObject, key, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1013,19 +1156,28 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonObject=[ " + jsonObject
                                 + " ], key=[ " + key + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -1090,9 +1242,15 @@ public class JsonUtilitiesTest
             Double result = getDouble(jsonArray, index, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1107,14 +1265,18 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonArray=[ " + jsonArray
                                 + " ], index=[ " + index + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -1196,9 +1358,15 @@ public class JsonUtilitiesTest
             BigDecimal result = getBigDecimal(jsonObject, key, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1213,19 +1381,28 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonObject=[ " + jsonObject
                                 + " ], key=[ " + key + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -1299,9 +1476,15 @@ public class JsonUtilitiesTest
             BigDecimal result = getBigDecimal(jsonArray, index, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1316,14 +1499,18 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonArray=[ " + jsonArray
                                 + " ], index=[ " + index + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -1402,9 +1589,15 @@ public class JsonUtilitiesTest
             BigInteger result = getBigInteger(jsonObject, key, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1419,19 +1612,28 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonObject=[ " + jsonObject
                                 + " ], key=[ " + key + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -1502,9 +1704,15 @@ public class JsonUtilitiesTest
             BigInteger result = getBigInteger(jsonArray, index, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1519,14 +1727,18 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonArray=[ " + jsonArray
                                 + " ], index=[ " + index + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -1569,8 +1781,10 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonObj, "one", 15.0F, 1.0F, null));
         result.add(arguments(jsonObj, "ten", null, 10.0F, null));
         result.add(arguments(jsonObj, "ten", 15.0F, 10.0F, null));
-        result.add(arguments(jsonObj, "long", null, ((float) maxIntPlus1), null));
-        result.add(arguments(jsonObj, "long", 15.0F, ((float) maxIntPlus1), null));
+        result.add(arguments(jsonObj, "long", null, ((float) maxIntPlus1),
+                             null));
+        result.add(arguments(jsonObj, "long", 15.0F, ((float) maxIntPlus1),
+                             null));
         result.add(arguments(jsonObj, "ten.zero", null, 10.0F, null));
         result.add(arguments(jsonObj, "ten.zero", 15.0F, 10.0F, null));
         result.add(arguments(jsonObj, "ten.five", null, 10.5F, null));
@@ -1599,9 +1813,15 @@ public class JsonUtilitiesTest
             Float result = getFloat(jsonObject, key, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1616,19 +1836,28 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonObject=[ " + jsonObject
                                 + " ], key=[ " + key + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -1693,9 +1922,15 @@ public class JsonUtilitiesTest
             Float result = getFloat(jsonArray, index, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1710,14 +1945,18 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonArray=[ " + jsonArray
                                 + " ], index=[ " + index + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -1775,7 +2014,6 @@ public class JsonUtilitiesTest
         result.add(arguments(null, null, false, false, null));
 
         return result;
-
     }
 
     @ParameterizedTest
@@ -1790,9 +2028,15 @@ public class JsonUtilitiesTest
             Boolean result = getBoolean(jsonObject, key, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1807,19 +2051,28 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonObject=[ " + jsonObject
                                 + " ], key=[ " + key + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -1866,7 +2119,6 @@ public class JsonUtilitiesTest
         result.add(arguments(null, 0, false, false, null));
 
         return result;
-
     }
 
     @ParameterizedTest
@@ -1881,9 +2133,15 @@ public class JsonUtilitiesTest
             Boolean result = getBoolean(jsonArray, index, defaultValue);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
@@ -1898,14 +2156,18 @@ public class JsonUtilitiesTest
                         "Unexpected result with no default value "
                                 + "parameter.  jsonArray=[ " + jsonArray
                                 + " ], index=[ " + index + " ]");
-
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -1967,26 +2229,41 @@ public class JsonUtilitiesTest
             JsonValue result = getJsonValue(jsonObject, key);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
                     "Unexpected result.  jsonObject=[ " + jsonObject
                             + " ], key=[ " + key + " ]");
-
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -2043,26 +2320,41 @@ public class JsonUtilitiesTest
             JsonObject result = getJsonObject(jsonObject, key);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
                     "Unexpected result.  jsonObject=[ " + jsonObject
                             + " ], key=[ " + key + " ]");
-
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ], key=[ "
-                        + key + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
-                fail("Expected a different failure.  jsonObject=[ " + jsonObject
-                        + " ], key=[ " + key + " ], expectedFailure=[ "
-                        + expectedFailure.getName() + " ]: " + e);
+                fail("Expected a different failure.  jsonObject=[ "
+                    + jsonObject
+                    + " ], key=[ "
+                    + key
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]: "
+                    + e);
             }
         }
     }
@@ -2117,21 +2409,31 @@ public class JsonUtilitiesTest
             JsonObject result = getJsonObject(jsonArray, index);
 
             if (expectedFailure != null) {
-                fail("Expected a failure, but got success.  jsonArray=[ " + jsonArray
-                        + " ], index=[ " + index + " ], result=[ " + result
-                        + " ], expectedFailure=[ " + expectedFailure.getName() + " ]");
+                fail("Expected a failure, but got success.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + result
+                    + " ], expectedFailure=[ "
+                    + expectedFailure.getName()
+                    + " ]");
             }
 
             assertEquals(expectedResult, result,
                     "Unexpected result.  jsonArray=[ " + jsonArray
                             + " ], index=[ " + index + " ]");
-
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
-                fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ], index=[ "
-                        + index + " ], result=[ " + expectedResult + " ]: " + e);
-
+                fail("Unexpected failure.  jsonArray=[ "
+                    + jsonArray
+                    + " ], index=[ "
+                    + index
+                    + " ], result=[ "
+                    + expectedResult
+                    + " ]: "
+                    + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure.  jsonArray=[ " + jsonArray
@@ -2171,10 +2473,10 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonObject=[ "
                             + jsonObject + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
+            fail(
+                "Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
         }
     }
 
@@ -2208,10 +2510,10 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonObject=[ "
                             + jsonObject + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
+            fail(
+                "Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
         }
     }
 
@@ -2245,10 +2547,10 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonObject=[ "
                             + jsonObject + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
+            fail(
+                "Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
         }
     }
 
@@ -2282,10 +2584,10 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonObject=[ "
                             + jsonObject + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
+            fail(
+                "Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
         }
     }
 
@@ -2319,10 +2621,10 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonObject=[ "
                             + jsonObject + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
+            fail(
+                "Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
         }
     }
 
@@ -2356,10 +2658,10 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonObject=[ "
                             + jsonObject + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
+            fail(
+                "Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
         }
     }
 
@@ -2393,10 +2695,10 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonObject=[ "
                             + jsonObject + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
+            fail(
+                "Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
         }
     }
 
@@ -2440,10 +2742,10 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonObject=[ "
                             + jsonObject + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
+            fail(
+                "Unexpected failure.  jsonObject=[ " + jsonObject + " ]: " + e);
         }
     }
 
@@ -2477,7 +2779,6 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonArray=[ "
                             + jsonArray + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2514,7 +2815,6 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonArray=[ "
                             + jsonArray + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2551,7 +2851,6 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonArray=[ "
                             + jsonArray + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2588,7 +2887,6 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonArray=[ "
                             + jsonArray + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2625,7 +2923,6 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonArray=[ "
                             + jsonArray + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2662,7 +2959,6 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonArray=[ "
                             + jsonArray + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2699,7 +2995,6 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonArray=[ "
                             + jsonArray + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2746,7 +3041,6 @@ public class JsonUtilitiesTest
             assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
                     "Unexpected null value type.  jsonArray=[ "
                             + jsonArray + " ]");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2795,7 +3089,6 @@ public class JsonUtilitiesTest
             assertEquals(expectedResult, result,
                     "Unexpected result when parsing JSON text: "
                             + jsonText);
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonText=[ " + jsonText
@@ -2842,7 +3135,6 @@ public class JsonUtilitiesTest
             assertEquals(expectedResult, result,
                     "Unexpected result when parsing JSON text: "
                             + jsonText);
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonText=[ " + jsonText
@@ -2898,7 +3190,6 @@ public class JsonUtilitiesTest
             assertEquals(expectedResult, result,
                     "Unexpected result when normalizing JSON text: "
                             + jsonText);
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonText=[ " + jsonText + " ]: " + e);
@@ -2942,18 +3233,15 @@ public class JsonUtilitiesTest
         result.add(arguments(JsonValue.TRUE, true));
         result.add(arguments(JsonValue.FALSE, false));
 
-        JsonNumber number = toJsonObject("value", 10)
-                .getJsonNumber("value");
+        JsonNumber number = toJsonObject("value", 10).getJsonNumber("value");
 
         result.add(arguments(number, 10L));
 
-        number = toJsonObject("value", 20.5)
-                .getJsonNumber("value");
+        number = toJsonObject("value", 20.5).getJsonNumber("value");
 
         result.add(arguments(number, 20.5));
 
-        JsonString string = toJsonObject("value", "Foo")
-                .getJsonString("value");
+        JsonString string = toJsonObject("value", "Foo").getJsonString("value");
 
         result.add(arguments(string, "Foo"));
 
@@ -2971,7 +3259,6 @@ public class JsonUtilitiesTest
             assertEquals(expectedResult, result,
                     "Unexpected result when normalizing JSON value: "
                             + jsonValue);
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonValue=[ " + jsonValue + " ]: " + e);
@@ -3022,7 +3309,6 @@ public class JsonUtilitiesTest
             JsonValue jsonValue = jsonObject.getValue("/value");
 
             validateJsonValue(value, jsonValue, expectedType);
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  value=[ " + value + " ]: " + e);
@@ -3064,13 +3350,15 @@ public class JsonUtilitiesTest
         if (value != null) {
             Object actual = null;
             Object expected = value;
-            switch (value.getClass().getName()) {
+            switch (value.getClass().getName())
+            {
                 case "java.lang.String":
                     actual = ((JsonString) jsonValue).getString();
                     break;
                 case "java.lang.Boolean":
-                    actual = (jsonValue.equals(JsonValue.TRUE)) ? true
-                            : (jsonValue.equals(JsonValue.FALSE)) ? false : jsonValue;
+                    actual = (jsonValue.equals(JsonValue.TRUE))
+                        ? true : (jsonValue.equals(JsonValue.FALSE))
+                        ? false : jsonValue;
                     break;
                 case "java.lang.Integer":
                     actual = ((JsonNumber) jsonValue).intValue();
@@ -3079,10 +3367,12 @@ public class JsonUtilitiesTest
                     actual = ((JsonNumber) jsonValue).longValue();
                     break;
                 case "java.lang.Short":
-                    actual = ((JsonNumber) jsonValue).numberValue().shortValue();
+                    actual = ((JsonNumber) jsonValue).numberValue()
+                                                     .shortValue();
                     break;
                 case "java.lang.Float":
-                    actual = ((JsonNumber) jsonValue).numberValue().floatValue();
+                    actual = ((JsonNumber) jsonValue).numberValue()
+                                                     .floatValue();
                     break;
                 case "java.lang.Double":
                     actual = ((JsonNumber) jsonValue).doubleValue();
@@ -3104,12 +3394,10 @@ public class JsonUtilitiesTest
                             list.add(Array.get(value, index));
                         }
                         expected = list;
-
                     } else if (value instanceof Collection) {
                         // convert to a list
                         actual = normalizeJsonValue(jsonValue);
                         expected = new ArrayList((Collection) value);
-
                     } else if (value instanceof Map) {
                         boolean stringKeys = true;
                         for (Object key : ((Map) value).keySet()) {
@@ -3121,7 +3409,6 @@ public class JsonUtilitiesTest
                         if (stringKeys) {
                             // convert to a Map
                             actual = normalizeJsonValue(jsonValue);
-
                         } else {
                             actual = ((JsonString) jsonValue).getString();
                             expected = value.toString();
@@ -3152,7 +3439,6 @@ public class JsonUtilitiesTest
 
             assertEquals(expected, actual,
                     "Unexpected result for toJsonObject() with 1 argument");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObject1()");
@@ -3174,12 +3460,10 @@ public class JsonUtilitiesTest
 
             assertEquals(expected, actual,
                     "Unexpected result for toJsonObject() with 2 arguments");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObject2()");
         }
-
     }
 
     @Test
@@ -3199,12 +3483,10 @@ public class JsonUtilitiesTest
 
             assertEquals(expected, actual,
                     "Unexpected result for toJsonObject() with 3 arguments");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObject3()");
         }
-
     }
 
     public List<Arguments> provideToJsonObjectParams()
@@ -3273,7 +3555,6 @@ public class JsonUtilitiesTest
             assertEquals(expectedResult, actual,
                     "Unexpected result for toJsonObject() with map: "
                             + map);
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObject(): " + map + " / "
@@ -3351,12 +3632,10 @@ public class JsonUtilitiesTest
 
             assertEquals(expected, actual,
                     "Unexpected result for toJsonArray() with N arguments");
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObjectN()");
         }
-
     }
 
     @ParameterizedTest
@@ -3370,7 +3649,6 @@ public class JsonUtilitiesTest
             assertEquals(expectedResult, actual,
                     "Unexpected result for toJsonArray() with list: "
                             + list);
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonArray(): " + list + " / "
@@ -3408,10 +3686,14 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonObject.getValue("/text"), "\"ABC\""));
 
         String fullText = "{ "
-                + "\"int\": 5, \"null\": null, "
-                + "\"array\": " + arrText + ", "
-                + "\"object\": " + objText + ", "
-                + "\"text\": \"ABC\" }";
+            + "\"int\": 5, \"null\": null, "
+            + "\"array\": "
+            + arrText
+            + ", "
+            + "\"object\": "
+            + objText
+            + ", "
+            + "\"text\": \"ABC\" }";
 
         result.add(arguments(jsonObject, fullText));
 
@@ -3421,23 +3703,25 @@ public class JsonUtilitiesTest
     private static int getPrettyPrintLineCount(JsonValue jsonValue)
     {
         if (jsonValue instanceof JsonArray) {
-            int lineCount = 1; // for the opening bracket
+            int lineCount = 1;
+            // for the opening bracket
             JsonArray jsonArray = (JsonArray) jsonValue;
             for (JsonValue value : jsonArray) {
                 lineCount += getPrettyPrintLineCount(value);
             }
-            lineCount++; // for the closing bracket
+            lineCount++;
+            // for the closing bracket
             return lineCount;
-
         } else if (jsonValue instanceof JsonStructure) {
             JsonObject jsonObject = (JsonObject) jsonValue;
-            int lineCount = 1; // for the opening curly brace
+            int lineCount = 1;
+            // for the opening curly brace
             for (JsonValue value : jsonObject.values()) {
                 lineCount += getPrettyPrintLineCount(value);
             }
-            lineCount++; // for the closing curly brace
+            lineCount++;
+            // for the closing curly brace
             return lineCount;
-
         } else {
             return 1;
         }
@@ -3473,10 +3757,10 @@ public class JsonUtilitiesTest
             assertEquals(expectedLineCount, actualLineCount,
                     "Pretty-print JSON line count is unexpected: "
                             + result);
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure for toJsonText(): " + jsonValue + " / " + e);
+            fail("Unexpected failure for toJsonText(): "
+                + jsonValue + " / " + e);
         }
     }
 
@@ -3529,10 +3813,10 @@ public class JsonUtilitiesTest
             assertEquals(expectedLineCount, actualLineCount,
                     "Pretty-print JSON line count is unexpected: "
                             + result);
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure for toJsonText(): " + jsonValue + " / " + e);
+            fail("Unexpected failure for toJsonText(): "
+                + jsonValue + " / " + e);
         }
     }
 
@@ -3585,10 +3869,10 @@ public class JsonUtilitiesTest
             assertEquals(expectedLineCount, actualLineCount,
                     "Pretty-print JSON line count is unexpected: "
                             + result);
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure for toJsonText(): " + jsonValue + " / " + e);
+            fail("Unexpected failure for toJsonText(): "
+                + jsonValue + " / " + e);
         }
     }
 
@@ -3624,10 +3908,10 @@ public class JsonUtilitiesTest
             assertEquals(expectedLineCount, actualLineCount,
                     "Pretty-print JSON line count is unexpected: "
                             + result);
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure for toJsonText(): " + jsonValue + " / " + e);
+            fail("Unexpected failure for toJsonText(): "
+                + jsonValue + " / " + e);
         }
     }
 
@@ -3678,10 +3962,10 @@ public class JsonUtilitiesTest
             assertEquals(expectedLineCount, actualLineCount,
                     "Pretty-print JSON line count is unexpected: "
                             + result);
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure for toJsonText(): " + jsonValue + " / " + e);
+            fail("Unexpected failure for toJsonText(): "
+                + jsonValue + " / " + e);
         }
     }
 
@@ -3732,10 +4016,10 @@ public class JsonUtilitiesTest
             assertEquals(expectedLineCount, actualLineCount,
                     "Pretty-print JSON line count is unexpected: "
                             + result);
-
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Unexpected failure for toJsonText(): " + jsonValue + " / " + e);
+            fail("Unexpected failure for toJsonText(): "
+                + jsonValue + " / " + e);
         }
     }
 
@@ -3792,7 +4076,8 @@ public class JsonUtilitiesTest
             file = File.createTempFile("test-", ".ini");
             file.deleteOnExit();
             try (FileOutputStream fos = new FileOutputStream(file);
-                    OutputStreamWriter osw = new OutputStreamWriter(fos)) {
+                 OutputStreamWriter osw = new OutputStreamWriter(fos))
+            {
                 osw.write(iniText);
                 osw.flush();
             }
@@ -3801,11 +4086,9 @@ public class JsonUtilitiesTest
 
             assertEquals(expectedResult, result,
                     "Incorrect JSON for INI: " + iniText);
-
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for iniToJson(): " + iniText + " / " + e);
-
         } finally {
             if (file != null) {
                 file.delete();
@@ -3837,7 +4120,7 @@ public class JsonUtilitiesTest
      *   <li>The type of exception to expect, or <code>null</code> if
      *       no exception is expected.
      * </ol>
-     * 
+     *
      * @return The {@link List} of {@link Argumebts} as described above.
      */
     public List<Arguments> getJsonDateObjectParameters()
@@ -3853,14 +4136,17 @@ public class JsonUtilitiesTest
             // format the instant as a JSON date
             String text = JsonUtilities.DATE_TIME_FORMATTER.format(instant);
 
-            // parse it back to account for precision loss due to JSON date format
-            instant = Instant.from(JsonUtilities.DATE_TIME_FORMATTER.parse(text));
+            // parse it back to account for precision loss due to JSON date
+            // format
+            instant = Instant.from(JsonUtilities.DATE_TIME_FORMATTER.parse(
+                text));
 
             // generate a distinct property key
             String key = TextUtilities.randomAlphabeticText(3, 8);
 
             // add a test case that should successfully obtain a date value
-            result.add(Arguments.of(createObject(key, text), key, instant, null));
+            result.add(Arguments.of(createObject(key, text), key, instant,
+                                    null));
         }
 
         // add a test case that will result in a null date value
@@ -3875,16 +4161,20 @@ public class JsonUtilitiesTest
 
     @MethodSource("getJsonDateObjectParameters")
     @ParameterizedTest
-    public void testGetInstantFromObject(JsonObject                 obj, 
-                                         String                     key, 
-                                         Instant                    expected, 
-                                         Class<? extends Throwable> exceptionType)
+    public void testGetInstantFromObject(
+            JsonObject obj,
+            String key,
+            Instant expected,
+            Class<? extends Throwable> exceptionType)
     {
         try {
             Instant instant = JsonUtilities.getInstant(obj, key);
             if (exceptionType != null) {
-                fail("Succeeded on getInstant() for key (" + key + ") when should have "
-                     + "failed: " + JsonUtilities.toJsonText(obj));
+                fail("Succeeded on getInstant() for key ("
+                    + key
+                    + ") when should have "
+                    + "failed: "
+                    + JsonUtilities.toJsonText(obj));
             }
             assertEquals(expected, instant, "Instant value for key (" + key
                 + ") is not as expected: " + JsonUtilities.toJsonText(obj));
@@ -3892,9 +4182,9 @@ public class JsonUtilitiesTest
             String nullResultKey = (expected == null) ? key : key + "-missing";
             Instant now = Instant.now();
             instant = JsonUtilities.getInstant(obj, nullResultKey, now);
-            assertEquals(now, instant, "Defaulted instant value is not as expected: "
+            assertEquals(now, instant,
+                         "Defaulted instant value is not as expected: "
                 + JsonUtilities.toJsonText(obj));
-            
         } catch (Exception e) {
             if (exceptionType == null || !exceptionType.isInstance(e)) {
                 fail("Unexpected exception on getInstant() for key (" + key 
@@ -3902,19 +4192,22 @@ public class JsonUtilitiesTest
             }
         }
     }
-    
+
     @MethodSource("getJsonDateObjectParameters")
     @ParameterizedTest
-    public void testGetDateFromObject(JsonObject                    obj, 
-                                      String                        key, 
-                                      Instant                       expected, 
-                                      Class<? extends Throwable>    exceptionType)
+    public void testGetDateFromObject(JsonObject obj,
+                                      String key,
+                                      Instant expected,
+                                      Class<? extends Throwable> exceptionType)
     {
         try {
             Date date = JsonUtilities.getDate(obj, key);
             if (exceptionType != null) {
-                fail("Succeeded on getDate() for key (" + key + ") when should have "
-                     + "failed: " + JsonUtilities.toJsonText(obj));
+                fail("Succeeded on getDate() for key ("
+                    + key
+                    + ") when should have "
+                    + "failed: "
+                    + JsonUtilities.toJsonText(obj));
             }
             Date expectedDate = (expected == null) ? null : Date.from(expected);
 
@@ -3926,7 +4219,6 @@ public class JsonUtilitiesTest
             date = JsonUtilities.getDate(obj, missingKey, now);
             assertEquals(now, date, "Defaulted date value is not as expected: "
                 + JsonUtilities.toJsonText(obj));
-
         } catch (Exception e) {
             if (exceptionType == null || !exceptionType.isInstance(e)) {
                 fail("Unexpected exception on getDate() for key (" + key 
@@ -3969,7 +4261,7 @@ public class JsonUtilitiesTest
      *   <li>The type of exception to expect, or <code>null</code> if
      *       no exception is expected.
      * </ol>
-     * 
+     *
      * @return The {@link List} of {@link Argumebts} as described above.
      */
     public List<Arguments> getJsonDateArrayParameters()
@@ -3987,12 +4279,13 @@ public class JsonUtilitiesTest
 
             // parse it back as an instant to account for lot precision
             // from the JSON date formatting
-            instant = Instant.from(JsonUtilities.DATE_TIME_FORMATTER.parse(text));
+            instant = Instant.from(JsonUtilities.DATE_TIME_FORMATTER.parse(
+                text));
 
             // pick an array index between 2 and 4
             int arrayIndex = (index % 3) + 2;
 
-            // add a case that should work with varying array indexes and 
+            // add a case that should work with varying array indexes and
             // date values
             result.add(Arguments.of(
                 createArray(arrayIndex, text), arrayIndex, instant, null));
@@ -4011,16 +4304,20 @@ public class JsonUtilitiesTest
 
     @MethodSource("getJsonDateArrayParameters")
     @ParameterizedTest
-    public void testGetInstantFromArray(JsonArray                   arr, 
-                                         int                        index, 
-                                         Instant                    expected, 
-                                         Class<? extends Throwable> exceptionType)
+    public void testGetInstantFromArray(
+            JsonArray arr,
+            int index,
+            Instant expected,
+            Class<? extends Throwable> exceptionType)
     {
         try {
             Instant instant = JsonUtilities.getInstant(arr, index);
             if (exceptionType != null) {
-                fail("Succeeded on getInstant() for index (" + index + ") when should have "
-                     + "failed: " + JsonUtilities.toJsonText(arr));
+                fail("Succeeded on getInstant() for index ("
+                    + index
+                    + ") when should have "
+                    + "failed: "
+                    + JsonUtilities.toJsonText(arr));
             }
             assertEquals(expected, instant, "Instant value at index (" + index 
                 + ") is not as expected: " + JsonUtilities.toJsonText(arr));
@@ -4028,9 +4325,9 @@ public class JsonUtilitiesTest
             int nullIndex = (expected == null) ? index : 0;
             Instant now = Instant.now();
             instant = JsonUtilities.getInstant(arr, nullIndex, now);
-            assertEquals(now, instant, "Defaulted instant value is not as expected: "
+            assertEquals(now, instant,
+                         "Defaulted instant value is not as expected: "
                 + JsonUtilities.toJsonText(arr));
-            
         } catch (Exception e) {
             if (exceptionType == null || !exceptionType.isInstance(e)) {
                 fail("Unexpected exception on getInstant() for index (" + index
@@ -4038,7 +4335,7 @@ public class JsonUtilitiesTest
             }
         }
     }
-    
+
     @MethodSource("getJsonDateArrayParameters")
     @ParameterizedTest
     public void testGetDateFromArray(JsonArray                  arr, 
@@ -4049,8 +4346,11 @@ public class JsonUtilitiesTest
         try {
             Date date = JsonUtilities.getDate(arr, index);
             if (exceptionType != null) {
-                fail("Succeeded on getDate() for index (" + index + ") when should have "
-                     + "failed: " + JsonUtilities.toJsonText(arr));
+                fail("Succeeded on getDate() for index ("
+                    + index
+                    + ") when should have "
+                    + "failed: "
+                    + JsonUtilities.toJsonText(arr));
             }
             Date expectedDate = (expected == null) ? null : Date.from(expected);
             assertEquals(expectedDate, date, "Date value at index (" + index 
@@ -4061,7 +4361,6 @@ public class JsonUtilitiesTest
             date = JsonUtilities.getDate(arr, nullIndex, now);
             assertEquals(now, date, "Defaulted date value is not as expected: "
                 + JsonUtilities.toJsonText(arr));
-
         } catch (Exception e) {
             if (exceptionType == null || !exceptionType.isInstance(e)) {
                 fail("Unexpected exception on getDate() for index (" + index 
@@ -4069,5 +4368,4 @@ public class JsonUtilitiesTest
             }
         }
     }
-
 }
