@@ -27,6 +27,7 @@
     "fastmcp",
     "findsecbugs",
     "getenv",
+    "GHSA",
     "glassfish",
     "ICLA",
     "ignorefile",

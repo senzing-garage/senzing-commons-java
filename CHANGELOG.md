@@ -8,11 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-06-17
+
+Maintenance release: a security fix in `commons-configuration2`, the
+java-coding-standards adoption (submodule + tooling refresh), and a
+batch of dependency bumps. No public API changes.
+
 **Migration note:** This release adopts a git submodule at
 `.java-coding-standards/`. After pulling, contributors must run
 `git submodule update --init --recursive` (or clone with
 `--recurse-submodules`) before the build will work — without it,
-checkstyle config, formatter profile, and the FAQ MCP server source
+checkstyle config, the formatter, and the FAQ MCP server source
 will be missing and `mvn -Pcheckstyle validate` will fail with
 "Unable to find configuration file". CI workflows must use
 `submodules: recursive` (or equivalent) on checkout. Contributors
@@ -21,35 +27,74 @@ who use Claude Code against this repository also need
 `PostToolUse` auto-format hook to function — see README
 "Dependencies".
 
+First-time setup also requires installing the formatter's Python
+runtime dependencies against the system `python3`:
+
+```bash
+python3 -m pip install --break-system-packages --user \
+  -r .java-coding-standards/tooling/scripts/requirements.txt
+```
+
+(omit `--break-system-packages --user` on non-PEP-668 systems).
+Without these, the Claude Code `PostToolUse` hook and VSCode
+`emeraldwalk.runonsave` extension both log `ModuleNotFoundError` on
+every Java edit. See
+`.java-coding-standards/adoption/adopt-standards-prompt.md` Step 2
+for details.
+
+### Security
+
+- **Bumped `org.apache.commons:commons-configuration2` from 2.13.0
+  to 2.15.0** (via dependabot PRs #207, #214). The 2.15.0 release
+  fixes
+  [GHSA-337m-mw94-2v6g](https://github.com/advisories/GHSA-337m-mw94-2v6g)
+  (medium severity) — _Apache Commons Configuration:
+  StackOverflowError for YAML input with cycles_. This project's
+  use of `commons-configuration2` is limited to internal
+  configuration loading, so the practical exposure was bounded, but
+  the bump is still recommended for any consumer who picks up
+  `senzing-commons` transitively.
+
 ### Changed
 
 - Adopted `senzing-garage/java-coding-standards` as a git submodule
   mounted at `.java-coding-standards/`. The shared rules document,
-  Eclipse JDT formatter profile, checkstyle config, bulk-format
-  Python scripts, FAQ MCP server, and shared FAQ corpus now live in
-  the submodule and are referenced from there rather than copied
-  into this repository.
-- `pom.xml` checkstyle profile updated: `<configLocation>` and
-  `<suppressionsLocation>` now point at the submodule
-  (`.java-coding-standards/checkstyle/...`).
+  formatter, checkstyle config, bulk-format Python scripts, FAQ MCP
+  server, and shared FAQ corpus now live in the submodule and are
+  referenced from there rather than copied into this repository.
+  Submodule pinned at the **0.4.1** release.
+- `pom.xml` checkstyle profile updated: `<configLocation>` now
+  points at the submodule
+  (`.java-coding-standards/checkstyle/senzing-checkstyle.xml`). The
+  separate `<suppressionsLocation>` line was removed — suppressions
+  are wired internally by `senzing-checkstyle.xml` via embedded
+  `SuppressionFilter` modules.
 - `.mcp.json` updated: the `senzing-commons-faq` MCP server is now
   invoked from the submodule
   (`.java-coding-standards/mcp/faq_server.py`) with explicit
   `--server-name`, `--faqs-dir`, `--shared-faqs-dir` arguments. The
-  server merges the four shared standards FAQs with this project's
+  server merges the shared standards FAQs with this project's
   local FAQs in a single BM25-ranked search index.
-- `.vscode/settings.json` updated: `java.format.settings.url` now
-  references the submodule's formatter profile. Added an
-  `emeraldwalk.runonsave` block that invokes the standards
-  bulk-format orchestrator on every Java save (requires the
-  `emeraldwalk.runonsave` extension, which is recommended via
-  `.vscode/extensions.json`).
+- `.vscode/settings.json` updated: added an `emeraldwalk.runonsave`
+  block that invokes the standards formatter on every Java save
+  (requires the `emeraldwalk.runonsave` extension, which is
+  recommended via `.vscode/extensions.json`).
 - `.claude/CLAUDE.md` updated: the "Java Coding Standards", "FAQ
   MCP Server", and "Testing Configuration" sections now reference
-  the submodule paths. Project-specific sections (Workflow
-  Preferences, Project Overview, Architecture Overview,
-  Development Notes, Code Patterns, Release Process, etc.) are
-  unchanged.
+  the submodule paths. The "Workflow Preferences" section retired
+  the older "do not modify source code files directly" rule —
+  Claude may now edit `src/` directly; PR review is the gate (see
+  the `conventions/source-edit-policy` FAQ for the rewritten
+  rule and history).
+- Bumped `org.junit.jupiter:junit-jupiter` from 6.0.3 to 6.1.0
+  (#216).
+- Bumped `org.xerial:sqlite-jdbc` from 3.53.0.0 to 3.53.1.0
+  (#215).
+- Bumped `org.apache.maven.plugins:maven-surefire-plugin` from
+  3.5.5 to 3.5.6 (#218).
+- Bumped `io.zonky.test.postgres:embedded-postgres-binaries-linux-arm64v8`
+  from 14.22.0 to 18.3.0 (#211) and the matching darwin-arm64v8
+  binary from 14.22.0 to 18.3.0 (#210).
 
 ### Added
 
@@ -62,9 +107,28 @@ who use Claude Code against this repository also need
 - `.claude/settings.json` with three Claude Code hooks:
   `PostToolUse` auto-formats every Java file Claude edits;
   `Stop` runs `mvn -Pcheckstyle validate` after Claude finishes;
-  `SessionStart` warns when the submodule pin is behind upstream.
+  `SessionStart` surfaces a one-line nudge when the submodule pin
+  is behind upstream.
 - `.claude/commands/init-java.md` slash command for re-running the
   adoption flow against the latest standards-repo pin.
+- Three project-local FAQs under `.claude/faqs/`:
+  `architecture/connection-pool-lifecycle.md`,
+  `architecture/record-reader-format-detection.md`, and
+  `troubleshooting/submodule-checkout-errors.md`.
+
+### Fixed
+
+- **`ZipUtilities.unzip(ZipInputStream, File)` Zip Slip
+  vulnerability** (CWE-22, surfaced by CodeQL on PR #217). The
+  method now canonicalizes the target directory once and refuses
+  any archive entry whose resolved path would escape it
+  (`IOException` carrying the entry name). Also picks up a latent
+  bug fix along the way: archives without explicit directory
+  entries previously failed with `FileNotFoundException` because
+  the parent directory wasn't created on the fly; the new code
+  auto-creates parent directories for file entries. New test
+  `ZipUtilitiesTest#unzipRejectsZipSlipTraversal` locks the
+  behavior.
 
 ### Removed
 
@@ -76,11 +140,13 @@ who use Claude Code against this repository also need
   - The four shared FAQs under `.claude/faqs/building/`,
     `.claude/faqs/conventions/adding-new-faqs.md`, and
     `.claude/faqs/testing/system-stubs-and-output-capture.md`.
-  - `.vscode/java-formatter.xml`.
+  - `.vscode/java-formatter.xml` (the Eclipse JDT formatter
+    profile — replaced by the in-process AST formatter shipped
+    with the standards submodule).
   - `checkstyle.xml` and `checkstyle-suppressions.xml`.
 - The project-local `.claude/faqs/conventions/source-edit-policy.md`
-  is preserved (it's a project-specific workflow rule, not part of
-  the shared standards).
+  is preserved; its content was rewritten to allow direct
+  source edits (see "Changed" above).
 
 ## [4.0.0] - 2026-04-28
 
@@ -177,8 +243,9 @@ who use Claude Code against this repository also need
   `@param`/`@return`/`@throws` descriptions to fill near 80
   characters with no orphan continuation words.
 - Added the `checkstyle` Maven profile and `checkstyle.xml` /
-  `checkstyle-suppressions.xml` configuration. `mvn -Pcheckstyle
-  validate` reports BUILD SUCCESS across the codebase.
+  `checkstyle-suppressions.xml` configuration. Running
+  `mvn -Pcheckstyle validate` reports BUILD SUCCESS across the
+  codebase.
 - Added the standards documentation under `.claude/`
   (`java-coding-standards.md`, FAQs, and bulk-fix Python scripts)
   to guide future contributions.
@@ -281,7 +348,7 @@ who use Claude Code against this repository also need
 - Updated dependencies:
   - Upgraded `sqlite-jdbc` from version `3.42.0.1` to `3.50.3.0` since
     `getGeneratedKeys()` support was restored
-  
+
 ## [3.3.5] - 2025-08-12
 
 ### Changed in 3.3.5
@@ -292,7 +359,7 @@ who use Claude Code against this repository also need
   - Updated `jackson-xxxx` dependencies from version `2.19.0` to `2.19.2`
   - Updated `junit-jupiter` from version `5.13.1` to `5.13.4`
   - Upgraded `maven-gpg-plugin` from version `3.2.7` to `3.2.8`
-  
+
 ## [3.3.4] - 2025-06-09
 
 ### Changed in 3.3.4
