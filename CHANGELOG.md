@@ -243,8 +243,9 @@ for details.
   `@param`/`@return`/`@throws` descriptions to fill near 80
   characters with no orphan continuation words.
 - Added the `checkstyle` Maven profile and `checkstyle.xml` /
-  `checkstyle-suppressions.xml` configuration. `mvn -Pcheckstyle
-validate` reports BUILD SUCCESS across the codebase.
+  `checkstyle-suppressions.xml` configuration. Running
+  `mvn -Pcheckstyle validate` reports BUILD SUCCESS across the
+  codebase.
 - Added the standards documentation under `.claude/`
   (`java-coding-standards.md`, FAQs, and bulk-fix Python scripts)
   to guide future contributions.
