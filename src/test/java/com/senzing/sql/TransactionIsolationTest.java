@@ -4,12 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 import static com.senzing.sql.TransactionIsolation.READ_COMMITTED;
 import static com.senzing.sql.TransactionIsolation.READ_UNCOMMITTED;
 import static com.senzing.sql.TransactionIsolation.REPEATABLE_READ;
@@ -42,144 +40,147 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Execution(ExecutionMode.CONCURRENT)
 public class TransactionIsolationTest
 {
-  // -------------------------------------------------------------------
-  // Enum value count
-  // -------------------------------------------------------------------
+    // -------------------------------------------------------------------
+    // Enum value count
+    // -------------------------------------------------------------------
 
-  /**
-   * The enum must declare exactly four constants per its javadoc:
-   * {@code READ_UNCOMMITTED}, {@code READ_COMMITTED},
-   * {@code REPEATABLE_READ}, {@code SERIALIZABLE}.
-   */
-  @Test
-  public void enumDeclaresFourConstants()
-  {
-    assertEquals(4, TransactionIsolation.values().length,
+    /**
+     * The enum must declare exactly four constants per its javadoc:
+     * {@code READ_UNCOMMITTED}, {@code READ_COMMITTED},
+     * {@code REPEATABLE_READ}, {@code SERIALIZABLE}.
+     */
+    @Test
+    public void enumDeclaresFourConstants()
+    {
+        assertEquals(4, TransactionIsolation.values().length,
                  "TransactionIsolation must declare exactly 4 constants");
-  }
+    }
 
-  // -------------------------------------------------------------------
-  // getIntegerValue() — must match the JDBC TRANSACTION_* constants
-  // -------------------------------------------------------------------
+    // -------------------------------------------------------------------
+    // getIntegerValue() — must match the JDBC TRANSACTION_* constants
+    // -------------------------------------------------------------------
 
-  /**
-   * {@code READ_UNCOMMITTED.getIntegerValue()} must equal
-   * {@link Connection#TRANSACTION_READ_UNCOMMITTED}.
-   */
-  @Test
-  public void readUncommittedMapsToJdbcConstant()
-  {
-    assertEquals(TRANSACTION_READ_UNCOMMITTED,
+    /**
+     * {@code READ_UNCOMMITTED.getIntegerValue()} must equal
+     * {@link Connection#TRANSACTION_READ_UNCOMMITTED}.
+     */
+    @Test
+    public void readUncommittedMapsToJdbcConstant()
+    {
+        assertEquals(TRANSACTION_READ_UNCOMMITTED,
                  READ_UNCOMMITTED.getIntegerValue());
-  }
+    }
 
-  /**
-   * {@code READ_COMMITTED.getIntegerValue()} must equal
-   * {@link Connection#TRANSACTION_READ_COMMITTED}.
-   */
-  @Test
-  public void readCommittedMapsToJdbcConstant()
-  {
-    assertEquals(TRANSACTION_READ_COMMITTED,
+    /**
+     * {@code READ_COMMITTED.getIntegerValue()} must equal
+     * {@link Connection#TRANSACTION_READ_COMMITTED}.
+     */
+    @Test
+    public void readCommittedMapsToJdbcConstant()
+    {
+        assertEquals(TRANSACTION_READ_COMMITTED,
                  READ_COMMITTED.getIntegerValue());
-  }
+    }
 
-  /**
-   * {@code REPEATABLE_READ.getIntegerValue()} must equal
-   * {@link Connection#TRANSACTION_REPEATABLE_READ}.
-   */
-  @Test
-  public void repeatableReadMapsToJdbcConstant()
-  {
-    assertEquals(TRANSACTION_REPEATABLE_READ,
+    /**
+     * {@code REPEATABLE_READ.getIntegerValue()} must equal
+     * {@link Connection#TRANSACTION_REPEATABLE_READ}.
+     */
+    @Test
+    public void repeatableReadMapsToJdbcConstant()
+    {
+        assertEquals(TRANSACTION_REPEATABLE_READ,
                  REPEATABLE_READ.getIntegerValue());
-  }
+    }
 
-  /**
-   * {@code SERIALIZABLE.getIntegerValue()} must equal
-   * {@link Connection#TRANSACTION_SERIALIZABLE}.
-   */
-  @Test
-  public void serializableMapsToJdbcConstant()
-  {
-    assertEquals(TRANSACTION_SERIALIZABLE,
+    /**
+     * {@code SERIALIZABLE.getIntegerValue()} must equal
+     * {@link Connection#TRANSACTION_SERIALIZABLE}.
+     */
+    @Test
+    public void serializableMapsToJdbcConstant()
+    {
+        assertEquals(TRANSACTION_SERIALIZABLE,
                  SERIALIZABLE.getIntegerValue());
-  }
+    }
 
-  // -------------------------------------------------------------------
-  // applyTo(Connection) contract
-  // -------------------------------------------------------------------
+    // -------------------------------------------------------------------
+    // applyTo(Connection) contract
+    // -------------------------------------------------------------------
 
-  /**
-   * {@link TransactionIsolation#applyTo(Connection)} must set the
-   * connection's transaction isolation when it differs from the current value.
-   */
-  @Test
-  public void applyToChangesIsolationWhenDifferent() throws Exception
-  {
-    try (Connection conn = openSqliteConnection()) {
-      int initial = conn.getTransactionIsolation();
-      TransactionIsolation target =
-          (initial == TRANSACTION_SERIALIZABLE)
-              ? READ_UNCOMMITTED : SERIALIZABLE;
-      target.applyTo(conn);
-      assertEquals(target.getIntegerValue(),
+    /**
+     * {@link TransactionIsolation#applyTo(Connection)} must set the
+     * connection's transaction isolation when it differs from the current
+     * value.
+     */
+    @Test
+    public void applyToChangesIsolationWhenDifferent()
+        throws Exception
+    {
+        try (Connection conn = openSqliteConnection()) {
+            int initial = conn.getTransactionIsolation();
+            TransactionIsolation target = (initial == TRANSACTION_SERIALIZABLE)
+                ? READ_UNCOMMITTED : SERIALIZABLE;
+            target.applyTo(conn);
+            assertEquals(target.getIntegerValue(),
                    conn.getTransactionIsolation(),
                    "applyTo must change isolation to the target value");
+        }
     }
-  }
 
-  /**
-   * {@link TransactionIsolation#applyTo(Connection)} must be a no-op
-   * (no exception, level unchanged) when the connection is already at the
-   * target isolation level.
-   */
-  @Test
-  public void applyToIsNoOpWhenAlreadySet() throws Exception
-  {
-    try (Connection conn = openSqliteConnection()) {
-      conn.setTransactionIsolation(TRANSACTION_READ_UNCOMMITTED);
-      READ_UNCOMMITTED.applyTo(conn);
-      assertEquals(TRANSACTION_READ_UNCOMMITTED,
+    /**
+     * {@link TransactionIsolation#applyTo(Connection)} must be a no-op
+     * (no exception, level unchanged) when the connection is already at the
+     * target isolation level.
+     */
+    @Test
+    public void applyToIsNoOpWhenAlreadySet()
+        throws Exception
+    {
+        try (Connection conn = openSqliteConnection()) {
+            conn.setTransactionIsolation(TRANSACTION_READ_UNCOMMITTED);
+            READ_UNCOMMITTED.applyTo(conn);
+            assertEquals(TRANSACTION_READ_UNCOMMITTED,
                    conn.getTransactionIsolation(),
                    "applyTo with matching level must leave isolation"
                        + " unchanged");
+        }
     }
-  }
 
-  /**
-   * {@link TransactionIsolation#applyTo(Connection)} must propagate
-   * {@link SQLException} from the underlying driver. Drives this with
-   * a proxy {@link Connection} that throws on
-   * {@code setTransactionIsolation}.
-   */
-  @Test
-  public void applyToPropagatesSqlException()
-  {
-    Connection throwing = throwingConnection();
-    assertThrows(SQLException.class,
+    /**
+     * {@link TransactionIsolation#applyTo(Connection)} must propagate
+     * {@link SQLException} from the underlying driver. Drives this with
+     * a proxy {@link Connection} that throws on
+     * {@code setTransactionIsolation}.
+     */
+    @Test
+    public void applyToPropagatesSqlException()
+    {
+        Connection throwing = throwingConnection();
+        assertThrows(SQLException.class,
                  () -> READ_UNCOMMITTED.applyTo(throwing));
-  }
+    }
 
-  // -------------------------------------------------------------------
-  // Helpers
-  // -------------------------------------------------------------------
+    // -------------------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------------------
 
-  private static Connection openSqliteConnection() throws SQLException
-  {
-    return DriverManager.getConnection("jdbc:sqlite::memory:");
-  }
+    private static Connection openSqliteConnection()
+        throws SQLException
+    {
+        return DriverManager.getConnection("jdbc:sqlite::memory:");
+    }
 
-  /**
-   * Returns a dynamic-proxy {@link Connection} where
-   * {@code getTransactionIsolation()} reports a value distinct from
-   * every {@link TransactionIsolation} constant (so {@code applyTo} always
-   * takes the "different — call setter" branch) and
-   * {@code setTransactionIsolation(int)} throws {@link SQLException}.
-   */
-  private static Connection throwingConnection()
-  {
-    return (Connection) Proxy.newProxyInstance(
+    /**
+     * Returns a dynamic-proxy {@link Connection} where
+     * {@code getTransactionIsolation()} reports a value distinct from
+     * every {@link TransactionIsolation} constant (so {@code applyTo} always
+     * takes the "different — call setter" branch) and
+     * {@code setTransactionIsolation(int)} throws {@link SQLException}.
+     */
+    private static Connection throwingConnection()
+    {
+        return (Connection) Proxy.newProxyInstance(
         TransactionIsolation.class.getClassLoader(),
         new Class<?>[] { Connection.class },
         (proxy, method, args) -> {
@@ -192,5 +193,5 @@ public class TransactionIsolationTest
           }
           return null;
         });
-  }
+    }
 }

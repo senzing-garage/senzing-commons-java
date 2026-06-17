@@ -3,7 +3,6 @@ package com.senzing.sql;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
-
 import static com.senzing.text.TextUtilities.urlEncodeUtf8;
 
 /**
@@ -22,23 +21,22 @@ public interface Connector
      *
      * @throws SQLException If a failure occurs.
      */
-    Connection openConnection() throws SQLException;
+    Connection openConnection()
+        throws SQLException;
 
     /**
      * Formats the specified {@link Map} of connection properties as a
      * URL-encoded query string with the <code>"?"</code> prefix. This returns
      * empty string if there are no query options.
-     * 
+     *
      * @param connProperties The {@link Map} of connection properties to be
      *                       formatted as a URL-encoded query string.
-     * 
+     *
      * @return The encoded query string, or empty-string if no query options.
      */
     static String formatConnectionProperties(Map<String, String> connProperties)
     {
-        if (connProperties == null || connProperties.size() == 0) {
-            return "";
-        }
+        if (connProperties == null || connProperties.size() == 0) return "";
         StringBuilder sb = new StringBuilder();
         sb.append("?");
         connProperties.forEach((key, value) -> {
@@ -52,5 +50,4 @@ public interface Connector
         });
         return sb.toString();
     }
-
 }

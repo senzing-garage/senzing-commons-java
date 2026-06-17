@@ -13,7 +13,6 @@
     "editor.formatOnSave": false
   },
   "java.configuration.updateBuildConfiguration": "automatic",
-  "java.format.settings.url": ".java-coding-standards/tooling/ide/java-formatter.xml",
   "java.settings.url": ".vscode/jdt-prefs.epf",
   "emeraldwalk.runonsave": {
     "commands": [

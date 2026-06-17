@@ -1,7 +1,6 @@
 package com.senzing.sql;
 
 import com.senzing.util.Quantified;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
@@ -9,7 +8,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.io.StringWriter;
 import java.io.PrintWriter;
-
 import static com.senzing.sql.ConnectionPool.Stat.*;
 
 /**
@@ -193,15 +191,11 @@ public class ConnectionPool implements Quantified
                 // synchronize
                 synchronized (pool) {
                     // check if shutdown
-                    if (pool.isShutdown()) {
-                        continue;
-                    }
+                    if (pool.isShutdown()) continue;
 
                     // check to see if pool is idle, if not
                     // let the pool handle it
-                    if (pool.getIdleTime() < waitTime) {
-                        continue;
-                    }
+                    if (pool.getIdleTime() < waitTime) continue;
 
                     // expire any old connections
                     try {
@@ -539,17 +533,16 @@ public class ConnectionPool implements Quantified
      *
      * @param connector The {@link Connector} for establishing new database
      *                  connections.
-     * @param poolSize  The number of connections to initialize the connection
-     *                  pool with.
-     * @throws SQLException             If a failure occurs in establishing a
-     *                                  connection.
+     * @param poolSize The number of connections to initialize the connection
+     *                 pool with.
+     * @throws SQLException If a failure occurs in establishing a connection.
      * @throws IllegalArgumentException If the specified pool size is less-than
      *                                  or equal-to zero (0).
-     * @throws NullPointerException     If the specified {@link Connector} is
-     *                                  <code>null</code>.
+     * @throws NullPointerException If the specified {@link Connector} is
+     *                              <code>null</code>.
      */
     public ConnectionPool(Connector connector, int poolSize)
-            throws SQLException, IllegalArgumentException, NullPointerException
+        throws SQLException, IllegalArgumentException, NullPointerException
     {
         this(connector, null, poolSize);
     }
@@ -558,25 +551,24 @@ public class ConnectionPool implements Quantified
      * Constructs with the {@link Connector} and the size of the connection
      * pool.
      *
-     * @param connector      The {@link Connector} for establishing new database
-     *                       connections.
+     * @param connector The {@link Connector} for establishing new database
+     *                  connections.
      * @param isolationLevel The {@link TransactionIsolation} level to ensure is
      *                       set on each {@link Connection} before providing it,
      *                       or <code>null</code> if the isolation level need
      *                       not be verified and set.
-     * @param poolSize       The number of connections to initialize the
-     *                       connection pool with.
-     * @throws SQLException             If a failure occurs in establishing a
-     *                                  connection.
+     * @param poolSize The number of connections to initialize the connection
+     *                 pool with.
+     * @throws SQLException If a failure occurs in establishing a connection.
      * @throws IllegalArgumentException If the specified pool size is less-than
      *                                  or equal-to zero (0).
-     * @throws NullPointerException     If the specified {@link Connector} is
-     *                                  <code>null</code>.
+     * @throws NullPointerException If the specified {@link Connector} is
+     *                              <code>null</code>.
      */
     public ConnectionPool(Connector connector,
             TransactionIsolation isolationLevel,
             int poolSize)
-            throws SQLException, IllegalArgumentException, NullPointerException
+        throws SQLException, IllegalArgumentException, NullPointerException
     {
         this(connector, isolationLevel, poolSize, poolSize);
     }
@@ -587,26 +579,25 @@ public class ConnectionPool implements Quantified
      * size. The pool will start at the minimum size and grow to the maximum
      * size if demand for connections requires it.
      *
-     * @param connector   The {@link Connector} for establishing new database
-     *                    connections.
+     * @param connector The {@link Connector} for establishing new database
+     *                  connections.
      * @param minPoolSize The minimum number of connections to initialize the
      *                    connection pool with.
      * @param maxPoolSize The maximum number of connections that the pool can
      *                    grow to have.
-     * @throws SQLException             If a failure occurs in establishing a
-     *                                  connection.
+     * @throws SQLException If a failure occurs in establishing a connection.
      * @throws IllegalArgumentException If the specified maximum pool size is
      *                                  less-than or equal-to zero (0), the
      *                                  minimum pool size is less-than zero (0),
      *                                  or the minimum pool size is greater-than
      *                                  the maximum pool size.
-     * @throws NullPointerException     If the specified {@link Connector} is
-     *                                  <code>null</code>.
+     * @throws NullPointerException If the specified {@link Connector} is
+     *                              <code>null</code>.
      */
     public ConnectionPool(Connector connector,
             int minPoolSize,
             int maxPoolSize)
-            throws SQLException, IllegalArgumentException, NullPointerException
+        throws SQLException, IllegalArgumentException, NullPointerException
     {
         this(connector, null, minPoolSize, maxPoolSize);
     }
@@ -617,31 +608,30 @@ public class ConnectionPool implements Quantified
      * size. The pool will start at the minimum size and grow to the maximum
      * size if demand for connections requires it.
      *
-     * @param connector      The {@link Connector} for establishing new database
-     *                       connections.
+     * @param connector The {@link Connector} for establishing new database
+     *                  connections.
      * @param isolationLevel The {@link TransactionIsolation} level to ensure is
      *                       set on each {@link Connection} before providing it,
      *                       or <code>null</code> if the isolation level need
      *                       not be verified and set.
-     * @param minPoolSize    The minimum number of connections to initialize the
-     *                       connection pool with.
-     * @param maxPoolSize    The maximum number of connections that the pool can
-     *                       grow to have.
-     * @throws SQLException             If a failure occurs in establishing a
-     *                                  connection.
+     * @param minPoolSize The minimum number of connections to initialize the
+     *                    connection pool with.
+     * @param maxPoolSize The maximum number of connections that the pool can
+     *                    grow to have.
+     * @throws SQLException If a failure occurs in establishing a connection.
      * @throws IllegalArgumentException If the specified maximum pool size is
      *                                  less-than or equal-to zero (0), the
      *                                  minimum pool size is less-than zero (0),
      *                                  or the minimum pool size is greater-than
      *                                  the maximum pool size.
-     * @throws NullPointerException     If the specified {@link Connector} is
-     *                                  <code>null</code>.
+     * @throws NullPointerException If the specified {@link Connector} is
+     *                              <code>null</code>.
      */
     public ConnectionPool(Connector connector,
             TransactionIsolation isolationLevel,
             int minPoolSize,
             int maxPoolSize)
-            throws SQLException, IllegalArgumentException, NullPointerException
+        throws SQLException, IllegalArgumentException, NullPointerException
     {
         this(connector, isolationLevel, minPoolSize, maxPoolSize, 0, 0);
     }
@@ -655,22 +645,21 @@ public class ConnectionPool implements Quantified
      * number of times a {@link Connection} will be leased (a retire count) can
      * be specified as non-zero values to impose limits.
      *
-     * @param connector   The {@link Connector} for establishing new database
-     *                    connections.
+     * @param connector The {@link Connector} for establishing new database
+     *                  connections.
      * @param minPoolSize The minimum number of connections to initialize the
      *                    connection pool with.
      * @param maxPoolSize The maximum number of connections that the pool can
      *                    grow to have.
-     * @param expireTime  The maximum number of <b>seconds</b> that a {@link
-     *                    Connection} will be used before it is closed and
-     *                    replaced, or zero (0) then {@link Connection}
-     *                    instances will not be expired based on time.
+     * @param expireTime The maximum number of <b>seconds</b> that a {@link
+     *                   Connection} will be used before it is closed and
+     *                   replaced, or zero (0) then {@link Connection} instances
+     *                   will not be expired based on time.
      * @param retireLimit The maximum number of times a {@link Connection} will
      *                    be leased before it is closed and replaced, or zero
      *                    (0) if {@link Connection} instances should not be
      *                    retired after exceeding a number of leases.
-     * @throws SQLException             If a failure occurs in establishing a
-     *                                  connection.
+     * @throws SQLException If a failure occurs in establishing a connection.
      * @throws IllegalArgumentException If the specified maximum pool size is
      *                                  less-than or equal-to zero (0), the
      *                                  minimum pool size is less-than zero (0),
@@ -678,15 +667,15 @@ public class ConnectionPool implements Quantified
      *                                  the maximum pool size or if the maximum
      *                                  lifespan or number of leases are
      *                                  less-than or equal-to zero (0).
-     * @throws NullPointerException     If the specified {@link Connector} is
-     *                                  <code>null</code>.
+     * @throws NullPointerException If the specified {@link Connector} is
+     *                              <code>null</code>.
      */
     public ConnectionPool(Connector connector,
             int minPoolSize,
             int maxPoolSize,
             int expireTime,
             int retireLimit)
-            throws SQLException, IllegalArgumentException, NullPointerException
+        throws SQLException, IllegalArgumentException, NullPointerException
     {
         this(connector, null,
              minPoolSize, maxPoolSize, expireTime, retireLimit);
@@ -701,26 +690,25 @@ public class ConnectionPool implements Quantified
      * number of times a {@link Connection} will be leased (a retire count) can
      * be specified as non-zero values to impose limits.
      *
-     * @param connector      The {@link Connector} for establishing new database
-     *                       connections.
+     * @param connector The {@link Connector} for establishing new database
+     *                  connections.
      * @param isolationLevel The {@link TransactionIsolation} level to ensure is
      *                       set on each {@link Connection} before providing it,
      *                       or <code>null</code> if the isolation level need
      *                       not be verified and set.
-     * @param minPoolSize    The minimum number of connections to initialize the
-     *                       connection pool with.
-     * @param maxPoolSize    The maximum number of connections that the pool can
-     *                       grow to have.
-     * @param expireTime     The maximum number of <b>seconds</b> that a {@link
-     *                       Connection} will be used before it is closed and
-     *                       replaced, or zero (0) then {@link Connection}
-     *                       instances will not be expired based on time.
-     * @param retireLimit    The maximum number of times a {@link Connection}
-     *                       will be leased before it is closed and replaced, or
-     *                       zero (0) if {@link Connection} instances should not
-     *                       be retired after exceeding a number of leases.
-     * @throws SQLException             If a failure occurs in establishing a
-     *                                  connection.
+     * @param minPoolSize The minimum number of connections to initialize the
+     *                    connection pool with.
+     * @param maxPoolSize The maximum number of connections that the pool can
+     *                    grow to have.
+     * @param expireTime The maximum number of <b>seconds</b> that a {@link
+     *                   Connection} will be used before it is closed and
+     *                   replaced, or zero (0) then {@link Connection} instances
+     *                   will not be expired based on time.
+     * @param retireLimit The maximum number of times a {@link Connection} will
+     *                    be leased before it is closed and replaced, or zero
+     *                    (0) if {@link Connection} instances should not be
+     *                    retired after exceeding a number of leases.
+     * @throws SQLException If a failure occurs in establishing a connection.
      * @throws IllegalArgumentException If the specified maximum pool size is
      *                                  less-than or equal-to zero (0), the
      *                                  minimum pool size is less-than zero (0),
@@ -728,8 +716,8 @@ public class ConnectionPool implements Quantified
      *                                  the maximum pool size or if the maximum
      *                                  lifespan or number of leases are
      *                                  less-than or equal-to zero (0).
-     * @throws NullPointerException     If the specified {@link Connector} is
-     *                                  <code>null</code>.
+     * @throws NullPointerException If the specified {@link Connector} is
+     *                              <code>null</code>.
      */
     public ConnectionPool(Connector connector,
             TransactionIsolation isolationLevel,
@@ -737,7 +725,7 @@ public class ConnectionPool implements Quantified
             int maxPoolSize,
             int expireTime,
             int retireLimit)
-            throws SQLException, IllegalArgumentException, NullPointerException
+        throws SQLException, IllegalArgumentException, NullPointerException
     {
         // check if the connector is null
         Objects.requireNonNull(connector,
@@ -838,7 +826,7 @@ public class ConnectionPool implements Quantified
     /**
      * Obtains a diagnostic string describing where each leased connection was
      * obtained and the state of the current lease holder threads.
-     * 
+     *
      * @return The diagnostic {@link String} describing the state of this
      *         instance.
      */
@@ -908,8 +896,8 @@ public class ConnectionPool implements Quantified
      * {@link Map} if the specified value is not <code>null</code>. It does
      * nothing if the value is <code>null</code>.
      *
-     * @param map   The {@link Map} to populate.
-     * @param key   The {@link Statistic} key for the map.
+     * @param map The {@link Map} to populate.
+     * @param key The {@link Statistic} key for the map.
      * @param value The value to associate with the key.
      */
     private static void putStat(Map<Statistic, Number> map,
@@ -976,7 +964,7 @@ public class ConnectionPool implements Quantified
      * @throws SQLException If a failure occurs.
      */
     public Connection acquire(long maxWait)
-            throws SQLException, IllegalArgumentException
+        throws SQLException, IllegalArgumentException
     {
         final long startTime = System.nanoTime();
         PooledConnection acquired = null;
@@ -985,26 +973,24 @@ public class ConnectionPool implements Quantified
         synchronized (this) {
             // loop until we have an acquired connection
             while (acquired == null && !this.isShutdown()
-                    && (maxWait <= 0L || elapsed(startTime) < maxWait)) {
+                    && (maxWait <= 0L || elapsed(startTime) < maxWait))
+            {
                 // wait for a connection to become available
                 while (!this.isShutdown()
                         && (this.availableConnections.size() == 0)
                         && (this.allConnections.size()
                                 == this.getMaximumSize())
                         && (maxWait < 0L
-                                || elapsed(startTime) < maxWait)) {
+                                || elapsed(startTime) < maxWait))
+                {
                     // unless no-wait was specified, then wait for a connection
                     if (maxWait != 0L) {
                         try {
                             long timeout = (maxWait < 0L)
-                                    ? WAIT_TIMEOUT
-                                    : Math.min(WAIT_TIMEOUT,
+                                ? WAIT_TIMEOUT : Math.min(WAIT_TIMEOUT,
                                           maxWait - elapsed(startTime));
-                            if (timeout < 0L) {
-                                break;
-                            }
+                            if (timeout < 0L) break;
                             this.wait(timeout);
-
                         } catch (InterruptedException ignore) {
                             // do nothing
                         }
@@ -1030,8 +1016,9 @@ public class ConnectionPool implements Quantified
                 }
 
                 // check if we should grow the pool
-                if (this.availableConnections.size() == 0
-                        && this.allConnections.size() < this.getMaximumSize()) {
+                if (this.availableConnections.size()
+                    == 0 && this.allConnections.size()
+                        < this.getMaximumSize()) {
                     // create a new pooled connection
                     acquired = new PooledConnection(
                         this.connector.openConnection());
@@ -1041,7 +1028,6 @@ public class ConnectionPool implements Quantified
 
                     // record the new pool size
                     newPoolSize = this.allConnections.size();
-
                 } else if (this.availableConnections.size() > 0) {
                     // acquire the first connection
                     acquired = this.availableConnections.remove(0);
@@ -1070,8 +1056,7 @@ public class ConnectionPool implements Quantified
             if (acquired != null) {
                 // we must have an acquired connection
                 // create a handler
-                PooledConnectionHandler handler
-                    = new PooledConnectionHandler(
+                PooledConnectionHandler handler = new PooledConnectionHandler(
                         this, acquired.getConnection());
 
                 // set the handler
@@ -1124,9 +1109,7 @@ public class ConnectionPool implements Quantified
         }
 
         // if no connection acquired, return null
-        if (acquired == null) {
-            return null;
-        }
+        if (acquired == null) return null;
 
         // get the connection
         Connection conn = acquired.getConnection();
@@ -1143,7 +1126,6 @@ public class ConnectionPool implements Quantified
                 this.getIsolationLevel().applyTo(conn);
             }
             success = true;
-
         } finally {
             if (!success) {
                 this.release(acquired.getCurrentLeaseHandler()
@@ -1174,9 +1156,7 @@ public class ConnectionPool implements Quantified
     {
         // check if null -- allow for easy semantics in finally blocks
         // when acquisition times out and null is returned
-        if (connection == null) {
-            return;
-        }
+        if (connection == null) return;
 
         // init the stats tracking variables
         Long leasedTime = null;
@@ -1218,7 +1198,8 @@ public class ConnectionPool implements Quantified
                     "WARNING: Connection released more than once");
                 System.err.println();
                 // CSOFF
-                System.err.println("-------------------------------------------------");
+                System.err.println(
+                    "-------------------------------------------------");
                 // CSON
                 exception.printStackTrace();
                 return;
@@ -1235,7 +1216,6 @@ public class ConnectionPool implements Quantified
                     backingConn.rollback();
                 }
                 backingConn.setAutoCommit(false);
-
             } catch (Exception e) {
                 e.printStackTrace();
                 connectionInvalid = true;
@@ -1254,16 +1234,15 @@ public class ConnectionPool implements Quantified
             pooledConn.setCurrentLeaseHandler(null);
 
             // conditionally make the connection available again
-            if (connectionInvalid 
-                || (this.getRetireLimit() != null
-                    && pooledConn.getLeaseCount() > this.getRetireLimit())) 
-            {
+            if (connectionInvalid || (this.getRetireLimit()
+                != null && pooledConn.getLeaseCount()
+                    > this.getRetireLimit())) {
                 // remove from the list of all connections
                 this.allConnections.remove(pooledConn);
 
                 // close the connection
                 SQLUtilities.close(pooledConn.getConnection());
-                 
+
                 // increment the retired count
                 retired++;
 
@@ -1276,7 +1255,6 @@ public class ConnectionPool implements Quantified
                         this.allConnections.put(
                             refill, refill.getCreatedTimeNanos());
                         this.availableConnections.add(refill);
-
                     } catch (SQLException ignore) {
                         ignore.printStackTrace();
                     }
@@ -1324,9 +1302,7 @@ public class ConnectionPool implements Quantified
     {
         // set the shutdown flag and notify all
         synchronized (this) {
-            if (this.shutdown) {
-                return;
-            }
+            if (this.shutdown) return;
             this.shutdown = true;
             this.notifyAll();
         }
@@ -1572,8 +1548,8 @@ public class ConnectionPool implements Quantified
     public Long getGreatestAcquisitionTime()
     {
         synchronized (this) {
-            if (this.totalLeaseCount == 0
-                    || this.greatestAcquisitionTime < 0L) {
+            if (this.totalLeaseCount == 0 || this.greatestAcquisitionTime
+                < 0L) {
                 return null;
             } else {
                 return this.greatestAcquisitionTime;
@@ -1802,5 +1778,4 @@ public class ConnectionPool implements Quantified
         // update the number of expired connections
         this.expiredCount += expired;
     }
-
 }

@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
-
 import static com.senzing.util.OperatingSystemFamily.RUNTIME_OS_FAMILY;
 
 /**
@@ -109,9 +108,9 @@ public class SzInstallLocations
 
     /**
      * Checks if the installation is actually a development build.
-     * 
+     *
      * @return <code>true</code> if this installation represents a development
-     *                           build, otherwise <code>false</code>.
+     *         build, otherwise <code>false</code>.
      */
     public boolean isDevelopmentBuild()
     {
@@ -120,7 +119,7 @@ public class SzInstallLocations
 
     /**
      * Produces a {@link String} describing this instance.
-     * 
+     *
      * @return A {@link String} describing this instance.
      */
     public String toString()
@@ -145,29 +144,29 @@ public class SzInstallLocations
      * instance describing those locations.
      *
      * @return The {@link SzInstallLocations} instance describing the install
-     *             locations.
-     * 
+     *         locations.
+     *
      * @throws IllegalStateException If the install locations could not be
      *                               found.
      */
     public static SzInstallLocations findLocations()
         throws IllegalStateException
     {
-        File homeDir        = new File(System.getProperty("user.home"));
-        File homeSenzing    = new File(homeDir, "senzing");
-        File homeSupport    = new File(homeSenzing, "data");
-        
-        File senzingDir     = null;
-        File installDir     = null;
-        File configDir      = null;
-        File resourceDir    = null;
-        File supportDir     = null;
-        File templatesDir   = null;
+        File homeDir = new File(System.getProperty("user.home"));
+        File homeSenzing = new File(homeDir, "senzing");
+        File homeSupport = new File(homeSenzing, "data");
+
+        File senzingDir = null;
+        File installDir = null;
+        File configDir = null;
+        File resourceDir = null;
+        File supportDir = null;
+        File templatesDir = null;
         try {
             String defaultSenzingPath = null;
             String defaultConfigPath = null;
             String defaultSupportPath = null;
-            
+
             // get the senzing path
             String senzingPath = System.getProperty("senzing.path");
             if (senzingPath == null || senzingPath.trim().length() == 0) {
@@ -178,7 +177,8 @@ public class SzInstallLocations
             }
 
             // check if we are in the dev structure with no senzing path defined
-            switch (RUNTIME_OS_FAMILY) {
+            switch (RUNTIME_OS_FAMILY)
+            {
                 case WINDOWS:
                     defaultSenzingPath = homeSenzing.getCanonicalPath();
                     defaultSupportPath = homeSupport.getCanonicalPath();
@@ -188,9 +188,9 @@ public class SzInstallLocations
                     defaultSupportPath = homeSupport.getCanonicalPath();
                     break;
                 case UNIX:
-                    defaultSenzingPath  = "/opt/senzing";
-                    defaultSupportPath  = defaultSenzingPath + "/data";
-                    defaultConfigPath   = "/etc/opt/senzing";
+                    defaultSenzingPath = "/opt/senzing";
+                    defaultSupportPath = defaultSenzingPath + "/data";
+                    defaultConfigPath = "/etc/opt/senzing";
                     break;
                 default:
                     throw new IllegalStateException(
@@ -228,7 +228,7 @@ public class SzInstallLocations
             // check for the root senzing dir
             senzingDir = new File(
                 (senzingPath == null) ? defaultSenzingPath : senzingPath);
-            
+
             if (!senzingDir.exists()) {
                 senzingDir = null;
             }
@@ -252,7 +252,6 @@ public class SzInstallLocations
                     pw.println(
                         "Check the -Dsenzing.path=[path] command line "
                         + "option or SENZING_PATH environment variable.");
-
                 } else {
                     pw.println(
                         "Use the -Dsenzing.path=[path] command line "
@@ -263,14 +262,12 @@ public class SzInstallLocations
                 throw new IllegalStateException(sw.toString());
             }
 
-
             // check the senzing support path
             supportDir = (supportPath != null) ? new File(supportPath) : null;
 
             // check if support dir is not defined BUT senzing path is defined
-            if (supportDir == null && senzingPath != null
-                && senzingDir != null)
-            {
+            if (supportDir == null && senzingPath != null && senzingDir
+                != null) {
                 supportDir = new File(senzingDir, "data");
                 if (!supportDir.exists()) {
                     supportDir = null;
@@ -278,8 +275,7 @@ public class SzInstallLocations
             }
 
             // fall back to whatever the default support directory path is
-            if (supportDir == null) 
-            {
+            if (supportDir == null) {
                 supportDir = new File(defaultSupportPath);
             }
 
@@ -299,12 +295,10 @@ public class SzInstallLocations
                         "Check the -Dsenzing.support.dir=[path] command "
                         + "line option or SENZING_SUPPORT_DIR environment "
                         + "variable.");
-
                 } else if (senzingPath != null) {
                     pw.println(
                         "Check the -Dsenzing.path=[path] command line "
                         + "option or SENZING_PATH environment variable.");
-
                 } else {
                     pw.println(
                         "Use the -Dsenzing.path=[path] command line "
@@ -325,8 +319,8 @@ public class SzInstallLocations
             }
 
             // now determine the resource path
-            resourceDir
-                = (resourcePath != null) ? new File(resourcePath) : null;
+            resourceDir = (resourcePath != null)
+                ? new File(resourcePath) : null;
 
             // try the "resources" sub-directory of the installation
             if (resourceDir == null && installDir != null) {
@@ -337,16 +331,14 @@ public class SzInstallLocations
             }
 
             // set the templates directory if we have the resource directory
-            if (resourceDir != null && resourceDir.exists()
-                && resourceDir.isDirectory()) 
-            {
+            if (resourceDir
+                != null && resourceDir.exists() && resourceDir.isDirectory()) {
                 templatesDir = new File(resourceDir, "templates");
             }
 
             // verify the discovered resource path
-            if ((resourceDir == null) || (!resourceDir.exists()) 
-                 || (!resourceDir.isDirectory())) 
-            {
+            if ((resourceDir == null)
+                || (!resourceDir.exists()) || (!resourceDir.isDirectory())) {
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
                 if (resourceDir == null || !resourceDir.exists()) {
@@ -357,7 +349,7 @@ public class SzInstallLocations
                 if (resourceDir != null) {
                     pw.println("         " + resourceDir);
                 }
-                
+
                 pw.println();
 
                 if (resourcePath != null) {
@@ -365,12 +357,10 @@ public class SzInstallLocations
                         "Check the -Dsenzing.resource.dir=[path] command "
                         + "line option or SENZING_RESOURCE_DIR environment "
                         + "variable.");
-
                 } else if (senzingPath != null) {
                     pw.println(
                         "Check the -Dsenzing.path=[path] command line "
                         + "option or SENZING_PATH environment variable.");
-
                 } else {
                     pw.println(
                         "Use the -Dsenzing.path=[path] command line "
@@ -407,7 +397,7 @@ public class SzInstallLocations
                 configDir = new File(installDir, "etc");
                 if (!configDir.exists()) {
                     configDir = null;
-                }                
+                }
             }
 
             // validate the contents of the config directory
@@ -427,9 +417,10 @@ public class SzInstallLocations
             }
 
             // verify the discovered config directory
-            if ((configDir == null) || (!configDir.exists()) 
-                 || (!configDir.isDirectory()) || (missingFiles.size() > 0))
-            {
+            if ((configDir == null)
+                || (!configDir.exists())
+                || (!configDir.isDirectory())
+                || (missingFiles.size() > 0)) {
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
                 if (configDir == null || !configDir.exists()) {
@@ -454,12 +445,10 @@ public class SzInstallLocations
                         "Check the -Dsenzing.config.dir=[path] command "
                         + "line option or SENZING_CONFIG_DIR environment "
                         + "variable.");
-
                 } else if (senzingPath != null) {
                     pw.println(
                         "Check the -Dsenzing.path=[path] command line "
                         + "option or SENZING_PATH environment variable.");
-
                 } else {
                     pw.println(
                         "Use the -Dsenzing.path=[path] command line "
@@ -500,11 +489,9 @@ public class SzInstallLocations
 
             // return the result
             return result;
-
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw e;
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);

@@ -6,21 +6,21 @@ package com.senzing.cmdline;
  */
 public class TooFewArgumentsException extends IllegalArgumentException
 {
-  /**
-   * Default constructor.
-   */
-  public TooFewArgumentsException()
-  {
-    super();
-  }
+    /**
+     * Default constructor.
+     */
+    public TooFewArgumentsException()
+    {
+        super();
+    }
 
-  /**
-   * Constructs with the specified message.
-   *
-   * @param message The message for the exception.
-   */
-  public TooFewArgumentsException(String message)
-  {
-    super(message);
-  }
+    /**
+     * Constructs with the specified message.
+     *
+     * @param message The message for the exception.
+     */
+    public TooFewArgumentsException(String message)
+    {
+        super(message);
+    }
 }

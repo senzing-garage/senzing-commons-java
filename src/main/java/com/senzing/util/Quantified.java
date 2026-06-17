@@ -7,42 +7,42 @@ import java.util.Map;
  */
 public interface Quantified
 {
-  /**
-   * Describes a statistic that is
-   */
-  interface Statistic
-  {
     /**
-     * Gets the descriptive name of the statistic.
-     *
-     * @return The descriptive name of the statistic.
+     * Describes a statistic that is
      */
-    default String getName()
+    interface Statistic
     {
-      Class c = this.getClass();
-      Class enclosing = c.getEnclosingClass();
-      if (enclosing != null) {
-        return enclosing.getSimpleName() + ":" + this.toString();
-      } else {
-        return c.getSimpleName() + ":" + this.toString();
-      }
+        /**
+         * Gets the descriptive name of the statistic.
+         *
+         * @return The descriptive name of the statistic.
+         */
+        default String getName()
+        {
+            Class c = this.getClass();
+            Class enclosing = c.getEnclosingClass();
+            if (enclosing != null) {
+                return enclosing.getSimpleName() + ":" + this.toString();
+            } else {
+                return c.getSimpleName() + ":" + this.toString();
+            }
+        }
+
+        /**
+         * Gets the unit of measure for this statistic. This is the unit that
+         * the {@link Number} value that has been measured.
+         *
+         * @return The unit of measure for this statistic.
+         */
+        String getUnits();
     }
 
     /**
-     * Gets the unit of measure for this statistic. This is the unit that the
-     * {@link Number} value that has been measured.
+     * Gets the {@link Map} of {@link Statistic} keys to their {@link Number}
+     * values in an atomic thread-safe manner.
      *
-     * @return The unit of measure for this statistic.
+     * @return The {@link Map} of {@link Statistic} keys to their {@link Number}
+     *         values.
      */
-    String getUnits();
-  }
-
-  /**
-   * Gets the {@link Map} of {@link Statistic} keys to their {@link Number}
-   * values in an atomic thread-safe manner.
-   *
-   * @return The {@link Map} of {@link Statistic} keys to their {@link Number}
-   *         values.
-   */
-  Map<Statistic, Number> getStatistics();
+    Map<Statistic, Number> getStatistics();
 }

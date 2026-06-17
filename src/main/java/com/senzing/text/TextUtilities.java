@@ -7,7 +7,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import static com.senzing.io.IOUtilities.UTF_8;
 
 /**
@@ -50,7 +49,8 @@ public class TextUtilities
      */
     private static final List<Character> ALPHANUMERIC_CHARS;
 
-    static {
+    static
+    {
         try {
             int capacity = (MAX_CHAR - MIN_CHAR) + 1;
             List<Character> printableChars = new ArrayList<>(capacity);
@@ -71,7 +71,6 @@ public class TextUtilities
             PRINTABLE_CHARS = Collections.unmodifiableList(printableChars);
             ALPHA_CHARS = Collections.unmodifiableList(alphaChars);
             ALPHANUMERIC_CHARS = Collections.unmodifiableList(alphaNumChars);
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new ExceptionInInitializerError(e);
@@ -88,12 +87,12 @@ public class TextUtilities
 
     /**
      * Gets the a random count within the specified bounds.
-     * 
+     *
      * @param minCount The inclusive lower bound for the random count.
      * @param maxCount The inclusive upper bound for the random count.
-     * 
+     *
      * @return The random count.
-     * 
+     *
      * @throws IllegalArgumentException If the specified minimum count is
      *                                  greater that the specified maximum
      *                                  count, or if either count is negative.
@@ -114,8 +113,8 @@ public class TextUtilities
         }
 
         // determine the count
-        return (maxCount == minCount) ? minCount 
-            : PRNG.nextInt(maxCount - minCount + 1) + minCount;
+        return (maxCount == minCount) ? minCount : PRNG.nextInt(maxCount
+            - minCount + 1) + minCount;
     }
 
     /**
@@ -125,7 +124,7 @@ public class TextUtilities
      * @param count The number of characters to generate.
      *
      * @return The generated text.
-     * 
+     *
      * @throws IllegalArgumentException If the specified count is negative.
      */
     public static String randomPrintableText(int count)
@@ -143,13 +142,13 @@ public class TextUtilities
      *                 generate.
      *
      * @return The generated text.
-     * 
+     *
      * @throws IllegalArgumentException If the specified minimum count is
      *                                  greater that the specified maximum
      *                                  count, or if either count is negative.
      */
     public static String randomPrintableText(int minCount, int maxCount)
-            throws IllegalArgumentException
+        throws IllegalArgumentException
     {
         return randomPrintableText(randomCount(minCount, maxCount));
     }
@@ -161,7 +160,7 @@ public class TextUtilities
      * @param count The number of characters to generate.
      *
      * @return The generated text.
-     * 
+     *
      * @throws IllegalArgumentException If the specified count is negative.
      */
     public static String randomAlphabeticText(int count)
@@ -179,7 +178,7 @@ public class TextUtilities
      *                 generate.
      *
      * @return The generated text.
-     * 
+     *
      * @throws IllegalArgumentException If the specified minimum count is
      *                                  greater that the specified maximum
      *                                  count, or if either count is negative.
@@ -196,7 +195,7 @@ public class TextUtilities
      * @param count The number of characters to generate.
      *
      * @return The generated text.
-     * 
+     *
      * @throws IllegalArgumentException If the specified count is negative.
      */
     public static String randomAlphanumericText(int count)
@@ -214,7 +213,7 @@ public class TextUtilities
      *                 generate.
      *
      * @return The generated text.
-     * 
+     *
      * @throws IllegalArgumentException If the specified minimum count is
      *                                  greater that the specified maximum
      *                                  count, or if either count is negative.
