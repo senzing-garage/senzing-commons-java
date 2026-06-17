@@ -31,10 +31,20 @@ Maintenance release. No public API changes — SemVer PATCH bump.
 
 ### Changed
 
-- Runtime dependency bumps:
+- Runtime dependency bumps (propagate to consumers via
+  transitive resolution):
   - `org.apache.commons:commons-configuration2` 2.13.0 → 2.15.0
     (see Security above).
   - `org.xerial:sqlite-jdbc` 3.53.0.0 → 3.53.1.0.
+- Test and build dependency bumps (do not propagate to
+  consumers — recorded here for `pom.xml` auditability):
+  - `org.junit.jupiter:junit-jupiter` 6.0.3 → 6.1.0.
+  - `io.zonky.test.postgres:embedded-postgres-binaries-linux-arm64v8`
+    14.22.0 → 18.3.0.
+  - `io.zonky.test.postgres:embedded-postgres-binaries-darwin-arm64v8`
+    14.22.0 → 18.3.0.
+  - `org.apache.maven.plugins:maven-surefire-plugin` 3.5.5 →
+    3.5.6.
 
 ## [4.0.0] - 2026-04-28
 
