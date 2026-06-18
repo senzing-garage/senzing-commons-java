@@ -836,9 +836,11 @@ public class JsonUtilitiesExtraTest
         // should locate it and use the Instant getter to populate.
         // The text must conform to JsonUtilities.DATE_TIME_FORMATTER pattern
         // (yyyy-MM-dd'T'HH:mm:ss.SSS'Z').
-        JsonObject obj = Json.createObjectBuilder().add(
+        JsonObject obj = Json.createObjectBuilder()
+                             .add(
             "k",
-            "2025-04-01T12:00:00.000Z").build();
+            "2025-04-01T12:00:00.000Z")
+                             .build();
         Date result = getValue(Date.class, obj, "k");
         assertNotNull(result, "Date.from(Instant) fallback should populate");
         assertEquals(Instant.parse("2025-04-01T12:00:00Z"), result.toInstant());

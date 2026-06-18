@@ -446,7 +446,8 @@ public class RecordReader
             ? Collections.emptyMap() : new LinkedHashMap<>();
         try {
             if (dataSourceMap != null) {
-                dataSourceMap.entrySet().forEach(entry -> {
+                dataSourceMap.entrySet()
+                             .forEach(entry -> {
           String key = entry.getKey();
           if (key != null) {
             key = key.trim().toUpperCase();
@@ -766,11 +767,15 @@ public class RecordReader
                                                    .get();
 
             try {
-                this.parser = CSVParser.builder().setReader(reader).setFormat(
-                    csvFormat).get();
+                this.parser = CSVParser.builder()
+                                       .setReader(reader)
+                                       .setFormat(
+                    csvFormat)
+                                       .get();
                 Map<String, Integer> headerMap = this.parser.getHeaderMap();
                 Set<String> headers = new HashSet<>();
-                headerMap.keySet().forEach(h -> {
+                headerMap.keySet()
+                         .forEach(h -> {
           headers.add(h.toUpperCase());
         });
                 this.recordIter = parser.iterator();

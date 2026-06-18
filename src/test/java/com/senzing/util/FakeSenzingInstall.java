@@ -115,7 +115,8 @@ final class FakeSenzingInstall implements AutoCloseable
     {
         if (dir == null || !Files.exists(dir)) return;
         try (var stream = Files.walk(dir)) {
-            stream.sorted(Comparator.reverseOrder()).forEach(p -> {
+            stream.sorted(Comparator.reverseOrder())
+                  .forEach(p -> {
               try {
                 Files.delete(p);
               } catch (IOException e) {

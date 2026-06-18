@@ -65,8 +65,10 @@ public enum OperatingSystemFamily
             String lowerOSName = osName.toLowerCase().trim();
             if (lowerOSName.startsWith("windows")) {
                 osFamily = WINDOWS;
-            } else if (lowerOSName.startsWith("mac") || lowerOSName.indexOf(
-                "darwin") >= 0) {
+            } else if (lowerOSName.startsWith("mac")
+                || lowerOSName.indexOf(
+                "darwin")
+                    >= 0) {
                 osFamily = MAC_OS;
             } else {
                 osFamily = UNIX;

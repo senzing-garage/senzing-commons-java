@@ -356,7 +356,8 @@ public class Timers
     {
         Map<String, Long> result = new LinkedHashMap<>();
         long now = now();
-        this.timerInfos.entrySet().forEach(e -> {
+        this.timerInfos.entrySet()
+                       .forEach(e -> {
             result.put(e.getKey(), e.getValue().getDuration(now));
         });
         return result;
@@ -373,7 +374,8 @@ public class Timers
     {
         if (timers == null) return;
         long now = now();
-        timers.timerInfos.entrySet().forEach(e -> {
+        timers.timerInfos.entrySet()
+                         .forEach(e -> {
             String key = e.getKey();
             TimerInfo info1 = this.timerInfos.get(key);
             TimerInfo info2 = e.getValue();

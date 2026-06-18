@@ -57,11 +57,13 @@ public class ReflectionUtilities
                 primitiveMap.put(promoted, primitive);
             });
 
-            promotedMap.keySet().forEach((primitive) -> {
+            promotedMap.keySet()
+                       .forEach((primitive) -> {
                 primitiveMap.put(primitive, primitive);
             });
 
-            primitiveMap.keySet().forEach(keyType -> {
+            primitiveMap.keySet()
+                        .forEach(keyType -> {
                 if (!keyType.isPrimitive()) {
                     promotedMap.put(keyType, keyType);
                 }
@@ -196,8 +198,10 @@ public class ReflectionUtilities
             numType = getPromotedType(numType);
         }
 
-        if (!Number.class.isAssignableFrom(numType) || (getPrimitiveType(
-            numType) == null)) {
+        if (!Number.class.isAssignableFrom(numType)
+            || (getPrimitiveType(
+            numType)
+                == null)) {
             throw new IllegalArgumentException(
                     "The specified target number type must extend "
                             + "java.lang.Number and have a corresponding "
@@ -408,7 +412,8 @@ public class ReflectionUtilities
 
                 // we know they differ even if the name
                 // is the same, so force difference
-                diff = System.identityHashCode(r1) - System.identityHashCode(
+                diff = System.identityHashCode(r1)
+                    - System.identityHashCode(
                     r2);
                 return diff;
             }

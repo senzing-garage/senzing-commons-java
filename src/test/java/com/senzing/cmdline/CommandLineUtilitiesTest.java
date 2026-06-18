@@ -244,10 +244,16 @@ public class CommandLineUtilitiesTest
       Class exceptionType)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("optionMap=[ ").append(optionMap).append(
-            " ], commandLineValue=[ ").append(value).append(
-            " ], expectedException=[ ").append(
-            (exceptionType == null) ? "NONE" : exceptionType.getName()).append(
+        sb.append("optionMap=[ ")
+          .append(optionMap)
+          .append(
+            " ], commandLineValue=[ ")
+          .append(value)
+          .append(
+            " ], expectedException=[ ")
+          .append(
+            (exceptionType == null) ? "NONE" : exceptionType.getName())
+          .append(
             " ]");
         String testInfo = sb.toString();
 
@@ -322,8 +328,12 @@ public class CommandLineUtilitiesTest
                         CommandLineOption expectedValue)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("flag=[ ").append(flag).append(" ], expected=[ ").append(
-            expectedValue).append(" ]");
+        sb.append("flag=[ ")
+          .append(flag)
+          .append(" ], expected=[ ")
+          .append(
+            expectedValue)
+          .append(" ]");
         String testInfo = sb.toString();
 
         try {
@@ -625,11 +635,19 @@ public class CommandLineUtilitiesTest
             Class<?> exceptionType)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("optionClass=[ ").append(optionClass).append(
-            " ], optionMap=[ ").append(optionMap).append(
-            " ], deprecationWarnings=[ ").append(deprecatedWarnings).append(
-            " ], expectedException=[ ").append(
-            (exceptionType == null) ? "NONE" : exceptionType.getName()).append(
+        sb.append("optionClass=[ ")
+          .append(optionClass)
+          .append(
+            " ], optionMap=[ ")
+          .append(optionMap)
+          .append(
+            " ], deprecationWarnings=[ ")
+          .append(deprecatedWarnings)
+          .append(
+            " ], expectedException=[ ")
+          .append(
+            (exceptionType == null) ? "NONE" : exceptionType.getName())
+          .append(
             " ]");
         String testInfo = sb.toString();
 
@@ -1319,10 +1337,18 @@ public class CommandLineUtilitiesTest
       boolean expectText)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("optionValues=[ ").append(optionValues).append(
-            " ], expectedResult=[ ").append(expectedResult).append(
-            " ], expectedJson=[ ").append(expectedJson).append(
-            " ], expectText=[ ").append(expectText).append(" ]");
+        sb.append("optionValues=[ ")
+          .append(optionValues)
+          .append(
+            " ], expectedResult=[ ")
+          .append(expectedResult)
+          .append(
+            " ], expectedJson=[ ")
+          .append(expectedJson)
+          .append(
+            " ], expectText=[ ")
+          .append(expectText)
+          .append(" ]");
 
         String testInfo = sb.toString();
 

@@ -835,7 +835,8 @@ public class ConnectionPool implements Quantified
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
 
-        leasedMap.values().forEach((pooledConnection) -> {
+        leasedMap.values()
+                 .forEach((pooledConnection) -> {
             PooledConnectionHandler handler
                 = pooledConnection.getCurrentLeaseHandler();
             pw.println();
@@ -1016,9 +1017,8 @@ public class ConnectionPool implements Quantified
                 }
 
                 // check if we should grow the pool
-                if (this.availableConnections.size()
-                    == 0 && this.allConnections.size()
-                        < this.getMaximumSize()) {
+                if (this.availableConnections.size() == 0
+                    && this.allConnections.size() < this.getMaximumSize()) {
                     // create a new pooled connection
                     acquired = new PooledConnection(
                         this.connector.openConnection());
@@ -1234,9 +1234,9 @@ public class ConnectionPool implements Quantified
             pooledConn.setCurrentLeaseHandler(null);
 
             // conditionally make the connection available again
-            if (connectionInvalid || (this.getRetireLimit()
-                != null && pooledConn.getLeaseCount()
-                    > this.getRetireLimit())) {
+            if (connectionInvalid
+                || (this.getRetireLimit() != null
+                    && pooledConn.getLeaseCount() > this.getRetireLimit())) {
                 // remove from the list of all connections
                 this.allConnections.remove(pooledConn);
 
@@ -1548,8 +1548,8 @@ public class ConnectionPool implements Quantified
     public Long getGreatestAcquisitionTime()
     {
         synchronized (this) {
-            if (this.totalLeaseCount == 0 || this.greatestAcquisitionTime
-                < 0L) {
+            if (this.totalLeaseCount == 0
+                || this.greatestAcquisitionTime < 0L) {
                 return null;
             } else {
                 return this.greatestAcquisitionTime;

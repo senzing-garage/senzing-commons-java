@@ -266,8 +266,8 @@ public class SzInstallLocations
             supportDir = (supportPath != null) ? new File(supportPath) : null;
 
             // check if support dir is not defined BUT senzing path is defined
-            if (supportDir == null && senzingPath != null && senzingDir
-                != null) {
+            if (supportDir == null
+                && senzingPath != null && senzingDir != null) {
                 supportDir = new File(senzingDir, "data");
                 if (!supportDir.exists()) {
                     supportDir = null;
@@ -331,8 +331,8 @@ public class SzInstallLocations
             }
 
             // set the templates directory if we have the resource directory
-            if (resourceDir
-                != null && resourceDir.exists() && resourceDir.isDirectory()) {
+            if (resourceDir != null
+                && resourceDir.exists() && resourceDir.isDirectory()) {
                 templatesDir = new File(resourceDir, "templates");
             }
 

@@ -307,7 +307,8 @@ public class RecordReaderTest
         String[] sourceIds = { null, "", "SomeFile" };
 
         List<Arguments> result = new LinkedList<>();
-        recordsMap.entrySet().forEach(entry -> {
+        recordsMap.entrySet()
+                  .forEach(entry -> {
       String recordsText = entry.getKey();
       List<JsonObject> expected = entry.getValue();
 

@@ -128,7 +128,8 @@ public class LoggingUtilities
                 if (index <= 0) break;
                 if (index == (packageName.length() - 1)) break;
                 packageName = packageName.substring(0, index);
-            } while (packageName.length() > 0 && !packageName.equals(
+            } while (packageName.length() > 0
+                && !packageName.equals(
                 "com.senzing"));
 
             // return the base product ID if we get here

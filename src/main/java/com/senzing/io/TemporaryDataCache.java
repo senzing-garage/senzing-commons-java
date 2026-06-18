@@ -649,8 +649,8 @@ public class TemporaryDataCache
 
                         // check if there is a current file part and the last
                         // write time
-                        if (this.lastWriteTime > 0L && this.currentWriteCount
-                            > 0) {
+                        if (this.lastWriteTime > 0L
+                            && this.currentWriteCount > 0) {
                             // calculate the duration from nanoseconds to
                             // milliseconds
                             long duration
@@ -1000,9 +1000,8 @@ public class TemporaryDataCache
 
             String prefix = "" + System.identityHashCode(this) + ": ";
             // check if the current file has bytes left to read
-            if (this.currentFilePart == null || ((this.currentFilePart.length
-                - this.currentOffset)
-                <= 0L)) {
+            if (this.currentFilePart == null
+                || ((this.currentFilePart.length - this.currentOffset) <= 0L)) {
                 // advance the file if the current one is exhausted
                 if (this.currentFilePart != null) {
                     this.advanceFile();

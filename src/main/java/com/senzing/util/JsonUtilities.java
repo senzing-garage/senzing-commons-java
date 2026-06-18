@@ -55,7 +55,8 @@ public class JsonUtilities
      * {@link #DATE_TIME_PATTERN} using the {@link Locale#UK} locale.
      */
     public static final DateTimeFormatter DATE_TIME_FORMATTER
-        = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, Locale.UK).withZone(
+        = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, Locale.UK)
+                           .withZone(
             ZoneOffset.UTC);
 
     /**
@@ -2343,7 +2344,8 @@ public class JsonUtilities
         // find the get with the default value functions
         for (Method method : methods) {
             int modifiers = method.getModifiers();
-            if (!(Modifier.isPublic(modifiers) && Modifier.isStatic(
+            if (!(Modifier.isPublic(modifiers)
+                && Modifier.isStatic(
                 modifiers))) {
                 continue;
             }
@@ -2352,8 +2354,8 @@ public class JsonUtilities
             if (!method.getName().startsWith("get")) continue;
             Class<?> paramTypes[] = method.getParameterTypes();
             if ((paramTypes.length == 3 && paramTypes[2] == returnType)
-                || (paramTypes.length
-                    == 2 && JsonValue.class.isAssignableFrom(returnType))) {
+                || (paramTypes.length == 2
+                    && JsonValue.class.isAssignableFrom(returnType))) {
                 // check if an object getter
                 if (paramTypes[0].equals(JsonObject.class)
                     && paramTypes[1].equals(String.class)) {
@@ -2956,7 +2958,8 @@ public class JsonUtilities
     public static String toJsonText(JsonObjectBuilder builder)
     {
         return JsonUtilities.toJsonText(
-                new StringWriter(), builder, false).toString();
+                new StringWriter(), builder, false)
+                            .toString();
     }
 
     /**
@@ -2988,7 +2991,8 @@ public class JsonUtilities
     public static String toJsonText(JsonArrayBuilder builder)
     {
         return JsonUtilities.toJsonText(
-                new StringWriter(), builder, false).toString();
+                new StringWriter(), builder, false)
+                            .toString();
     }
 
     /**
@@ -3036,7 +3040,8 @@ public class JsonUtilities
     public static String toJsonText(JsonValue jsonValue, boolean prettyPrint)
     {
         return JsonUtilities.toJsonText(
-                new StringWriter(), jsonValue, prettyPrint).toString();
+                new StringWriter(), jsonValue, prettyPrint)
+                            .toString();
     }
 
     /**
@@ -3084,7 +3089,8 @@ public class JsonUtilities
                                     boolean             prettyPrint)
     {
         return JsonUtilities.toJsonText(
-                new StringWriter(), builder, prettyPrint).toString();
+                new StringWriter(), builder, prettyPrint)
+                            .toString();
     }
 
     /**
@@ -3132,7 +3138,8 @@ public class JsonUtilities
                                     boolean             prettyPrint)
     {
         return JsonUtilities.toJsonText(
-                new StringWriter(), builder, prettyPrint).toString();
+                new StringWriter(), builder, prettyPrint)
+                            .toString();
     }
 
     /**

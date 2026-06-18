@@ -84,8 +84,9 @@ public class AsyncWorkerPool<T>
          */
         public String toString()
         {
-            return "{ value=[ " + this.value + " ]" + ((this.failure != null)
-                ? ", failure=[ " + this.failure + " ]" : "") + " }";
+            return "{ value=[ "
+                + this.value + " ]" + ((this.failure != null) ? ", failure=[ "
+                    + this.failure + " ]" : "") + " }";
         }
     }
 

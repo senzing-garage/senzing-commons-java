@@ -67,8 +67,12 @@ public class IOUtilitiesTest
     {
         StringBuilder sb = new StringBuilder();
         try {
-            sb.append("data=[ ").append(new String(data, "ASCII")).append(
-                " ], expectedResult=[ ").append(expectedResult).append(" ]");
+            sb.append("data=[ ")
+              .append(new String(data, "ASCII"))
+              .append(
+                " ], expectedResult=[ ")
+              .append(expectedResult)
+              .append(" ]");
         } catch (UnsupportedEncodingException cannotHappen) {
             throw new IllegalStateException("ASCII encoding not supported");
         }
@@ -308,8 +312,10 @@ public class IOUtilitiesTest
 
                 byte[] bytes = baos.toByteArray();
 
-                if ((encoding.startsWith("UTF-16") || encoding.startsWith(
-                    "UTF-32")) && (checkBOM(bytes) > 0)) {
+                if ((encoding.startsWith("UTF-16")
+                    || encoding.startsWith(
+                    "UTF-32"))
+                    && (checkBOM(bytes) > 0)) {
                     // the data already has a BOM, exclude it from the non-BOM
                     // file
                     int offset = checkBOM(bytes);
@@ -350,11 +356,14 @@ public class IOUtilitiesTest
                 if (checkBOM(bytes) > 0) {
                     fail("Non-BOM file contains a BOM: " + encoding);
                 }
-                if ((checkBOM(bomBytes) <= 0) && (encoding.startsWith(
-                    "UTF-16") || encoding.startsWith("UTF-32"))) {
+                if ((checkBOM(bomBytes) <= 0)
+                    && (encoding.startsWith(
+                    "UTF-16")
+                        || encoding.startsWith("UTF-32"))) {
                     fail("BOM file missing BOM: " + encoding + " / "
                    + bytesToHex(bomBytes) + " / " + bomFile);
-                } else if ((checkBOM(bomBytes) > 0) && !encoding.startsWith(
+                } else if ((checkBOM(bomBytes) > 0)
+                    && !encoding.startsWith(
                     "UTF-16") && !encoding.startsWith("UTF-32")) {
                     fail("BOM file contains a BOM for wrong encoding: "
                         + encoding);
@@ -413,8 +422,8 @@ public class IOUtilitiesTest
     {
         if (bytes[0] == ((byte) 0xFF) && bytes[1] == ((byte) 0xFE)) return 2;
         if (bytes[0] == ((byte) 0xFE) && bytes[1] == ((byte) 0xFF)) return 2;
-        if (bytes[0]
-            == 0 && bytes[1] == 0 && bytes[2] == ((byte) 0xFE) && bytes[3]
+        if (bytes[0] == 0
+            && bytes[1] == 0 && bytes[2] == ((byte) 0xFE) && bytes[3]
                 == ((byte) 0xFF)) {
             return 4;
         }

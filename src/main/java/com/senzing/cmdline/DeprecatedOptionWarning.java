@@ -153,7 +153,8 @@ public class DeprecatedOptionWarning implements SpecifiedOption
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeprecatedOptionWarning that = (DeprecatedOptionWarning) o;
-        return (this.getSource() == that.getSource() && Objects.equals(
+        return (this.getSource() == that.getSource()
+            && Objects.equals(
             this.getOption(),
             that.getOption()) && Objects.equals(this.getSpecifier(),
                                                 that.getSpecifier()));

@@ -88,8 +88,7 @@ public class PropertyReflector<T>
 
             String name = method.getName();
             // check if we have a standard getter
-            if (name.length()
-                > 3
+            if (name.length() > 3
                 && name.startsWith("get")
                 && Character.isUpperCase(name.charAt(3))
                 && method.getParameterCount() == 0
@@ -102,14 +101,12 @@ public class PropertyReflector<T>
                 continue;
             }
             // check for a boolean getter
-            if (name.length()
-                > 2
+            if (name.length() > 2
                 && name.startsWith("is")
                 && Character.isUpperCase(name.charAt(2))
                 && method.getParameterCount() == 0
-                && (method.getReturnType()
-                    == Boolean.class || method.getReturnType()
-                        == boolean.class)) {
+                && (method.getReturnType() == Boolean.class
+                    || method.getReturnType() == boolean.class)) {
                 String key = name.substring(2, 3).toLowerCase();
                 if (name.length() > 3) {
                     key += name.substring(3);
@@ -118,8 +115,7 @@ public class PropertyReflector<T>
                 continue;
             }
             // check for a setter
-            if (name.length()
-                > 3
+            if (name.length() > 3
                 && name.startsWith("set")
                 && Character.isUpperCase(name.charAt(3))
                 && method.getParameterCount() == 1

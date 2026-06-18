@@ -153,8 +153,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream
     {
         long skipped = 0;
         while (!this.eof && skipped < n) {
-            if (this.currentChunk == null || this.currentChunk.available()
-                == 0) {
+            if (this.currentChunk == null
+                || this.currentChunk.available() == 0) {
                 this.readChunk();
             }
             if (this.currentChunk != null) {

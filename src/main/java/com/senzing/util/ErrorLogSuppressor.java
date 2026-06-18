@@ -103,9 +103,8 @@ public class ErrorLogSuppressor
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Result result = (Result) o;
-            return (this.getSuppressedCount()
-                == result.getSuppressedCount() && this.getState()
-                    == result.getState());
+            return (this.getSuppressedCount() == result.getSuppressedCount()
+                && this.getState() == result.getState());
         }
 
         @Override

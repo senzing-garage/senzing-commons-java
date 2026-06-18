@@ -100,7 +100,8 @@ public class SQLiteConnector implements Connector
     private static File newFile(String              filePath,
                                 Map<String, String> connProperties)
     {
-        if (connProperties != null && MEMORY_MODE.equals(connProperties.get(
+        if (connProperties != null
+            && MEMORY_MODE.equals(connProperties.get(
             MODE_KEY))) {
             return (filePath == null) ? null : new File(filePath);
         }
@@ -198,7 +199,8 @@ public class SQLiteConnector implements Connector
      */
     public SQLiteConnector(File file, Map<String, String> connProperties)
     {
-        if (connProperties == null || !MEMORY_MODE.equals(connProperties.get(
+        if (connProperties == null
+            || !MEMORY_MODE.equals(connProperties.get(
             MODE_KEY))) {
             Objects.requireNonNull(
                     file, "The specified file cannot be null");
@@ -254,7 +256,8 @@ public class SQLiteConnector implements Connector
     public Connection openConnection()
         throws SQLException
     {
-        boolean memoryMode = this.connProperties != null && "memory".equals(
+        boolean memoryMode = this.connProperties != null
+            && "memory".equals(
             this.connProperties.get("mode"));
 
         // SQLite URI parameters (e.g. `?mode=memory`) require the

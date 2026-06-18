@@ -52,7 +52,8 @@ public class CommandLineUtilities
             Class<CommandLineUtilities> cls = CommandLineUtilities.class;
 
             String url = cls.getResource(
-                    cls.getSimpleName() + ".class").toString();
+                    cls.getSimpleName() + ".class")
+                            .toString();
 
             JarLocation loc = extractJarLocation(url, cls.getName());
             jarBaseUrl = loc.baseUrl();
@@ -230,7 +231,8 @@ public class CommandLineUtilities
 
                 // check for conflicts
                 if ((conflicts != null && conflicts.contains(opt))
-                    || ((revConflicts != null && revConflicts.contains(
+                    || ((revConflicts != null
+                        && revConflicts.contains(
                         option)))) {
                     // get the command-line value
                     CommandLineValue conflictValue = optionMap.get(opt);
@@ -273,8 +275,7 @@ public class CommandLineUtilities
         int maxParamCount = option.getMaximumParameterCount();
         List<String> defaultParams = option.getDefaultParameters();
         List<String> actualParams = cmdLineValue.getParameters();
-        return (minParamCount
-            == 0
+        return (minParamCount == 0
             && maxParamCount >= 0
             && defaultParams != null
             && defaultParams.size() == 1
@@ -678,7 +679,8 @@ public class CommandLineUtilities
             Map<String, CommandLineOption> baseMap
                 = createFlagLookupMap(baseType);
 
-            baseMap.keySet().forEach(flag -> {
+            baseMap.keySet()
+                   .forEach(flag -> {
                 if (lookupMap.containsKey(flag)) {
                     CommandLineOption option = lookupMap.get(flag);
                     CommandLineOption baseOption = baseMap.get(flag);
@@ -952,8 +954,7 @@ public class CommandLineUtilities
             List<String> defaultParams = option.getDefaultParameters();
 
             // check if we have a zero-argument parameter
-            if (minParamCount
-                == 0
+            if (minParamCount == 0
                 && maxParamCount == 0
                 && defaultParams != null
                 && defaultParams.size() == 1
@@ -1025,8 +1026,7 @@ public class CommandLineUtilities
             defaultParams = option.getDefaultParameters();
 
             // check if we have a zero-parameter option with a "false" default
-            if (minParamCount
-                == 0
+            if (minParamCount == 0
                 && maxParamCount == 0
                 && params.size() == 0
                 && defaultParams != null
@@ -1056,8 +1056,10 @@ public class CommandLineUtilities
             ? null : ((Boolean) ignoreEnvOptionVal.getProcessedValue());
 
         // optionally process the environment
-        ignoreEnvironment = (ignoreEnvironment || (result.containsKey(
-            ignoreEnvOption) && (!Boolean.FALSE.equals(
+        ignoreEnvironment = (ignoreEnvironment
+            || (result.containsKey(
+            ignoreEnvOption)
+                && (!Boolean.FALSE.equals(
                             result.get(ignoreEnvOption)
                                   .getProcessedValue()))));
         if (!ignoreEnvironment) {
@@ -1245,8 +1247,8 @@ public class CommandLineUtilities
 
                     // check if the fallback count and missing count are
                     // equal and if so then use this dependency set
-                    if (missingSet.size() > 0 && missingSet.size()
-                        == fallbackCount) {
+                    if (missingSet.size() > 0
+                        && missingSet.size() == fallbackCount) {
                         fallbackOptions.addAll(missingSet);
                         break;
                     }
@@ -1575,8 +1577,8 @@ public class CommandLineUtilities
         boolean doJson = (jsonBuilder != null || stringBuilder != null);
 
         // check if we need to create the JSON object builder
-        JsonObjectBuilder job = (doJson && (jsonBuilder
-            == null || stringBuilder != null))
+        JsonObjectBuilder job = (doJson
+            && (jsonBuilder == null || stringBuilder != null))
             ? Json.createObjectBuilder() : jsonBuilder;
 
         // iterate over the option values and handle them

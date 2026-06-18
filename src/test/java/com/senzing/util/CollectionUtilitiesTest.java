@@ -123,7 +123,8 @@ public class CollectionUtilitiesTest
                 // ignore
             }
 
-            map.values().forEach((value) -> {
+            map.values()
+               .forEach((value) -> {
         testRecursivelyUnmodifiable(value, depth + 1, testInfo);
       });
         }

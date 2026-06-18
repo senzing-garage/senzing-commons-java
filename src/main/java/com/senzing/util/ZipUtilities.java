@@ -397,7 +397,8 @@ public class ZipUtilities
             // comparison defeats `..` segments and symlink games
             // embedded in the entry name.
             File canonicalTarget = targetFile.getCanonicalFile();
-            if (!canonicalTarget.toPath().startsWith(
+            if (!canonicalTarget.toPath()
+                                .startsWith(
                 canonicalTargetDir.toPath())) {
                 throw new IOException(
                     "Refusing to extract zip entry outside target "
@@ -468,10 +469,16 @@ public class ZipUtilities
                         + arg.equals(uncompressed));
                 }
             } else {
-                boolean sourceZip = (source.getName().toLowerCase().endsWith(
-                    ".zip") && !source.isDirectory());
-                boolean targetZip = (target.getName().toLowerCase().endsWith(
-                    ".zip") && !target.isDirectory());
+                boolean sourceZip = (source.getName()
+                                           .toLowerCase()
+                                           .endsWith(
+                    ".zip")
+                    && !source.isDirectory());
+                boolean targetZip = (target.getName()
+                                           .toLowerCase()
+                                           .endsWith(
+                    ".zip")
+                    && !target.isDirectory());
 
                 // check if extracting
                 if (target.exists() && target.isDirectory() && sourceZip) {
