@@ -38,8 +38,7 @@ public class ConnectorTest
     @Test
     public void formatEmptyMapReturnsEmptyString()
     {
-        assertEquals("",
-                 Connector.formatConnectionProperties(
+        assertEquals("", Connector.formatConnectionProperties(
                      Collections.emptyMap()));
     }
 
@@ -83,13 +82,12 @@ public class ConnectorTest
         // percent-encoded in the value to avoid corrupting the structure.
         assertEquals(true, formatted.startsWith("?"),
                  "Output must start with '?'");
-        assertEquals(true,
-                 formatted.contains("name+with+space")
-                     || formatted.contains("name%20with%20space"),
-                 "Key spaces must be URL-encoded: " + formatted);
-        assertEquals(true,
-                 formatted.contains("%26") && formatted.contains("%3D"),
-                 "'&' and '=' in value must be percent-encoded: "
-                     + formatted);
+        assertEquals(true, formatted.contains("name+with+space")
+            || formatted.contains("name%20with%20space"),
+                     "Key spaces must be URL-encoded: " + formatted);
+        assertEquals(true, formatted.contains("%26")
+            && formatted.contains("%3D"),
+                     "'&' and '=' in value must be percent-encoded: "
+            + formatted);
     }
 }

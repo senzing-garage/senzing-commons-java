@@ -142,8 +142,8 @@ public class TemporaryDataCacheTest
             TemporaryDataCache tdc = new TemporaryDataCache(fis, tempDir);
 
             assertEquals(tempDir, tdc.getDirectory(),
-                   "TemporaryDataCache.getDirectory() has unexpected "
-                    + "directory.");
+                         "TemporaryDataCache.getDirectory() has unexpected "
+                + "directory.");
 
             try (InputStream is = tdc.getInputStream();
                  BufferedInputStream bis = new BufferedInputStream(is))
@@ -168,11 +168,11 @@ public class TemporaryDataCacheTest
             }
             if (maxCount == 0) {
                 fail("Files were never created in specified directory: "
-                    + tempDir);
+                     + tempDir);
             }
             if (postCount > 0) {
                 fail("Files were never deleted from specified directory: "
-                    + tempDir);
+                     + tempDir);
             }
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -214,7 +214,7 @@ public class TemporaryDataCacheTest
                      byteRead = bis.read())
                 {
                     int count = tempDir.listFiles(
-              f -> f.getName().startsWith("TempDataCache-")).length;
+                        f -> f.getName().startsWith("TempDataCache-")).length;
                     if (count > maxCount) {
                         maxCount = count;
                     }
@@ -235,7 +235,7 @@ public class TemporaryDataCacheTest
             }
             if (postCount > 0) {
                 fail("Files were never deleted from specified directory: "
-                    + tempDir);
+                     + tempDir);
             }
         } catch (RuntimeException | IOException e) {
             e.printStackTrace();
@@ -275,7 +275,7 @@ public class TemporaryDataCacheTest
                   "TemporaryDataCache is still appending.");
 
             maxCount = tempDir.listFiles(
-          f -> f.getName().startsWith("TempDataCache-")).length;
+                f -> f.getName().startsWith("TempDataCache-")).length;
 
             try (InputStream is = tdc.getInputStream(true);
                  BufferedInputStream bis = new BufferedInputStream(is))
@@ -287,7 +287,7 @@ public class TemporaryDataCacheTest
                     // do nothing
                 }
                 int count = tempDir.listFiles(
-            f -> f.getName().startsWith("TempDataCache-")).length;
+                    f -> f.getName().startsWith("TempDataCache-")).length;
                 if (count > maxCount) {
                     fail(
                         "File count increased after consuming TemporaryDataCache: "
@@ -297,15 +297,15 @@ public class TemporaryDataCacheTest
                      "File count did not reduce to zero after consuming.");
             } finally {
                 int count = tempDir.listFiles(
-            f -> f.getName().startsWith("TempDataCache-")).length;
+                    f -> f.getName().startsWith("TempDataCache-")).length;
                 if (count > 0) {
                     fail(
                         "Files remaining after consuming entire TemporaryDataCache: "
                             + tempDir);
                 }
                 assertTrue(tdc.isDeleted(),
-                   "TemporaryDataCache NOT marked deleted after "
-                   + "consuming all data");
+                           "TemporaryDataCache NOT marked deleted after "
+                    + "consuming all data");
                 tdc.delete();
             }
         } catch (RuntimeException | IOException e) {
@@ -329,7 +329,9 @@ public class TemporaryDataCacheTest
             try (InputStream is = tdc.getInputStream();
                  BufferedInputStream bis = new BufferedInputStream(is))
             {
-                for (int byteRead = bis.read(); byteRead >= 0; byteRead = bis.read())
+                for (int byteRead = bis.read();
+                     byteRead >= 0;
+                     byteRead = bis.read())
                 {
                     if (!appended) {
                         appended = tdc.isAppending();
@@ -364,14 +366,14 @@ public class TemporaryDataCacheTest
     {
         // read the bytes
         Thread thread = new Thread(() -> {
-      try {
-        for (int index = 0; index < byteCount; index++) {
-          is.read();
-        }
-      } catch (IOException ignore) {
-        // ignore
-      }
-    });
+            try {
+                for (int index = 0; index < byteCount; index++) {
+                    is.read();
+                }
+            } catch (IOException ignore) {
+                // ignore
+            }
+        });
         thread.start();
         try {
             // give it 5 seconds to complete
@@ -383,8 +385,8 @@ public class TemporaryDataCacheTest
         if (stillAlive) {
             tdc.delete();
             thread.interrupt();
-            fail("Reader thread is still blocked in reading "
-               + byteCount + " bytes after " + waitTime + "ms.");
+            fail("Reader thread is still blocked in reading " + byteCount
+                 + " bytes after " + waitTime + "ms.");
         }
     }
 
@@ -556,7 +558,7 @@ public class TemporaryDataCacheTest
                 {
                     readCount++;
                     assertFalse(tdc.isDeleted(),
-                      "TemporaryDataCache prematurely marked deleted!");
+                        "TemporaryDataCache prematurely marked deleted!");
                     if (readCount > fileSize / 2) break;
                 }
 
@@ -570,7 +572,7 @@ public class TemporaryDataCacheTest
                     {
                         readCount++;
                         assertTrue(tdc.isDeleted(),
-                        "TemporaryDataCache should be marked deleted!");
+                            "TemporaryDataCache should be marked deleted!");
                     }
 
                     fail(
@@ -667,12 +669,12 @@ public class TemporaryDataCacheTest
                 try (InputStream in = tdc.getInputStream()) {
                     long skipped = in.skip(skipAmount);
                     assertEquals(skipAmount, skipped,
-                       "Skip must advance by the requested amount"
-                           + " when bytes are available");
+                                 "Skip must advance by the requested amount"
+                        + " when bytes are available");
                     int actualByte = in.read();
                     assertEquals(expectedByte, actualByte,
-                       "Byte after skip must match source-file byte"
-                           + " at the same offset");
+                                 "Byte after skip must match source-file byte"
+                        + " at the same offset");
                 }
             } finally {
                 tdc.delete();
@@ -768,11 +770,10 @@ public class TemporaryDataCacheTest
                 break;
             }
         }
-        assertNotNull(filePartClass,
-                  "CacheFilePart inner class must exist");
+        assertNotNull(filePartClass, "CacheFilePart inner class must exist");
         java.lang.reflect.Constructor<?> ctor
             = filePartClass.getDeclaredConstructor(
-            File.class, long.class, long.class);
+                File.class, long.class, long.class);
         ctor.setAccessible(true);
         return ctor.newInstance(f, offset, length);
     }
@@ -823,8 +824,7 @@ public class TemporaryDataCacheTest
     {
         Object a = newCacheFilePart(this.testFiles.get(0), 50L, 200L);
         Object b = newCacheFilePart(this.testFiles.get(1), 50L, 200L);
-        assertTrue(a.equals(b),
-               "Same offset+length must compare equal");
+        assertTrue(a.equals(b), "Same offset+length must compare equal");
         assertEquals(a.hashCode(), b.hashCode(),
                  "Equal instances must have equal hash codes");
     }
@@ -876,8 +876,8 @@ public class TemporaryDataCacheTest
 
         assertEquals(0, cmpA.compareTo(cmpD));
         assertTrue(cmpA.compareTo(cmpB) < 0,
-               "Smaller length must sort before larger when offsets"
-                   + " match");
+                   "Smaller length must sort before larger when offsets"
+            + " match");
         assertTrue(cmpB.compareTo(cmpA) > 0);
         assertTrue(cmpA.compareTo(cmpC) < 0,
                "Smaller offset must sort before larger");

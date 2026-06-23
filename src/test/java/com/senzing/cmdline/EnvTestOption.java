@@ -74,14 +74,14 @@ public enum EnvTestOption implements CommandLineOption<EnvTestOption, EnvTestOpt
     public Set<String> getEnvironmentSynonyms()
     {
         return Collections.singleton(
-        "SZ_ENV_TEST_" + this.flag.substring(2).toUpperCase());
+            "SZ_ENV_TEST_" + this.flag.substring(2).toUpperCase());
     }
 
     @Override
     public List<String> getEnvironmentFallbacks()
     {
         return List.of(
-        "SENZING_ENV_FALLBACK_" + this.flag.substring(2).toUpperCase());
+            "SENZING_ENV_FALLBACK_" + this.flag.substring(2).toUpperCase());
     }
 
     @Override

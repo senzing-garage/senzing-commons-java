@@ -115,10 +115,11 @@ public class SzInstallLocationsTest
                  result.getSupportDirectory().getCanonicalFile());
         assertEquals(install.resourceDir().toFile().getCanonicalFile(),
                  result.getResourceDirectory().getCanonicalFile());
-        assertEquals(
-        install.resourceDir().resolve("templates").toFile()
-                                                  .getCanonicalFile(),
-        result.getTemplatesDirectory().getCanonicalFile());
+        assertEquals(install.resourceDir()
+                            .resolve("templates")
+                            .toFile()
+                            .getCanonicalFile(), result.getTemplatesDirectory()
+                                                       .getCanonicalFile());
     }
 
     // -------------------------------------------------------------------
@@ -139,10 +140,11 @@ public class SzInstallLocationsTest
             System.setProperty("senzing.support.dir", altSupport.toString());
 
             SzInstallLocations result = SzInstallLocations.findLocations();
-            assertEquals(altSupport.toFile().getCanonicalFile(),
-                   result.getSupportDirectory().getCanonicalFile(),
-                   "Explicit senzing.support.dir must override the"
-                       + " default <senzing.path>/data");
+            assertEquals(altSupport.toFile().getCanonicalFile(), result
+                .getSupportDirectory()
+                .getCanonicalFile(),
+                         "Explicit senzing.support.dir must override the"
+                + " default <senzing.path>/data");
         } finally {
             deleteRecursively(altSupport);
         }
@@ -162,10 +164,11 @@ public class SzInstallLocationsTest
             System.setProperty("senzing.resource.dir", altResource.toString());
 
             SzInstallLocations result = SzInstallLocations.findLocations();
-            assertEquals(altResource.toFile().getCanonicalFile(),
-                   result.getResourceDirectory().getCanonicalFile(),
-                   "Explicit senzing.resource.dir must override the"
-                       + " default <install>/resources");
+            assertEquals(altResource.toFile().getCanonicalFile(), result
+                .getResourceDirectory()
+                .getCanonicalFile(),
+                         "Explicit senzing.resource.dir must override the"
+                + " default <install>/resources");
         } finally {
             deleteRecursively(altResource);
         }
@@ -187,10 +190,11 @@ public class SzInstallLocationsTest
             System.setProperty("senzing.config.dir", altConfig.toString());
 
             SzInstallLocations result = SzInstallLocations.findLocations();
-            assertEquals(altConfig.toFile().getCanonicalFile(),
-                   result.getConfigDirectory().getCanonicalFile(),
-                   "Explicit senzing.config.dir must override the"
-                       + " default");
+            assertEquals(altConfig.toFile().getCanonicalFile(), result
+                .getConfigDirectory()
+                .getCanonicalFile(),
+                         "Explicit senzing.config.dir must override the"
+                + " default");
         } finally {
             deleteRecursively(altConfig);
         }
@@ -218,15 +222,15 @@ public class SzInstallLocationsTest
             System.setProperty("senzing.path", emptyRoot.toString());
 
             new SystemErr().execute(() -> {
-        IllegalStateException ise = assertThrows(
-            IllegalStateException.class,
-            SzInstallLocations::findLocations);
-        assertTrue(ise.getMessage().contains("installation directory")
-                       || ise.getMessage().contains(
+                IllegalStateException ise = assertThrows(
+                    IllegalStateException.class,
+                    SzInstallLocations::findLocations);
+                assertTrue(ise.getMessage().contains("installation directory")
+                    || ise.getMessage().contains(
                            emptyRoot.resolve("er").toString()),
-                   "Expected message to mention the missing install"
-                       + " directory: " + ise.getMessage());
-      });
+                           "Expected message to mention the missing install"
+                    + " directory: " + ise.getMessage());
+            });
         } finally {
             deleteRecursively(emptyRoot);
         }
@@ -248,13 +252,13 @@ public class SzInstallLocationsTest
         System.setProperty("senzing.support.dir", nowhere.toString());
 
         new SystemErr().execute(() -> {
-      IllegalStateException ise = assertThrows(
-          IllegalStateException.class,
-          SzInstallLocations::findLocations);
-      assertTrue(ise.getMessage().contains("support directory"),
-                 "Expected message to mention support directory: "
-                     + ise.getMessage());
-    });
+            IllegalStateException ise = assertThrows(
+                IllegalStateException.class,
+                SzInstallLocations::findLocations);
+            assertTrue(ise.getMessage().contains("support directory"),
+                       "Expected message to mention support directory: "
+                + ise.getMessage());
+        });
     }
 
     /**
@@ -273,13 +277,13 @@ public class SzInstallLocationsTest
         System.setProperty("senzing.resource.dir", nowhere.toString());
 
         new SystemErr().execute(() -> {
-      IllegalStateException ise = assertThrows(
-          IllegalStateException.class,
-          SzInstallLocations::findLocations);
-      assertTrue(ise.getMessage().contains("resource directory"),
-                 "Expected message to mention resource directory: "
-                     + ise.getMessage());
-    });
+            IllegalStateException ise = assertThrows(
+                IllegalStateException.class,
+                SzInstallLocations::findLocations);
+            assertTrue(ise.getMessage().contains("resource directory"),
+                       "Expected message to mention resource directory: "
+                + ise.getMessage());
+        });
     }
 
     /**
@@ -298,13 +302,13 @@ public class SzInstallLocationsTest
         System.setProperty("senzing.config.dir", nowhere.toString());
 
         new SystemErr().execute(() -> {
-      IllegalStateException ise = assertThrows(
-          IllegalStateException.class,
-          SzInstallLocations::findLocations);
-      assertTrue(ise.getMessage().contains("config directory"),
-                 "Expected message to mention config directory: "
-                     + ise.getMessage());
-    });
+            IllegalStateException ise = assertThrows(
+                IllegalStateException.class,
+                SzInstallLocations::findLocations);
+            assertTrue(ise.getMessage().contains("config directory"),
+                       "Expected message to mention config directory: "
+                + ise.getMessage());
+        });
     }
 
     // -------------------------------------------------------------------
@@ -345,8 +349,8 @@ public class SzInstallLocationsTest
         System.setProperty("senzing.path", install.root().toString());
         SzInstallLocations result = SzInstallLocations.findLocations();
         assertFalse(result.isDevelopmentBuild(),
-                "isDevelopmentBuild() must be false for er/-style"
-                    + " install");
+                    "isDevelopmentBuild() must be false for er/-style"
+            + " install");
     }
 
     // -------------------------------------------------------------------
@@ -363,12 +367,12 @@ public class SzInstallLocationsTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_PATH", install.root().toString()).execute(() -> {
-      SzInstallLocations result = SzInstallLocations.findLocations();
-      assertNotNull(result);
-      assertEquals(install.installDir().toFile().getCanonicalFile(),
+            "SENZING_PATH", install.root().toString()).execute(() -> {
+            SzInstallLocations result = SzInstallLocations.findLocations();
+            assertNotNull(result);
+            assertEquals(install.installDir().toFile().getCanonicalFile(),
                    result.getInstallDirectory().getCanonicalFile());
-    });
+        });
     }
 
     /**
@@ -382,11 +386,11 @@ public class SzInstallLocationsTest
     {
         System.setProperty("senzing.path", "   ");
         new EnvironmentVariables(
-        "SENZING_PATH", install.root().toString()).execute(() -> {
-      SzInstallLocations result = SzInstallLocations.findLocations();
-      assertNotNull(result,
+            "SENZING_PATH", install.root().toString()).execute(() -> {
+            SzInstallLocations result = SzInstallLocations.findLocations();
+            assertNotNull(result,
                     "Empty senzing.path must fall back to SENZING_PATH");
-    });
+        });
     }
 
     /**
@@ -401,11 +405,11 @@ public class SzInstallLocationsTest
         try {
             System.setProperty("senzing.path", install.root().toString());
             new EnvironmentVariables(
-          "SENZING_SUPPORT_DIR", altSupport.toString()).execute(() -> {
-        SzInstallLocations result = SzInstallLocations.findLocations();
-        assertEquals(altSupport.toFile().getCanonicalFile(),
+                "SENZING_SUPPORT_DIR", altSupport.toString()).execute(() -> {
+                SzInstallLocations result = SzInstallLocations.findLocations();
+                assertEquals(altSupport.toFile().getCanonicalFile(),
                      result.getSupportDirectory().getCanonicalFile());
-      });
+            });
         } finally {
             deleteRecursively(altSupport);
         }
@@ -423,11 +427,11 @@ public class SzInstallLocationsTest
         try {
             System.setProperty("senzing.path", install.root().toString());
             new EnvironmentVariables(
-          "SENZING_RESOURCE_DIR", altResource.toString()).execute(() -> {
-        SzInstallLocations result = SzInstallLocations.findLocations();
-        assertEquals(altResource.toFile().getCanonicalFile(),
+                "SENZING_RESOURCE_DIR", altResource.toString()).execute(() -> {
+                SzInstallLocations result = SzInstallLocations.findLocations();
+                assertEquals(altResource.toFile().getCanonicalFile(),
                      result.getResourceDirectory().getCanonicalFile());
-      });
+            });
         } finally {
             deleteRecursively(altResource);
         }
@@ -447,11 +451,11 @@ public class SzInstallLocationsTest
         try {
             System.setProperty("senzing.path", install.root().toString());
             new EnvironmentVariables(
-          "SENZING_CONFIG_DIR", altConfig.toString()).execute(() -> {
-        SzInstallLocations result = SzInstallLocations.findLocations();
-        assertEquals(altConfig.toFile().getCanonicalFile(),
+                "SENZING_CONFIG_DIR", altConfig.toString()).execute(() -> {
+                SzInstallLocations result = SzInstallLocations.findLocations();
+                assertEquals(altConfig.toFile().getCanonicalFile(),
                      result.getConfigDirectory().getCanonicalFile());
-      });
+            });
         } finally {
             deleteRecursively(altConfig);
         }
@@ -470,10 +474,11 @@ public class SzInstallLocationsTest
         System.setProperty("senzing.support.dir", "");
 
         SzInstallLocations result = SzInstallLocations.findLocations();
-        assertEquals(install.supportDir().toFile().getCanonicalFile(),
-                 result.getSupportDirectory().getCanonicalFile(),
-                 "Empty senzing.support.dir must fall back to the"
-                     + " <senzing.path>/data default");
+        assertEquals(install.supportDir().toFile().getCanonicalFile(), result
+            .getSupportDirectory()
+            .getCanonicalFile(),
+                     "Empty senzing.support.dir must fall back to the"
+            + " <senzing.path>/data default");
     }
 
     /**
@@ -525,8 +530,7 @@ public class SzInstallLocationsTest
         // instead of "er".
         Path devRoot = Files.createTempDirectory("dev-build-");
         Files.createDirectories(devRoot.resolve("dist/etc"));
-        Files.writeString(
-        devRoot.resolve("dist/etc/cfgVariant.json"), "{}");
+        Files.writeString(devRoot.resolve("dist/etc/cfgVariant.json"), "{}");
         Files.createDirectories(devRoot.resolve("dist/resources"));
         Files.createDirectories(devRoot.resolve("data"));
         try {
@@ -536,28 +540,27 @@ public class SzInstallLocationsTest
             // the fake install's er/ resolves to dist/.
             try {
                 Files.createSymbolicLink(
-            devRoot.resolve("er"), devRoot.resolve("dist"));
+                    devRoot.resolve("er"), devRoot.resolve("dist"));
             } catch (UnsupportedOperationException | java.nio.file.FileSystemException e) {
                 // Filesystems that don't support symlinks (e.g. some CI
                 // environments) make this assertion impossible; skip
                 // gracefully.
                 org.junit.jupiter.api.Assumptions.assumeTrue(false,
-            "Filesystem does not support symbolic links");
+                    "Filesystem does not support symbolic links");
             }
 
             System.setProperty("senzing.path", devRoot.toString());
             SzInstallLocations result = SzInstallLocations.findLocations();
 
             // The discovered installDir is the symlink's target, "dist".
-            assertEquals("dist",
-                   result.getInstallDirectory()
-                         .getCanonicalFile()
-                         .getName(),
-                   "installDir resolved through symlink should be "
-                       + "named 'dist'");
+            assertEquals("dist", result.getInstallDirectory()
+                                       .getCanonicalFile()
+                                       .getName(),
+                         "installDir resolved through symlink should be "
+                + "named 'dist'");
             assertTrue(result.isDevelopmentBuild(),
-                 "Install dir named 'dist' must mark"
-                     + " isDevelopmentBuild() = true");
+                       "Install dir named 'dist' must mark"
+                + " isDevelopmentBuild() = true");
         } finally {
             deleteRecursively(devRoot);
         }
@@ -583,13 +586,13 @@ public class SzInstallLocationsTest
             System.setProperty("senzing.path", root.toString());
 
             new SystemErr().execute(() -> {
-        IllegalStateException ise = assertThrows(
-            IllegalStateException.class,
-            SzInstallLocations::findLocations);
-        assertTrue(ise.getMessage().contains("cfgVariant.json"),
-                   "Error message must name the missing file: "
-                       + ise.getMessage());
-      });
+                IllegalStateException ise = assertThrows(
+                    IllegalStateException.class,
+                    SzInstallLocations::findLocations);
+                assertTrue(ise.getMessage().contains("cfgVariant.json"),
+                           "Error message must name the missing file: "
+                    + ise.getMessage());
+            });
         } finally {
             deleteRecursively(root);
         }
@@ -611,9 +614,9 @@ public class SzInstallLocationsTest
         System.setProperty("senzing.path", nonexistent.toString());
 
         new SystemErr().execute(() -> {
-      assertThrows(IllegalStateException.class,
+            assertThrows(IllegalStateException.class,
                    SzInstallLocations::findLocations);
-    });
+        });
     }
 
     // -------------------------------------------------------------------
@@ -625,13 +628,12 @@ public class SzInstallLocationsTest
     {
         if (dir == null || !Files.exists(dir)) return;
         try (var stream = Files.walk(dir)) {
-            stream.sorted(Comparator.reverseOrder())
-                  .forEach(p -> {
-              try {
-                Files.delete(p);
-              } catch (IOException e) {
-                throw new RuntimeException(e);
-              }
+            stream.sorted(Comparator.reverseOrder()).forEach(p -> {
+                try {
+                    Files.delete(p);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             });
         }
     }

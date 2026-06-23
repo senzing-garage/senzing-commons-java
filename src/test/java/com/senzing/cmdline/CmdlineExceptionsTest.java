@@ -70,7 +70,7 @@ public class CmdlineExceptionsTest
     public void specifiedOptionExceptionRetainsAllFields()
     {
         BadOptionParametersException ex = new BadOptionParametersException(
-        COMMAND_LINE, CONFIG, "--config", List.of("path"));
+            COMMAND_LINE, CONFIG, "--config", List.of("path"));
 
         assertSame(COMMAND_LINE, ex.getSource(),
                "getSource() should return constructor argument");
@@ -86,7 +86,7 @@ public class CmdlineExceptionsTest
     public void specifiedOptionExceptionWithMessageRetainsMessage()
     {
         BadOptionParametersException ex = new BadOptionParametersException(
-        ENVIRONMENT, PORT, "MY_PORT", List.of("xyz"), "bad value");
+            ENVIRONMENT, PORT, "MY_PORT", List.of("xyz"), "bad value");
 
         assertSame(ENVIRONMENT, ex.getSource());
         assertSame(PORT, ex.getOption());
@@ -99,7 +99,7 @@ public class CmdlineExceptionsTest
     public void specifiedOptionExceptionImplementsSpecifiedOption()
     {
         BadOptionParametersException ex = new BadOptionParametersException(
-        COMMAND_LINE, CONFIG, "--config", List.of());
+            COMMAND_LINE, CONFIG, "--config", List.of());
         SpecifiedOption so = ex;
 
         assertSame(COMMAND_LINE, so.getSource());
@@ -111,7 +111,7 @@ public class CmdlineExceptionsTest
     public void specifiedOptionDescriptorForCommandLine()
     {
         BadOptionParametersException ex = new BadOptionParametersException(
-        COMMAND_LINE, CONFIG, "--config", List.of());
+            COMMAND_LINE, CONFIG, "--config", List.of());
 
         assertEquals("--config option", ex.getSourceDescriptor(),
                  "COMMAND_LINE source should produce '<flag> option'");
@@ -121,7 +121,7 @@ public class CmdlineExceptionsTest
     public void specifiedOptionDescriptorForEnvironment()
     {
         BadOptionParametersException ex = new BadOptionParametersException(
-        ENVIRONMENT, PORT, "MY_PORT", List.of());
+            ENVIRONMENT, PORT, "MY_PORT", List.of());
 
         assertEquals("MY_PORT environment variable", ex.getSourceDescriptor(),
                  "ENVIRONMENT source should produce '<var> environment variable'");
@@ -133,7 +133,7 @@ public class CmdlineExceptionsTest
         // For DEFAULT source, the descriptor uses the option's flag, not the
         // (typically null) specifier.
         BadOptionParametersException ex = new BadOptionParametersException(
-        DEFAULT, CONFIG, null, List.of());
+            DEFAULT, CONFIG, null, List.of());
 
         assertEquals("--config default", ex.getSourceDescriptor(),
                  "DEFAULT source should produce '<flag> default'");
@@ -143,10 +143,10 @@ public class CmdlineExceptionsTest
     public void specifiedOptionStaticDescriptorMatchesInstance()
     {
         String fromStatic = SpecifiedOption.sourceDescriptor(
-        COMMAND_LINE, CONFIG, "--config");
+            COMMAND_LINE, CONFIG, "--config");
 
         BadOptionParametersException ex = new BadOptionParametersException(
-        COMMAND_LINE, CONFIG, "--config", List.of());
+            COMMAND_LINE, CONFIG, "--config", List.of());
 
         assertEquals(fromStatic, ex.getSourceDescriptor(),
                  "Static and instance source descriptors should match");
@@ -161,7 +161,7 @@ public class CmdlineExceptionsTest
     {
         List<String> params = Arrays.asList("a", "b");
         BadOptionParametersException ex = new BadOptionParametersException(
-        COMMAND_LINE, CONFIG, "--config", params);
+            COMMAND_LINE, CONFIG, "--config", params);
 
         assertEquals(params, ex.getParameters(),
                  "getParameters() should preserve list contents");
@@ -171,7 +171,7 @@ public class CmdlineExceptionsTest
     public void badOptionParametersWithNullList()
     {
         BadOptionParametersException ex = new BadOptionParametersException(
-        COMMAND_LINE, CONFIG, "--config", null);
+            COMMAND_LINE, CONFIG, "--config", null);
 
         assertNotNull(ex.getParameters(),
                   "Null params should be converted to empty list, not null");
@@ -184,7 +184,7 @@ public class CmdlineExceptionsTest
     {
         List<String> params = Arrays.asList("a", "b");
         BadOptionParametersException ex = new BadOptionParametersException(
-        COMMAND_LINE, CONFIG, "--config", params);
+            COMMAND_LINE, CONFIG, "--config", params);
 
         // Per javadoc: "unmodifiable List of parameters"
         assertThrows(UnsupportedOperationException.class,
@@ -200,7 +200,7 @@ public class CmdlineExceptionsTest
         List<String> params = new java.util.ArrayList<>();
         params.add("a");
         BadOptionParametersException ex = new BadOptionParametersException(
-        COMMAND_LINE, CONFIG, "--config", params);
+            COMMAND_LINE, CONFIG, "--config", params);
         params.add("b");
 
         assertEquals(1, ex.getParameters().size(),
@@ -213,7 +213,7 @@ public class CmdlineExceptionsTest
     {
         List<String> params = List.of("x");
         BadOptionParametersException ex = new BadOptionParametersException(
-        ENVIRONMENT, PORT, "MY_PORT", params, "bad value");
+            ENVIRONMENT, PORT, "MY_PORT", params, "bad value");
 
         assertEquals("bad value", ex.getMessage());
         assertEquals(params, ex.getParameters());
@@ -238,8 +238,8 @@ public class CmdlineExceptionsTest
     @Test
     public void unrecognizedOptionWithMessage()
     {
-        UnrecognizedOptionException ex = new UnrecognizedOptionException(
-        "--bar", "no such option");
+        UnrecognizedOptionException ex
+            = new UnrecognizedOptionException("--bar", "no such option");
 
         assertEquals("--bar", ex.getOption());
         assertEquals("no such option", ex.getMessage());
@@ -257,9 +257,10 @@ public class CmdlineExceptionsTest
     @Test
     public void unrecognizedOptionExtendsCommandLineException()
     {
-        assertTrue(CommandLineException.class.isAssignableFrom(
-        UnrecognizedOptionException.class),
-        "UnrecognizedOptionException must extend CommandLineException");
+        assertTrue(
+            CommandLineException.class.isAssignableFrom(
+                UnrecognizedOptionException.class),
+            "UnrecognizedOptionException must extend CommandLineException");
     }
 
     // -------------------------------------------------------------------
@@ -286,9 +287,10 @@ public class CmdlineExceptionsTest
     {
         // Per the class declaration: extends IllegalArgumentException
         // (unchecked).
-        assertTrue(IllegalArgumentException.class.isAssignableFrom(
-        TooFewArgumentsException.class),
-        "TooFewArgumentsException must extend IllegalArgumentException");
+        assertTrue(
+            IllegalArgumentException.class.isAssignableFrom(
+                TooFewArgumentsException.class),
+            "TooFewArgumentsException must extend IllegalArgumentException");
     }
 
     @Test
@@ -296,6 +298,6 @@ public class CmdlineExceptionsTest
     {
         // Distinguishes from CommandLineException, which is checked.
         assertTrue(RuntimeException.class.isAssignableFrom(
-        TooFewArgumentsException.class));
+            TooFewArgumentsException.class));
     }
 }

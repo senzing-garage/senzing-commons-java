@@ -90,7 +90,7 @@ public class ReflectionUtilitiesTest
         } catch (Exception e) {
             e.printStackTrace();
             fail("testSynchronizedWithMonitorProxy() failed with exception: "
-                + e);
+                 + e);
         }
     }
 
@@ -109,10 +109,9 @@ public class ReflectionUtilitiesTest
         throws Exception
     {
         final TestClass testObject = new TestClass();
-        final TestInterface syncObject = (monitor == null) ? synchronizedProxy(
-            TestInterface.class,
-            testObject) : synchronizedProxy(TestInterface.class, testObject,
-                                            monitor);
+        final TestInterface syncObject = (monitor == null)
+            ? synchronizedProxy(TestInterface.class, testObject)
+            : synchronizedProxy(TestInterface.class, testObject, monitor);
 
         final TestInterface targetObject = (sync) ? syncObject : testObject;
 
@@ -242,7 +241,7 @@ public class ReflectionUtilitiesTest
 
         result.add(arguments(10, null, null, NullPointerException.class));
         result.add(arguments(
-        10, String.class, null, IllegalArgumentException.class));
+            10, String.class, null, IllegalArgumentException.class));
 
         return result;
     }
@@ -262,24 +261,29 @@ public class ReflectionUtilitiesTest
                 = ReflectionUtilities.convertPrimitiveNumber(value, numType);
 
             if (exceptionClass != null) {
-                fail("Expected failure when converting " + value + " from "
-                 + valueClass + " to " + targetType
-                 + ": " + exceptionClass.getName());
+                fail("Expected failure when converting " + value
+                     + " from " + valueClass
+                     + " to " + targetType
+                     + ": " + exceptionClass.getName());
             }
             assertEquals(expectedResult, result,
-                   "Unexpected result when converting " + value
-                       + " from " + valueClass + " to " + targetType);
+                         "Unexpected result when converting " + value
+                + " from " + valueClass
+                + " to " + targetType);
         } catch (Exception e) {
             if (exceptionClass == null) {
                 e.printStackTrace();
-                fail("Expected " + expectedResult + " when converting " + value
-                 + " from " + valueClass + " to " + targetType
-                 + ", but got an exception: " + e.getClass().getName());
+                fail("Expected " + expectedResult
+                     + " when converting " + value
+                     + " from " + valueClass
+                     + " to " + targetType
+                     + ", but got an exception: " + e.getClass().getName());
             } else if (!exceptionClass.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different exception when converting " + value
-                 + " from " + valueClass + " to " + targetType
-                 + ": " + e.getClass().getName());
+                     + " from " + valueClass
+                     + " to " + targetType
+                     + ": " + e.getClass().getName());
             }
         }
     }
@@ -353,10 +357,9 @@ public class ReflectionUtilitiesTest
 
         assertEquals("allowed-result", proxy.allowed(),
                  "Unrestricted method must still delegate to target");
-        assertThrows(UnsupportedOperationException.class,
-                 proxy::restricted,
-                 "Restricted method must throw"
-                     + " UnsupportedOperationException");
+        assertThrows(UnsupportedOperationException.class, proxy::restricted,
+                     "Restricted method must throw"
+            + " UnsupportedOperationException");
     }
 
     /**
@@ -373,8 +376,8 @@ public class ReflectionUtilitiesTest
             = (RestrictableInterface) ReflectionUtilities.restrictedProxy(
                 target);
         assertThrows(IllegalStateException.class, proxy::throwingMethod,
-                 "Proxy must unwrap InvocationTargetException and"
-                     + " propagate the original cause");
+                     "Proxy must unwrap InvocationTargetException and"
+            + " propagate the original cause");
     }
 
     /**
@@ -398,7 +401,7 @@ public class ReflectionUtilitiesTest
     {
         RestrictableImpl target = new RestrictableImpl();
         assertThrows(NullPointerException.class,
-                 () -> ReflectionUtilities.restrictedProxy(
+                     () -> ReflectionUtilities.restrictedProxy(
                      target, (java.lang.reflect.Method) null));
     }
 
@@ -412,7 +415,7 @@ public class ReflectionUtilitiesTest
     {
         RestrictableImpl target = new RestrictableImpl();
         assertThrows(NullPointerException.class,
-                 () -> ReflectionUtilities.restrictedProxy(
+                     () -> ReflectionUtilities.restrictedProxy(
                      null, target, new java.lang.reflect.Method[0]));
     }
 
@@ -451,11 +454,11 @@ public class ReflectionUtilitiesTest
                 target,
                 restrictedMethod);
 
-        Object reproxied = ReflectionUtilities.restrictedProxy(
-        proxy, restrictedMethod);
+        Object reproxied
+            = ReflectionUtilities.restrictedProxy(proxy, restrictedMethod);
         assertSame(proxy, reproxied,
-               "Re-applying the same restriction must short-circuit"
-                   + " and return the same proxy");
+                   "Re-applying the same restriction must short-circuit"
+            + " and return the same proxy");
     }
 
     /**
@@ -483,10 +486,8 @@ public class ReflectionUtilitiesTest
 
         assertNotSame(proxy1, proxy2,
                   "Adding a new restriction must produce a new proxy");
-        assertThrows(UnsupportedOperationException.class,
-                 proxy2::allowed);
-        assertThrows(UnsupportedOperationException.class,
-                 proxy2::restricted);
+        assertThrows(UnsupportedOperationException.class, proxy2::allowed);
+        assertThrows(UnsupportedOperationException.class, proxy2::restricted);
     }
 
     // -------------------------------------------------------------------
@@ -531,7 +532,7 @@ public class ReflectionUtilitiesTest
         try {
             java.lang.reflect.Field f
                 = ReflectionUtilities.class.getDeclaredField(
-              "METHOD_COMPARATOR");
+                    "METHOD_COMPARATOR");
             f.setAccessible(true);
             return (java.util.Comparator<java.lang.reflect.Method>) f.get(null);
         } catch (Exception e) {
@@ -596,13 +597,13 @@ public class ReflectionUtilitiesTest
     {
         java.lang.reflect.Method noArgs = CompA.class.getMethod("alpha");
         // 0 params
-        java.lang.reflect.Method twoArgs = CompA.class.getMethod(
-        "alpha", int.class, int.class);
+        java.lang.reflect.Method twoArgs
+            = CompA.class.getMethod("alpha", int.class, int.class);
         // 2 params
         int actual = methodComparator().compare(noArgs, twoArgs);
         assertTrue(actual < 0,
-               "Method with fewer params must sort before one with"
-                   + " more: got " + actual);
+                   "Method with fewer params must sort before one with"
+            + " more: got " + actual);
 
         int reverse = methodComparator().compare(twoArgs, noArgs);
         assertTrue(reverse > 0,
@@ -618,11 +619,11 @@ public class ReflectionUtilitiesTest
     public void methodComparatorOrdersByParamTypeWhenAllElseEqual()
         throws Exception
     {
-        java.lang.reflect.Method intArg = CompA.class.getMethod(
-        "alpha", int.class);
+        java.lang.reflect.Method intArg
+            = CompA.class.getMethod("alpha", int.class);
         // void alpha(int)
-        java.lang.reflect.Method strArg = CompA.class.getMethod(
-        "alpha", String.class);
+        java.lang.reflect.Method strArg
+            = CompA.class.getMethod("alpha", String.class);
         // void alpha(String)
         int expected = int.class.getName().compareTo(String.class.getName());
         int actual = methodComparator().compare(intArg, strArg);

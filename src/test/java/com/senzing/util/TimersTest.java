@@ -43,7 +43,7 @@ public class TimersTest
         } catch (Exception e) {
             e.printStackTrace();
             fail("Expected NullPointerException when constructing with null: "
-                + e);
+                 + e);
         }
     }
 
@@ -53,13 +53,13 @@ public class TimersTest
         try {
             Timers timers = new Timers("Foo", "Bar", "Foo", "Phoo");
             fail("Expected an IllegalArgumentException when constructing with "
-          + "duplicates, but got success instead.");
+                 + "duplicates, but got success instead.");
         } catch (IllegalArgumentException e) {
             // success
         } catch (Exception e) {
             e.printStackTrace();
             fail("Expected IllegalArgumentException when constructing with "
-          + "duplicates, but got a different exception: " + e);
+                 + "duplicates, but got a different exception: " + e);
         }
     }
 
@@ -67,12 +67,9 @@ public class TimersTest
     {
         List<Arguments> result = new LinkedList<>();
 
-        result.add(arguments(
-        new Timers("foo", "bar"), "phoo", false, null));
-        result.add(arguments(
-        new Timers("foo", "bar"), "foo", true, null));
-        result.add(arguments(
-        new Timers("foo", "bar"), "bar", true, null));
+        result.add(arguments(new Timers("foo", "bar"), "phoo", false, null));
+        result.add(arguments(new Timers("foo", "bar"), "foo", true, null));
+        result.add(arguments(new Timers("foo", "bar"), "bar", true, null));
         result.add(arguments(new Timers(), "bar", false, null));
 
         return result;
@@ -86,14 +83,11 @@ public class TimersTest
       Boolean expectedResult,
       Class expectedFailure)
     {
-        String info = "  timer=[ "
-            + timer
-            + " ], timerName=[ "
-            + timerName
-            + " ], expectedResult=[ "
-            + expectedResult
-            + " ], expectedFailure=[ "
-            + ((expectedFailure == null) ? null : expectedFailure.getName())
+        String info = "  timer=[ " + timer
+            + " ], timerName=[ " + timerName
+            + " ], expectedResult=[ " + expectedResult
+            + " ], expectedFailure=[ " + ((expectedFailure == null)
+                                          ? null : expectedFailure.getName())
             + " ]";
 
         try {
@@ -111,7 +105,8 @@ public class TimersTest
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different failure." + info
-            + ", failure=[ " + e + " ]");
+                     + ", failure=[ " + e
+                     + " ]");
             }
         }
     }
@@ -137,13 +132,12 @@ public class TimersTest
         long end = System.nanoTime();
         long duration = (end - start) / 1000000L;
         long elapsed = timers.getElapsedTime("foo");
-        assertTrue((elapsed <= duration),
-        "The elapsed time (" + elapsed + ") exceeds the bookend "
-            + "duration (" + duration + ").");
+        assertTrue((elapsed <= duration), "The elapsed time (" + elapsed
+            + ") exceeds the bookend " + "duration (" + duration + ").");
 
         Map<String, Long> timings = timers.getTimings();
         assertEquals(timings.get("foo"), elapsed,
-        "The elapsed time does not match the timings.");
+            "The elapsed time does not match the timings.");
     }
 
     @Test
@@ -158,12 +152,10 @@ public class TimersTest
                 = new LinkedHashSet<>(Arrays.asList(timerNames));
 
             for (String timerName : timerNameSet) {
-                assertTrue(timers.isRunning(timerName),
-            "Timer (" + timerName + ") expected to be running: "
-                + timers);
-                assertFalse(timers.isPaused(timerName),
-            "Timer (" + timerName + ") unexpectedly paused: "
-                + timers);
+                assertTrue(timers.isRunning(timerName), "Timer (" + timerName
+                    + ") expected to be running: " + timers);
+                assertFalse(timers.isPaused(timerName), "Timer (" + timerName
+                    + ") unexpectedly paused: " + timers);
             }
 
             Set<String> pauseSet = Set.of("bar", "foox");
@@ -177,19 +169,18 @@ public class TimersTest
 
             for (String timerName : timerNameSet) {
                 if (pauseSet.contains(timerName)) {
-                    assertTrue(timers.isPaused(timerName),
-              "Paused timer (" + timerName + ") not registering "
-                  + "as paused: " + timers);
-                    assertFalse(timers.isRunning(timerName),
-              "Paused timer (" + timerName + ") still "
-                  + "registering as running: " + timers);
+                    assertTrue(timers.isPaused(timerName), "Paused timer ("
+                        + timerName + ") not registering " + "as paused: "
+                        + timers);
+                    assertFalse(timers.isRunning(timerName), "Paused timer ("
+                        + timerName + ") still " + "registering as running: "
+                        + timers);
                 } else {
-                    assertTrue(timers.isRunning(timerName),
-              "Running timer (" + timerName + ") not "
-                  + "registering as running: " + timers);
-                    assertFalse(timers.isPaused(timerName),
-              "Running timer (" + timerName + ") unexpectedly "
-                  + "paused: " + timers);
+                    assertTrue(timers.isRunning(timerName), "Running timer ("
+                        + timerName + ") not " + "registering as running: "
+                        + timers);
+                    assertFalse(timers.isPaused(timerName), "Running timer ("
+                        + timerName + ") unexpectedly " + "paused: " + timers);
                 }
             }
 
@@ -207,33 +198,33 @@ public class TimersTest
             long postTimings = milliTime() - start;
 
             assertEquals(timerNames.length, timings.size(),
-          "Timings map is not the expected size: " + timings);
+                "Timings map is not the expected size: " + timings);
 
             assertEquals(timerNameSet, timings.keySet(),
-          "Timings does not have expected timer names: "
-              + timings);
+                         "Timings does not have expected timer names: "
+                + timings);
 
             timings.forEach((key, value) -> {
-        if (pauseSet.contains(key)) {
-          assertTrue((value >= prePause),
-              "Paused timer (" + key + ") value (" + value
-                  + ") should not be less than pre-paused value: "
-                  + prePause);
-          assertTrue((value <= postPause),
-              "Paused timer (" + key + ") value (" + value
-                  + ") should not be greater than post-paused value: "
-                  + postPause);
-        } else {
-          assertTrue((value >= postPause),
-              "Running timer (" + key + ") value (" + value
-                  + ") should not be less than post-paused value: "
-                  + postPause);
-          assertTrue((value <= postTimings),
-              "Running timer (" + key + ") value (" + value + ") "
-                  + "should not be greater than post-timings duration: "
-                  + postTimings);
-        }
-      });
+                if (pauseSet.contains(key)) {
+                    assertTrue((value >= prePause), "Paused timer (" + key
+                        + ") value (" + value
+                        + ") should not be less than pre-paused value: "
+                        + prePause);
+                    assertTrue((value <= postPause), "Paused timer (" + key
+                        + ") value (" + value
+                        + ") should not be greater than post-paused value: "
+                        + postPause);
+                } else {
+                    assertTrue((value >= postPause), "Running timer (" + key
+                        + ") value (" + value
+                        + ") should not be less than post-paused value: "
+                        + postPause);
+                    assertTrue((value <= postTimings), "Running timer (" + key
+                        + ") value (" + value + ") "
+                        + "should not be greater than post-timings duration: "
+                        + postTimings);
+                }
+            });
 
             long preResume = milliTime() - start;
 
@@ -247,18 +238,18 @@ public class TimersTest
             for (String timerName : timerNameSet) {
                 if (pauseSet.contains(timerName)) {
                     assertTrue(timers.isRunning(timerName),
-              "Resumed timer (" + timerName
-                  + ") not registering as running: " + timers);
-                    assertFalse(timers.isPaused(timerName),
-              "Resumed timer (" + timerName + ") still "
-                  + "registering as paused: " + timers);
+                               "Resumed timer (" + timerName
+                        + ") not registering as running: " + timers);
+                    assertFalse(timers.isPaused(timerName), "Resumed timer ("
+                        + timerName + ") still " + "registering as paused: "
+                        + timers);
                 } else {
-                    assertTrue(timers.isRunning(timerName),
-              "Running timer (" + timerName + ") not "
-                  + "registering as running post-resume: " + timers);
-                    assertFalse(timers.isPaused(timerName),
-              "Running timer (" + timerName + ") unexpectedly "
-                  + "paused post-resume: " + timers);
+                    assertTrue(timers.isRunning(timerName), "Running timer ("
+                        + timerName + ") not "
+                        + "registering as running post-resume: " + timers);
+                    assertFalse(timers.isPaused(timerName), "Running timer ("
+                        + timerName + ") unexpectedly "
+                        + "paused post-resume: " + timers);
                 }
             }
 
@@ -269,36 +260,52 @@ public class TimersTest
             long postTimings2 = milliTime() - start;
 
             assertEquals(timerNames.length, timings.size(),
-          "Timings map is not the expected size: " + timings);
+                "Timings map is not the expected size: " + timings);
 
             assertEquals(timerNameSet, timings.keySet(),
-          "Timings does not have expected timer names: "
-              + timings);
+                         "Timings does not have expected timer names: "
+                + timings);
 
-            timings.forEach((key, value) -> {
-        if (pauseSet.contains(key)) {
-          assertTrue((value >= (prePause + (postTimings2 - postResume))),
-              "Resumed timer (" + key + ") value (" + value
-                  + ") should not be less than pre-paused + resumed "
-                  + "value: "
-                  + (prePause + (postTimings2 - postResume)));
-          assertTrue((value <= (postPause + (postTimings2 - preResume))),
-              "Resumed timer (" + key + ") value (" + value
-                  + ") should not be greater than post-paused + resumed "
-                  + "value: "
-                  + (postPause + (postTimings2 - preResume)));
-        } else {
-          assertTrue((value >= (postPause + (postTimings2 - postResume))),
-              "Running timer (" + key + ") value (" + value
-                  + ") should not be less than post-paused + resumed "
-                  + "value: "
-                  + (postPause + (postTimings2 - postResume)));
-          assertTrue((value <= postTimings2),
-              "Running timer (" + key + ") value (" + value + ") "
-                  + "should not be greater than post-timings + "
-                  + "resumed duration: " + postTimings2);
-        }
-      });
+            timings.forEach(
+                (key, value) -> {
+                    if (pauseSet.contains(key)) {
+                        assertTrue(
+                            (value
+                             >= (prePause + (postTimings2 - postResume))),
+                            "Resumed timer ("
+                                + key
+                                + ") value ("
+                                + value
+                                + ") should not be less than pre-paused + resumed "
+                                + "value: "
+                                + (prePause + (postTimings2 - postResume)));
+                        assertTrue(
+                            (value
+                             <= (postPause + (postTimings2 - preResume))),
+                            "Resumed timer ("
+                                + key
+                                + ") value ("
+                                + value
+                                + ") should not be greater than post-paused + resumed "
+                                + "value: "
+                                + (postPause + (postTimings2 - preResume)));
+                    } else {
+                        assertTrue(
+                            (value
+                             >= (postPause + (postTimings2 - postResume))),
+                            "Running timer ("
+                                + key
+                                + ") value ("
+                                + value
+                                + ") should not be less than post-paused + resumed "
+                                + "value: "
+                                + (postPause + (postTimings2 - postResume)));
+                        assertTrue((value <= postTimings2), "Running timer ("
+                            + key + ") value (" + value + ") "
+                            + "should not be greater than post-timings + "
+                            + "resumed duration: " + postTimings2);
+                    }
+                });
         } catch (Exception e) {
             e.printStackTrace();
             fail("Failed unexpectedly with an exception: " + e);
@@ -317,12 +324,10 @@ public class TimersTest
                 = new LinkedHashSet<>(Arrays.asList(timerNames));
 
             for (String timerName : timerNameSet) {
-                assertTrue(timers.isRunning(timerName),
-            "Timer (" + timerName + ") expected to be running: "
-                + timers);
-                assertFalse(timers.isPaused(timerName),
-            "Timer (" + timerName + ") unexpectedly paused: "
-                + timers);
+                assertTrue(timers.isRunning(timerName), "Timer (" + timerName
+                    + ") expected to be running: " + timers);
+                assertFalse(timers.isPaused(timerName), "Timer (" + timerName
+                    + ") unexpectedly paused: " + timers);
             }
 
             long prePause = milliTime() - start;
@@ -334,11 +339,11 @@ public class TimersTest
 
             for (String timerName : timerNameSet) {
                 assertTrue(timers.isPaused(timerName),
-            "Paused timer (" + timerName + ") not registering "
-                + "as paused: " + timers);
-                assertFalse(timers.isRunning(timerName),
-            "Paused timer (" + timerName + ") still "
-                + "registering as running: " + timers);
+                           "Paused timer (" + timerName + ") not registering "
+                    + "as paused: " + timers);
+                assertFalse(timers.isRunning(timerName), "Paused timer ("
+                    + timerName + ") still " + "registering as running: "
+                    + timers);
             }
 
             Thread.sleep(10L);
@@ -355,22 +360,22 @@ public class TimersTest
             long postTimings = milliTime() - start;
 
             assertEquals(timerNames.length, timings.size(),
-          "Timings map is not the expected size: " + timings);
+                "Timings map is not the expected size: " + timings);
 
             assertEquals(timerNameSet, timings.keySet(),
-          "Timings does not have expected timer names: "
-              + timings);
+                         "Timings does not have expected timer names: "
+                + timings);
 
             timings.forEach((key, value) -> {
-        assertTrue((value >= prePause),
-            "Paused timer (" + key + ") value (" + value
-                + ") should not be less than pre-paused value: "
-                + prePause);
-        assertTrue((value <= postPause),
-            "Paused timer (" + key + ") value (" + value
-                + ") should not be greater than post-paused value: "
-                + postPause);
-      });
+                assertTrue((value >= prePause), "Paused timer (" + key
+                    + ") value (" + value
+                    + ") should not be less than pre-paused value: "
+                    + prePause);
+                assertTrue((value <= postPause), "Paused timer (" + key
+                    + ") value (" + value
+                    + ") should not be greater than post-paused value: "
+                    + postPause);
+            });
 
             long preResume = milliTime() - start;
 
@@ -384,12 +389,12 @@ public class TimersTest
             Thread.sleep(10L);
 
             for (String timerName : timerNameSet) {
-                assertTrue(timers.isRunning(timerName),
-            "Resumed timer (" + timerName + ") not registering "
-                + "as running: " + timers);
-                assertFalse(timers.isPaused(timerName),
-            "Resumed timer (" + timerName + ") still "
-                + "registering as paused: " + timers);
+                assertTrue(timers.isRunning(timerName), "Resumed timer ("
+                    + timerName + ") not registering " + "as running: "
+                    + timers);
+                assertFalse(timers.isPaused(timerName), "Resumed timer ("
+                    + timerName + ") still " + "registering as paused: "
+                    + timers);
             }
 
             timings = timers.getTimings();
@@ -397,24 +402,33 @@ public class TimersTest
             long postTimings2 = milliTime() - start;
 
             assertEquals(timerNames.length, timings.size(),
-          "Timings map is not the expected size: " + timings);
+                "Timings map is not the expected size: " + timings);
 
             assertEquals(timerNameSet, timings.keySet(),
-          "Timings does not have expected timer names: "
-              + timings);
+                         "Timings does not have expected timer names: "
+                + timings);
 
-            timings.forEach((key, value) -> {
-        assertTrue((value >= (prePause + (postTimings2 - postResume))),
-            "Resumed timer (" + key + ") value (" + value
-                + ") should not be less than pre-paused + resumed "
-                + "value: "
-                + (prePause + (postTimings2 - postResume)));
-        assertTrue((value <= (postPause + (postTimings2 - preResume))),
-            "Resumed timer (" + key + ") value (" + value
-                + ") should not be greater than post-paused + resumed "
-                + "value: "
-                + (postPause + (postTimings2 - preResume)));
-      });
+            timings.forEach(
+                (key, value) -> {
+                    assertTrue(
+                        (value >= (prePause + (postTimings2 - postResume))),
+                        "Resumed timer ("
+                            + key
+                            + ") value ("
+                            + value
+                            + ") should not be less than pre-paused + resumed "
+                            + "value: "
+                            + (prePause + (postTimings2 - postResume)));
+                    assertTrue(
+                        (value <= (postPause + (postTimings2 - preResume))),
+                        "Resumed timer ("
+                            + key
+                            + ") value ("
+                            + value
+                            + ") should not be greater than post-paused + resumed "
+                            + "value: "
+                            + (postPause + (postTimings2 - preResume)));
+                });
         } catch (Exception e) {
             e.printStackTrace();
             fail("Failed unexpectedly with an exception: " + e);
@@ -452,22 +466,22 @@ public class TimersTest
             long duration2b = endB - start2b;
 
             timings.forEach((key, value) -> {
-        if (delayedSet.contains(key)) {
-          assertTrue((value >= duration2b),
-              "Delayed timer (" + key + ") value (" + value
-                  + ") should not be less than " + duration2b);
-          assertTrue((value <= duration2a),
-              "Delayed timer (" + key + ") value (" + value
-                  + ") should not be greater than " + duration2a);
-        } else {
-          assertTrue((value >= duration1b),
-              "Initial timer (" + key + ") value (" + value
-                  + ") should not be less than " + duration1b);
-          assertTrue((value <= duration1a),
-              "Initial timer (" + key + ") value (" + value
-                  + ") should not be greater than " + duration1a);
-        }
-      });
+                if (delayedSet.contains(key)) {
+                    assertTrue((value >= duration2b), "Delayed timer (" + key
+                        + ") value (" + value
+                        + ") should not be less than " + duration2b);
+                    assertTrue((value <= duration2a), "Delayed timer (" + key
+                        + ") value (" + value
+                        + ") should not be greater than " + duration2a);
+                } else {
+                    assertTrue((value >= duration1b), "Initial timer (" + key
+                        + ") value (" + value
+                        + ") should not be less than " + duration1b);
+                    assertTrue((value <= duration1a), "Initial timer (" + key
+                        + ") value (" + value
+                        + ") should not be greater than " + duration1a);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
             fail("Failed unexpectedly with an exception: " + e);
@@ -500,15 +514,12 @@ public class TimersTest
                         "Paused timer values do not match.  timerName=[ "
                             + timerName + " ]");
                 } else {
-                    assertTrue(timings2.get(timerName) > timings1.get(
-                        timerName), "Running timer value dod not increase.  "
-                        + "timerName=[ "
-                        + timerName
-                        + " ], value1=[ "
-                        + timings1.get(timerName)
-                        + " ], value2=[ "
-                        + timings2.get(timerName)
-                        + " ]");
+                    assertTrue(timings2.get(timerName)
+                        > timings1.get(timerName),
+                               "Running timer value dod not increase.  "
+                        + "timerName=[ " + timerName + " ], value1=[ "
+                        + timings1.get(timerName) + " ], value2=[ "
+                        + timings2.get(timerName) + " ]");
                 }
             }
         } catch (Exception e) {

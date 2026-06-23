@@ -54,15 +54,15 @@ public enum ExtendedTestOption implements CommandLineOption<ExtendedTestOption, 
     {
         String flag = this.getCommandLineFlag();
         return Collections.singleton(
-        "SZ_EXT_TEST_" + flag.substring(2).toUpperCase());
+            "SZ_EXT_TEST_" + flag.substring(2).toUpperCase());
     }
 
     @Override
     public List<String> getEnvironmentFallbacks()
     {
         String flag = this.getCommandLineFlag();
-        return List.of("SENZING_ALT_EXT_TEST_" + flag.substring(2)
-                                                     .toUpperCase());
+        return List.of("SENZING_ALT_EXT_TEST_"
+                       + flag.substring(2).toUpperCase());
     }
 
     @Override
@@ -136,8 +136,8 @@ public enum ExtendedTestOption implements CommandLineOption<ExtendedTestOption, 
 
             if (!(option instanceof ExtendedTestOption)) {
                 throw new IllegalArgumentException(
-            "Unhandled command-line option: " + option.getCommandLineFlag()
-                + " / "+ option);
+                    "Unhandled command-line option: "
+                        + option.getCommandLineFlag() + " / " + option);
             }
 
             ExtendedTestOption testOption = (ExtendedTestOption) option;
@@ -149,9 +149,8 @@ public enum ExtendedTestOption implements CommandLineOption<ExtendedTestOption, 
 
                 default:
                     throw new IllegalArgumentException(
-              "Unhandled command line option: "
-                  + option.getCommandLineFlag()
-                  + " / " + option);
+                        "Unhandled command line option: "
+                            + option.getCommandLineFlag() + " / " + option);
             }
         }
     }

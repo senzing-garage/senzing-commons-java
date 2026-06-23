@@ -46,22 +46,22 @@ public class CommandLineUtilitiesEnvTest
     {
         new EnvironmentVariables("SENZING_ENV_TEST_NAME",
                                  "alice").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(EnvTestOption.class,
-                             new String[] {},
-                             EnvTestOption.PARAMETER_PROCESSOR,
-                             null);
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[]{},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      CommandLineValue val = result.get(NAME);
-      assertNotNull(val,
+            CommandLineValue val = result.get(NAME);
+            assertNotNull(val,
                     "NAME option should be populated from environment");
-      assertSame(ENVIRONMENT, val.getSource(),
+            assertSame(ENVIRONMENT, val.getSource(),
                  "Source should be ENVIRONMENT");
-      assertEquals("SENZING_ENV_TEST_NAME", val.getSpecifier(),
+            assertEquals("SENZING_ENV_TEST_NAME", val.getSpecifier(),
                    "Specifier should be the env var name");
-      assertEquals(List.of("alice"), val.getParameters());
-      assertEquals("alice", val.getProcessedValue());
-    });
+            assertEquals(List.of("alice"), val.getParameters());
+            assertEquals("alice", val.getProcessedValue());
+        });
     }
 
     /**
@@ -75,18 +75,18 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables("SZ_ENV_TEST_NAME", "bob").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(EnvTestOption.class,
-                             new String[] {},
-                             EnvTestOption.PARAMETER_PROCESSOR,
-                             null);
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[]{},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      CommandLineValue val = result.get(NAME);
-      assertNotNull(val);
-      assertEquals("SZ_ENV_TEST_NAME", val.getSpecifier(),
+            CommandLineValue val = result.get(NAME);
+            assertNotNull(val);
+            assertEquals("SZ_ENV_TEST_NAME", val.getSpecifier(),
                    "Specifier should be the synonym env var name");
-      assertEquals("bob", val.getProcessedValue());
-    });
+            assertEquals("bob", val.getProcessedValue());
+        });
     }
 
     /**
@@ -100,18 +100,18 @@ public class CommandLineUtilitiesEnvTest
     {
         new EnvironmentVariables("SENZING_ENV_TEST_VERBOSE",
                                  "").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(EnvTestOption.class,
-                             new String[] {},
-                             EnvTestOption.PARAMETER_PROCESSOR,
-                             null);
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[]{},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      CommandLineValue val = result.get(VERBOSE);
-      assertNotNull(val);
-      assertEquals(List.of("true"), val.getParameters(),
-                   "Empty env value for boolean option should yield "
-                       + "\"true\"");
-    });
+            CommandLineValue val = result.get(VERBOSE);
+            assertNotNull(val);
+            assertEquals(List.of("true"), val.getParameters(),
+                         "Empty env value for boolean option should yield "
+                + "\"true\"");
+        });
     }
 
     @Test
@@ -119,15 +119,15 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_VERBOSE", "true").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(EnvTestOption.class,
-                             new String[] {},
-                             EnvTestOption.PARAMETER_PROCESSOR,
-                             null);
+            "SENZING_ENV_TEST_VERBOSE", "true").execute(() -> {
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[]{},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      assertEquals(List.of("true"), result.get(VERBOSE).getParameters());
-    });
+            assertEquals(List.of("true"), result.get(VERBOSE).getParameters());
+        });
     }
 
     @Test
@@ -135,15 +135,16 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_VERBOSE", "false").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(EnvTestOption.class,
-                             new String[] {},
-                             EnvTestOption.PARAMETER_PROCESSOR,
-                             null);
+            "SENZING_ENV_TEST_VERBOSE", "false").execute(() -> {
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[]{},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      assertEquals(List.of("false"), result.get(VERBOSE).getParameters());
-    });
+            assertEquals(List.of("false"),
+                         result.get(VERBOSE).getParameters());
+        });
     }
 
     /**
@@ -156,13 +157,13 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_VERBOSE", "yes").execute(() -> {
-      assertThrows(IllegalArgumentException.class,
-                   () -> parseCommandLine(EnvTestOption.class,
+            "SENZING_ENV_TEST_VERBOSE", "yes").execute(() -> {
+            assertThrows(IllegalArgumentException.class,
+                         () -> parseCommandLine(EnvTestOption.class,
                                           new String[] {},
                                           EnvTestOption.PARAMETER_PROCESSOR,
                                           null));
-    });
+        });
     }
 
     /**
@@ -174,7 +175,7 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_TAGS", "[\"red\", \"green\", \"blue\"]").execute(
+            "SENZING_ENV_TEST_TAGS", "[\"red\", \"green\", \"blue\"]").execute(
             () -> {
                 Map<CommandLineOption, CommandLineValue> result
                     = parseCommandLine(EnvTestOption.class,
@@ -199,17 +200,17 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_TAGS", "red,green,blue").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(EnvTestOption.class,
-                             new String[] {},
-                             EnvTestOption.PARAMETER_PROCESSOR,
-                             null);
+            "SENZING_ENV_TEST_TAGS", "red,green,blue").execute(() -> {
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[]{},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      assertEquals(List.of("red", "green", "blue"),
+            assertEquals(List.of("red", "green", "blue"),
                    result.get(TAGS).getParameters(),
                    "Comma-separated env value should split into list");
-    });
+        });
     }
 
     /**
@@ -221,17 +222,17 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_TAGS", "red green blue").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(EnvTestOption.class,
-                             new String[] {},
-                             EnvTestOption.PARAMETER_PROCESSOR,
-                             null);
+            "SENZING_ENV_TEST_TAGS", "red green blue").execute(() -> {
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[]{},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      assertEquals(List.of("red", "green", "blue"),
+            assertEquals(List.of("red", "green", "blue"),
                    result.get(TAGS).getParameters(),
                    "Whitespace-separated env value should split into list");
-    });
+        });
     }
 
     /**
@@ -243,13 +244,13 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_COORDS", "x").execute(() -> {
-      assertThrows(BadOptionParameterCountException.class,
-                   () -> parseCommandLine(EnvTestOption.class,
+            "SENZING_ENV_TEST_COORDS", "x").execute(() -> {
+            assertThrows(BadOptionParameterCountException.class,
+                         () -> parseCommandLine(EnvTestOption.class,
                                           new String[] {},
                                           EnvTestOption.PARAMETER_PROCESSOR,
                                           null));
-    });
+        });
     }
 
     /**
@@ -261,13 +262,13 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_COORDS", "a,b,c,d,e").execute(() -> {
-      assertThrows(BadOptionParameterCountException.class,
-                   () -> parseCommandLine(EnvTestOption.class,
+            "SENZING_ENV_TEST_COORDS", "a,b,c,d,e").execute(() -> {
+            assertThrows(BadOptionParameterCountException.class,
+                         () -> parseCommandLine(EnvTestOption.class,
                                           new String[] {},
                                           EnvTestOption.PARAMETER_PROCESSOR,
                                           null));
-    });
+        });
     }
 
     /**
@@ -278,16 +279,16 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_COORDS", "x,y").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(EnvTestOption.class,
-                             new String[] {},
-                             EnvTestOption.PARAMETER_PROCESSOR,
-                             null);
+            "SENZING_ENV_TEST_COORDS", "x,y").execute(() -> {
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[]{},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      assertEquals(List.of("x", "y"),
+            assertEquals(List.of("x", "y"),
                    result.get(COORDS).getParameters());
-    });
+        });
     }
 
     /**
@@ -299,19 +300,18 @@ public class CommandLineUtilitiesEnvTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_ENV_TEST_NAME", "from-env").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(
-              EnvTestOption.class,
-              new String[] {"--name", "from-cli"},
-              EnvTestOption.PARAMETER_PROCESSOR,
-              null);
+            "SENZING_ENV_TEST_NAME", "from-env").execute(() -> {
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[] {"--name", "from-cli"},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      CommandLineValue val = result.get(NAME);
-      assertEquals("from-cli", val.getProcessedValue(),
+            CommandLineValue val = result.get(NAME);
+            assertEquals("from-cli", val.getProcessedValue(),
                    "Explicit --name on command line must override env");
-      assertSame(CommandLineSource.COMMAND_LINE, val.getSource());
-    });
+            assertSame(CommandLineSource.COMMAND_LINE, val.getSource());
+        });
     }
 
     /**
@@ -326,20 +326,22 @@ public class CommandLineUtilitiesEnvTest
         // execute on an isolated env to ensure no unrelated SENZING_*
         // var leaks in from the host.
         new EnvironmentVariables().execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(EnvTestOption.class,
-                             new String[] {},
-                             EnvTestOption.PARAMETER_PROCESSOR,
-                             null);
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                EnvTestOption.class,
+                new String[]{},
+                EnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      // None of the EnvTestOption values have a default, so result
-      // should contain no entries for any option that was not
-      // sourced from cmdline or env.
-      assertTrue(result.isEmpty()
-                     || result.values().stream().noneMatch(
-                         v -> v.getSource() == ENVIRONMENT),
-                 "No env-sourced values should appear when env vars unset");
-    });
+            // None of the EnvTestOption values have a default, so result
+            // should contain no entries for any option that was not
+            // sourced from cmdline or env.
+            assertTrue(
+                result.isEmpty()
+                    || result.values()
+                             .stream()
+                             .noneMatch(v -> v.getSource() == ENVIRONMENT),
+                "No env-sourced values should appear when env vars unset");
+        });
     }
 
     // Note: the primary-option fallback path

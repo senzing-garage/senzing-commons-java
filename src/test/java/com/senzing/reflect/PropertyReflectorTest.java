@@ -63,13 +63,8 @@ public class PropertyReflectorTest
 
         public String toString()
         {
-            return this.getStreet()
-                + "; "
-                + this.getCity()
-                + ", "
-                + this.getState()
-                + " "
-                + this.getZip();
+            return this.getStreet() + "; " + this.getCity() + ", "
+                + this.getState() + " " + this.getZip();
         }
     }
 
@@ -281,22 +276,22 @@ public class PropertyReflectorTest
                              Set.of()));
 
         result.add(arguments(
-        Polygon.class, Set.of("area", "perimeter", "sideCount"), Set.of()));
+            Polygon.class, Set.of("area", "perimeter", "sideCount"), Set.of()));
 
         result.add(arguments(
-        Rectangle.class,
-        Set.of("area", "perimeter", "sideCount", "width", "length"),
-        Set.of("width", "length")));
+            Rectangle.class,
+            Set.of("area", "perimeter", "sideCount", "width", "length"),
+            Set.of("width", "length")));
 
         result.add(arguments(
-        Square.class,
-        Set.of("area", "perimeter", "sideCount", "width", "length"),
-        Set.of("width", "length")));
+            Square.class,
+            Set.of("area", "perimeter", "sideCount", "width", "length"),
+            Set.of("width", "length")));
 
         result.add(arguments(
-        Circle.class,
-        Set.of("area", "perimeter", "radius"),
-        Set.of("radius")));
+            Circle.class,
+            Set.of("area", "perimeter", "radius"),
+            Set.of("radius")));
 
         return result;
     }
@@ -313,30 +308,34 @@ public class PropertyReflectorTest
             Map<String, List<Method>> setters = propRef.getMutators();
 
             assertEquals(expectedGetters, getters.keySet(),
-          "Unexpected accessor properties encountered");
+                "Unexpected accessor properties encountered");
             assertEquals(expectedSetters, setters.keySet(),
-          "Unexpected mutator properties encountered");
+                "Unexpected mutator properties encountered");
 
             getters.forEach((propName, method) -> {
-        assertTrue(method.getName().toUpperCase().endsWith(propName.toUpperCase()),
-            "Unexpected accessor method for '" + propName
-                + "' property: " + method);
-        assertTrue(method.getName().startsWith("get")
-            || method.getName().startsWith("is"),
-            "Unexpected accessor method prefix for '" + propName
-                + "' property: " + method);
-      });
+                assertTrue(method.getName()
+                                 .toUpperCase()
+                                 .endsWith(propName.toUpperCase()),
+                           "Unexpected accessor method for '" + propName
+                    + "' property: " + method);
+                assertTrue(method.getName().startsWith("get")
+                    || method.getName().startsWith("is"),
+                           "Unexpected accessor method prefix for '"
+                    + propName + "' property: " + method);
+            });
 
             setters.forEach((propName, methods) -> {
-        methods.forEach((method) -> {
-          assertTrue(method.getName().toUpperCase().endsWith(propName.toUpperCase()),
-              "Unexpected mutator method for '" + propName
-                  + "' property: " + method);
-          assertTrue(method.getName().startsWith("set"),
-              "Unexpected mutator method prefix for '" + propName
-                  + "' property: " + method);
-        });
-      });
+                methods.forEach((method) -> {
+                    assertTrue(method.getName()
+                                     .toUpperCase()
+                                     .endsWith(propName.toUpperCase()),
+                               "Unexpected mutator method for '" + propName
+                        + "' property: " + method);
+                    assertTrue(method.getName().startsWith("set"),
+                               "Unexpected mutator method prefix for '"
+                        + propName + "' property: " + method);
+                });
+            });
         } catch (Exception e) {
             e.printStackTrace();
             fail("testProperties() failed with exception: " + e);
@@ -382,32 +381,30 @@ public class PropertyReflectorTest
             // check if an exception was expected
             if (expectedFailure != null) {
                 fail("Expected an exception when getting property ("
-                    + propertyKey
-                    + "), on target ("
-                    + target
-                    + "): "
-                    + expectedFailure.getName());
+                     + propertyKey + "), on target (" + target + "): "
+                     + expectedFailure.getName());
             }
 
             // make sure the result is correct
             assertEquals(expectedValue, result,
-          "Unexpected result when getting property ("
-              + propertyKey + "), on target (" + target + ").");
+                         "Unexpected result when getting property ("
+                + propertyKey + "), on target (" + target + ").");
         } catch (Exception e) {
             // check if no failure is expected
             if (expectedFailure == null) {
                 e.printStackTrace();
                 fail("Expected success when getting property (" + propertyKey
-            + "), on target (" + target + "): " + e);
+                     + "), on target (" + target
+                     + "): " + e);
             }
 
             // check if the wrong exception type was produced
             if (!e.getClass().isAssignableFrom(expectedFailure)) {
                 e.printStackTrace();
                 fail("Unexpected exception type (" + e.getClass().getName()
-            + ") when getting property (" + propertyKey
-            + "), on target (" + target + ").  Expected: "
-            + expectedFailure.getName());
+                     + ") when getting property (" + propertyKey
+                     + "), on target (" + target
+                     + ").  Expected: " + expectedFailure.getName());
             }
         }
     }
@@ -446,7 +443,7 @@ public class PropertyReflectorTest
                              unsupported));
 
         result.add(
-        arguments(propRef, newRectangle(), "perimeter", 60.0, unsupported));
+            arguments(propRef, newRectangle(), "perimeter", 60.0, unsupported));
 
         result.add(arguments(propRef, newRectangle(), "volume", null,
                              illegalArg));
@@ -468,18 +465,14 @@ public class PropertyReflectorTest
 
             String propVal = (propertyValue == null)
                 ? String.valueOf(null) : (propertyValue.getClass().getName()
-                + ": " + propertyValue);
+                                          + ": " + propertyValue);
 
             // check if an exception was expected
             if (expectedFailure != null) {
                 fail("Expected an exception when setting property ("
-                    + propertyKey
-                    + ") to value ("
-                    + propVal
-                    + "), on target ("
-                    + target
-                    + "): "
-                    + expectedFailure.getName());
+                     + propertyKey + ") to value (" + propVal
+                     + "), on target (" + target + "): "
+                     + expectedFailure.getName());
             }
 
             Object result
@@ -495,29 +488,31 @@ public class PropertyReflectorTest
        */
 
             assertEquals(propertyValue, result,
-          "Unexpected property value after setting property ("
-              + propertyKey + ") to value (" + propVal
-              + "), on target (" + target + ").");
+                         "Unexpected property value after setting property ("
+                + propertyKey + ") to value (" + propVal + "), on target ("
+                + target + ").");
         } catch (Exception e) {
             String propVal = (propertyValue == null)
-                ? ("" + null) : (propertyValue.getClass().getName()
-                + ": " + propertyValue);
+                ? ("" + null) : (propertyValue.getClass().getName() + ": "
+                                 + propertyValue);
 
             // check if no failure is expected
             if (expectedFailure == null) {
                 e.printStackTrace();
                 fail("Expected success when setting property (" + propertyKey
-            + ") to value (" + propVal + "), on target (" + target
-            + "): " + e);
+                     + ") to value (" + propVal
+                     + "), on target (" + target
+                     + "): " + e);
             }
 
             // check if the wrong exception type was produced
             if (!e.getClass().isAssignableFrom(expectedFailure)) {
                 e.printStackTrace();
                 fail("Unexpected exception type (" + e.getClass().getName()
-            + ") when setting property (" + propertyKey
-            + ") to value (" + propVal + "), on target (" + target
-            + ").  Expected: " + expectedFailure.getName());
+                     + ") when setting property (" + propertyKey
+                     + ") to value (" + propVal
+                     + "), on target (" + target
+                     + ").  Expected: " + expectedFailure.getName());
             }
         }
     }
@@ -551,13 +546,13 @@ public class PropertyReflectorTest
 
         Person joeSchmoe = new Person("Joe Schmoe");
         joeSchmoe.addAddress(new Address("101 Main Street",
-        "Las Vegas",
-        "NV",
-        "89143"));
+            "Las Vegas",
+            "NV",
+            "89143"));
         joeSchmoe.addAddress(new Address("35401 Beach Road",
-        "Capistrano Beach",
-        "CA",
-        "92624"));
+            "Capistrano Beach",
+            "CA",
+            "92624"));
 
         job = Json.createObjectBuilder();
         job.add("name", "Joe Schmoe");
@@ -603,22 +598,22 @@ public class PropertyReflectorTest
             // check if an exception was expected
             if (expectedFailure != null) {
                 fail("Expected an exception when converting object (" + object
-            + ") to JSON (" + result + "): "
-            + expectedFailure.getName());
+                     + ") to JSON (" + result
+                     + "): " + expectedFailure.getName());
             }
 
             assertEquals(expectedResult, result,
-          "Unexpected converted JsonObject value");
+                "Unexpected converted JsonObject value");
         } catch (Exception e) {
             // check if no failure is expected
             if (expectedFailure == null) {
                 e.printStackTrace();
                 fail("Expected success when converting object (" + object
-            + ") to JSON: " + e);
+                     + ") to JSON: " + e);
             } else if (!expectedFailure.isAssignableFrom(e.getClass())) {
                 e.printStackTrace();
                 fail("Expected a different exception when converting object ("
-            + object + ") to JSON: " + e.getClass().getName());
+                     + object + ") to JSON: " + e.getClass().getName());
             }
         }
     }
@@ -889,8 +884,8 @@ public class PropertyReflectorTest
         MultiSetterBean bean = new MultiSetterBean();
         reflector.setPropertyValue(bean, "tag", 42);
         assertEquals("I:42", bean.getTag(),
-                 "Integer-to-int primitive promotion must select"
-                     + " setTag(int)");
+                     "Integer-to-int primitive promotion must select"
+            + " setTag(int)");
     }
 
     /**
@@ -909,8 +904,8 @@ public class PropertyReflectorTest
         Date now = new Date(0L);
         reflector.setPropertyValue(bean, "tag", now);
         assertTrue(bean.getTag().startsWith("O:"),
-               "Date should fall through to Object overload, got: "
-                   + bean.getTag());
+                   "Date should fall through to Object overload, got: "
+            + bean.getTag());
     }
 
     /**
@@ -928,8 +923,8 @@ public class PropertyReflectorTest
 
         reflector.setPropertyValue(bean, "name", null);
         assertNull(reflector.getPropertyValue(bean, "name"),
-               "Setting null on a non-primitive setter must succeed"
-                   + " and produce a null value");
+                   "Setting null on a non-primitive setter must succeed"
+            + " and produce a null value");
     }
 
     /**
@@ -941,17 +936,16 @@ public class PropertyReflectorTest
     public void setPropertyValueRejectsNullForPrimitiveOnlySetter()
     {
         PropertyReflector<PrimitiveOnlySetterBean> reflector
-            = PropertyReflector.getInstance(
-            PrimitiveOnlySetterBean.class);
+            = PropertyReflector.getInstance(PrimitiveOnlySetterBean.class);
         PrimitiveOnlySetterBean bean = new PrimitiveOnlySetterBean();
         bean.setCount(5);
 
         NullPointerException npe = assertThrows(
-        NullPointerException.class,
-        () -> reflector.setPropertyValue(bean, "count", null));
+            NullPointerException.class,
+            () -> reflector.setPropertyValue(bean, "count", null));
         assertTrue(npe.getMessage().contains("count"),
-               "NPE message must mention the property key: "
-                   + npe.getMessage());
+                   "NPE message must mention the property key: "
+            + npe.getMessage());
     }
 
     // -------------------------------------------------------------------
@@ -1033,8 +1027,8 @@ public class PropertyReflectorTest
         // assertion here is just that no map-key/value entries appear).
         JsonObject json = PropertyReflector.toJsonObject(input);
         assertFalse(json.containsKey("1"),
-                "Non-String-keyed map must not be exposed as JSON"
-                    + " entries: " + json);
+                    "Non-String-keyed map must not be exposed as JSON"
+            + " entries: " + json);
         assertFalse(json.containsKey("2"));
     }
 }

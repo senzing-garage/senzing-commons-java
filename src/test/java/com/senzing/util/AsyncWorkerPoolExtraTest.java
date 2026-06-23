@@ -38,25 +38,24 @@ public class AsyncWorkerPoolExtraTest
             // execution's result is null (no previous execution), so
             // execute returns null.
             AsyncResult<String> first = pool.execute(() -> {
-        throw expected;
-      });
+                throw expected;
+            });
             assertEquals(null, first,
-                   "First execute() returns previous result, which"
-                       + " is null on a fresh worker");
+                         "First execute() returns previous result, which"
+                + " is null on a fresh worker");
 
             // Second call: returns the previous (failed) AsyncResult.
             // Submit a no-op as the new task.
             AsyncResult<String> previous = pool.execute(() -> "ok");
-            assertNotNull(previous,
-                    "Second execute should return the previous"
-                        + " AsyncResult");
+            assertNotNull(previous, "Second execute should return the previous"
+                + " AsyncResult");
 
             // getValue on the failed result must rethrow.
-            Exception thrown = assertThrows(Exception.class,
-                                      previous::getValue);
+            Exception thrown
+                = assertThrows(Exception.class, previous::getValue);
             assertSame(expected, thrown,
-                 "AsyncResult.getValue() must rethrow the task's"
-                     + " original exception verbatim");
+                       "AsyncResult.getValue() must rethrow the task's"
+                + " original exception verbatim");
         } finally {
             pool.close();
         }
@@ -74,15 +73,15 @@ public class AsyncWorkerPoolExtraTest
         AsyncWorkerPool<String> pool = new AsyncWorkerPool<>(1);
         try {
             pool.execute(() -> {
-        throw new IllegalArgumentException("boom");
-      });
+                throw new IllegalArgumentException("boom");
+            });
             AsyncResult<String> previous = pool.execute(() -> "next");
             assertNotNull(previous);
 
             String s = previous.toString();
             assertTrue(s.contains("failure=["),
-                 "toString must include 'failure=[...]' for a failed"
-                     + " AsyncResult; got: " + s);
+                       "toString must include 'failure=[...]' for a failed"
+                + " AsyncResult; got: " + s);
         } finally {
             pool.close();
         }
@@ -105,8 +104,8 @@ public class AsyncWorkerPoolExtraTest
 
             String s = previous.toString();
             assertTrue(!s.contains("failure="),
-                 "toString must omit 'failure=' for a successful"
-                     + " AsyncResult; got: " + s);
+                       "toString must omit 'failure=' for a successful"
+                + " AsyncResult; got: " + s);
             assertTrue(s.contains("success-value"),
                  "toString must include the value: " + s);
         } finally {

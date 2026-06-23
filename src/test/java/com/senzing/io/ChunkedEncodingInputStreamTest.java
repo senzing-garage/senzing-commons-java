@@ -74,10 +74,10 @@ public class ChunkedEncodingInputStreamTest
             do {
                 available = ceis.available();
                 assertTrue(available >= 0,
-                   "Available bytes less-than zero: " + available);
+                    "Available bytes less-than zero: " + available);
                 assertTrue(available < bytes.length,
-                   "More bytes available than should be ("
-                       + bytes.length + "): " + available);
+                           "More bytes available than should be ("
+                    + bytes.length + "): " + available);
 
                 totalAvailable += available;
 
@@ -87,8 +87,8 @@ public class ChunkedEncodingInputStreamTest
             } while (available > 0);
 
             assertEquals(bytes.length, totalAvailable,
-                   "Total available bytes on chunked input stream not "
-                   + "as expected.");
+                         "Total available bytes on chunked input stream not "
+                + "as expected.");
         } catch (Exception e) {
             System.out.println("TOTAL AVAILABLE: " + totalAvailable);
             e.printStackTrace();
@@ -175,11 +175,11 @@ public class ChunkedEncodingInputStreamTest
                 = new ChunkedEncodingInputStream(tis);
 
             assertFalse(ceis.markSupported(),
-                  "Mark is unexpectedly supported for "
-                  + "ChunkedEncodingInputStream.");
+                        "Mark is unexpectedly supported for "
+                + "ChunkedEncodingInputStream.");
         } catch (Exception e) {
             fail("chunkedEncodingMarkSupportedTest() failed with exception: "
-                + e);
+                 + e);
         }
     }
 
@@ -233,8 +233,8 @@ public class ChunkedEncodingInputStreamTest
 
             byte[] buffer = new byte[100];
             for (int readCount = ceis.read(buffer, 0, buffer.length);
-           readCount >= 0;
-           readCount = ceis.read(buffer, 0, buffer.length))
+                 readCount >= 0;
+                 readCount = ceis.read(buffer, 0, buffer.length))
             {
                 baos.write(buffer, 0, readCount);
             }
@@ -296,16 +296,16 @@ public class ChunkedEncodingInputStreamTest
 
             byte[] buffer = new byte[100];
             for (int readCount = ceis.read(buffer, 0, buffer.length);
-           readCount >= 0;
-           readCount = ceis.read(buffer, 0, buffer.length))
+                 readCount >= 0;
+                 readCount = ceis.read(buffer, 0, buffer.length))
             {
                 baos.write(buffer, 0, readCount);
             }
 
             byte[] readBytes = baos.toByteArray();
             assertEquals(bytes.length - 100, readBytes.length,
-                   "Skipped unchunked data length does not match "
-                   + "pre-chunked.");
+                         "Skipped unchunked data length does not match "
+                + "pre-chunked.");
 
             byte[] copyArray = Arrays.copyOfRange(bytes, 100, bytes.length);
 

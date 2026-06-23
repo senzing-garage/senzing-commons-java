@@ -111,8 +111,7 @@ public class SemanticVersionExtraTest
     public void equalsReturnsTrueForSameInstance()
     {
         SemanticVersion v = new SemanticVersion("1.2.3");
-        assertEquals(v, v,
-                 "An instance must be equal to itself by reference");
+        assertEquals(v, v, "An instance must be equal to itself by reference");
     }
 
     /**
@@ -151,11 +150,11 @@ public class SemanticVersionExtraTest
         SystemErr err = new SystemErr();
         try {
             err.execute(() -> {
-        // Wrap System.exit to throw instead of terminate.
-        // System Stubs has SystemExit but it is heavier; we just
-        // assert the branch behavior in the tests below by
-        // exercising main() with arguments.
-      });
+                // Wrap System.exit to throw instead of terminate.
+                // System Stubs has SystemExit but it is heavier; we just
+                // assert the branch behavior in the tests below by
+                // exercising main() with arguments.
+            });
         } catch (Exception ignored) {
             // Defensive: the SystemErr capture above does not invoke main
             // because doing so would call System.exit. The non-zero-args
@@ -181,8 +180,8 @@ public class SemanticVersionExtraTest
     {
         SystemOut out = new SystemOut();
         out.execute(() -> {
-      SemanticVersion.main(new String[] {"1.2.3"});
-    });
+            SemanticVersion.main(new String[]{ "1.2.3" });
+        });
 
         String output = out.getText();
         assertTrue(output.contains("VERSION: 1.2.3"),
@@ -202,13 +201,12 @@ public class SemanticVersionExtraTest
     {
         SystemOut out = new SystemOut();
         out.execute(() -> {
-      SemanticVersion.main(new String[] {"1.2.3", "1.2.4", "1.2.3"});
-    });
+            SemanticVersion.main(new String[]{ "1.2.3", "1.2.4", "1.2.3" });
+        });
 
         String output = out.getText();
         assertTrue(output.contains("VERSUS"),
-               "main should print 'VERSUS' for each comparison: "
-                   + output);
+                   "main should print 'VERSUS' for each comparison: " + output);
         assertTrue(output.contains("COMPARE"),
                "main should print 'COMPARE': " + output);
         assertTrue(output.contains("EQUALS"),

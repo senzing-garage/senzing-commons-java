@@ -88,28 +88,18 @@ public class SQLUtilitiesTest
     {
         this.conn = DriverManager.getConnection("jdbc:sqlite::memory:");
         try (Statement stmt = this.conn.createStatement()) {
-            stmt.execute(
-          "CREATE TABLE TEST_TYPES ("
-              + "ID INTEGER PRIMARY KEY,"
-              + "BIG DECIMAL,"
-              + "BOOL INTEGER,"
-              + "BY INTEGER,"
-              + "D DATE,"
-              + "DBL REAL,"
-              + "FLT REAL,"
-              + "I INTEGER,"
-              + "L INTEGER,"
-              + "SH INTEGER,"
-              + "S TEXT,"
-              + "T TIME,"
-              + "TS TIMESTAMP"
-              + ")");
+            stmt.execute("CREATE TABLE TEST_TYPES ("
+                         + "ID INTEGER PRIMARY KEY," + "BIG DECIMAL,"
+                         + "BOOL INTEGER," + "BY INTEGER," + "D DATE,"
+                         + "DBL REAL," + "FLT REAL," + "I INTEGER,"
+                         + "L INTEGER," + "SH INTEGER," + "S TEXT," + "T TIME,"
+                         + "TS TIMESTAMP" + ")");
         }
 
         // Row 1: all populated.
         try (PreparedStatement ps = this.conn.prepareStatement(
-        "INSERT INTO TEST_TYPES (ID,BIG,BOOL,BY,D,DBL,FLT,I,L,SH,S,T,TS)"
-            + " VALUES (1,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+            "INSERT INTO TEST_TYPES (ID,BIG,BOOL,BY,D,DBL,FLT,I,L,SH,S,T,TS)"
+                + " VALUES (1,?,?,?,?,?,?,?,?,?,?,?,?)")) {
             ps.setBigDecimal(1, V_BIG);
             ps.setBoolean(2, V_BOOL);
             ps.setByte(3, V_BY);
@@ -128,9 +118,9 @@ public class SQLUtilitiesTest
         // Row 2: all NULL except ID.
         try (Statement stmt = this.conn.createStatement()) {
             stmt.execute(
-          "INSERT INTO TEST_TYPES (ID,BIG,BOOL,BY,D,DBL,FLT,I,L,SH,S,T,TS)"
-              + " VALUES (2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"
-              + "NULL,NULL,NULL,NULL)");
+                "INSERT INTO TEST_TYPES (ID,BIG,BOOL,BY,D,DBL,FLT,I,L,SH,S,T,TS)"
+                    + " VALUES (2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"
+                    + "NULL,NULL,NULL,NULL)");
         }
     }
 
@@ -154,8 +144,7 @@ public class SQLUtilitiesTest
     @Test
     public void utcCalendarUsesUtcTimeZone()
     {
-        assertEquals("UTC",
-                 SQLUtilities.UTC_CALENDAR.getTimeZone().getID());
+        assertEquals("UTC", SQLUtilities.UTC_CALENDAR.getTimeZone().getID());
     }
 
     // -------------------------------------------------------------------
@@ -182,8 +171,7 @@ public class SQLUtilitiesTest
     {
         Connection c = DriverManager.getConnection("jdbc:sqlite::memory:");
         assertNull(SQLUtilities.close(c));
-        assertTrue(c.isClosed(),
-               "Connection must be closed after close()");
+        assertTrue(c.isClosed(), "Connection must be closed after close()");
     }
 
     /**
@@ -261,12 +249,12 @@ public class SQLUtilitiesTest
     public void closeAlreadyClosedCallableStatementReturnsNull()
     {
         CallableStatement cs = (CallableStatement) Proxy.newProxyInstance(
-        SQLUtilitiesTest.class.getClassLoader(),
-        new Class<?>[] { CallableStatement.class },
-        (proxy, method, args) -> {
-          if ("isClosed".equals(method.getName())) return true;
-          return null;
-        });
+            SQLUtilitiesTest.class.getClassLoader(),
+            new Class<?>[]{ CallableStatement.class },
+            (proxy, method, args) -> {
+                if ("isClosed".equals(method.getName())) return true;
+                return null;
+            });
         assertNull(SQLUtilities.close(cs));
     }
 
@@ -304,27 +292,27 @@ public class SQLUtilitiesTest
     public void closeOverloadsSwallowExceptions()
     {
         Connection conn = (Connection) Proxy.newProxyInstance(
-        SQLUtilitiesTest.class.getClassLoader(),
-        new Class<?>[] { Connection.class },
-        (proxy, method, args) -> {
-          throw new SQLException("simulated");
-        });
+            SQLUtilitiesTest.class.getClassLoader(),
+            new Class<?>[]{ Connection.class },
+            (proxy, method, args) -> {
+                throw new SQLException("simulated");
+            });
         assertNull(SQLUtilities.close(conn));
 
         Statement stmt = (Statement) Proxy.newProxyInstance(
-        SQLUtilitiesTest.class.getClassLoader(),
-        new Class<?>[] { Statement.class },
-        (proxy, method, args) -> {
-          throw new SQLException("simulated");
-        });
+            SQLUtilitiesTest.class.getClassLoader(),
+            new Class<?>[]{ Statement.class },
+            (proxy, method, args) -> {
+                throw new SQLException("simulated");
+            });
         assertNull(SQLUtilities.close(stmt));
 
         ResultSet rs = (ResultSet) Proxy.newProxyInstance(
-        SQLUtilitiesTest.class.getClassLoader(),
-        new Class<?>[] { ResultSet.class },
-        (proxy, method, args) -> {
-          throw new SQLException("simulated");
-        });
+            SQLUtilitiesTest.class.getClassLoader(),
+            new Class<?>[]{ ResultSet.class },
+            (proxy, method, args) -> {
+                throw new SQLException("simulated");
+            });
         assertNull(SQLUtilities.close(rs));
     }
 
@@ -378,14 +366,14 @@ public class SQLUtilitiesTest
     public void rollbackSwallowsSqlExceptionAndLogsToStderr()
     {
         Connection failing = (Connection) Proxy.newProxyInstance(
-        SQLUtilitiesTest.class.getClassLoader(),
-        new Class<?>[] { Connection.class },
-        (proxy, method, args) -> {
-          if ("rollback".equals(method.getName())) {
-            throw new SQLException("simulated rollback failure");
-          }
-          return null;
-        });
+            SQLUtilitiesTest.class.getClassLoader(),
+            new Class<?>[]{ Connection.class },
+            (proxy, method, args) -> {
+                if ("rollback".equals(method.getName())) {
+                    throw new SQLException("simulated rollback failure");
+                }
+                return null;
+            });
 
         PrintStream originalErr = System.err;
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
@@ -398,8 +386,8 @@ public class SQLUtilitiesTest
             assertTrue(err.contains("Exception caught when rolling back"),
                  "Stderr must contain the diagnostic prefix: " + err);
             assertTrue(err.contains("simulated rollback failure"),
-                 "Stderr must contain the underlying SQLException"
-                     + " message: " + err);
+                       "Stderr must contain the underlying SQLException"
+                + " message: " + err);
         } finally {
             System.setErr(originalErr);
         }
@@ -414,8 +402,7 @@ public class SQLUtilitiesTest
         throws Exception
     {
         try (ResultSet rs = openRow(1)) {
-            assertEquals(0,
-                   V_BIG.compareTo(SQLUtilities.getBigDecimal(rs, 1)));
+            assertEquals(0, V_BIG.compareTo(SQLUtilities.getBigDecimal(rs, 1)));
         }
     }
 
@@ -696,7 +683,7 @@ public class SQLUtilitiesTest
     {
         try (ResultSet rs = openRow(1)) {
             assertEquals(0, V_BIG.compareTo(
-          SQLUtilities.getBigDecimal(rs, "BIG")));
+                SQLUtilities.getBigDecimal(rs, "BIG")));
         }
     }
 
@@ -732,8 +719,7 @@ public class SQLUtilitiesTest
         throws Exception
     {
         try (ResultSet rs = openRow(1)) {
-            assertEquals(V_BY,
-                   SQLUtilities.getByte(rs, "BY").byteValue());
+            assertEquals(V_BY, SQLUtilities.getByte(rs, "BY").byteValue());
         }
     }
 
@@ -861,8 +847,7 @@ public class SQLUtilitiesTest
         throws Exception
     {
         try (ResultSet rs = openRow(1)) {
-            assertEquals(V_SH,
-                   SQLUtilities.getShort(rs, "SH").shortValue());
+            assertEquals(V_SH, SQLUtilities.getShort(rs, "SH").shortValue());
         }
     }
 
@@ -1007,9 +992,8 @@ public class SQLUtilitiesTest
             SQLUtilities.main(new String[]{ "jdbc:sqlite::memory:" });
             String out = captured.toString(StandardCharsets.UTF_8);
             assertTrue(out.contains("jdbc:sqlite::memory:")
-                     && out.toUpperCase().contains("SQLITE"),
-                 "Output must include the URL and product name: "
-                     + out);
+                && out.toUpperCase().contains("SQLITE"),
+                       "Output must include the URL and product name: " + out);
         } finally {
             System.setOut(originalOut);
         }

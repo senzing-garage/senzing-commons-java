@@ -23,8 +23,8 @@ public class ChunkedEncodingInputStreamExtraTest
     private static ChunkedEncodingInputStream wrap(String chunked)
     {
         return new ChunkedEncodingInputStream(
-        new ByteArrayInputStream(
-            chunked.getBytes(StandardCharsets.US_ASCII)));
+            new ByteArrayInputStream(
+                chunked.getBytes(StandardCharsets.US_ASCII)));
     }
 
     /**
@@ -114,8 +114,8 @@ public class ChunkedEncodingInputStreamExtraTest
 
         IOException ex = assertThrows(IOException.class, s::read);
         assertTrue(ex.getMessage().contains("Unexpected EOF"),
-               "Error message should mention Unexpected EOF: "
-                   + ex.getMessage());
+                   "Error message should mention Unexpected EOF: "
+            + ex.getMessage());
     }
 
     /**
@@ -148,11 +148,11 @@ public class ChunkedEncodingInputStreamExtraTest
         String malformed = "8\r\nABCD";
         ChunkedEncodingInputStream s = wrap(malformed);
 
-        IOException ex = assertThrows(IOException.class,
-        () -> s.readAllBytes());
+        IOException ex
+            = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("Unexpected EOF"),
-               "Error message should mention Unexpected EOF: "
-                   + ex.getMessage());
+                   "Error message should mention Unexpected EOF: "
+            + ex.getMessage());
     }
 
     /**
@@ -166,11 +166,11 @@ public class ChunkedEncodingInputStreamExtraTest
         String malformed = "4\r\nABCD";
         ChunkedEncodingInputStream s = wrap(malformed);
 
-        IOException ex = assertThrows(IOException.class,
-        () -> s.readAllBytes());
+        IOException ex
+            = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("trailing CR"),
-               "Error message should mention trailing CR: "
-                   + ex.getMessage());
+                   "Error message should mention trailing CR: "
+            + ex.getMessage());
     }
 
     /**
@@ -186,11 +186,11 @@ public class ChunkedEncodingInputStreamExtraTest
         // cspell:enable
         ChunkedEncodingInputStream s = wrap(malformed);
 
-        IOException ex = assertThrows(IOException.class,
-        () -> s.readAllBytes());
+        IOException ex
+            = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("Expected trailing CR"),
-               "Error message should mention 'Expected trailing CR': "
-                   + ex.getMessage());
+                   "Error message should mention 'Expected trailing CR': "
+            + ex.getMessage());
     }
 
     /**
@@ -204,11 +204,11 @@ public class ChunkedEncodingInputStreamExtraTest
         String malformed = "4\r\nABCD\r";
         ChunkedEncodingInputStream s = wrap(malformed);
 
-        IOException ex = assertThrows(IOException.class,
-        () -> s.readAllBytes());
+        IOException ex
+            = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("trailing LF"),
-               "Error message should mention trailing LF: "
-                   + ex.getMessage());
+                   "Error message should mention trailing LF: "
+            + ex.getMessage());
     }
 
     /**
@@ -221,10 +221,10 @@ public class ChunkedEncodingInputStreamExtraTest
         String malformed = "4\r\nABCD\rX";
         ChunkedEncodingInputStream s = wrap(malformed);
 
-        IOException ex = assertThrows(IOException.class,
-        () -> s.readAllBytes());
+        IOException ex
+            = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("Expected trailing LF"),
-               "Error message should mention 'Expected trailing LF': "
-                   + ex.getMessage());
+                   "Error message should mention 'Expected trailing LF': "
+            + ex.getMessage());
     }
 }

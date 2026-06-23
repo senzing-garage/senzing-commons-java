@@ -36,7 +36,7 @@ public class CollectionUtilitiesTest
         } catch (Exception e) {
             e.printStackTrace();
             fail("recursivelyUnmodifiableListTest() failed with exception: "
-                + e);
+                 + e);
         }
     }
 
@@ -103,7 +103,7 @@ public class CollectionUtilitiesTest
                 coll = (Collection) obj;
                 coll.add("Should Fail");
                 fail("Succeeded in adding to a collection that should be "
-                 + "unmodifiable.  depth=[ " + depth + " ]" + testInfo);
+                     + "unmodifiable.  depth=[ " + depth + " ]" + testInfo);
             } catch (UnsupportedOperationException expected) {
                 // ignore
             }
@@ -118,15 +118,14 @@ public class CollectionUtilitiesTest
             try {
                 map.put("Should", "fail");
                 fail("Succeeded in adding to a map that should be "
-                 + "unmodifiable.  depth=[ " + depth + " ]" + testInfo);
+                     + "unmodifiable.  depth=[ " + depth + " ]" + testInfo);
             } catch (UnsupportedOperationException expected) {
                 // ignore
             }
 
-            map.values()
-               .forEach((value) -> {
-        testRecursivelyUnmodifiable(value, depth + 1, testInfo);
-      });
+            map.values().forEach((value) -> {
+                testRecursivelyUnmodifiable(value, depth + 1, testInfo);
+            });
         }
     }
 }

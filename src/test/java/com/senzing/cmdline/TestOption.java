@@ -79,8 +79,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
             return Collections.emptySet();
         }
         String flag = this.getCommandLineFlag();
-        return Collections.singleton("SZ_TEST_" + flag.substring(2)
-                                                      .toUpperCase());
+        return Collections.singleton("SZ_TEST_"
+                                     + flag.substring(2).toUpperCase());
     }
 
     @Override
@@ -215,8 +215,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
         {
             if (!(option instanceof TestOption)) {
                 throw new IllegalArgumentException(
-            "Unhandled command-line option: " + option.getCommandLineFlag()
-            + " / "+ option);
+                    "Unhandled command-line option: "
+                        + option.getCommandLineFlag() + " / " + option);
             }
             TestOption testOption = (TestOption) option;
             switch (testOption)
@@ -234,9 +234,9 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
                     }
                     if ("true".equalsIgnoreCase(boolText)) return Boolean.TRUE;
                     throw new IllegalArgumentException(
-              "The specified parameter for "
-                  + option.getCommandLineFlag()
-                  + " must be true or false: " + params.get(0));
+                        "The specified parameter for "
+                            + option.getCommandLineFlag()
+                            + " must be true or false: " + params.get(0));
 
                 case CONFIG:
                     {
@@ -255,8 +255,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
                         String[] tokens = params.get(0).split(":");
                         if (tokens.length != 2) {
                             throw new IllegalArgumentException(
-                "Expected format <interface>:<port>.  Received: "
-                    + params.get(0));
+                                "Expected format <interface>:<port>.  Received: "
+                                    + params.get(0));
                         }
                         InetAddress address = parseInterface(tokens[0]);
                         int port = parsePort(tokens[1]);
@@ -269,9 +269,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
 
                 default:
                     throw new IllegalArgumentException(
-              "Unhandled command line option: "
-                  + option.getCommandLineFlag()
-                  + " / " + option);
+                        "Unhandled command line option: "
+                            + option.getCommandLineFlag() + " / " + option);
             }
         }
 
@@ -280,7 +279,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
             int port = Integer.parseInt(text);
             if (port < 0) {
                 throw new IllegalArgumentException(
-            "Negative port numbers are not allowed: " + port);
+                    "Negative port numbers are not allowed: " + port);
             }
             return port;
         }

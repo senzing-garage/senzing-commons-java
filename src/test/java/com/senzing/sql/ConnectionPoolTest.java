@@ -109,15 +109,16 @@ public class ConnectionPoolTest
                     Connection conn = this.threadConnMap.get(current);
                     if (conn != null && conn != connection) {
                         throw new IllegalStateException(
-                "Thread connection does not match specified connection.");
+                            "Thread connection does not match specified connection.");
                     }
                     if (this.connThreadMap.containsKey(connection)) {
                         Thread thread = this.connThreadMap.get(connection);
                         if (current != thread) {
-                            throw new IllegalStateException(
-                  "Current thread (" + current.getName()
-                      + ") does not match recorded thread (" + thread.getName()
-                      + " for connection: " + connection);
+                            throw new IllegalStateException("Current thread ("
+                                + current.getName()
+                                + ") does not match recorded thread ("
+                                + thread.getName() + " for connection: "
+                                + connection);
                         }
                     }
                     this.connThreadMap.put(connection, current);
@@ -169,7 +170,7 @@ public class ConnectionPoolTest
             throws SQLException
         {
             return (Connection) Proxy.newProxyInstance(
-          this.getClass().getClassLoader(), INTERFACES, this.handler);
+                this.getClass().getClassLoader(), INTERFACES, this.handler);
         }
     }
 
@@ -250,8 +251,9 @@ public class ConnectionPoolTest
                        IdentityHashMap<Connection, Thread>  connThreadMap,
                        IdentityHashMap<Thread, Connection>  threadConnMap)
         {
-            super("Dummy Thread " + threadIndex + " ("
-                + System.identityHashCode(new Object()) + ")");
+            super("Dummy Thread " + threadIndex
+                  + " (" + System.identityHashCode(new Object())
+                  + ")");
             this.threadIndex = threadIndex;
             this.threadCount = threadCount;
             this.pool = pool;
@@ -266,16 +268,11 @@ public class ConnectionPoolTest
         @Override
         public void run()
         {
-            String info = "minSize=[ "
-                + this.pool.getMaximumSize()
-                + " ], maxSize=[ "
-                + this.pool.getMaximumSize()
-                + " ], threadIndex=[ "
-                + threadIndex
-                + " ], threadCount =[ "
-                + threadCount
-                + " ], maxWait=[ "
-                + this.maxWait
+            String info = "minSize=[ " + this.pool.getMaximumSize()
+                + " ], maxSize=[ " + this.pool.getMaximumSize()
+                + " ], threadIndex=[ " + threadIndex
+                + " ], threadCount =[ " + threadCount
+                + " ], maxWait=[ " + this.maxWait
                 + " ]";
 
             try {
@@ -283,7 +280,7 @@ public class ConnectionPoolTest
                     Connection conn = this.pool.acquire(this.maxWait);
                     if (conn == null) {
                         throw new IllegalStateException(
-                "Failed to obtain connection in allotted time.  " + info);
+                            "Failed to obtain connection in allotted time.  " + info);
                     }
                     try {
                         // try at least two operations on the connection to
@@ -319,7 +316,7 @@ public class ConnectionPoolTest
                         try {
                             PreparedStatement ps = conn.prepareStatement("");
                             throw new IllegalStateException(
-                  "Used connection after closing without an error.  " + info);
+                                "Used connection after closing without an error.  " + info);
                         } catch (SQLException expected) {
                             // do nothing
                         }
@@ -352,9 +349,8 @@ public class ConnectionPoolTest
                 = new IdentityHashMap<>();
             List<Exception> failures = new LinkedList<>();
 
-            DummyConnector connector = new DummyConnector(failures,
-                                                    connThreadMap,
-                                                    threadConnMap);
+            DummyConnector connector
+                = new DummyConnector(failures, connThreadMap, threadConnMap);
 
             if (minPoolSize == maxPoolSize) {
                 pool = new ConnectionPool(connector, minPoolSize);
@@ -369,10 +365,9 @@ public class ConnectionPoolTest
             assertNull(pool.getRetireLimit(),
                  "Maximum connection leases not as expected: " + info);
             assertNull(pool.getExpireTime(),
-                 "Maximum connection lifespan not as expected: "
-                     + info);
+                       "Maximum connection lifespan not as expected: " + info);
             assertFalse(pool.isShutdown(),
-          "Pool prematurely registering shutdown state: " + info);
+                "Pool prematurely registering shutdown state: " + info);
             assertNull(pool.getGreatestLeasedCount(),
                    "Greatest lease count not initially null: " + info);
             assertNull(pool.getAverageLeasedCount(),
@@ -384,11 +379,11 @@ public class ConnectionPoolTest
             assertNull(pool.getRetiredConnectionCount(),
                  "Retired connection count is not null: " + info);
             assertNull(pool.getAverageAcquisitionTime(),
-                 "Average acquisition time is not initially null: "
-                     + info);
+                       "Average acquisition time is not initially null: "
+                + info);
             assertNull(pool.getGreatestAcquisitionTime(),
-                 "Greatest acquisition time is not initially null: "
-                     + info);
+                       "Greatest acquisition time is not initially null: "
+                + info);
             assertNull(pool.getGreatestLeaseTime(),
                  "Greatest lease time is not initially null: " + info);
             assertNull(pool.getAverageLeaseTime(),
@@ -414,12 +409,12 @@ public class ConnectionPoolTest
                     long endNanos = System.nanoTime();
                     long elapsed = (endNanos - startNanos) / ONE_MILLION;
                     assertNotNull(conn, "Connection not acquired.  index=[ "
-              + index + " ], " + info);
+                        + index + " ], " + info);
                     leased.add(conn);
                     assertTrue((elapsed < 200L),
-                     "Blocked for more than 200ms (" + elapsed
-                         + "ms) waiting for a connection.  index=[ "
-                         + index + " ], " + info);
+                               "Blocked for more than 200ms (" + elapsed
+                        + "ms) waiting for a connection.  index=[ " + index
+                        + " ], " + info);
                 }
             } finally {
                 for (Connection connection : leased) {
@@ -431,7 +426,7 @@ public class ConnectionPoolTest
                     try {
                         PreparedStatement ps = connection.prepareStatement("");
                         throw new IllegalStateException(
-                "Used connection after closing without an error.");
+                            "Used connection after closing without an error.");
                     } catch (SQLException expected) {
                         // do nothing
                     }
@@ -440,18 +435,17 @@ public class ConnectionPoolTest
             }
 
             assertEquals(minPoolSize, pool.getCurrentPoolSize(),
-                   "Current pool size expanded beyond minimum: "
-                       + info);
+                         "Current pool size expanded beyond minimum: " + info);
             assertEquals(minPoolSize, pool.getAvailableConnectionCount(),
-                   "Pool has leased connections when they should have "
-                   + "been returned: " + info);
+                         "Pool has leased connections when they should have "
+                + "been returned: " + info);
             assertEquals(0, pool.getOutstandingLeaseCount(),
-                   "Outstanding leases exist when they should not: "
-                       + info);
+                         "Outstanding leases exist when they should not: "
+                + info);
             if (minPoolSize > 0) {
                 assertNotNull(pool.getGreatestAcquisitionTime(),
-                      "Greatest acquisition time should not be null: "
-                          + info);
+                              "Greatest acquisition time should not be null: "
+                    + info);
                 assertNotNull(pool.getGreatestLeasedCount(),
                       "Greatest lease count should not be null: " + info);
                 assertNotNull(pool.getAverageLeaseTime(),
@@ -460,8 +454,7 @@ public class ConnectionPoolTest
                       "Greatest lease time should not be null: " + info);
             } else {
                 assertNull(pool.getGreatestAcquisitionTime(),
-                      "Greatest acquisition time should be null: "
-                          + info);
+                           "Greatest acquisition time should be null: " + info);
                 assertNull(pool.getGreatestLeasedCount(),
                       "Greatest lease count should be null: " + info);
                 assertNull(pool.getAverageLeaseTime(),
@@ -495,9 +488,8 @@ public class ConnectionPoolTest
                 = new IdentityHashMap<>();
             List<Exception> failures = new LinkedList<>();
 
-            DummyConnector connector = new DummyConnector(failures,
-                                                    connThreadMap,
-                                                    threadConnMap);
+            DummyConnector connector
+                = new DummyConnector(failures, connThreadMap, threadConnMap);
 
             pool = new ConnectionPool(connector, 5, 10);
 
@@ -508,12 +500,8 @@ public class ConnectionPoolTest
                     Connection conn = pool.acquire(0L);
                     assertNotNull(conn,
                                   "Connection not immediately acquired.  "
-                        + "leased=[ "
-                        + leased.size()
-                        + " ], minPoolSize=[ "
-                        + minPoolSize
-                        + " ], maxPoolSize=[ "
-                        + maxPoolSize
+                        + "leased=[ " + leased.size() + " ], minPoolSize=[ "
+                        + minPoolSize + " ], maxPoolSize=[ " + maxPoolSize
                         + " ]");
 
                     leased.add(conn);
@@ -523,9 +511,9 @@ public class ConnectionPoolTest
                 // grow
                 Connection unavailable = pool.acquire(100L);
                 assertNull(unavailable, "Connection acquired when none should "
-            + "have been available.  leased=[ " + leased.size()
-            + " ], minPoolSize=[ " + minPoolSize + " ], maxPoolSize=[ "
-            + maxPoolSize + " ]");
+                    + "have been available.  leased=[ " + leased.size()
+                    + " ], minPoolSize=[ " + minPoolSize + " ], maxPoolSize=[ "
+                    + maxPoolSize + " ]");
             } finally {
                 for (Connection connection : leased) {
                     SQLUtilities.close(connection);
@@ -559,9 +547,8 @@ public class ConnectionPoolTest
                 = new IdentityHashMap<>();
             List<Exception> failures = new LinkedList<>();
 
-            DummyConnector connector = new DummyConnector(failures,
-                                                    connThreadMap,
-                                                    threadConnMap);
+            DummyConnector connector
+                = new DummyConnector(failures, connThreadMap, threadConnMap);
 
             if (minPoolSize == maxPoolSize) {
                 pool = new ConnectionPool(connector, minPoolSize);
@@ -581,12 +568,12 @@ public class ConnectionPoolTest
                     long endNanos = System.nanoTime();
                     long elapsed = (endNanos - startNanos) / ONE_MILLION;
                     assertNotNull(conn, "Connection not acquired.  index=[ "
-              + index + " ], " + info);
+                        + index + " ], " + info);
                     leased.add(conn);
                     assertTrue((elapsed < 200L),
-                     "Blocked for more than 200ms (" + elapsed
-                         + "ms) waiting for a connection.  index=[ "
-                         + index + " ], " + info);
+                               "Blocked for more than 200ms (" + elapsed
+                        + "ms) waiting for a connection.  index=[ " + index
+                        + " ], " + info);
                 }
             } finally {
                 for (Connection connection : leased) {
@@ -598,7 +585,7 @@ public class ConnectionPoolTest
                     try {
                         PreparedStatement ps = connection.prepareStatement("");
                         throw new IllegalStateException(
-                "Used connection after closing without an error.");
+                            "Used connection after closing without an error.");
                     } catch (SQLException expected) {
                         // do nothing
                     }
@@ -606,10 +593,9 @@ public class ConnectionPoolTest
                 leased.clear();
             }
 
-            assertEquals(maxPoolSize,
-                   pool.getAvailableConnectionCount(),
-                   "Pool has leased connections when they should have "
-                       + "been returned");
+            assertEquals(maxPoolSize, pool.getAvailableConnectionCount(),
+                         "Pool has leased connections when they should have "
+                + "been returned");
             assertEquals(0, pool.getOutstandingLeaseCount(),
                    "Outstanding leases exist when they should not");
             assertEquals(maxPoolSize, pool.getCurrentPoolSize(),
@@ -634,12 +620,9 @@ public class ConnectionPoolTest
                                int threadCount)
     {
         ConnectionPool pool = null;
-        String info = "min=[ "
-            + minPoolSize
-            + " ], max=[ "
-            + maxPoolSize
-            + " ], threads=[ "
-            + threadCount
+        String info = "min=[ " + minPoolSize
+            + " ], max=[ " + maxPoolSize
+            + " ], threads=[ " + threadCount
             + " ]";
         try {
             IdentityHashMap<Connection, Thread> connThreadMap
@@ -648,9 +631,8 @@ public class ConnectionPoolTest
                 = new IdentityHashMap<>();
             List<Exception> failures = new LinkedList<>();
 
-            DummyConnector connector = new DummyConnector(failures,
-                                                    connThreadMap,
-                                                    threadConnMap);
+            DummyConnector connector
+                = new DummyConnector(failures, connThreadMap, threadConnMap);
 
             if (minPoolSize == maxPoolSize) {
                 pool = new ConnectionPool(connector, minPoolSize);
@@ -686,8 +668,8 @@ public class ConnectionPoolTest
             }
             for (Thread thread : threads) {
                 assertFalse(thread.isAlive(),
-                    "Worker thread is unexpectedly still alive: "
-                        + info);
+                            "Worker thread is unexpectedly still alive: "
+                    + info);
             }
             if (failures.size() > 0) {
                 if (failures.size() == 1) {
@@ -701,8 +683,8 @@ public class ConnectionPoolTest
                 assertEquals(minPoolSize, pool.getCurrentPoolSize(),
                      "Current pool size expanded beyond minimum");
                 assertEquals(minPoolSize, pool.getAvailableConnectionCount(),
-                     "Pool has leased connections when they should "
-                         + "have been returned");
+                             "Pool has leased connections when they should "
+                    + "have been returned");
             }
             assertEquals(0, pool.getOutstandingLeaseCount(),
                    "Outstanding leases exist when they should not");
@@ -744,16 +726,15 @@ public class ConnectionPoolTest
                 = new IdentityHashMap<>();
             List<Exception> failures = new LinkedList<>();
 
-            DummyConnector connector = new DummyConnector(failures,
-                                                    connThreadMap,
-                                                    threadConnMap);
+            DummyConnector connector
+                = new DummyConnector(failures, connThreadMap, threadConnMap);
 
             final int maxPoolSize = 5;
             final int expireSeconds = 2;
             final int noRetireLimit = 0;
             final int minPoolSize = 0;
             pool = new ConnectionPool(
-          connector, minPoolSize, maxPoolSize, expireSeconds, noRetireLimit);
+                connector, minPoolSize, maxPoolSize, expireSeconds, noRetireLimit);
 
             assertEquals(2000L, pool.getExpireTime(),
                    "Expire time is not as expected.");
@@ -810,16 +791,15 @@ public class ConnectionPoolTest
                 = new IdentityHashMap<>();
             List<Exception> failures = new LinkedList<>();
 
-            DummyConnector connector = new DummyConnector(failures,
-                                                    connThreadMap,
-                                                    threadConnMap);
+            DummyConnector connector
+                = new DummyConnector(failures, connThreadMap, threadConnMap);
 
             final int maxPoolSize = 5;
             final int expireSeconds = 2;
             final int noRetireLimit = 0;
             final int minPoolSize = 0;
             pool = new ConnectionPool(
-          connector, minPoolSize, maxPoolSize, expireSeconds, noRetireLimit);
+                connector, minPoolSize, maxPoolSize, expireSeconds, noRetireLimit);
 
             assertEquals(2000L, pool.getExpireTime(),
                    "Expire time is not as expected.");
@@ -872,19 +852,17 @@ public class ConnectionPoolTest
                 = new IdentityHashMap<>();
             List<Exception> failures = new LinkedList<>();
 
-            DummyConnector connector = new DummyConnector(failures,
-                                                    connThreadMap,
-                                                    threadConnMap);
+            DummyConnector connector
+                = new DummyConnector(failures, connThreadMap, threadConnMap);
 
             final int maxPoolSize = 5;
             final int noExpireTime = 0;
             final int retireLimit = 4;
             final int minPoolSize = 0;
             pool = new ConnectionPool(
-          connector, minPoolSize, maxPoolSize, noExpireTime, retireLimit);
+                connector, minPoolSize, maxPoolSize, noExpireTime, retireLimit);
 
-            assertNull(pool.getExpireTime(),
-                   "Expire time is not null.");
+            assertNull(pool.getExpireTime(), "Expire time is not null.");
             assertNull(pool.getExpiredConnectionCount(),
                  "Expired connection count is not null.");
             assertEquals(0, pool.getRetiredConnectionCount(),
@@ -934,14 +912,10 @@ public class ConnectionPoolTest
                              int retireLimit)
     {
         ConnectionPool pool = null;
-        String info = "min=[ "
-            + minPoolSize
-            + " ], max=[ "
-            + maxPoolSize
-            + " ], expire=[ "
-            + expireSeconds
-            + " ], retire=[ "
-            + retireLimit
+        String info = "min=[ " + minPoolSize
+            + " ], max=[ " + maxPoolSize
+            + " ], expire=[ " + expireSeconds
+            + " ], retire=[ " + retireLimit
             + " ]";
 
         try {
@@ -953,12 +927,11 @@ public class ConnectionPoolTest
 
             long startTime = System.nanoTime();
             Thread.sleep(20L);
-            DummyConnector connector = new DummyConnector(failures,
-                                                    connThreadMap,
-                                                    threadConnMap);
+            DummyConnector connector
+                = new DummyConnector(failures, connThreadMap, threadConnMap);
 
             pool = new ConnectionPool(
-          connector, minPoolSize, maxPoolSize, expireSeconds, retireLimit);
+                connector, minPoolSize, maxPoolSize, expireSeconds, retireLimit);
             Thread.sleep(20L);
             long startTime2 = System.nanoTime();
             Thread.sleep(50L);
@@ -972,9 +945,9 @@ public class ConnectionPoolTest
                    "Maximum pool size is not as expected: " + info);
 
             if (retireLimit == 0) {
-                assertFalse(statsMap.containsKey(Stat.retireLimit),
-                    "Retire limit unexpectedly present in map: "
-                    + info);
+                assertFalse(
+                    statsMap.containsKey(Stat.retireLimit),
+                    "Retire limit unexpectedly present in map: " + info);
             } else {
                 assertEquals(retireLimit, statsMap.get(Stat.retireLimit),
                      "Maximum connection leases not as expected: " + info);
@@ -984,8 +957,8 @@ public class ConnectionPoolTest
                     "Expire time unexpectedly present in map: " + info);
             } else {
                 assertEquals(expireSeconds * 1000L, statsMap.get(expireTime),
-                     "Maximum connection lifespan not as expected: "
-                         + info);
+                             "Maximum connection lifespan not as expected: "
+                    + info);
             }
             assertEquals(minPoolSize, statsMap.get(currentPoolSize),
                    "Current pool size not as expected: " + info);
@@ -994,60 +967,56 @@ public class ConnectionPoolTest
             assertEquals(0, statsMap.get(outstandingLeases),
                    "Outstanding leases not as expected: " + info);
             assertFalse(statsMap.containsKey(greatestOutstandingLeaseTime),
-                  "Greatest outstanding lease time unexpectedly "
-                  + "present: " + info);
+                        "Greatest outstanding lease time unexpectedly "
+                + "present: " + info);
             assertFalse(statsMap.containsKey(averageOutstandingLeaseTime),
-                  "Average outstanding lease time unexpectedly "
-                      + "present: " + info);
+                        "Average outstanding lease time unexpectedly "
+                + "present: " + info);
             assertFalse(statsMap.containsKey(greatestLeasedCount),
-                  "Greatest leased count unexpectedly present: "
-                      + info);
+                        "Greatest leased count unexpectedly present: " + info);
             assertFalse(statsMap.containsKey(averageLeasedCount),
-                  "Average leased count unexpectedly present: "
-                      + info);
+                        "Average leased count unexpectedly present: " + info);
             assertEquals(minPoolSize, statsMap.get(greatestPoolSize),
                   "Greatest pool size is not as expected: " + info);
             if (expireSeconds == 0) {
                 assertFalse(statsMap.containsKey(expiredConnections),
-                    "Expired connections is unexpectedly present: "
-                        + info);
+                            "Expired connections is unexpectedly present: "
+                    + info);
             } else {
                 assertEquals(0, statsMap.get(expiredConnections),
                      "Expired connections is not as expected: " + info);
             }
             if (retireLimit == 0) {
                 assertFalse(statsMap.containsKey(retiredConnections),
-                    "Retired connections is unexpectedly present: "
-                        + info);
+                            "Retired connections is unexpectedly present: "
+                    + info);
             } else {
                 assertEquals(0, statsMap.get(retiredConnections),
                      "Retired connections is not as expected: " + info);
             }
 
-            assertFalse(statsMap.containsKey(averageAcquireTime),
-                  "Average acquire time is unexpectedly present: "
-                      + info);
+            assertFalse(
+                statsMap.containsKey(averageAcquireTime),
+                "Average acquire time is unexpectedly present: " + info);
             assertFalse(statsMap.containsKey(greatestAcquireTime),
-                  "Greatest acquire time is unexpectedly present: "
-                      + info);
+                        "Greatest acquire time is unexpectedly present: "
+                + info);
             assertFalse(statsMap.containsKey(greatestLeaseTime),
-                  "Greatest lease time is unexpectedly present: "
-                      + info);
+                        "Greatest lease time is unexpectedly present: " + info);
             assertFalse(statsMap.containsKey(averageLeaseTime),
-                  "Average lease time is unexpectedly present: "
-                      + info);
+                        "Average lease time is unexpectedly present: " + info);
             long elapsed = (System.nanoTime() - startTime) / ONE_MILLION;
             assertTrue(statsMap.containsKey(idleTime),
                  "Idle time unexpectedly not present: " + info);
             assertTrue(statsMap.get(idleTime).longValue() < elapsed,
-                 "Idle time is greater than expected.  idle=[ "
-                     + statsMap.get(idleTime) + " ], elapsed=[ " + elapsed
-                     + " ], "+ info);
+                       "Idle time is greater than expected.  idle=[ "
+                + statsMap.get(idleTime) + " ], elapsed=[ " + elapsed + " ], "
+                + info);
 
             assertTrue(statsMap.get(idleTime).longValue() > lowerLimit,
-                 "Idle time is less than expected.  idle=[ "
-                     + statsMap.get(idleTime) + " ], lowerLimit=[ " + lowerLimit
-                     + " ], "+ info);
+                       "Idle time is less than expected.  idle=[ "
+                + statsMap.get(idleTime) + " ], lowerLimit=[ " + lowerLimit
+                + " ], " + info);
 
             // attempt to acquire connections up to the min pool size
             List<Connection> leased = new LinkedList<>();
@@ -1070,7 +1039,7 @@ public class ConnectionPoolTest
                     statsMap = pool.getStatistics();
 
                     assertEquals(maxPoolSize, statsMap.get(outstandingLeases),
-                       "Outstanding leases not as expected: " + info);
+                        "Outstanding leases not as expected: " + info);
                     assertTrue(statsMap.containsKey(
                         greatestOutstandingLeaseTime),
                                "Greatest outstanding lease time unexpectedly "
@@ -1098,9 +1067,9 @@ public class ConnectionPoolTest
                    "Maximum pool size is not as expected: " + info);
 
             if (retireLimit == 0) {
-                assertFalse(statsMap.containsKey(Stat.retireLimit),
-                    "Retire limit unexpectedly present in map: "
-                        + info);
+                assertFalse(
+                    statsMap.containsKey(Stat.retireLimit),
+                    "Retire limit unexpectedly present in map: " + info);
             } else {
                 assertEquals(retireLimit, statsMap.get(Stat.retireLimit),
                      "Maximum connection leases not as expected: " + info);
@@ -1110,8 +1079,8 @@ public class ConnectionPoolTest
                     "Expire time unexpectedly present in map: " + info);
             } else {
                 assertEquals(expireSeconds * 1000L, statsMap.get(expireTime),
-                     "Maximum connection lifespan not as expected: "
-                         + info);
+                             "Maximum connection lifespan not as expected: "
+                    + info);
             }
             assertEquals(statsMap.get(currentPoolSize),
                    statsMap.get(availableConnections),
@@ -1121,14 +1090,13 @@ public class ConnectionPoolTest
                    "Outstanding leases not as expected: " + info);
 
             assertFalse(statsMap.containsKey(greatestOutstandingLeaseTime),
-                  "Greatest outstanding lease time unexpectedly "
-                      + "present: " + info);
+                        "Greatest outstanding lease time unexpectedly "
+                + "present: " + info);
             assertFalse(statsMap.containsKey(averageOutstandingLeaseTime),
-                  "Average outstanding lease time unexpectedly "
-                      + "present: " + info);
+                        "Average outstanding lease time unexpectedly "
+                + "present: " + info);
             assertTrue(statsMap.containsKey(greatestLeasedCount),
-                  "Greatest leased count unexpectedly missing: "
-                      + info);
+                       "Greatest leased count unexpectedly missing: " + info);
             assertTrue(statsMap.containsKey(averageLeasedCount),
                  "Average leased count unexpectedly missing: " + info);
 
@@ -1137,46 +1105,43 @@ public class ConnectionPoolTest
 
             if (expireSeconds == 0) {
                 assertFalse(statsMap.containsKey(expiredConnections),
-                    "Expired connections is unexpectedly present: "
-                        + info);
+                            "Expired connections is unexpectedly present: "
+                    + info);
             } else {
                 assertTrue(statsMap.containsKey(expiredConnections),
-                    "Expired connections is unexpectedly missing: "
-                        + info);
+                           "Expired connections is unexpectedly missing: "
+                    + info);
             }
             if (retireLimit == 0) {
                 assertFalse(statsMap.containsKey(retiredConnections),
-                    "Retired connections is unexpectedly present: "
-                        + info);
+                            "Retired connections is unexpectedly present: "
+                    + info);
             } else {
                 assertTrue(statsMap.containsKey(retiredConnections),
-                    "Retired connections is unexpectedly missing: "
-                        + info);
+                           "Retired connections is unexpectedly missing: "
+                    + info);
             }
 
             assertTrue(statsMap.containsKey(averageAcquireTime),
-                  "Average acquire time is unexpectedly missing: "
-                      + info);
-            assertTrue(statsMap.containsKey(greatestAcquireTime),
-                  "Greatest acquire time is unexpectedly missing: "
-                      + info);
+                       "Average acquire time is unexpectedly missing: " + info);
+            assertTrue(
+                statsMap.containsKey(greatestAcquireTime),
+                "Greatest acquire time is unexpectedly missing: " + info);
             assertTrue(statsMap.containsKey(greatestLeaseTime),
-                  "Greatest lease time is unexpectedly missing: "
-                      + info);
+                       "Greatest lease time is unexpectedly missing: " + info);
             assertTrue(statsMap.containsKey(averageLeaseTime),
-                  "Average lease time is unexpectedly missing: "
-                      + info);
+                       "Average lease time is unexpectedly missing: " + info);
             assertTrue(statsMap.containsKey(idleTime),
                  "Idle time unexpectedly not present: " + info);
             assertTrue(statsMap.get(idleTime).longValue() < elapsed,
-                 "Idle time is greater than expected.  idle=[ "
-                     + statsMap.get(idleTime) + " ], elapsed=[ " + elapsed
-                     + " ], "+ info);
+                       "Idle time is greater than expected.  idle=[ "
+                + statsMap.get(idleTime) + " ], elapsed=[ " + elapsed + " ], "
+                + info);
 
             assertTrue(statsMap.get(idleTime).longValue() > lowerLimit,
-                 "Idle time is less than expected.  idle=[ "
-                     + statsMap.get(idleTime) + " ], lowerLimit=[ " + lowerLimit
-                     + " ], "+ info);
+                       "Idle time is less than expected.  idle=[ "
+                + statsMap.get(idleTime) + " ], lowerLimit=[ " + lowerLimit
+                + " ], " + info);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Received a SQL exception", e);
@@ -1212,13 +1177,14 @@ public class ConnectionPoolTest
 
             assertFalse(conn.getAutoCommit(), "Auto-commit is not false");
 
-            List<String> setupList = List.of(
-          "PRAGMA foreign_keys = ON;",
-          "PRAGMA journal_mode = WAL;",
-          "PRAGMA synchronous = 0;",
-          "PRAGMA secure_delete = 0;",
-          "PRAGMA automatic_index = 0;",
-          "CREATE TABLE foo (foo_id INTEGER PRIMARY_KEY, description TEXT)");
+            List<String> setupList
+                = List.of(
+                    "PRAGMA foreign_keys = ON;",
+                    "PRAGMA journal_mode = WAL;",
+                    "PRAGMA synchronous = 0;",
+                    "PRAGMA secure_delete = 0;",
+                    "PRAGMA automatic_index = 0;",
+                    "CREATE TABLE foo (foo_id INTEGER PRIMARY_KEY, description TEXT)");
 
             conn.setAutoCommit(true);
             stmt = conn.createStatement();
@@ -1257,8 +1223,7 @@ public class ConnectionPoolTest
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT COUNT (*) FROM foo");
             int result = rs.getInt(1);
-            assertEquals(0, result,
-                   "Got more rows than expected: " + result);
+            assertEquals(0, result, "Got more rows than expected: " + result);
 
             rs = SQLUtilities.close(rs);
             stmt = SQLUtilities.close(stmt);
@@ -1287,8 +1252,7 @@ public class ConnectionPoolTest
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT COUNT (*) FROM foo");
             result = rs.getInt(1);
-            assertEquals(0, result,
-                   "Got more rows than expected: " + result);
+            assertEquals(0, result, "Got more rows than expected: " + result);
 
             rs = SQLUtilities.close(rs);
             stmt = SQLUtilities.close(stmt);

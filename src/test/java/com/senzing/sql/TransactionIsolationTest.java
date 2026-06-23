@@ -100,8 +100,7 @@ public class TransactionIsolationTest
     @Test
     public void serializableMapsToJdbcConstant()
     {
-        assertEquals(TRANSACTION_SERIALIZABLE,
-                 SERIALIZABLE.getIntegerValue());
+        assertEquals(TRANSACTION_SERIALIZABLE, SERIALIZABLE.getIntegerValue());
     }
 
     // -------------------------------------------------------------------
@@ -141,9 +140,9 @@ public class TransactionIsolationTest
             conn.setTransactionIsolation(TRANSACTION_READ_UNCOMMITTED);
             READ_UNCOMMITTED.applyTo(conn);
             assertEquals(TRANSACTION_READ_UNCOMMITTED,
-                   conn.getTransactionIsolation(),
-                   "applyTo with matching level must leave isolation"
-                       + " unchanged");
+                         conn.getTransactionIsolation(),
+                         "applyTo with matching level must leave isolation"
+                + " unchanged");
         }
     }
 
@@ -181,17 +180,17 @@ public class TransactionIsolationTest
     private static Connection throwingConnection()
     {
         return (Connection) Proxy.newProxyInstance(
-        TransactionIsolation.class.getClassLoader(),
-        new Class<?>[] { Connection.class },
-        (proxy, method, args) -> {
-          String name = method.getName();
-          if ("getTransactionIsolation".equals(name)) {
-            return Integer.MIN_VALUE;
-          }
-          if ("setTransactionIsolation".equals(name)) {
-            throw new SQLException("simulated driver failure");
-          }
-          return null;
-        });
+            TransactionIsolation.class.getClassLoader(),
+            new Class<?>[]{ Connection.class },
+            (proxy, method, args) -> {
+                String name = method.getName();
+                if ("getTransactionIsolation".equals(name)) {
+                    return Integer.MIN_VALUE;
+                }
+                if ("setTransactionIsolation".equals(name)) {
+                    throw new SQLException("simulated driver failure");
+                }
+                return null;
+            });
     }
 }

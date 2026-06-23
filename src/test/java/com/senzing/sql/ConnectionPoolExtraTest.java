@@ -48,41 +48,61 @@ public class ConnectionPoolExtraTest
     public void constructorRejectsNegativeMinPoolSize()
     {
         // Per javadoc: IllegalArgumentException for negative min pool size.
-        assertThrows(IllegalArgumentException.class,
-                 () -> new ConnectionPool(connector(), null,
-                                          -1, 5, 0, 0));
+        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
+            connector(),
+            null,
+            -1,
+            5,
+            0,
+            0));
     }
 
     @Test
     public void constructorRejectsZeroMaxPoolSize()
     {
-        assertThrows(IllegalArgumentException.class,
-                 () -> new ConnectionPool(connector(), null,
-                                          0, 0, 0, 0));
+        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
+            connector(),
+            null,
+            0,
+            0,
+            0,
+            0));
     }
 
     @Test
     public void constructorRejectsNegativeMaxPoolSize()
     {
-        assertThrows(IllegalArgumentException.class,
-                 () -> new ConnectionPool(connector(), null,
-                                          0, -1, 0, 0));
+        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
+            connector(),
+            null,
+            0,
+            -1,
+            0,
+            0));
     }
 
     @Test
     public void constructorRejectsMinGreaterThanMax()
     {
-        assertThrows(IllegalArgumentException.class,
-                 () -> new ConnectionPool(connector(), null,
-                                          5, 2, 0, 0));
+        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
+            connector(),
+            null,
+            5,
+            2,
+            0,
+            0));
     }
 
     @Test
     public void constructorRejectsNegativeExpireTime()
     {
-        assertThrows(IllegalArgumentException.class,
-                 () -> new ConnectionPool(connector(), null,
-                                          0, 5, -1, 0));
+        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
+            connector(),
+            null,
+            0,
+            5,
+            -1,
+            0));
     }
 
     // -------------------------------------------------------------------
@@ -97,8 +117,8 @@ public class ConnectionPoolExtraTest
         try {
             String info = pool.getDiagnosticLeaseInfo();
             assertEquals("", info,
-                   "With no active leases the diagnostic info should"
-                       + " be empty");
+                         "With no active leases the diagnostic info should"
+                + " be empty");
         } finally {
             pool.shutdown();
         }
@@ -115,8 +135,8 @@ public class ConnectionPoolExtraTest
             String info = pool.getDiagnosticLeaseInfo();
             assertNotNull(info);
             assertTrue(info.length() > 0,
-                 "Diagnostic info should be non-empty when a"
-                     + " connection is leased");
+                       "Diagnostic info should be non-empty when a"
+                + " connection is leased");
         } finally {
             if (conn != null) {
                 pool.release(conn);
@@ -153,9 +173,9 @@ public class ConnectionPoolExtraTest
 
             String captured = stub.getText();
             assertTrue(captured.contains("released more than once")
-                     || captured.length() > 0,
-                 "release()-of-already-released should write a "
-                     + "warning to stderr");
+                || captured.length() > 0,
+                       "release()-of-already-released should write a "
+                + "warning to stderr");
         } finally {
             pool.shutdown();
         }
@@ -215,8 +235,7 @@ public class ConnectionPoolExtraTest
 
         SQLException ex = assertThrows(SQLException.class, pool::acquire);
         assertTrue(ex.getMessage().contains("shutdown"),
-               "Error message should mention shutdown: "
-                   + ex.getMessage());
+                   "Error message should mention shutdown: " + ex.getMessage());
     }
 
     // -------------------------------------------------------------------
@@ -268,8 +287,7 @@ public class ConnectionPoolExtraTest
     public void getMinAndMaxSizesReturnConstructorArguments()
         throws Exception
     {
-        ConnectionPool pool = new ConnectionPool(connector(), null,
-                                             2, 5, 0, 0);
+        ConnectionPool pool = new ConnectionPool(connector(), null, 2, 5, 0, 0);
         try {
             assertEquals(2, pool.getMinimumSize());
             assertEquals(5, pool.getMaximumSize());

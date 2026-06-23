@@ -31,8 +31,7 @@ public class ErrorLogSuppressorExtraTest
     public void resultEqualsReturnsTrueForSelf()
     {
         Result r = new Result(State.ACTIVE, 0);
-        assertEquals(r, r,
-                 "A Result instance must be equal to itself");
+        assertEquals(r, r, "A Result instance must be equal to itself");
     }
 
     @Test
@@ -47,8 +46,8 @@ public class ErrorLogSuppressorExtraTest
     {
         Result r = new Result(State.ACTIVE, 0);
         assertNotEquals("ACTIVE(0)", r,
-                    "Result must not be equal to a String even with"
-                        + " matching toString");
+                        "Result must not be equal to a String even with"
+            + " matching toString");
     }
 
     @Test
@@ -56,9 +55,8 @@ public class ErrorLogSuppressorExtraTest
     {
         Result a = new Result(State.SUPPRESSED, 5);
         Result b = new Result(State.SUPPRESSED, 5);
-        assertEquals(a, b,
-                 "Two Result instances with identical state and "
-                     + "suppressedCount must be equal");
+        assertEquals(a, b, "Two Result instances with identical state and "
+            + "suppressedCount must be equal");
     }
 
     @Test
@@ -66,8 +64,7 @@ public class ErrorLogSuppressorExtraTest
     {
         Result a = new Result(State.ACTIVE, 5);
         Result b = new Result(State.SUPPRESSED, 5);
-        assertNotEquals(a, b,
-                    "Different state must yield non-equal Results");
+        assertNotEquals(a, b, "Different state must yield non-equal Results");
     }
 
     @Test
