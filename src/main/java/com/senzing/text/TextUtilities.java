@@ -106,16 +106,14 @@ public class TextUtilities
 
         if (minCount > maxCount) {
             throw new IllegalArgumentException(
-                    "The specified minimum count cannot be greater than"
-                            + " the maximum count.  minCount=[ "
-                            + minCount + " ], maxCount=[ "
-                            + maxCount + " ]");
+                "The specified minimum count cannot be greater than"
+                    + " the maximum count.  minCount=[ " + minCount
+                    + " ], maxCount=[ " + maxCount + " ]");
         }
 
         // determine the count
-        return (maxCount == minCount) ? minCount : PRNG.nextInt(maxCount
-            - minCount + 1)
-            + minCount;
+        return (maxCount == minCount)
+            ? minCount : PRNG.nextInt(maxCount - minCount + 1) + minCount;
     }
 
     /**

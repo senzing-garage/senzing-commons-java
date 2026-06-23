@@ -58,8 +58,8 @@ public class WorkerThreadPool
     {
         if (size < 1) {
             throw new IllegalArgumentException(
-          "The thread-pool size must be a positive number.  size=[ " + size
-              + " ]");
+                "The thread-pool size must be a positive number.  size=[ "
+                    + size + " ]");
         }
         this.available = new LinkedList<>();
         this.allThreads = new LinkedList<>();
@@ -160,8 +160,8 @@ public class WorkerThreadPool
             // check if already closed
             if (this.isClosed()) {
                 throw new IllegalStateException(
-            "This WorkerThreadPool has already been marked as closed and the "
-                + "threads have been shutdown.");
+                    "This WorkerThreadPool has already been marked "
+                        + "as closed and the threads have been shutdown.");
             }
 
             // wait for an available worker thread
@@ -277,13 +277,13 @@ public class WorkerThreadPool
         synchronized (this.available) {
             if (accessToken != null && this.pauseToken == null) {
                 throw new IllegalStateException(
-            "This WorkerThreadPool is NOT currently in a paused state.  Cannot "
-                + "resume.");
+                    "This WorkerThreadPool is NOT currently in a "
+                        + "paused state.  Cannot resume.");
             }
             if (accessToken != null && this.pauseToken != accessToken) {
                 throw new IllegalArgumentException(
-            "The specified access token is not valid for unpausing this "
-                + "WorkerThreadPool instance.");
+                    "The specified access token is not valid "
+                        + "for unpausing this WorkerThreadPool instance.");
             }
             // resume
             this.pauseToken = null;
@@ -503,13 +503,13 @@ public class WorkerThreadPool
             final String arg = args[index];
             try {
                 Object result = pool.execute(() -> {
-          String threadName = Thread.currentThread().getName();
-          String message = threadName + ": " + arg;
-          if (arg.startsWith("ERROR")) {
-            throw new RuntimeException(message);
-          }
-          return message;
-        });
+                    String threadName = Thread.currentThread().getName();
+                    String message = threadName + ": " + arg;
+                    if (arg.startsWith("ERROR")) {
+                        throw new RuntimeException(message);
+                    }
+                    return message;
+                });
 
                 System.out.println(result);
             } catch (Exception failure) {

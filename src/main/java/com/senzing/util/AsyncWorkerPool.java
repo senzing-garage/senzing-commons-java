@@ -84,9 +84,10 @@ public class AsyncWorkerPool<T>
          */
         public String toString()
         {
-            return "{ value=[ "
-                + this.value + " ]" + ((this.failure != null) ? ", failure=[ "
-                    + this.failure + " ]" : "") + " }";
+            return "{ value=[ " + this.value
+                + " ]" + ((this.failure != null)
+                          ? ", failure=[ " + this.failure + " ]" : "")
+                + " }";
         }
     }
 
@@ -175,7 +176,7 @@ public class AsyncWorkerPool<T>
             // check if closed
             if (worker == null || this.isClosed()) {
                 throw new IllegalStateException(
-            "Pool closed while attempting to execute a task.");
+                    "Pool closed while attempting to execute a task.");
             }
 
             // execute the task

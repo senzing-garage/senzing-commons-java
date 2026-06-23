@@ -33,11 +33,8 @@ public class SemanticVersion implements Comparable<SemanticVersion>
      * their corresponding string suffix representations for use in
      * reconstructing the version string via {@link #toString()}.
      */
-    private static final Map<Integer, String> SUFFIX_MAP = Map.of(
-        RC_VALUE,    "-rc",
-        BETA_VALUE,  "-beta",
-        ALPHA_VALUE, "-alpha"
-    );
+    private static final Map<Integer, String> SUFFIX_MAP
+        = Map.of(RC_VALUE, "-rc", BETA_VALUE, "-beta", ALPHA_VALUE, "-alpha");
 
     /**
      * The {@link List} of version parts.
@@ -72,8 +69,7 @@ public class SemanticVersion implements Comparable<SemanticVersion>
     public SemanticVersion(String versionString)
         throws NullPointerException, IllegalArgumentException
     {
-        Objects.requireNonNull(
-                versionString, "Version string cannot be null");
+        Objects.requireNonNull(versionString, "Version string cannot be null");
 
         try {
             String[] tokens = versionString.split("[-.]");
@@ -88,12 +84,12 @@ public class SemanticVersion implements Comparable<SemanticVersion>
                     case "rc":
                         if (hasSuffix) {
                             throw new IllegalArgumentException(
-                                    "Multiple pre-release suffixes are not "
+                                "Multiple pre-release suffixes are not "
                                     + "allowed: " + versionString);
                         }
                         if (this.versionParts.isEmpty()) {
                             throw new IllegalArgumentException(
-                                    "Pre-release suffix must follow at least "
+                                "Pre-release suffix must follow at least "
                                     + "one numeric version part: "
                                     + versionString);
                         }
@@ -107,7 +103,7 @@ public class SemanticVersion implements Comparable<SemanticVersion>
                         int part = Integer.parseInt(token);
                         if (part < 0) {
                             throw new IllegalArgumentException(
-                                    "Negative version part is not allowed: "
+                                "Negative version part " + "is not allowed: "
                                     + part);
                         }
                         this.versionParts.add(part);
@@ -258,7 +254,7 @@ public class SemanticVersion implements Comparable<SemanticVersion>
     {
         if (args.length == 0) {
             System.err.println("USAGE: java " + SemanticVersion.class.getName()
-                    + " <version> [compare-version]*");
+                               + " <version> [compare-version]*");
             System.exit(1);
         }
         SemanticVersion version = new SemanticVersion(args[0]);
@@ -267,15 +263,14 @@ public class SemanticVersion implements Comparable<SemanticVersion>
         for (int index = 1; index < args.length; index++) {
             SemanticVersion version2 = new SemanticVersion(args[index]);
             System.out.println();
-            System.out.println(
-                    "VERSUS " + version2 + " (" + version2.toString(true)
-                            + "): "
-                            + "COMPARE (" + version.compareTo(version2) + ") "
-                            + " / EQUALS (" + version.equals(version2) + ") "
-                            + " / HASH (" + version2.hashCode() + ") "
-                            + " / HASH-EQUALITY ("
-                            + (version.hashCode() == version2.hashCode())
-                            + ")");
+            System.out.println("VERSUS " + version2 + " ("
+                               + version2.toString(true) + "): " + "COMPARE ("
+                               + version.compareTo(version2) + ") "
+                               + " / EQUALS (" + version.equals(version2)
+                               + ") " + " / HASH (" + version2.hashCode()
+                               + ") " + " / HASH-EQUALITY ("
+                               + (version.hashCode() == version2.hashCode())
+                               + ")");
         }
     }
 }

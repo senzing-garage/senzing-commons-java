@@ -170,8 +170,7 @@ public class TemporaryDataCache
             tempFile = File.createTempFile(fileNamePrefix, "-0.dat");
             directory = tempFile.getParentFile();
         } else {
-            tempFile = File.createTempFile(fileNamePrefix, "-0.dat",
-                                     directory);
+            tempFile = File.createTempFile(fileNamePrefix, "-0.dat", directory);
         }
         String fileName = tempFile.getName();
         int length = fileName.length();
@@ -460,8 +459,10 @@ public class TemporaryDataCache
 
                     // check if we do not have a current file
                     if ((this.currentFOS == null)
-                        || (this.currentCOS == null) || (this.currentGOS
-                            == null) || (this.currentFile == null)) {
+                        || (this.currentCOS == null)
+                        || (this.currentGOS == null)
+                        || (this.currentFile == null))
+                    {
                         return;
                     }
 
@@ -483,9 +484,10 @@ public class TemporaryDataCache
                     IOUtilities.close(this.currentCOS);
                     IOUtilities.close(this.currentFOS);
 
-                    logDebug("Completed file part: " + this.currentFile + " ("
-                       + this.currentWriteCount + " bytes / "
-                       + this.currentFile.length() + " compressed)");
+                    logDebug("Completed file part: " + this.currentFile
+                             + " (" + this.currentWriteCount
+                             + " bytes / " + this.currentFile.length()
+                             + " compressed)");
 
                     // reinitialize the current file fields
                     this.currentGOS = null;
@@ -535,8 +537,10 @@ public class TemporaryDataCache
             synchronized (owner.fileParts) {
                 try {
                     if ((this.currentFOS != null)
-                        || (this.currentCOS != null) || (this.currentGOS
-                            != null) || (this.currentFile != null)) {
+                        || (this.currentCOS != null)
+                        || (this.currentGOS != null)
+                        || (this.currentFile != null))
+                    {
                         throw new IllegalStateException(
                             "A current file is already open.");
                     }
@@ -604,20 +608,17 @@ public class TemporaryDataCache
                 // log every 5K bytes
                 if (LoggingUtilities.isDebugLogging()) {
                     double countLog10 = Math.floor(
-              Math.log10((double) this.currentWriteCount));
+                        Math.log10((double) this.currentWriteCount));
 
                     int logInterval = (int) (Math.max(100, Math.pow(10,
                                                                     countLog10)
-                        * Math.max(1, countLog10 - 1)));
+                                             * Math.max(1, countLog10 - 1)));
 
                     if ((this.currentWriteCount % logInterval) == 0) {
-                        logDebug("Bytes written to file: "
-                            + this.currentFile
-                            + " ("
-                            + this.currentWriteCount
-                            + " current part / "
-                            + this.totalWriteCount
-                            + " total bytes)");
+                        logDebug("Bytes written to file: " + this.currentFile
+                                 + " (" + this.currentWriteCount
+                                 + " current part / " + this.totalWriteCount
+                                 + " total bytes)");
                     }
                 }
 
@@ -650,7 +651,8 @@ public class TemporaryDataCache
                         // check if there is a current file part and the last
                         // write time
                         if (this.lastWriteTime > 0L
-                            && this.currentWriteCount > 0) {
+                            && this.currentWriteCount > 0)
+                        {
                             // calculate the duration from nanoseconds to
                             // milliseconds
                             long duration
@@ -725,8 +727,8 @@ public class TemporaryDataCache
             try (InputStream bis = new BufferedInputStream(is, 8192)) {
                 int readByte = 0;
                 for (readByte = bis.read();
-             readByte >= 0 && !owner.isDeleted();
-             readByte = bis.read())
+                     readByte >= 0 && !owner.isDeleted();
+                     readByte = bis.read())
                 {
                     sink.writeByte((byte) readByte);
                     byteCount++;
@@ -860,7 +862,8 @@ public class TemporaryDataCache
                             throw new IOException(
                                 "Cannot skip: Backing files deleted");
                         } else if (owner.fileParts.size()
-                            > this.currentFileIndex) {
+                                   > this.currentFileIndex)
+                        {
                             this.attachStream();
                         } else if (owner.isAppending()) {
                             // data is still be appended -- so wait for it
@@ -868,7 +871,9 @@ public class TemporaryDataCache
                                 owner.fileParts.wait(5000L);
                             } catch (InterruptedException e) {
                                 throw new IOException(
-                    "Interrupted while waiting for an available file.", e);
+                                    "Interrupted while waiting for "
+                                        + "an available file.",
+                                    e);
                             }
                         } else {
                             return totalSkipped;
@@ -941,8 +946,8 @@ public class TemporaryDataCache
                             char[] buffer = new char[2048];
                             StringBuilder sb = new StringBuilder();
                             for (int readCount = isr.read(buffer);
-                   readCount >= 0;
-                   readCount = isr.read(buffer))
+                                 readCount >= 0;
+                                 readCount = isr.read(buffer))
                             {
                                 sb.append(buffer, 0, readCount);
                                 if (sb.length() >= buffer.length * 2) break;
@@ -959,7 +964,7 @@ public class TemporaryDataCache
                     }
 
                     this.currentIS = new BufferedInputStream(
-              new FileInputStream(this.currentFilePart.file), 8192);
+                        new FileInputStream(this.currentFilePart.file), 8192);
 
                     try {
                         this.currentIS = new CipherInputStream(this.currentIS,
@@ -1001,7 +1006,8 @@ public class TemporaryDataCache
             String prefix = "" + System.identityHashCode(this) + ": ";
             // check if the current file has bytes left to read
             if (this.currentFilePart == null
-                || ((this.currentFilePart.length - this.currentOffset) <= 0L)) {
+                || ((this.currentFilePart.length - this.currentOffset) <= 0L))
+            {
                 // advance the file if the current one is exhausted
                 if (this.currentFilePart != null) {
                     this.advanceFile();
@@ -1015,7 +1021,8 @@ public class TemporaryDataCache
                             throw new IOException(
                                 "Cannot read: Backing files deleted");
                         } else if (owner.fileParts.size()
-                            > this.currentFileIndex) {
+                                   > this.currentFileIndex)
+                        {
                             this.attachStream();
                         } else if (owner.isAppending()) {
                             // data is still be appended -- so wait for it
@@ -1024,7 +1031,9 @@ public class TemporaryDataCache
                                 owner.fileParts.wait(5000L);
                             } catch (InterruptedException e) {
                                 throw new IOException(
-                    "Interrupted while waiting for an available file.", e);
+                                    "Interrupted while waiting for "
+                                        + "an available file.",
+                                    e);
                             }
                         } else {
                             this.eof = true;
@@ -1042,9 +1051,9 @@ public class TemporaryDataCache
             int byteRead = this.currentIS.read();
             if (byteRead < 0L) {
                 throw new IOException(
-            "Unexpected EOF from backing input stream.  offset=[ "
-                + this.currentOffset + " ], fileSize=[ "
-                + this.currentFilePart.length + " ]");
+                    "Unexpected EOF from backing input stream.  offset=[ "
+                        + this.currentOffset + " ], fileSize=[ "
+                        + this.currentFilePart.length + " ]");
             }
             this.currentOffset++;
 

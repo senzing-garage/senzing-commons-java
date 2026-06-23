@@ -78,10 +78,11 @@ public class PoolConnectionProvider implements ConnectionProvider
         Connection conn = this.pool.acquire(this.getMaximumWaitTime());
         long elapsedMillis = (System.nanoTime() - startTime) / ONE_MILLION;
         if (conn == null) {
-            throw new SQLException(
-          "The connection could not be obtained within the allotted time.  "
-          + "maximumWait=[ " + this.getMaximumWaitTime() + " ], elapsed=[ "
-              + elapsedMillis + " ]");
+            long maxWaitTime = this.getMaximumWaitTime();
+            throw new SQLException("The connection could not be obtained "
+                                   + "within the allotted time.  "
+                                   + "maximumWait=[ " + maxWaitTime
+                                   + " ], elapsed=[ " + elapsedMillis + " ]");
         }
         return conn;
     }

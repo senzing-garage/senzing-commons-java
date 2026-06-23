@@ -37,8 +37,8 @@ public class PostgreSqlConnector implements Connector
             String user,
             String password)
     {
-        this.jdbcUrl = "jdbc:postgresql://"
-            + host + ":" + port + "/" + database;
+        this.jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/"
+            + database;
         this.properties = new Properties();
         this.properties.put("user", user);
         this.properties.put("password", password);
@@ -63,8 +63,8 @@ public class PostgreSqlConnector implements Connector
             String password,
             Properties addlProperties)
     {
-        this.jdbcUrl = "jdbc:postgresql://"
-            + host + ":" + port + "/" + database;
+        this.jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/"
+            + database;
         this.properties = new Properties();
         this.properties.putAll(addlProperties);
         this.properties.put("user", user);
@@ -75,8 +75,8 @@ public class PostgreSqlConnector implements Connector
     public Connection openConnection()
         throws SQLException
     {
-        Connection conn = DriverManager.getConnection(this.jdbcUrl,
-                this.properties);
+        Connection conn
+            = DriverManager.getConnection(this.jdbcUrl, this.properties);
         try {
             conn.setAutoCommit(false);
         } catch (SQLException e) {

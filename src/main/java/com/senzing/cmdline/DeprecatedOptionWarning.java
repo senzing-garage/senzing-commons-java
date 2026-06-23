@@ -49,8 +49,10 @@ public class DeprecatedOptionWarning implements SpecifiedOption
     {
         if (!option.isDeprecated()) {
             throw new IllegalArgumentException(
-          "The specified CommandLineOption is not deprecated: " + option
-          + " (source=[ " + source + " ], specifier=[ " + specifier + " ])");
+                "The specified CommandLineOption is not deprecated: " + option
+                    + " (source=[ " + source
+                    + " ], specifier=[ " + specifier
+                    + " ])");
         }
         this.source = source;
         this.specifier = specifier;
@@ -72,8 +74,8 @@ public class DeprecatedOptionWarning implements SpecifiedOption
     public DeprecatedOptionWarning(SpecifiedOption specifiedOption)
     {
         this(specifiedOption.getSource(),
-         specifiedOption.getOption(),
-         specifiedOption.getSpecifier());
+            specifiedOption.getOption(),
+            specifiedOption.getSpecifier());
     }
 
     /**
@@ -131,9 +133,8 @@ public class DeprecatedOptionWarning implements SpecifiedOption
         if (alternatives.size() == 1) {
             CommandLineOption alternative = alternatives.iterator().next();
             pw.println();
-            pw.println(
-          "Consider using " + alternative.getCommandLineFlag()
-              + " instead.");
+            pw.println("Consider using " + alternative.getCommandLineFlag()
+                       + " instead.");
         } else if (alternatives.size() > 1) {
             pw.println();
             pw.println("Consider using one of the following instead:");
@@ -154,10 +155,8 @@ public class DeprecatedOptionWarning implements SpecifiedOption
         if (o == null || getClass() != o.getClass()) return false;
         DeprecatedOptionWarning that = (DeprecatedOptionWarning) o;
         return (this.getSource() == that.getSource()
-            && Objects.equals(
-            this.getOption(),
-            that.getOption()) && Objects.equals(this.getSpecifier(),
-                                                that.getSpecifier()));
+                && Objects.equals(this.getOption(), that.getOption())
+                && Objects.equals(this.getSpecifier(), that.getSpecifier()));
     }
 
     @Override

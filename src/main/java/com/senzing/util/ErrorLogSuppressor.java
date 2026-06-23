@@ -104,7 +104,7 @@ public class ErrorLogSuppressor
             if (o == null || getClass() != o.getClass()) return false;
             Result result = (Result) o;
             return (this.getSuppressedCount() == result.getSuppressedCount()
-                && this.getState() == result.getState());
+                    && this.getState() == result.getState());
         }
 
         @Override
@@ -181,8 +181,8 @@ public class ErrorLogSuppressor
     public ErrorLogSuppressor()
     {
         this(DEFAULT_ERROR_LIMIT,
-        DEFAULT_TIME_WINDOW,
-        DEFAULT_SUPPRESS_DURATION);
+            DEFAULT_TIME_WINDOW,
+            DEFAULT_SUPPRESS_DURATION);
     }
 
     /**
@@ -201,15 +201,16 @@ public class ErrorLogSuppressor
     {
         if (errorLimit <= 0) {
             throw new IllegalArgumentException(
-          "Error limit must be a positive number: " + errorLimit);
+                "Error limit must be a positive number: " + errorLimit);
         }
         if (timeWindow <= 0L) {
             throw new IllegalArgumentException(
-          "Time window must be a positive number: " + timeWindow);
+                "Time window must be a positive number: " + timeWindow);
         }
         if (suppressDuration <= 0L) {
             throw new IllegalArgumentException(
-          "Suppress duration must be a positive number: " + suppressDuration);
+                "Suppress duration must be a positive number: "
+                    + suppressDuration);
         }
         this.errorLimit = errorLimit;
         this.timeWindow = timeWindow;

@@ -77,7 +77,7 @@ public class ChunkedEncodingInputStream extends FilterInputStream
         throws UnsupportedOperationException
     {
         throw new UnsupportedOperationException(
-        "Mark is not supported when decoding chunked transfer encoding");
+            "Mark is not supported when decoding chunked transfer encoding");
     }
 
     /**
@@ -120,10 +120,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream
         if (this.currentChunk == null || this.currentChunk.available() == 0) {
             this.readChunk();
         }
-        return (this.currentChunk == null) ? -1 : this.currentChunk.read(
-            buffer,
-            offset,
-            length);
+        return (this.currentChunk == null)
+            ? -1 : this.currentChunk.read(buffer, offset, length);
     }
 
     /**
@@ -137,7 +135,7 @@ public class ChunkedEncodingInputStream extends FilterInputStream
         throws UnsupportedOperationException
     {
         throw new UnsupportedOperationException(
-        "Reset is not supported when decoding chunked transfer encoding");
+            "Reset is not supported when decoding chunked transfer encoding");
     }
 
     /**
@@ -154,7 +152,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream
         long skipped = 0;
         while (!this.eof && skipped < n) {
             if (this.currentChunk == null
-                || this.currentChunk.available() == 0) {
+                || this.currentChunk.available() == 0)
+            {
                 this.readChunk();
             }
             if (this.currentChunk != null) {
@@ -174,23 +173,22 @@ public class ChunkedEncodingInputStream extends FilterInputStream
         StringBuilder sb = new StringBuilder();
         boolean cr = false;
         for (int readByte = this.in.read();
-         readByte >= 0;
-         readByte = this.in.read())
+             readByte >= 0;
+             readByte = this.in.read())
         {
             // if we have a carriage return then look for a line-feed
             if (cr) {
                 if (readByte != ((int) '\n')) {
                     throw new IOException(
-              "Bad chunked encoding.  Encountered CR without subsequent LF: "
-                  + sb.toString());
+                        "Bad chunked encoding.  Encountered CR "
+                            + "without subsequent LF: " + sb);
                 }
 
                 // we should have the chunk size so break here
                 break;
             } else if (readByte == ((int) '\n')) {
-                throw new IOException(
-            "Bad chunked encoding.  Encountered LF without preceding CR: "
-                + sb.toString());
+                throw new IOException("Bad chunked encoding.  Encountered LF "
+                                      + "without preceding CR: " + sb);
             }
 
             // look for carriage return character
@@ -206,8 +204,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream
         // check if we reached EOF before the last chunk
         if (!cr) {
             this.eof = true;
-            throw new IOException(
-          "Bad chunked encoding.  Unexpected EOF (" + sb.length() + "): " + sb);
+            throw new IOException("Bad chunked encoding.  Unexpected EOF ("
+                                  + sb.length() + "): " + sb);
         }
 
         // get the chunk line
@@ -230,9 +228,13 @@ public class ChunkedEncodingInputStream extends FilterInputStream
             if (chunkBytes.length != readCount) {
                 this.eof = true;
                 throw new IOException(
-            "Bad chunked encoding.  Unexpected EOF while reading chunk "
-                + "of size " + readCount + " (only "
-                + chunkBytes.length + " read): " + chunkLine);
+                    "Bad chunked encoding.  Unexpected EOF while reading chunk "
+                        + "of size "
+                        + readCount
+                        + " (only "
+                        + chunkBytes.length
+                        + " read): "
+                        + chunkLine);
             }
         }
 
@@ -240,26 +242,28 @@ public class ChunkedEncodingInputStream extends FilterInputStream
         int trailerByte = this.in.read();
         if (trailerByte < 0) {
             throw new IOException(
-          "Bad chunked encoding.  EOF prior to trailing CR following chunk: "
-              + Integer.toString(readCount, 16).toUpperCase());
+                "Bad chunked encoding.  EOF prior to trailing CR "
+                    + "following chunk: "
+                    + Integer.toString(readCount, 16).toUpperCase());
         }
         if (trailerByte != '\r') {
             throw new IOException(
-          "Bad chunked encoding.  Expected trailing CR following chunk ("
-              + Integer.toString(readCount, 16).toUpperCase()
-              + "), but got code point: " + trailerByte);
+                "Bad chunked encoding.  Expected trailing CR following chunk ("
+                    + Integer.toString(readCount, 16).toUpperCase()
+                    + "), but got code point: " + trailerByte);
         }
         trailerByte = this.in.read();
         if (trailerByte < 0) {
             throw new IOException(
-          "Bad chunked encoding.  EOF prior to trailing LF following chunk: "
-              + Integer.toString(readCount, 16).toUpperCase());
+                "Bad chunked encoding.  EOF prior to trailing LF "
+                    + "following chunk: "
+                    + Integer.toString(readCount, 16).toUpperCase());
         }
         if (trailerByte != '\n') {
             throw new IOException(
-          "Bad chunked encoding.  Expected trailing LF following chunk ("
-              + Integer.toString(readCount, 16).toUpperCase()
-              + "), but got code point: " + trailerByte);
+                "Bad chunked encoding.  Expected trailing LF following chunk ("
+                    + Integer.toString(readCount, 16).toUpperCase()
+                    + "), but got code point: " + trailerByte);
         }
 
         // create the next chunk stream

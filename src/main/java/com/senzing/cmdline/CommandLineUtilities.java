@@ -51,9 +51,8 @@ public class CommandLineUtilities
         try {
             Class<CommandLineUtilities> cls = CommandLineUtilities.class;
 
-            String url = cls.getResource(
-                    cls.getSimpleName() + ".class")
-                            .toString();
+            String url
+                = cls.getResource(cls.getSimpleName() + ".class").toString();
 
             JarLocation loc = extractJarLocation(url, cls.getName());
             jarBaseUrl = loc.baseUrl();
@@ -120,8 +119,7 @@ public class CommandLineUtilities
             return JarLocation.EMPTY;
         }
 
-        int index = classUrl.lastIndexOf(
-                classFqn.replace(".", "/") + ".class");
+        int index = classUrl.lastIndexOf(classFqn.replace(".", "/") + ".class");
         String baseUrl = classUrl.substring(0, index);
         String fileName = null;
         String pathToJar = null;
@@ -171,10 +169,9 @@ public class CommandLineUtilities
         }
         if ((args.length - count) < 0) {
             throw new TooFewArgumentsException(
-                    "The specified shift count cannot be greater than "
-                            + "the array length.  arrayLength=[ "
-                            + args.length + " ], shiftCount=[ "
-                            + count + " ]");
+                "The specified shift count cannot be greater than "
+                    + "the array length.  arrayLength=[ " + args.length
+                    + " ], shiftCount=[ " + count + " ]");
         }
         String[] args2 = new String[args.length - count];
         for (int index = 0; index < args2.length; index++) {
@@ -232,8 +229,8 @@ public class CommandLineUtilities
                 // check for conflicts
                 if ((conflicts != null && conflicts.contains(opt))
                     || ((revConflicts != null
-                        && revConflicts.contains(
-                        option)))) {
+                         && revConflicts.contains(option))))
+                {
                     // get the command-line value
                     CommandLineValue conflictValue = optionMap.get(opt);
 
@@ -276,13 +273,13 @@ public class CommandLineUtilities
         List<String> defaultParams = option.getDefaultParameters();
         List<String> actualParams = cmdLineValue.getParameters();
         return (minParamCount == 0
-            && maxParamCount >= 0
-            && defaultParams != null
-            && defaultParams.size() == 1
-            && "false".equalsIgnoreCase(defaultParams.get(0))
-            && actualParams != null
-            && actualParams.size() == 1
-            && "false".equalsIgnoreCase(actualParams.get(0)));
+                && maxParamCount >= 0
+                && defaultParams != null
+                && defaultParams.size() == 1
+                && "false".equalsIgnoreCase(defaultParams.get(0))
+                && actualParams != null
+                && actualParams.size() == 1
+                && "false".equalsIgnoreCase(actualParams.get(0)));
     }
 
     /**
@@ -513,21 +510,20 @@ public class CommandLineUtilities
         optionValues.forEach((option, optionValue) -> {
             if (option != optionValue.getOption()) {
                 throw new IllegalArgumentException(
-                        "Mismatch on option values key/value pair.  The "
-                                + "option key does not the associated "
-                                + "CommandLineValue's option.  optionKey=[ "
-                                + option + " ], optionValue=[ "
-                                + optionValue.getOption() + " ]");
+                    "Mismatch on option values key/value pair.  The "
+                        + "option key does not the associated "
+                        + "CommandLineValue's option.  optionKey=[ " + option
+                        + " ], optionValue=[ " + optionValue.getOption()
+                        + " ]");
             }
 
             if (!typeChainSet.contains(option.getClass())) {
                 throw new IllegalArgumentException(
-                        "The specified option values map contains an "
-                                + "option of an illegal type given the "
-                                + "specified CommandLineOption type.  "
-                                + "found=[ " + option + " ], foundType=[ "
-                                + option.getClass() + " ], expected=[ "
-                                + typeChainSet + " ]");
+                    "The specified option values map contains an "
+                        + "option of an illegal type given the "
+                        + "specified CommandLineOption type.  " + "found=[ "
+                        + option + " ], foundType=[ " + option.getClass()
+                        + " ], expected=[ " + typeChainSet + " ]");
             }
         });
 
@@ -631,11 +627,12 @@ public class CommandLineUtilities
 
             // do a sanity check
             if (lookupMap.containsKey(flag)) {
-                throw new IllegalStateException(
-                        "Command-line flag (" + flag + ") cannot resolve "
-                                + "to different options ("
-                                + lookupMap.get(flag) + " and " + option
-                                + ").  It must be unique.");
+                throw new IllegalStateException("Command-line flag (" + flag
+                                                + ") cannot resolve "
+                                                + "to different options ("
+                                                + lookupMap.get(flag) + " and "
+                                                + option
+                                                + ").  It must be unique.");
             }
 
             // add the primary flag to the lookup map
@@ -649,19 +646,17 @@ public class CommandLineUtilities
             for (String synonym : synonymFlags) {
                 // check the synonym against the primary flag (sanity check)
                 if (synonym.equals(flag)) {
-                    throw new IllegalStateException(
-                            "Synonym command-line (" + flag + ") for "
-                                    + "option (" + option + ") is the "
-                                    + "same as the primary flag.");
+                    throw new IllegalStateException("Synonym command-line ("
+                        + flag + ") for " + "option (" + option + ") is the "
+                        + "same as the primary flag.");
                 }
 
                 // do a sanity check
                 if (lookupMap.containsKey(synonym)) {
-                    throw new IllegalStateException(
-                            "Command-line flag (" + flag + ") cannot "
-                                    + "resolve to different options ("
-                                    + lookupMap.get(flag) + " and "
-                                    + option + ").  It must be unique.");
+                    throw new IllegalStateException("Command-line flag ("
+                        + flag + ") cannot " + "resolve to different options ("
+                        + lookupMap.get(flag) + " and " + option
+                        + ").  It must be unique.");
                 }
 
                 // add to the lookup map
@@ -679,18 +674,18 @@ public class CommandLineUtilities
             Map<String, CommandLineOption> baseMap
                 = createFlagLookupMap(baseType);
 
-            baseMap.keySet()
-                   .forEach(flag -> {
+            baseMap.keySet().forEach(flag -> {
                 if (lookupMap.containsKey(flag)) {
                     CommandLineOption option = lookupMap.get(flag);
                     CommandLineOption baseOption = baseMap.get(flag);
 
-                    throw new IllegalStateException(
-                            "Command-line flag (" + flag + ") for "
-                                    + option + " in " + enumClass
-                                    + " conflicts with " + baseOption
-                                    + " in the " + baseType
-                                    + " base option class.");
+                    throw new IllegalStateException("Command-line flag ("
+                                                    + flag + ") for " + option
+                                                    + " in " + enumClass
+                                                    + " conflicts with "
+                                                    + baseOption + " in the "
+                                                    + baseType
+                                                    + " base option class.");
                 }
             });
 
@@ -924,14 +919,13 @@ public class CommandLineUtilities
             int maxParamCount = option.getMaximumParameterCount();
             if (maxParamCount >= 0 && maxParamCount < minParamCount) {
                 throw new IllegalStateException(
-                        "The non-negative maximum parameter count is less"
-                                + " than the minimum parameter count.  "
-                                + "min=[ " + minParamCount
-                                + " ], max=[ " + maxParamCount
-                                + " ], option=[ " + option + " ]");
+                    "The non-negative maximum parameter count is less"
+                        + " than the minimum parameter count.  " + "min=[ "
+                        + minParamCount + " ], max=[ " + maxParamCount
+                        + " ], option=[ " + option + " ]");
             }
-            List<String> params = new ArrayList<>(
-                maxParamCount < 0 ? 5 : maxParamCount);
+            List<String> params
+                = new ArrayList<>(maxParamCount < 0 ? 5 : maxParamCount);
             if (minParamCount > 0) {
                 // check if there are enough parameters
                 int max = index + minParamCount;
@@ -958,7 +952,8 @@ public class CommandLineUtilities
                 && maxParamCount == 0
                 && defaultParams != null
                 && defaultParams.size() == 1
-                && "false".equalsIgnoreCase(defaultParams.get(0))) {
+                && "false".equalsIgnoreCase(defaultParams.get(0)))
+            {
                 // allow a zero-argument parameter to be followed
                 // by "true" or "false"
                 if (args.length > (index + 1)) {
@@ -976,29 +971,30 @@ public class CommandLineUtilities
                                 break;
                             default:
                                 throw new BadOptionParametersException(
-                                        COMMAND_LINE, option, flag,
-                                        List.of(param),
-                                        "The " + flag + " command line "
-                                                + "option can be "
-                                                + "specified with no "
-                                                + "parameters, but if a "
-                                                + "parameter is provided "
-                                                + "it must be \"true\" "
-                                                + "or \"false\": "
-                                                + args[index + 1]);
+                                    COMMAND_LINE,
+                                    option,
+                                    flag,
+                                    List.of(param),
+                                    "The " + flag + " command line "
+                                        + "option can be "
+                                        + "specified with no "
+                                        + "parameters, but if a "
+                                        + "parameter is provided "
+                                        + "it must be \"true\" "
+                                        + "or \"false\": " + args[index + 1]);
                         }
                     }
                 }
             } else {
                 // get the parameters from the command line
-                int bound = (maxParamCount < 0) ? args.length : index
-                    + (maxParamCount - minParamCount) + 1;
+                int bound = (maxParamCount < 0)
+                    ? args.length : index + (maxParamCount - minParamCount) + 1;
                 if (bound > args.length) {
                     bound = args.length;
                 }
                 for (int nextIndex = index + 1;
                      nextIndex < bound
-                             && !lookupMap.containsKey(args[nextIndex]);
+                    && !lookupMap.containsKey(args[nextIndex]);
                      nextIndex++)
                 {
                     params.add(args[nextIndex]);
@@ -1008,8 +1004,8 @@ public class CommandLineUtilities
                 // check if there are more (unexpected) parameters
                 for (int nextIndex = index + 1;
                      (nextIndex < args.length
-                             && !args[nextIndex].startsWith("-")
-                             && !lookupMap.containsKey(args[index]));
+                      && !args[nextIndex].startsWith("-")
+                      && !lookupMap.containsKey(args[index]));
                      nextIndex++)
                 {
                     params.add(args[nextIndex]);
@@ -1031,13 +1027,14 @@ public class CommandLineUtilities
                 && params.size() == 0
                 && defaultParams != null
                 && defaultParams.size() == 1
-                && "false".equalsIgnoreCase(defaultParams.get(0))) {
+                && "false".equalsIgnoreCase(defaultParams.get(0)))
+            {
                 params.add("true");
             }
 
             // process the parameters
-            Object processedValue = processValue(
-                    COMMAND_LINE, option, flag, processor, params);
+            Object processedValue
+                = processValue(COMMAND_LINE, option, flag, processor, params);
 
             // create the command-line value
             CommandLineValue cmdLineVal = new CommandLineValue(COMMAND_LINE,
@@ -1057,11 +1054,9 @@ public class CommandLineUtilities
 
         // optionally process the environment
         ignoreEnvironment = (ignoreEnvironment
-            || (result.containsKey(
-            ignoreEnvOption)
-                && (!Boolean.FALSE.equals(
-                            result.get(ignoreEnvOption)
-                                  .getProcessedValue()))));
+            || (result.containsKey(ignoreEnvOption)
+                && (!Boolean.FALSE.equals(result.get(ignoreEnvOption)
+                                                .getProcessedValue()))));
         if (!ignoreEnvironment) {
             try {
                 processEnvironment(enumClass, processor, result);
@@ -1126,7 +1121,7 @@ public class CommandLineUtilities
 
                 pw.println();
                 pw.println("Bad parameters for " + option.getCommandLineFlag()
-                        + " option:");
+                           + " option:");
                 for (String p : params) {
                     pw.println("    o " + p);
                 }
@@ -1177,10 +1172,7 @@ public class CommandLineUtilities
         Set<CommandLineOption> options = new LinkedHashSet<>();
         populateOptionsChain(options, enumClass);
 
-        processEnvironment(options,
-                processor,
-                optionValues,
-                false);
+        processEnvironment(options, processor, optionValues, false);
 
         // create a set if fallback options to check
         Set<CommandLineOption> fallbackOptions = new LinkedHashSet<>();
@@ -1248,7 +1240,8 @@ public class CommandLineUtilities
                     // check if the fallback count and missing count are
                     // equal and if so then use this dependency set
                     if (missingSet.size() > 0
-                        && missingSet.size() == fallbackCount) {
+                        && missingSet.size() == fallbackCount)
+                    {
                         fallbackOptions.addAll(missingSet);
                         break;
                     }
@@ -1328,11 +1321,10 @@ public class CommandLineUtilities
             int maxParamCount = option.getMaximumParameterCount();
             if (maxParamCount > 0 && maxParamCount < minParamCount) {
                 throw new IllegalStateException(
-                        "The non-negative maximum parameter count is less"
-                                + " than the minimum parameter count.  "
-                                + "min=[ " + minParamCount
-                                + " ], max=[ " + maxParamCount
-                                + " ], option=[ " + option + " ]");
+                    "The non-negative maximum parameter count is less"
+                        + " than the minimum parameter count.  " + "min=[ "
+                        + minParamCount + " ], max=[ " + maxParamCount
+                        + " ], option=[ " + option + " ]");
             }
             List<String> params = null;
 
@@ -1350,16 +1342,16 @@ public class CommandLineUtilities
                         break;
                     default:
                         throw new IllegalArgumentException(
-                                "The specified value for the " + foundVar
-                                        + " environment variable can "
-                                        + "only be \"true\" or \"false\": "
-                                        + foundVar);
+                            "The specified value for the " + foundVar
+                                + " environment variable can "
+                                + "only be \"true\" or \"false\": " + foundVar);
                 }
             } else if (minParamCount <= 1 && maxParamCount == 1) {
                 // handle the single parameter case
                 params = List.of(envVal);
             } else if ((maxParamCount > 1 || maxParamCount < 0)
-                && (JSON_ARRAY_PATTERN.matcher(envVal).matches())) {
+                       && (JSON_ARRAY_PATTERN.matcher(envVal).matches()))
+            {
                 // handle the case of multiple parameters and a JSON array
                 JsonArray jsonArray
                     = JsonUtilities.parseJsonArray(envVal.trim());
@@ -1449,14 +1441,12 @@ public class CommandLineUtilities
             if (params == null || params.size() == 0) continue;
 
             // process the parameters
-            Object processedValue = processValue(
-                    DEFAULT, option, null, processor, params);
+            Object processedValue
+                = processValue(DEFAULT, option, null, processor, params);
 
             // create the command line value
-            CommandLineValue cmdLineVal = new CommandLineValue(DEFAULT,
-                    option,
-                    processedValue,
-                    params);
+            CommandLineValue cmdLineVal
+                = new CommandLineValue(DEFAULT, option, processedValue, params);
 
             // put the value
             putValue(optionValues, cmdLineVal);
@@ -1481,10 +1471,7 @@ public class CommandLineUtilities
             Map<CommandLineOption, CommandLineValue> optionValues,
             Map<CommandLineOption, Object> processedValues)
     {
-        return processCommandLine(optionValues,
-                processedValues,
-                null,
-                null);
+        return processCommandLine(optionValues, processedValues, null, null);
     }
 
     /**
@@ -1578,7 +1565,8 @@ public class CommandLineUtilities
 
         // check if we need to create the JSON object builder
         JsonObjectBuilder job = (doJson
-            && (jsonBuilder == null || stringBuilder != null))
+                                 && (jsonBuilder == null
+                                     || stringBuilder != null))
             ? Json.createObjectBuilder() : jsonBuilder;
 
         // iterate over the option values and handle them
@@ -1586,10 +1574,10 @@ public class CommandLineUtilities
             // confirm the option is consistent between the key and value
             if (key != cmdLineVal.getOption()) {
                 throw new IllegalArgumentException(
-                        "CommandLineOption key does not match the option "
-                                + "from the paired CommandLineValue "
-                                + "value.  key=[ " + key + " ], value=[ "
-                                + cmdLineVal + " ]");
+                    "CommandLineOption key does not match the option "
+                        + "from the paired CommandLineValue "
+                        + "value.  key=[ " + key + " ], value=[ " + cmdLineVal
+                        + " ]");
             }
 
             // create the sub-builder if doing JSON
@@ -1605,7 +1593,6 @@ public class CommandLineUtilities
                 if (key.isSensitive()) {
                     // handle sensitive values
                     job2.add("value", REDACTED_SENSITIVE_VALUE);
-
                 } else if (params.size() == 1) {
                     // handle a single parameter
                     job2.add("value", params.get(0));
@@ -1756,8 +1743,7 @@ public class CommandLineUtilities
         String simpleName = cls.getSimpleName();
         String url = cls.getResource(simpleName + ".class").toString();
 
-        int index = url.lastIndexOf(
-                cls.getName().replace(".", "/") + ".class");
+        int index = url.lastIndexOf(cls.getName().replace(".", "/") + ".class");
 
         if (index < 0) return null;
 

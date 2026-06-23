@@ -191,17 +191,12 @@ public class CommandLineValue implements SpecifiedOption
      */
     public String toString()
     {
-        return ("{ option=[ "
-            + this.getOption()
-            + " ], processedValue=[ "
-            + this.getProcessedValue()
-            + " ], source=[ "
-            + this.getSource()
-            + " ], specifier=[ "
-            + this.getSpecifier()
-            + " ], parameters=[ "
-            + this.getParameters()
-            + " ] }");
+        return ("{ option=[ " + this.getOption()
+                + " ], processedValue=[ " + this.getProcessedValue()
+                + " ], source=[ " + this.getSource()
+                + " ], specifier=[ " + this.getSpecifier()
+                + " ], parameters=[ " + this.getParameters()
+                + " ] }");
     }
 
     @Override
