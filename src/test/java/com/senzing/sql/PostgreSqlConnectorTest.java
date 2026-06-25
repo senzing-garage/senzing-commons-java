@@ -131,7 +131,7 @@ public class PostgreSqlConnectorTest
             assertTrue(rs.next());
             assertEquals("senzing-commons-test", rs.getString(1),
                          "Addl 'ApplicationName' property must be applied to"
-                + " the connection");
+                         + " the connection");
         }
     }
 
@@ -156,7 +156,7 @@ public class PostgreSqlConnectorTest
             "localhost", port, "postgres", "postgres", "", addl);
         try (Connection conn = connector.openConnection()) {
             assertNotNull(conn, "Explicit user 'postgres' must override the "
-                + "addlProperties 'user' entry");
+                                + "addlProperties 'user' entry");
         }
     }
 

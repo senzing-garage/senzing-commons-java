@@ -208,7 +208,7 @@ public class CommandLineOptionAndValueTest
         // ("ONLY") is not "PASSWORD" so the eventual result is false.
         assertFalse(NonStaticFieldOption.ONLY.isSensitive(),
                     "Option whose enum has a non-static public field"
-            + " must skip that field and not throw");
+                    + " must skip that field and not throw");
     }
 
     /**
@@ -223,7 +223,7 @@ public class CommandLineOptionAndValueTest
     {
         assertFalse(new NonEnumOption().isSensitive(),
                     "Non-enum option must fall through to 'return false'"
-            + " — no public-static field equals the instance");
+                    + " — no public-static field equals the instance");
     }
 
     // -------------------------------------------------------------------

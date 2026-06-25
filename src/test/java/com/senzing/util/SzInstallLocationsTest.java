@@ -118,8 +118,8 @@ public class SzInstallLocationsTest
         assertEquals(install.resourceDir()
                             .resolve("templates")
                             .toFile()
-                            .getCanonicalFile(), result.getTemplatesDirectory()
-                                                       .getCanonicalFile());
+                            .getCanonicalFile(),
+                     result.getTemplatesDirectory().getCanonicalFile());
     }
 
     // -------------------------------------------------------------------
@@ -144,7 +144,7 @@ public class SzInstallLocationsTest
                 .getSupportDirectory()
                 .getCanonicalFile(),
                          "Explicit senzing.support.dir must override the"
-                + " default <senzing.path>/data");
+                         + " default <senzing.path>/data");
         } finally {
             deleteRecursively(altSupport);
         }
@@ -168,7 +168,7 @@ public class SzInstallLocationsTest
                 .getResourceDirectory()
                 .getCanonicalFile(),
                          "Explicit senzing.resource.dir must override the"
-                + " default <install>/resources");
+                         + " default <install>/resources");
         } finally {
             deleteRecursively(altResource);
         }
@@ -194,7 +194,7 @@ public class SzInstallLocationsTest
                 .getConfigDirectory()
                 .getCanonicalFile(),
                          "Explicit senzing.config.dir must override the"
-                + " default");
+                         + " default");
         } finally {
             deleteRecursively(altConfig);
         }
@@ -226,10 +226,10 @@ public class SzInstallLocationsTest
                     IllegalStateException.class,
                     SzInstallLocations::findLocations);
                 assertTrue(ise.getMessage().contains("installation directory")
-                    || ise.getMessage().contains(
+                           || ise.getMessage().contains(
                            emptyRoot.resolve("er").toString()),
                            "Expected message to mention the missing install"
-                    + " directory: " + ise.getMessage());
+                           + " directory: " + ise.getMessage());
             });
         } finally {
             deleteRecursively(emptyRoot);
@@ -257,7 +257,7 @@ public class SzInstallLocationsTest
                 SzInstallLocations::findLocations);
             assertTrue(ise.getMessage().contains("support directory"),
                        "Expected message to mention support directory: "
-                + ise.getMessage());
+                       + ise.getMessage());
         });
     }
 
@@ -282,7 +282,7 @@ public class SzInstallLocationsTest
                 SzInstallLocations::findLocations);
             assertTrue(ise.getMessage().contains("resource directory"),
                        "Expected message to mention resource directory: "
-                + ise.getMessage());
+                       + ise.getMessage());
         });
     }
 
@@ -307,7 +307,7 @@ public class SzInstallLocationsTest
                 SzInstallLocations::findLocations);
             assertTrue(ise.getMessage().contains("config directory"),
                        "Expected message to mention config directory: "
-                + ise.getMessage());
+                       + ise.getMessage());
         });
     }
 
@@ -350,7 +350,7 @@ public class SzInstallLocationsTest
         SzInstallLocations result = SzInstallLocations.findLocations();
         assertFalse(result.isDevelopmentBuild(),
                     "isDevelopmentBuild() must be false for er/-style"
-            + " install");
+                    + " install");
     }
 
     // -------------------------------------------------------------------
@@ -478,7 +478,7 @@ public class SzInstallLocationsTest
             .getSupportDirectory()
             .getCanonicalFile(),
                      "Empty senzing.support.dir must fall back to the"
-            + " <senzing.path>/data default");
+                     + " <senzing.path>/data default");
     }
 
     /**
@@ -557,10 +557,10 @@ public class SzInstallLocationsTest
                                        .getCanonicalFile()
                                        .getName(),
                          "installDir resolved through symlink should be "
-                + "named 'dist'");
+                         + "named 'dist'");
             assertTrue(result.isDevelopmentBuild(),
                        "Install dir named 'dist' must mark"
-                + " isDevelopmentBuild() = true");
+                       + " isDevelopmentBuild() = true");
         } finally {
             deleteRecursively(devRoot);
         }
@@ -591,7 +591,7 @@ public class SzInstallLocationsTest
                     SzInstallLocations::findLocations);
                 assertTrue(ise.getMessage().contains("cfgVariant.json"),
                            "Error message must name the missing file: "
-                    + ise.getMessage());
+                           + ise.getMessage());
             });
         } finally {
             deleteRecursively(root);

@@ -90,7 +90,7 @@ public class TemporaryDataCacheExtraTest
                 int next = is.read();
                 assertEquals(data[64 * 1024] & 0xFF, next,
                              "Read after skip should return data at the new"
-                    + " position");
+                             + " position");
             } finally {
                 is.close();
             }
@@ -145,7 +145,7 @@ public class TemporaryDataCacheExtraTest
                 long total = drain(is);
                 assertEquals(data.length, total,
                              "Sequential read across parts must return all "
-                    + "bytes written into the cache");
+                             + "bytes written into the cache");
             } finally {
                 is.close();
             }
@@ -230,7 +230,7 @@ public class TemporaryDataCacheExtraTest
             tdc.waitUntilAppendingComplete();
             assertTrue(!tdc.isAppending(),
                        "isAppending() must return false after consumption "
-                + "completes");
+                       + "completes");
         } finally {
             tdc.delete();
         }
@@ -254,7 +254,7 @@ public class TemporaryDataCacheExtraTest
             boolean done = tdc.waitUntilAppendingComplete(30_000L);
             assertTrue(done,
                        "Bounded waitUntilAppendingComplete must return true"
-                + " when consumer thread completes within budget");
+                       + " when consumer thread completes within budget");
         } finally {
             tdc.delete();
         }
@@ -276,7 +276,7 @@ public class TemporaryDataCacheExtraTest
             boolean done = tdc.waitUntilAppendingComplete(0L);
             assertTrue(done,
                        "maxWait <= 0 must delegate to the unbounded wait "
-                + "and return true after completion");
+                       + "and return true after completion");
         } finally {
             tdc.delete();
         }
@@ -305,14 +305,14 @@ public class TemporaryDataCacheExtraTest
                 long total = drain(is);
                 assertEquals(data.length, total,
                              "Consuming stream should still surface every "
-                    + "byte of the original input");
+                             + "byte of the original input");
             }
 
             // After consuming, the cache should be marked deleted (or at
             // least the file parts gone).
             assertTrue(tdc.isDeleted(),
                        "After fully consuming a consumer-mode input stream"
-                + " the cache should be marked deleted");
+                       + " the cache should be marked deleted");
         } finally {
             tdc.delete();
         }

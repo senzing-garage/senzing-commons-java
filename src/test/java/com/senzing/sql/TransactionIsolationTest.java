@@ -142,7 +142,7 @@ public class TransactionIsolationTest
             assertEquals(TRANSACTION_READ_UNCOMMITTED,
                          conn.getTransactionIsolation(),
                          "applyTo with matching level must leave isolation"
-                + " unchanged");
+                         + " unchanged");
         }
     }
 
@@ -181,7 +181,7 @@ public class TransactionIsolationTest
     {
         return (Connection) Proxy.newProxyInstance(
             TransactionIsolation.class.getClassLoader(),
-            new Class<?>[]{ Connection.class },
+            new Class<?>[] { Connection.class },
             (proxy, method, args) -> {
                 String name = method.getName();
                 if ("getTransactionIsolation".equals(name)) {

@@ -118,7 +118,7 @@ public class ConnectionPoolExtraTest
             String info = pool.getDiagnosticLeaseInfo();
             assertEquals("", info,
                          "With no active leases the diagnostic info should"
-                + " be empty");
+                         + " be empty");
         } finally {
             pool.shutdown();
         }
@@ -136,7 +136,7 @@ public class ConnectionPoolExtraTest
             assertNotNull(info);
             assertTrue(info.length() > 0,
                        "Diagnostic info should be non-empty when a"
-                + " connection is leased");
+                       + " connection is leased");
         } finally {
             if (conn != null) {
                 pool.release(conn);
@@ -173,9 +173,9 @@ public class ConnectionPoolExtraTest
 
             String captured = stub.getText();
             assertTrue(captured.contains("released more than once")
-                || captured.length() > 0,
+                       || captured.length() > 0,
                        "release()-of-already-released should write a "
-                + "warning to stderr");
+                       + "warning to stderr");
         } finally {
             pool.shutdown();
         }

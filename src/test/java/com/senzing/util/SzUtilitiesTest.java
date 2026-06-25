@@ -359,7 +359,7 @@ public class SzUtilitiesTest
                  "First call returns true");
             assertFalse(SzUtilities.ensureSenzingSQLiteSchema(conn),
                         "Second call must detect existing schema and"
-                + " return false");
+                        + " return false");
         }
     }
 
@@ -384,7 +384,7 @@ public class SzUtilitiesTest
     {
         DatabaseMetaData md = (DatabaseMetaData) Proxy.newProxyInstance(
             SzUtilitiesTest.class.getClassLoader(),
-            new Class<?>[]{ DatabaseMetaData.class },
+            new Class<?>[] { DatabaseMetaData.class },
             (proxy, method, args) -> {
                 if ("getDatabaseProductName".equals(method.getName())) {
                     return "PostgreSQL";
@@ -393,7 +393,7 @@ public class SzUtilitiesTest
             });
         return (Connection) Proxy.newProxyInstance(
             SzUtilitiesTest.class.getClassLoader(),
-            new Class<?>[]{ Connection.class },
+            new Class<?>[] { Connection.class },
             (proxy, method, args) -> {
                 if ("getMetaData".equals(method.getName())) return md;
                 // for primitive returns, return null/default as appropriate

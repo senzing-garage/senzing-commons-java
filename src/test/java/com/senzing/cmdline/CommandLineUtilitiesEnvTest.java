@@ -110,7 +110,7 @@ public class CommandLineUtilitiesEnvTest
             assertNotNull(val);
             assertEquals(List.of("true"), val.getParameters(),
                          "Empty env value for boolean option should yield "
-                + "\"true\"");
+                         + "\"true\"");
         });
     }
 

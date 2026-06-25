@@ -57,15 +57,15 @@ public class TextUtilitiesTest
                 String text1 = randomPrintableText(minCount, maxCount);
                 String text2 = randomPrintableText(minCount, maxCount);
                 assertTrue(text1.length() >= minCount
-                    && text1.length() <= maxCount,
+                           && text1.length() <= maxCount,
                            "First generated text has unexpected length: "
-                    + "length=[ " + text1.length() + " ], minLength=[ "
-                    + minCount + " ], maxLength=[ " + maxCount + " ]");
+                           + "length=[ " + text1.length() + " ], minLength=[ "
+                           + minCount + " ], maxLength=[ " + maxCount + " ]");
                 assertTrue(text2.length() >= minCount
-                    && text2.length() <= maxCount,
+                           && text2.length() <= maxCount,
                            "Second generated text has unexpected length: "
-                    + "length=[ " + text2.length() + " ], minLength=[ "
-                    + minCount + " ], maxLength=[ " + maxCount + " ]");
+                           + "length=[ " + text2.length() + " ], minLength=[ "
+                           + minCount + " ], maxLength=[ " + maxCount + " ]");
                 assertNotEquals(text1, text2,
                         "Randomly generated text is identical.");
 
@@ -126,15 +126,15 @@ public class TextUtilitiesTest
                 String text1 = randomAlphabeticText(minCount, maxCount);
                 String text2 = randomAlphabeticText(minCount, maxCount);
                 assertTrue(text1.length() >= minCount
-                    && text1.length() <= maxCount,
+                           && text1.length() <= maxCount,
                            "First generated text has unexpected length: "
-                    + "length=[ " + text1.length() + " ], minLength=[ "
-                    + minCount + " ], maxLength=[ " + maxCount + " ]");
+                           + "length=[ " + text1.length() + " ], minLength=[ "
+                           + minCount + " ], maxLength=[ " + maxCount + " ]");
                 assertTrue(text2.length() >= minCount
-                    && text2.length() <= maxCount,
+                           && text2.length() <= maxCount,
                            "Second generated text has unexpected length: "
-                    + "length=[ " + text2.length() + " ], minLength=[ "
-                    + minCount + " ], maxLength=[ " + maxCount + " ]");
+                           + "length=[ " + text2.length() + " ], minLength=[ "
+                           + minCount + " ], maxLength=[ " + maxCount + " ]");
                 assertNotEquals(text1, text2,
                         "Randomly generated text is identical.");
 
@@ -174,13 +174,13 @@ public class TextUtilitiesTest
                     char c1 = text1.charAt(index);
                     char c2 = text2.charAt(index);
                     assertTrue(Character.isAlphabetic(c1)
-                        || Character.isDigit(c1),
+                               || Character.isDigit(c1),
                                "Random character is not alphanumeric: "
-                        + ((int) c1));
+                               + ((int) c1));
                     assertTrue(Character.isAlphabetic(c2)
-                        || Character.isDigit(c2),
+                               || Character.isDigit(c2),
                                "Random character is not alphanumeric: "
-                        + ((int) c2));
+                               + ((int) c2));
                 }
             }
         } catch (Exception e) {
@@ -199,31 +199,31 @@ public class TextUtilitiesTest
                 String text1 = randomAlphanumericText(minCount, maxCount);
                 String text2 = randomAlphanumericText(minCount, maxCount);
                 assertTrue(text1.length() >= minCount
-                    && text1.length() <= maxCount,
+                           && text1.length() <= maxCount,
                            "First generated text has unexpected length: "
-                    + "length=[ " + text1.length() + " ], minLength=[ "
-                    + minCount + " ], maxLength=[ " + maxCount + " ]");
+                           + "length=[ " + text1.length() + " ], minLength=[ "
+                           + minCount + " ], maxLength=[ " + maxCount + " ]");
                 assertTrue(text2.length() >= minCount
-                    && text2.length() <= maxCount,
+                           && text2.length() <= maxCount,
                            "Second generated text has unexpected length: "
-                    + "length=[ " + text2.length() + " ], minLength=[ "
-                    + minCount + " ], maxLength=[ " + maxCount + " ]");
+                           + "length=[ " + text2.length() + " ], minLength=[ "
+                           + minCount + " ], maxLength=[ " + maxCount + " ]");
                 assertNotEquals(text1, text2,
                         "Randomly generated text is identical.");
 
                 for (int index = 0; index < text1.length(); index++) {
                     char c1 = text1.charAt(index);
                     assertTrue(Character.isAlphabetic(c1)
-                        || Character.isDigit(c1),
+                               || Character.isDigit(c1),
                                "Random character is not alphanumeric: "
-                        + ((int) c1));
+                               + ((int) c1));
                 }
                 for (int index = 0; index < text2.length(); index++) {
                     char c2 = text2.charAt(index);
                     assertTrue(Character.isAlphabetic(c2)
-                        || Character.isDigit(c2),
+                               || Character.isDigit(c2),
                                "Random character is not alphanumeric: "
-                        + ((int) c2));
+                               + ((int) c2));
                 }
             }
         } catch (Exception e) {

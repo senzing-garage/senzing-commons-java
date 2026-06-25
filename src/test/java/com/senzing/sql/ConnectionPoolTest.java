@@ -380,10 +380,10 @@ public class ConnectionPoolTest
                  "Retired connection count is not null: " + info);
             assertNull(pool.getAverageAcquisitionTime(),
                        "Average acquisition time is not initially null: "
-                + info);
+                       + info);
             assertNull(pool.getGreatestAcquisitionTime(),
                        "Greatest acquisition time is not initially null: "
-                + info);
+                       + info);
             assertNull(pool.getGreatestLeaseTime(),
                  "Greatest lease time is not initially null: " + info);
             assertNull(pool.getAverageLeaseTime(),
@@ -409,12 +409,12 @@ public class ConnectionPoolTest
                     long endNanos = System.nanoTime();
                     long elapsed = (endNanos - startNanos) / ONE_MILLION;
                     assertNotNull(conn, "Connection not acquired.  index=[ "
-                        + index + " ], " + info);
+                                        + index + " ], " + info);
                     leased.add(conn);
                     assertTrue((elapsed < 200L),
                                "Blocked for more than 200ms (" + elapsed
-                        + "ms) waiting for a connection.  index=[ " + index
-                        + " ], " + info);
+                               + "ms) waiting for a connection.  index=[ "
+                               + index + " ], " + info);
                 }
             } finally {
                 for (Connection connection : leased) {
@@ -438,14 +438,14 @@ public class ConnectionPoolTest
                          "Current pool size expanded beyond minimum: " + info);
             assertEquals(minPoolSize, pool.getAvailableConnectionCount(),
                          "Pool has leased connections when they should have "
-                + "been returned: " + info);
+                         + "been returned: " + info);
             assertEquals(0, pool.getOutstandingLeaseCount(),
                          "Outstanding leases exist when they should not: "
-                + info);
+                         + info);
             if (minPoolSize > 0) {
                 assertNotNull(pool.getGreatestAcquisitionTime(),
                               "Greatest acquisition time should not be null: "
-                    + info);
+                              + info);
                 assertNotNull(pool.getGreatestLeasedCount(),
                       "Greatest lease count should not be null: " + info);
                 assertNotNull(pool.getAverageLeaseTime(),
@@ -500,9 +500,9 @@ public class ConnectionPoolTest
                     Connection conn = pool.acquire(0L);
                     assertNotNull(conn,
                                   "Connection not immediately acquired.  "
-                        + "leased=[ " + leased.size() + " ], minPoolSize=[ "
-                        + minPoolSize + " ], maxPoolSize=[ " + maxPoolSize
-                        + " ]");
+                                  + "leased=[ " + leased.size()
+                                  + " ], minPoolSize=[ " + minPoolSize
+                                  + " ], maxPoolSize=[ " + maxPoolSize + " ]");
 
                     leased.add(conn);
                 }
@@ -511,9 +511,10 @@ public class ConnectionPoolTest
                 // grow
                 Connection unavailable = pool.acquire(100L);
                 assertNull(unavailable, "Connection acquired when none should "
-                    + "have been available.  leased=[ " + leased.size()
-                    + " ], minPoolSize=[ " + minPoolSize + " ], maxPoolSize=[ "
-                    + maxPoolSize + " ]");
+                                        + "have been available.  leased=[ "
+                                        + leased.size() + " ], minPoolSize=[ "
+                                        + minPoolSize + " ], maxPoolSize=[ "
+                                        + maxPoolSize + " ]");
             } finally {
                 for (Connection connection : leased) {
                     SQLUtilities.close(connection);
@@ -568,12 +569,12 @@ public class ConnectionPoolTest
                     long endNanos = System.nanoTime();
                     long elapsed = (endNanos - startNanos) / ONE_MILLION;
                     assertNotNull(conn, "Connection not acquired.  index=[ "
-                        + index + " ], " + info);
+                                        + index + " ], " + info);
                     leased.add(conn);
                     assertTrue((elapsed < 200L),
                                "Blocked for more than 200ms (" + elapsed
-                        + "ms) waiting for a connection.  index=[ " + index
-                        + " ], " + info);
+                               + "ms) waiting for a connection.  index=[ "
+                               + index + " ], " + info);
                 }
             } finally {
                 for (Connection connection : leased) {
@@ -595,7 +596,7 @@ public class ConnectionPoolTest
 
             assertEquals(maxPoolSize, pool.getAvailableConnectionCount(),
                          "Pool has leased connections when they should have "
-                + "been returned");
+                         + "been returned");
             assertEquals(0, pool.getOutstandingLeaseCount(),
                    "Outstanding leases exist when they should not");
             assertEquals(maxPoolSize, pool.getCurrentPoolSize(),
@@ -669,7 +670,7 @@ public class ConnectionPoolTest
             for (Thread thread : threads) {
                 assertFalse(thread.isAlive(),
                             "Worker thread is unexpectedly still alive: "
-                    + info);
+                            + info);
             }
             if (failures.size() > 0) {
                 if (failures.size() == 1) {
@@ -684,7 +685,7 @@ public class ConnectionPoolTest
                      "Current pool size expanded beyond minimum");
                 assertEquals(minPoolSize, pool.getAvailableConnectionCount(),
                              "Pool has leased connections when they should "
-                    + "have been returned");
+                             + "have been returned");
             }
             assertEquals(0, pool.getOutstandingLeaseCount(),
                    "Outstanding leases exist when they should not");
@@ -958,7 +959,7 @@ public class ConnectionPoolTest
             } else {
                 assertEquals(expireSeconds * 1000L, statsMap.get(expireTime),
                              "Maximum connection lifespan not as expected: "
-                    + info);
+                             + info);
             }
             assertEquals(minPoolSize, statsMap.get(currentPoolSize),
                    "Current pool size not as expected: " + info);
@@ -968,10 +969,10 @@ public class ConnectionPoolTest
                    "Outstanding leases not as expected: " + info);
             assertFalse(statsMap.containsKey(greatestOutstandingLeaseTime),
                         "Greatest outstanding lease time unexpectedly "
-                + "present: " + info);
+                        + "present: " + info);
             assertFalse(statsMap.containsKey(averageOutstandingLeaseTime),
                         "Average outstanding lease time unexpectedly "
-                + "present: " + info);
+                        + "present: " + info);
             assertFalse(statsMap.containsKey(greatestLeasedCount),
                         "Greatest leased count unexpectedly present: " + info);
             assertFalse(statsMap.containsKey(averageLeasedCount),
@@ -981,7 +982,7 @@ public class ConnectionPoolTest
             if (expireSeconds == 0) {
                 assertFalse(statsMap.containsKey(expiredConnections),
                             "Expired connections is unexpectedly present: "
-                    + info);
+                            + info);
             } else {
                 assertEquals(0, statsMap.get(expiredConnections),
                      "Expired connections is not as expected: " + info);
@@ -989,7 +990,7 @@ public class ConnectionPoolTest
             if (retireLimit == 0) {
                 assertFalse(statsMap.containsKey(retiredConnections),
                             "Retired connections is unexpectedly present: "
-                    + info);
+                            + info);
             } else {
                 assertEquals(0, statsMap.get(retiredConnections),
                      "Retired connections is not as expected: " + info);
@@ -1000,7 +1001,7 @@ public class ConnectionPoolTest
                 "Average acquire time is unexpectedly present: " + info);
             assertFalse(statsMap.containsKey(greatestAcquireTime),
                         "Greatest acquire time is unexpectedly present: "
-                + info);
+                        + info);
             assertFalse(statsMap.containsKey(greatestLeaseTime),
                         "Greatest lease time is unexpectedly present: " + info);
             assertFalse(statsMap.containsKey(averageLeaseTime),
@@ -1010,13 +1011,13 @@ public class ConnectionPoolTest
                  "Idle time unexpectedly not present: " + info);
             assertTrue(statsMap.get(idleTime).longValue() < elapsed,
                        "Idle time is greater than expected.  idle=[ "
-                + statsMap.get(idleTime) + " ], elapsed=[ " + elapsed + " ], "
-                + info);
+                       + statsMap.get(idleTime) + " ], elapsed=[ " + elapsed
+                       + " ], " + info);
 
             assertTrue(statsMap.get(idleTime).longValue() > lowerLimit,
                        "Idle time is less than expected.  idle=[ "
-                + statsMap.get(idleTime) + " ], lowerLimit=[ " + lowerLimit
-                + " ], " + info);
+                       + statsMap.get(idleTime) + " ], lowerLimit=[ "
+                       + lowerLimit + " ], " + info);
 
             // attempt to acquire connections up to the min pool size
             List<Connection> leased = new LinkedList<>();
@@ -1032,7 +1033,7 @@ public class ConnectionPoolTest
                         afterAcquiredTime = System.nanoTime();
                         assertNotNull(conn,
                                       "Connection not acquired.  index=[ "
-                            + index1 + ", " + index2 + " ], " + info);
+                                      + index1 + ", " + index2 + " ], " + info);
                         leased.add(conn);
                     }
                     Thread.sleep(100L);
@@ -1043,11 +1044,11 @@ public class ConnectionPoolTest
                     assertTrue(statsMap.containsKey(
                         greatestOutstandingLeaseTime),
                                "Greatest outstanding lease time unexpectedly "
-                        + "missing: " + info);
+                               + "missing: " + info);
                     assertTrue(statsMap.containsKey(
                         averageOutstandingLeaseTime),
                                "Average outstanding lease time unexpectedly "
-                        + "missing: " + info);
+                               + "missing: " + info);
                 } finally {
                     for (Connection connection : leased) {
                         SQLUtilities.close(connection);
@@ -1080,7 +1081,7 @@ public class ConnectionPoolTest
             } else {
                 assertEquals(expireSeconds * 1000L, statsMap.get(expireTime),
                              "Maximum connection lifespan not as expected: "
-                    + info);
+                             + info);
             }
             assertEquals(statsMap.get(currentPoolSize),
                    statsMap.get(availableConnections),
@@ -1091,10 +1092,10 @@ public class ConnectionPoolTest
 
             assertFalse(statsMap.containsKey(greatestOutstandingLeaseTime),
                         "Greatest outstanding lease time unexpectedly "
-                + "present: " + info);
+                        + "present: " + info);
             assertFalse(statsMap.containsKey(averageOutstandingLeaseTime),
                         "Average outstanding lease time unexpectedly "
-                + "present: " + info);
+                        + "present: " + info);
             assertTrue(statsMap.containsKey(greatestLeasedCount),
                        "Greatest leased count unexpectedly missing: " + info);
             assertTrue(statsMap.containsKey(averageLeasedCount),
@@ -1106,20 +1107,20 @@ public class ConnectionPoolTest
             if (expireSeconds == 0) {
                 assertFalse(statsMap.containsKey(expiredConnections),
                             "Expired connections is unexpectedly present: "
-                    + info);
+                            + info);
             } else {
                 assertTrue(statsMap.containsKey(expiredConnections),
                            "Expired connections is unexpectedly missing: "
-                    + info);
+                           + info);
             }
             if (retireLimit == 0) {
                 assertFalse(statsMap.containsKey(retiredConnections),
                             "Retired connections is unexpectedly present: "
-                    + info);
+                            + info);
             } else {
                 assertTrue(statsMap.containsKey(retiredConnections),
                            "Retired connections is unexpectedly missing: "
-                    + info);
+                           + info);
             }
 
             assertTrue(statsMap.containsKey(averageAcquireTime),
@@ -1135,13 +1136,13 @@ public class ConnectionPoolTest
                  "Idle time unexpectedly not present: " + info);
             assertTrue(statsMap.get(idleTime).longValue() < elapsed,
                        "Idle time is greater than expected.  idle=[ "
-                + statsMap.get(idleTime) + " ], elapsed=[ " + elapsed + " ], "
-                + info);
+                       + statsMap.get(idleTime) + " ], elapsed=[ " + elapsed
+                       + " ], " + info);
 
             assertTrue(statsMap.get(idleTime).longValue() > lowerLimit,
                        "Idle time is less than expected.  idle=[ "
-                + statsMap.get(idleTime) + " ], lowerLimit=[ " + lowerLimit
-                + " ], " + info);
+                       + statsMap.get(idleTime) + " ], lowerLimit=[ "
+                       + lowerLimit + " ], " + info);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Received a SQL exception", e);

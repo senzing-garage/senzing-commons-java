@@ -164,7 +164,7 @@ public class DatabaseTypeTest
     {
         Connection conn = (Connection) Proxy.newProxyInstance(
             DatabaseType.class.getClassLoader(),
-            new Class<?>[]{ Connection.class },
+            new Class<?>[] { Connection.class },
             (proxy, method, args) -> {
                 if ("getMetaData".equals(method.getName())) {
                     throw new SQLException("simulated");
@@ -278,7 +278,7 @@ public class DatabaseTypeTest
 
         assertEquals(1, recorder.calls.size(),
                      "Exactly one binding call expected for SQLITE on"
-            + " CallableStatement");
+                     + " CallableStatement");
         assertEquals("setString", recorder.calls.get(0).method);
     }
 
@@ -455,7 +455,7 @@ public class DatabaseTypeTest
     {
         DatabaseMetaData md = (DatabaseMetaData) Proxy.newProxyInstance(
             DatabaseTypeTest.class.getClassLoader(),
-            new Class<?>[]{ DatabaseMetaData.class },
+            new Class<?>[] { DatabaseMetaData.class },
             (proxy, method, args) -> {
                 if ("getDatabaseProductName".equals(method.getName())) {
                     return productName;
@@ -464,7 +464,7 @@ public class DatabaseTypeTest
             });
         return (Connection) Proxy.newProxyInstance(
             DatabaseTypeTest.class.getClassLoader(),
-            new Class<?>[]{ Connection.class },
+            new Class<?>[] { Connection.class },
             (proxy, method, args) -> {
                 if ("getMetaData".equals(method.getName())) return md;
                 return null;

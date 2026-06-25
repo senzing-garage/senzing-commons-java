@@ -35,7 +35,7 @@ public class SemanticVersionTest
         boolean result = version.equals("1.0.0");
         assertEquals(false, result,
                      "Equality versus an object of a different type is "
-            + "unexpectedly true.");
+                     + "unexpectedly true.");
     }
 
     public List<Arguments> provideEqualParams()
@@ -96,33 +96,32 @@ public class SemanticVersionTest
             boolean result = v1.equals(v2);
 
             assertEquals(expectedResult, result, "Unexpected result comparing "
-                + version1 + " to " + version2 + " for equality.");
+                                                 + version1 + " to " + version2
+                                                 + " for equality.");
 
             result = v2.equals(v1);
 
             assertEquals(expectedResult, result,
                          "Inconsistent result comparing " + version2
-                + " to " + version1
-                + " for equality.");
+                         + " to " + version1
+                         + " for equality.");
 
             if (result) {
                 int hash1 = v1.hashCode();
                 int hash2 = v2.hashCode();
 
                 assertEquals(hash1, hash2, "Inconsistent hash codes for "
-                    + version1 + " and " + version2);
+                                           + version1 + " and " + version2);
 
                 int compare = v1.compareTo(v2);
 
-                assertEquals(0, compare, "Comparison of " + version1
-                    + " to " + version2
-                    + " is non-zero even though they equal.");
+                assertEquals(0, compare, "Comparison of " + version1 + " to "
+                    + version2 + " is non-zero even though they equal.");
 
                 compare = v2.compareTo(v1);
 
-                assertEquals(0, compare, "Comparison of " + version2
-                    + " to " + version1
-                    + " is non-zero even though they equal.");
+                assertEquals(0, compare, "Comparison of " + version2 + " to "
+                    + version1 + " is non-zero even though they equal.");
             } else {
                 int compare = v1.compareTo(v2);
 
@@ -200,7 +199,7 @@ public class SemanticVersionTest
 
             assertEquals(expectedResult, result,
                          "Unexpected result converting version to string: "
-                + version);
+                         + version);
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
@@ -281,15 +280,15 @@ public class SemanticVersionTest
             if (expectedResult == 0) {
                 assertEquals(expectedResult, result,
                              "Unexpected result comparing " + version1
-                    + " to " + version2
-                    + " for equality.");
+                             + " to " + version2
+                             + " for equality.");
 
                 result = v2.compareTo(v1);
 
                 assertEquals(expectedResult, result,
                              "Inconsistent result comparing " + version2
-                    + " to " + version1
-                    + " for equality.");
+                             + " to " + version1
+                             + " for equality.");
 
                 int hash1 = v1.hashCode();
                 int hash2 = v2.hashCode();
@@ -307,12 +306,14 @@ public class SemanticVersionTest
                     + " despite compareTo() returning zero (0)");
             } else if (expectedResult < 0) {
                 assertTrue((result < 0), "Unexpected result comparing "
-                    + version1 + " to " + version2 + " for less-than.");
+                                         + version1 + " to " + version2
+                                         + " for less-than.");
 
                 result = v2.compareTo(v1);
 
                 assertTrue((result > 0), "Unexpected result reverse comparing "
-                    + version2 + " to " + version1 + " for greater-than.");
+                                         + version2 + " to " + version1
+                                         + " for greater-than.");
 
                 assertNotEquals(true, v1.equals(v2), "Version " + version1
                     + " is equal to " + version2
@@ -323,12 +324,14 @@ public class SemanticVersionTest
                     + " despite compareTo() being positive");
             } else {
                 assertTrue((result > 0), "Unexpected result comparing "
-                    + version1 + " to " + version2 + " for greater-than.");
+                                         + version1 + " to " + version2
+                                         + " for greater-than.");
 
                 result = v2.compareTo(v1);
 
                 assertTrue((result < 0), "Unexpected result reverse comparing "
-                    + version2 + " to " + version1 + " for less-than.");
+                                         + version2 + " to " + version1
+                                         + " for less-than.");
 
                 assertNotEquals(true, v1.equals(v2), "Version " + version1
                     + " is equal to " + version2

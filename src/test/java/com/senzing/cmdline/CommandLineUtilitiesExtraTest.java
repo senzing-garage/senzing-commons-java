@@ -130,7 +130,8 @@ public class CommandLineUtilitiesExtraTest
         String url = getJarBaseUrl(CommandLineUtilitiesExtraTest.class);
         assertNotNull(url, "Base URL should be non-null for a loaded class");
         assertTrue(url.startsWith("file:")
-            || url.startsWith("jar:") || url.startsWith("nested:"),
+                   || url.startsWith("jar:")
+                   || url.startsWith("nested:"),
                    "Base URL should be a URL: " + url);
     }
 
@@ -190,7 +191,7 @@ public class CommandLineUtilitiesExtraTest
         // clean; SAME_THREAD so the redirect does not interleave with
         // concurrent tests.
         new SystemOut().execute(() -> {
-            CommandLineUtilities.main(new String[]{});
+            CommandLineUtilities.main(new String[] {});
         });
         // Reaching here means it did not throw.
     }
@@ -385,7 +386,7 @@ public class CommandLineUtilitiesExtraTest
     @Test
     public void shiftArgumentsZeroFromEmptyArrayReturnsEmpty()
     {
-        String[] args = new String[]{};
+        String[] args = new String[] {};
         String[] shifted = CommandLineUtilities.shiftArguments(args, 0);
         assertEquals(0, shifted.length);
     }

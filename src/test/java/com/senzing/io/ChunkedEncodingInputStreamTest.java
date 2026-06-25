@@ -77,7 +77,7 @@ public class ChunkedEncodingInputStreamTest
                     "Available bytes less-than zero: " + available);
                 assertTrue(available < bytes.length,
                            "More bytes available than should be ("
-                    + bytes.length + "): " + available);
+                           + bytes.length + "): " + available);
 
                 totalAvailable += available;
 
@@ -88,7 +88,7 @@ public class ChunkedEncodingInputStreamTest
 
             assertEquals(bytes.length, totalAvailable,
                          "Total available bytes on chunked input stream not "
-                + "as expected.");
+                         + "as expected.");
         } catch (Exception e) {
             System.out.println("TOTAL AVAILABLE: " + totalAvailable);
             e.printStackTrace();
@@ -176,7 +176,7 @@ public class ChunkedEncodingInputStreamTest
 
             assertFalse(ceis.markSupported(),
                         "Mark is unexpectedly supported for "
-                + "ChunkedEncodingInputStream.");
+                        + "ChunkedEncodingInputStream.");
         } catch (Exception e) {
             fail("chunkedEncodingMarkSupportedTest() failed with exception: "
                  + e);
@@ -305,7 +305,7 @@ public class ChunkedEncodingInputStreamTest
             byte[] readBytes = baos.toByteArray();
             assertEquals(bytes.length - 100, readBytes.length,
                          "Skipped unchunked data length does not match "
-                + "pre-chunked.");
+                         + "pre-chunked.");
 
             byte[] copyArray = Arrays.copyOfRange(bytes, 100, bytes.length);
 

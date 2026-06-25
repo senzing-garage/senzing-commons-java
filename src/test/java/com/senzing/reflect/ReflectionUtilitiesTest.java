@@ -268,8 +268,8 @@ public class ReflectionUtilitiesTest
             }
             assertEquals(expectedResult, result,
                          "Unexpected result when converting " + value
-                + " from " + valueClass
-                + " to " + targetType);
+                         + " from " + valueClass
+                         + " to " + targetType);
         } catch (Exception e) {
             if (exceptionClass == null) {
                 e.printStackTrace();
@@ -359,7 +359,7 @@ public class ReflectionUtilitiesTest
                  "Unrestricted method must still delegate to target");
         assertThrows(UnsupportedOperationException.class, proxy::restricted,
                      "Restricted method must throw"
-            + " UnsupportedOperationException");
+                     + " UnsupportedOperationException");
     }
 
     /**
@@ -377,7 +377,7 @@ public class ReflectionUtilitiesTest
                 target);
         assertThrows(IllegalStateException.class, proxy::throwingMethod,
                      "Proxy must unwrap InvocationTargetException and"
-            + " propagate the original cause");
+                     + " propagate the original cause");
     }
 
     /**
@@ -458,7 +458,7 @@ public class ReflectionUtilitiesTest
             = ReflectionUtilities.restrictedProxy(proxy, restrictedMethod);
         assertSame(proxy, reproxied,
                    "Re-applying the same restriction must short-circuit"
-            + " and return the same proxy");
+                   + " and return the same proxy");
     }
 
     /**
@@ -603,7 +603,7 @@ public class ReflectionUtilitiesTest
         int actual = methodComparator().compare(noArgs, twoArgs);
         assertTrue(actual < 0,
                    "Method with fewer params must sort before one with"
-            + " more: got " + actual);
+                   + " more: got " + actual);
 
         int reverse = methodComparator().compare(twoArgs, noArgs);
         assertTrue(reverse > 0,

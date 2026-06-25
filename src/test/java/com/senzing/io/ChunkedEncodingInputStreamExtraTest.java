@@ -115,7 +115,7 @@ public class ChunkedEncodingInputStreamExtraTest
         IOException ex = assertThrows(IOException.class, s::read);
         assertTrue(ex.getMessage().contains("Unexpected EOF"),
                    "Error message should mention Unexpected EOF: "
-            + ex.getMessage());
+                   + ex.getMessage());
     }
 
     /**
@@ -152,7 +152,7 @@ public class ChunkedEncodingInputStreamExtraTest
             = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("Unexpected EOF"),
                    "Error message should mention Unexpected EOF: "
-            + ex.getMessage());
+                   + ex.getMessage());
     }
 
     /**
@@ -170,7 +170,7 @@ public class ChunkedEncodingInputStreamExtraTest
             = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("trailing CR"),
                    "Error message should mention trailing CR: "
-            + ex.getMessage());
+                   + ex.getMessage());
     }
 
     /**
@@ -190,7 +190,7 @@ public class ChunkedEncodingInputStreamExtraTest
             = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("Expected trailing CR"),
                    "Error message should mention 'Expected trailing CR': "
-            + ex.getMessage());
+                   + ex.getMessage());
     }
 
     /**
@@ -208,7 +208,7 @@ public class ChunkedEncodingInputStreamExtraTest
             = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("trailing LF"),
                    "Error message should mention trailing LF: "
-            + ex.getMessage());
+                   + ex.getMessage());
     }
 
     /**
@@ -225,6 +225,6 @@ public class ChunkedEncodingInputStreamExtraTest
             = assertThrows(IOException.class, () -> s.readAllBytes());
         assertTrue(ex.getMessage().contains("Expected trailing LF"),
                    "Error message should mention 'Expected trailing LF': "
-            + ex.getMessage());
+                   + ex.getMessage());
     }
 }

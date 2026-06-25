@@ -66,7 +66,7 @@ public class PropertyReflectorExtraTest
             list.add(BigInteger.valueOf(7L));
             list.add("eight");
             list.add(List.of(9, 10));
-            list.add(new int[]{ 11, 12 });
+            list.add(new int[] { 11, 12 });
             list.add(new SimpleNested("inner"));
             return list;
         }
@@ -195,7 +195,7 @@ public class PropertyReflectorExtraTest
 
         JsonObject nested = json.getJsonObject("nested");
         assertNotNull(nested, "Nested non-collection, non-primitive property "
-            + "should be serialized as a JSON object");
+                              + "should be serialized as a JSON object");
         assertEquals("hello", nested.getString("label"));
     }
 
@@ -268,7 +268,7 @@ public class PropertyReflectorExtraTest
         map.put("bigInt", BigInteger.valueOf(7L));
         map.put("aString", "eight");
         map.put("aColl", List.of(9, 10));
-        map.put("anArray", new int[]{ 11, 12 });
+        map.put("anArray", new int[] { 11, 12 });
         map.put("nested", new SimpleNested("nine"));
 
         JsonObject json = PropertyReflector.toJsonObject(map);

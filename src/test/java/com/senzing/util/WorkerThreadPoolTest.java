@@ -54,11 +54,12 @@ public class WorkerThreadPoolTest
             if (baseName == null) {
                 assertTrue(threadName.startsWith(DEFAULT_BASE_NAME),
                            "Thread base name (" + threadName
-                    + ") does not have default prefix: " + DEFAULT_BASE_NAME);
+                           + ") does not have default prefix: "
+                           + DEFAULT_BASE_NAME);
             } else {
                 assertTrue(threadName.startsWith(baseName),
                            "Thread base name (" + threadName
-                    + ") does not have specified prefix: " + baseName);
+                           + ") does not have specified prefix: " + baseName);
             }
 
             // pause the pool
@@ -97,24 +98,24 @@ public class WorkerThreadPoolTest
             synchronized (completed) {
                 assertFalse(completed[0],
                             "Paused pool unexpectedly executed a task after "
-                    + "re-pause.");
+                            + "re-pause.");
             }
 
             assertFalse(pool.resume(null),
                         "Attempt to resume without an access token did "
-                + "not return false");
+                        + "not return false");
 
             Thread.sleep(100L);
 
             // check if paused
             assertTrue(pool.isPaused(),
                        "Pool is not registering as paused after resume "
-                + "with null token");
+                       + "with null token");
 
             synchronized (completed) {
                 assertFalse(completed[0],
                             "Paused pool unexpectedly executed a task after "
-                    + "resume with null token");
+                            + "resume with null token");
             }
 
             AccessToken fakeToken = new AccessToken();
@@ -129,12 +130,12 @@ public class WorkerThreadPoolTest
             // check if paused
             assertTrue(pool.isPaused(),
                        "Pool is not registering as paused after resume "
-                + "with invalid token.");
+                       + "with invalid token.");
 
             synchronized (completed) {
                 assertFalse(completed[0],
                             "Paused pool unexpectedly executed a task after "
-                    + "resume with invalid token");
+                            + "resume with invalid token");
             }
 
             // resume the pool for real

@@ -224,7 +224,7 @@ public class TimersExtraTest
 
         assertTrue(after >= before,
                    "Merged timer's elapsed time should be at least the "
-            + "pre-merge value");
+                   + "pre-merge value");
     }
 
     // -------------------------------------------------------------------

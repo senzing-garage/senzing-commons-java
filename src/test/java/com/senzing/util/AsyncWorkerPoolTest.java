@@ -140,21 +140,21 @@ public class AsyncWorkerPoolTest
         }
 
         assertTrue(pool.isBusy(), "Pool is not busy, but should be: " + tasks
-            + " tasks / " + poolSize
-            + " threads");
+                                  + " tasks / " + poolSize
+                                  + " threads");
         try {
             Thread.sleep(tasks * 200L);
         } catch (InterruptedException ignore) {
             // do nothing
         }
         assertFalse(pool.isBusy(), "Pool is busy, but should not be: " + tasks
-            + " tasks / " + poolSize
-            + " threads");
+                                   + " tasks / " + poolSize
+                                   + " threads");
 
         // close the pool
         pool.close();
         assertFalse(pool.isBusy(), "Closed pool is busy: " + tasks
-            + " tasks / " + poolSize
-            + " threads");
+                                   + " tasks / " + poolSize
+                                   + " threads");
     }
 }

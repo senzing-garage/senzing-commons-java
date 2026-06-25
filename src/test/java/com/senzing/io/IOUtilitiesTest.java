@@ -384,7 +384,7 @@ public class IOUtilitiesTest
                 } else {
                     assertNotEquals(isr, reader,
                                     "Readers are the same, not wrapped: "
-                        + encoding);
+                                    + encoding);
                 }
                 Reader bomReader = bomSkippingReader(bomISR, encoding);
                 if (!encoding.startsWith("UTF-")) {
@@ -396,7 +396,7 @@ public class IOUtilitiesTest
                 } else {
                     assertNotEquals(bomISR, bomReader,
                                     "Readers are the same, not wrapped: "
-                        + encoding);
+                                    + encoding);
                 }
 
                 // read the text
@@ -408,10 +408,10 @@ public class IOUtilitiesTest
 
             assertEquals(text, result,
                          "Text read via reader with no BOM does not match: "
-                + encoding);
+                         + encoding);
             assertEquals(text, bomResult,
                          "Text read via reader with BOM does not match: "
-                + encoding);
+                         + encoding);
         } catch (IOException e) {
             e.printStackTrace();
             fail("bomSkippingReaderTest() failed with exception: " + e);
@@ -458,10 +458,10 @@ public class IOUtilitiesTest
                  "New directory does NOT exist: " + newDirectory);
             assertTrue(newDirectory.isDirectory(),
                        "New directory exists but is not a directory: "
-                + newDirectory);
+                       + newDirectory);
             assertTrue(result,
                        "Directory created, but return value was false: "
-                + newDirectory);
+                       + newDirectory);
             newDirectory.deleteOnExit();
             result = createDirectoryIfMissing(newDirectory);
             assertTrue(newDirectory.exists(),
@@ -522,21 +522,21 @@ public class IOUtilitiesTest
 
             assertTrue(rootDir.exists() && rootDir.isDirectory(),
                        "Root directory does not exist or is not a directory: "
-                + rootDir);
+                       + rootDir);
             assertTrue(subDir.exists() && subDir.isDirectory(),
                        "Sub-directory does not exist or is not a directory: "
-                + subDir);
+                       + subDir);
             assertTrue(tmpFile1.exists() && !tmpFile1.isDirectory(),
                        "First temp file does not exist or is a directory: "
-                + tmpFile1);
+                       + tmpFile1);
             assertTrue(tmpFile2.exists() && !tmpFile2.isDirectory(),
                        "Second temp file does not exist or is a directory: "
-                + tmpFile2);
+                       + tmpFile2);
 
             int result = recursiveDeleteDirectory(rootDir);
 
             assertEquals(0, result, "Some files could not be deleted: "
-                + result);
+                                    + result);
 
             assertFalse(
                 tmpFile2.exists(),
@@ -544,13 +544,13 @@ public class IOUtilitiesTest
                     + tmpFile2);
             assertFalse(tmpFile1.exists(),
                         "First temp file still exists after recursive delete: "
-                + tmpFile1);
+                        + tmpFile1);
             assertFalse(subDir.exists(),
                         "Sub-directory still exists after recursive delete: "
-                + subDir);
+                        + subDir);
             assertFalse(rootDir.exists(),
                         "Root directory still exists after recursive delete: "
-                + rootDir);
+                        + rootDir);
         } catch (Exception e) {
             e.printStackTrace();
             fail("recursiveDeleteDirectoryTest() failed with exception: " + e);
@@ -578,16 +578,16 @@ public class IOUtilitiesTest
 
             boolean result = checkFilesDiffer(file1, file2);
             assertFalse(result, "Files show different, but are the same (1): "
-                + file1 + " vs " + file2);
+                                + file1 + " vs " + file2);
 
             result = checkFilesDiffer(file1, file2, false);
             assertFalse(result, "Files show different, but are the same (2): "
-                + file1 + " vs " + file2);
+                                + file1 + " vs " + file2);
 
             result = checkFilesDiffer(file1, file2, true);
             assertTrue(result,
                        "Files show the same despite different timestamps: "
-                + file1 + " vs " + file2);
+                       + file1 + " vs " + file2);
 
             // update modified timestamps to be the same
             long now = System.currentTimeMillis();
@@ -597,7 +597,7 @@ public class IOUtilitiesTest
             result = checkFilesDiffer(file1, file2, true);
             assertFalse(result,
                         "Files show the different despite same timestamps: "
-                + file1 + " vs " + file2);
+                        + file1 + " vs " + file2);
 
             // delete the files
             file1.delete();
@@ -626,16 +626,16 @@ public class IOUtilitiesTest
 
             boolean result = checkFilesDiffer(file1, file2);
             assertTrue(result, "Files show same, but are different (1): "
-                + file1 + " vs " + file2);
+                               + file1 + " vs " + file2);
 
             result = checkFilesDiffer(file1, file2, false);
             assertTrue(result, "Files show same, but are different (2): "
-                + file1 + " vs " + file2);
+                               + file1 + " vs " + file2);
 
             result = checkFilesDiffer(file1, file2, true);
             assertTrue(result,
                        "Files same despite different content & timestamps: "
-                + file1 + " vs " + file2);
+                       + file1 + " vs " + file2);
 
             file1.delete();
             file2.delete();
@@ -665,18 +665,18 @@ public class IOUtilitiesTest
 
             boolean result = checkFilesDiffer(file1, file1);
             assertFalse(result, "Files show different, but are same file: "
-                + file1);
+                                + file1);
 
             file1.delete();
 
             result = checkFilesDiffer(file1, file2);
             assertTrue(result, "Files show same, but one does not exist: "
-                + file1 + " vs " + file2);
+                               + file1 + " vs " + file2);
 
             file2.delete();
             result = checkFilesDiffer(file1, file2, false);
             assertFalse(result, "Files show different, but neither exist: "
-                + file1 + " vs " + file2);
+                                + file1 + " vs " + file2);
         } catch (Exception e) {
             e.printStackTrace();
             fail("checkFilesDifferTest() failed with exception: " + e);
@@ -703,10 +703,9 @@ public class IOUtilitiesTest
             assertTrue(newFile.exists(),
                   "Touched file does not exist: " + newFile);
 
-            assertTrue((result > now),
-                       "Last modified time of touched file (" + result
-                + ") is older than expected (" + now
-                + "): " + newFile);
+            assertTrue((result > now), "Last modified time of touched file ("
+                                       + result + ") is older than expected ("
+                                       + now + "): " + newFile);
 
             Thread.sleep(10);
 
@@ -717,8 +716,8 @@ public class IOUtilitiesTest
 
             assertTrue((result2 > result),
                        "Last modified time of retouched file (" + result2
-                + ") is older than expected (" + result
-                + "): " + newFile);
+                       + ") is older than expected (" + result
+                       + "): " + newFile);
         } catch (Exception e) {
             e.printStackTrace();
             fail("touchFileTest() failed with exception: " + e);

@@ -47,7 +47,7 @@ public class ErrorLogSuppressorExtraTest
         Result r = new Result(State.ACTIVE, 0);
         assertNotEquals("ACTIVE(0)", r,
                         "Result must not be equal to a String even with"
-            + " matching toString");
+                        + " matching toString");
     }
 
     @Test
@@ -56,7 +56,7 @@ public class ErrorLogSuppressorExtraTest
         Result a = new Result(State.SUPPRESSED, 5);
         Result b = new Result(State.SUPPRESSED, 5);
         assertEquals(a, b, "Two Result instances with identical state and "
-            + "suppressedCount must be equal");
+                           + "suppressedCount must be equal");
     }
 
     @Test

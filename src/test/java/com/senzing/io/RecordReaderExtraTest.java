@@ -263,7 +263,7 @@ public class RecordReaderExtraTest
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             System.setOut(new PrintStream(baos));
-            RecordReader.main(new String[]{ temp.getAbsolutePath() });
+            RecordReader.main(new String[] { temp.getAbsolutePath() });
         } finally {
             System.setOut(origOut);
         }
@@ -285,7 +285,7 @@ public class RecordReaderExtraTest
         PrintStream origErr = System.err;
         try {
             System.setErr(new PrintStream(new ByteArrayOutputStream()));
-            RecordReader.main(new String[]{ "/nonexistent/path/file.json" });
+            RecordReader.main(new String[] { "/nonexistent/path/file.json" });
         } finally {
             System.setErr(origErr);
         }
@@ -300,7 +300,7 @@ public class RecordReaderExtraTest
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             System.setOut(new PrintStream(baos));
-            RecordReader.main(new String[]{});
+            RecordReader.main(new String[] {});
         } finally {
             System.setOut(origOut);
         }

@@ -317,11 +317,11 @@ public class PropertyReflectorTest
                                  .toUpperCase()
                                  .endsWith(propName.toUpperCase()),
                            "Unexpected accessor method for '" + propName
-                    + "' property: " + method);
+                           + "' property: " + method);
                 assertTrue(method.getName().startsWith("get")
-                    || method.getName().startsWith("is"),
+                           || method.getName().startsWith("is"),
                            "Unexpected accessor method prefix for '"
-                    + propName + "' property: " + method);
+                           + propName + "' property: " + method);
             });
 
             setters.forEach((propName, methods) -> {
@@ -330,10 +330,10 @@ public class PropertyReflectorTest
                                      .toUpperCase()
                                      .endsWith(propName.toUpperCase()),
                                "Unexpected mutator method for '" + propName
-                        + "' property: " + method);
+                               + "' property: " + method);
                     assertTrue(method.getName().startsWith("set"),
                                "Unexpected mutator method prefix for '"
-                        + propName + "' property: " + method);
+                               + propName + "' property: " + method);
                 });
             });
         } catch (Exception e) {
@@ -388,7 +388,7 @@ public class PropertyReflectorTest
             // make sure the result is correct
             assertEquals(expectedValue, result,
                          "Unexpected result when getting property ("
-                + propertyKey + "), on target (" + target + ").");
+                         + propertyKey + "), on target (" + target + ").");
         } catch (Exception e) {
             // check if no failure is expected
             if (expectedFailure == null) {
@@ -489,8 +489,8 @@ public class PropertyReflectorTest
 
             assertEquals(propertyValue, result,
                          "Unexpected property value after setting property ("
-                + propertyKey + ") to value (" + propVal + "), on target ("
-                + target + ").");
+                         + propertyKey + ") to value (" + propVal
+                         + "), on target (" + target + ").");
         } catch (Exception e) {
             String propVal = (propertyValue == null)
                 ? ("" + null) : (propertyValue.getClass().getName() + ": "
@@ -789,7 +789,7 @@ public class PropertyReflectorTest
         }
         public int[] getArr()
         {
-            return new int[]{ 11, 12 };
+            return new int[] { 11, 12 };
         }
     }
 
@@ -885,7 +885,7 @@ public class PropertyReflectorTest
         reflector.setPropertyValue(bean, "tag", 42);
         assertEquals("I:42", bean.getTag(),
                      "Integer-to-int primitive promotion must select"
-            + " setTag(int)");
+                     + " setTag(int)");
     }
 
     /**
@@ -905,7 +905,7 @@ public class PropertyReflectorTest
         reflector.setPropertyValue(bean, "tag", now);
         assertTrue(bean.getTag().startsWith("O:"),
                    "Date should fall through to Object overload, got: "
-            + bean.getTag());
+                   + bean.getTag());
     }
 
     /**
@@ -924,7 +924,7 @@ public class PropertyReflectorTest
         reflector.setPropertyValue(bean, "name", null);
         assertNull(reflector.getPropertyValue(bean, "name"),
                    "Setting null on a non-primitive setter must succeed"
-            + " and produce a null value");
+                   + " and produce a null value");
     }
 
     /**
@@ -945,7 +945,7 @@ public class PropertyReflectorTest
             () -> reflector.setPropertyValue(bean, "count", null));
         assertTrue(npe.getMessage().contains("count"),
                    "NPE message must mention the property key: "
-            + npe.getMessage());
+                   + npe.getMessage());
     }
 
     // -------------------------------------------------------------------
@@ -1028,7 +1028,7 @@ public class PropertyReflectorTest
         JsonObject json = PropertyReflector.toJsonObject(input);
         assertFalse(json.containsKey("1"),
                     "Non-String-keyed map must not be exposed as JSON"
-            + " entries: " + json);
+                    + " entries: " + json);
         assertFalse(json.containsKey("2"));
     }
 }

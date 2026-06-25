@@ -143,7 +143,7 @@ public class TemporaryDataCacheTest
 
             assertEquals(tempDir, tdc.getDirectory(),
                          "TemporaryDataCache.getDirectory() has unexpected "
-                + "directory.");
+                         + "directory.");
 
             try (InputStream is = tdc.getInputStream();
                  BufferedInputStream bis = new BufferedInputStream(is))
@@ -305,7 +305,7 @@ public class TemporaryDataCacheTest
                 }
                 assertTrue(tdc.isDeleted(),
                            "TemporaryDataCache NOT marked deleted after "
-                    + "consuming all data");
+                           + "consuming all data");
                 tdc.delete();
             }
         } catch (RuntimeException | IOException e) {
@@ -670,11 +670,11 @@ public class TemporaryDataCacheTest
                     long skipped = in.skip(skipAmount);
                     assertEquals(skipAmount, skipped,
                                  "Skip must advance by the requested amount"
-                        + " when bytes are available");
+                                 + " when bytes are available");
                     int actualByte = in.read();
                     assertEquals(expectedByte, actualByte,
                                  "Byte after skip must match source-file byte"
-                        + " at the same offset");
+                                 + " at the same offset");
                 }
             } finally {
                 tdc.delete();
@@ -877,7 +877,7 @@ public class TemporaryDataCacheTest
         assertEquals(0, cmpA.compareTo(cmpD));
         assertTrue(cmpA.compareTo(cmpB) < 0,
                    "Smaller length must sort before larger when offsets"
-            + " match");
+                   + " match");
         assertTrue(cmpB.compareTo(cmpA) > 0);
         assertTrue(cmpA.compareTo(cmpC) < 0,
                "Smaller offset must sort before larger");

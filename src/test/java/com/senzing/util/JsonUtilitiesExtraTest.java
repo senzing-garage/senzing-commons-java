@@ -499,8 +499,8 @@ public class JsonUtilitiesExtraTest
         addProperty(job, "date", Date.from(Instant.parse(
             "2025-01-01T00:00:00Z")));
         addProperty(job, "instant", Instant.parse("2025-02-02T00:00:00Z"));
-        addProperty(job, "intArray", new int[]{ 1, 2, 3 });
-        addProperty(job, "objArray", new String[]{ "a", "b" });
+        addProperty(job, "intArray", new int[] { 1, 2, 3 });
+        addProperty(job, "objArray", new String[] { "a", "b" });
         addProperty(job, "list", List.of("c", "d"));
         addProperty(job, "stringMap", Map.of("k1", "v1", "k2", 2));
         Map<Object, Object> nonStringKeys = new LinkedHashMap<>();
@@ -574,7 +574,7 @@ public class JsonUtilitiesExtraTest
         addElement(jab, new BigDecimal("7.7"));
         addElement(jab, Date.from(Instant.parse("2025-01-01T00:00:00Z")));
         addElement(jab, Instant.parse("2025-02-02T00:00:00Z"));
-        addElement(jab, new int[]{ 1, 2, 3 });
+        addElement(jab, new int[] { 1, 2, 3 });
         addElement(jab, List.of("c", "d"));
         addElement(jab, Map.of("k", "v"));
         Map<Object, Object> nonStringMap = new LinkedHashMap<>();

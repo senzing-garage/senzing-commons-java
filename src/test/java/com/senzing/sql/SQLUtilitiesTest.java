@@ -250,7 +250,7 @@ public class SQLUtilitiesTest
     {
         CallableStatement cs = (CallableStatement) Proxy.newProxyInstance(
             SQLUtilitiesTest.class.getClassLoader(),
-            new Class<?>[]{ CallableStatement.class },
+            new Class<?>[] { CallableStatement.class },
             (proxy, method, args) -> {
                 if ("isClosed".equals(method.getName())) return true;
                 return null;
@@ -293,7 +293,7 @@ public class SQLUtilitiesTest
     {
         Connection conn = (Connection) Proxy.newProxyInstance(
             SQLUtilitiesTest.class.getClassLoader(),
-            new Class<?>[]{ Connection.class },
+            new Class<?>[] { Connection.class },
             (proxy, method, args) -> {
                 throw new SQLException("simulated");
             });
@@ -301,7 +301,7 @@ public class SQLUtilitiesTest
 
         Statement stmt = (Statement) Proxy.newProxyInstance(
             SQLUtilitiesTest.class.getClassLoader(),
-            new Class<?>[]{ Statement.class },
+            new Class<?>[] { Statement.class },
             (proxy, method, args) -> {
                 throw new SQLException("simulated");
             });
@@ -309,7 +309,7 @@ public class SQLUtilitiesTest
 
         ResultSet rs = (ResultSet) Proxy.newProxyInstance(
             SQLUtilitiesTest.class.getClassLoader(),
-            new Class<?>[]{ ResultSet.class },
+            new Class<?>[] { ResultSet.class },
             (proxy, method, args) -> {
                 throw new SQLException("simulated");
             });
@@ -367,7 +367,7 @@ public class SQLUtilitiesTest
     {
         Connection failing = (Connection) Proxy.newProxyInstance(
             SQLUtilitiesTest.class.getClassLoader(),
-            new Class<?>[]{ Connection.class },
+            new Class<?>[] { Connection.class },
             (proxy, method, args) -> {
                 if ("rollback".equals(method.getName())) {
                     throw new SQLException("simulated rollback failure");
@@ -387,7 +387,7 @@ public class SQLUtilitiesTest
                  "Stderr must contain the diagnostic prefix: " + err);
             assertTrue(err.contains("simulated rollback failure"),
                        "Stderr must contain the underlying SQLException"
-                + " message: " + err);
+                       + " message: " + err);
         } finally {
             System.setErr(originalErr);
         }
@@ -989,10 +989,10 @@ public class SQLUtilitiesTest
         System.setOut(new PrintStream(captured, true,
                                   StandardCharsets.UTF_8));
         try {
-            SQLUtilities.main(new String[]{ "jdbc:sqlite::memory:" });
+            SQLUtilities.main(new String[] { "jdbc:sqlite::memory:" });
             String out = captured.toString(StandardCharsets.UTF_8);
             assertTrue(out.contains("jdbc:sqlite::memory:")
-                && out.toUpperCase().contains("SQLITE"),
+                       && out.toUpperCase().contains("SQLITE"),
                        "Output must include the URL and product name: " + out);
         } finally {
             System.setOut(originalOut);
@@ -1014,7 +1014,7 @@ public class SQLUtilitiesTest
                                   StandardCharsets.UTF_8));
         try {
             // Must not throw despite the bad URL.
-            SQLUtilities.main(new String[]{ "definitely-not-a-jdbc-url" });
+            SQLUtilities.main(new String[] { "definitely-not-a-jdbc-url" });
         } finally {
             System.setErr(originalErr);
         }

@@ -112,7 +112,7 @@ public class AccessTokenTest
 
             assertEquals(0, failureSet.size(),
                          "At least one of the threads claimed the same access "
-                + "token on repeated calls: " + failureSet);
+                         + "token on repeated calls: " + failureSet);
 
             assertEquals(LOOP_COUNT * THREAD_COUNT, tokenSet.size(),
                    "Not all claimed access tokens were unique.");

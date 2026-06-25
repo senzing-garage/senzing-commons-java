@@ -42,7 +42,7 @@ public class CommandLineUtilitiesFallbackTest
             CommandLineValue val = result.get(RUN);
             assertNotNull(val,
                           "Primary option should be populated from fallback"
-                + " env var when primary/synonym are unset");
+                          + " env var when primary/synonym are unset");
             assertEquals("SENZING_PRIMARY_FALLBACK_RUN", val.getSpecifier(),
                        "Specifier should be the fallback env var name");
             assertEquals("fallback-value", val.getProcessedValue());

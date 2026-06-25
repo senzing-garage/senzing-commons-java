@@ -36,7 +36,7 @@ public class ConnectionProviderTest
     {
         assertNotNull(ConnectionProvider.REGISTRY,
                       "ConnectionProvider.REGISTRY must be initialized"
-            + " non-null");
+                      + " non-null");
     }
 
     /**

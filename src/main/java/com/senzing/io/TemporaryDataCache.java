@@ -612,7 +612,7 @@ public class TemporaryDataCache
 
                     int logInterval = (int) (Math.max(100, Math.pow(10,
                                                                     countLog10)
-                                             * Math.max(1, countLog10 - 1)));
+                        * Math.max(1, countLog10 - 1)));
 
                     if ((this.currentWriteCount % logInterval) == 0) {
                         logDebug("Bytes written to file: " + this.currentFile
@@ -955,7 +955,7 @@ public class TemporaryDataCache
                             boolean truncated = (isr.read() >= 0);
 
                             logDebug("Reading file part "
-                                + this.currentFileIndex + ": " + filePart,
+                                     + this.currentFileIndex + ": " + filePart,
                                      (truncated ? "CONTENTS:" : "PREVIEW"),
                                      "-------------------------------------",
                                      sb.toString(),

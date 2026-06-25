@@ -369,7 +369,7 @@ public class SQLiteConnectorTest
         File leaked = new File(":memory:?mode=memory");
         assertFalse(leaked.exists(),
                     "Memory-mode open must not create a file in CWD: "
-            + leaked.getAbsolutePath());
+                    + leaked.getAbsolutePath());
     }
 
     // -------------------------------------------------------------------

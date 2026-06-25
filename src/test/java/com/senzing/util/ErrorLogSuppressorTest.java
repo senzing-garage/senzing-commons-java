@@ -43,7 +43,7 @@ public class ErrorLogSuppressorTest
                      "Unexpected error count before update: " + index);
                 assertEquals(index, suppressor.getPeriodCount(),
                              "Unexpected period error count before update: "
-                    + index);
+                             + index);
 
                 // update the suppressor on error
                 result = suppressor.updateOnError();
@@ -53,7 +53,7 @@ public class ErrorLogSuppressorTest
 
                 assertEquals(index + 1, suppressor.getPeriodCount(),
                              "Unexpected period error count after update: "
-                    + index);
+                             + index);
                 if (index >= 5) {
                     assertTrue(suppressor.isSuppressing(),
                         "Suppressor is not suppressing: " + index);
@@ -75,7 +75,7 @@ public class ErrorLogSuppressorTest
             result = suppressor.updateOnError();
             assertEquals(REACTIVATED, result.getState(),
                          "ErrorLogSuppressorResult has wrong state after "
-                + "reactivation.");
+                         + "reactivation.");
             assertEquals(5, result.getSuppressedCount(),
                    "Wrong suppressed count after reactivation");
             assertFalse(suppressor.isSuppressing(),
@@ -88,7 +88,7 @@ public class ErrorLogSuppressorTest
             result = suppressor.updateOnError();
             assertEquals(ACTIVE, result.getState(),
                          "ErrorLogSuppressorResult has wrong state after "
-                + "reactivation.");
+                         + "reactivation.");
             assertEquals(0, result.getSuppressedCount(),
                    "Wrong suppressed count after reactivation");
             assertFalse(suppressor.isSuppressing(),

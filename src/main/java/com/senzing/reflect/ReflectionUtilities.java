@@ -476,7 +476,7 @@ public class ReflectionUtilities
     public static Object restrictedProxy(Object     targetObject,
                                          Method...  restrictedMethods)
     {
-        Objects.requireNonNull(targetObject, 
+        Objects.requireNonNull(targetObject,
                 "The target object cannot be null");
 
         // get the class loader
@@ -514,7 +514,7 @@ public class ReflectionUtilities
                                          Method...      restrictedMethods)
     {
         // check the target object
-        Objects.requireNonNull(targetObject, 
+        Objects.requireNonNull(targetObject,
                        "The target object cannot be null");
         Objects.requireNonNull(classLoader, "The class loader cannot be null");
 

@@ -42,20 +42,20 @@ public class AsyncWorkerPoolExtraTest
             });
             assertEquals(null, first,
                          "First execute() returns previous result, which"
-                + " is null on a fresh worker");
+                         + " is null on a fresh worker");
 
             // Second call: returns the previous (failed) AsyncResult.
             // Submit a no-op as the new task.
             AsyncResult<String> previous = pool.execute(() -> "ok");
             assertNotNull(previous, "Second execute should return the previous"
-                + " AsyncResult");
+                                    + " AsyncResult");
 
             // getValue on the failed result must rethrow.
             Exception thrown
                 = assertThrows(Exception.class, previous::getValue);
             assertSame(expected, thrown,
                        "AsyncResult.getValue() must rethrow the task's"
-                + " original exception verbatim");
+                       + " original exception verbatim");
         } finally {
             pool.close();
         }
@@ -81,7 +81,7 @@ public class AsyncWorkerPoolExtraTest
             String s = previous.toString();
             assertTrue(s.contains("failure=["),
                        "toString must include 'failure=[...]' for a failed"
-                + " AsyncResult; got: " + s);
+                       + " AsyncResult; got: " + s);
         } finally {
             pool.close();
         }
@@ -105,7 +105,7 @@ public class AsyncWorkerPoolExtraTest
             String s = previous.toString();
             assertTrue(!s.contains("failure="),
                        "toString must omit 'failure=' for a successful"
-                + " AsyncResult; got: " + s);
+                       + " AsyncResult; got: " + s);
             assertTrue(s.contains("success-value"),
                  "toString must include the value: " + s);
         } finally {

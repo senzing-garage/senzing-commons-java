@@ -133,7 +133,8 @@ public class TimersTest
         long duration = (end - start) / 1000000L;
         long elapsed = timers.getElapsedTime("foo");
         assertTrue((elapsed <= duration), "The elapsed time (" + elapsed
-            + ") exceeds the bookend " + "duration (" + duration + ").");
+                                          + ") exceeds the bookend "
+                                          + "duration (" + duration + ").");
 
         Map<String, Long> timings = timers.getTimings();
         assertEquals(timings.get("foo"), elapsed,
@@ -180,7 +181,10 @@ public class TimersTest
                         + timerName + ") not " + "registering as running: "
                         + timers);
                     assertFalse(timers.isPaused(timerName), "Running timer ("
-                        + timerName + ") unexpectedly " + "paused: " + timers);
+                                                            + timerName
+                                                            + ") unexpectedly "
+                                                            + "paused: "
+                                                            + timers);
                 }
             }
 
@@ -202,7 +206,7 @@ public class TimersTest
 
             assertEquals(timerNameSet, timings.keySet(),
                          "Timings does not have expected timer names: "
-                + timings);
+                         + timings);
 
             timings.forEach((key, value) -> {
                 if (pauseSet.contains(key)) {
@@ -239,7 +243,7 @@ public class TimersTest
                 if (pauseSet.contains(timerName)) {
                     assertTrue(timers.isRunning(timerName),
                                "Resumed timer (" + timerName
-                        + ") not registering as running: " + timers);
+                               + ") not registering as running: " + timers);
                     assertFalse(timers.isPaused(timerName), "Resumed timer ("
                         + timerName + ") still " + "registering as paused: "
                         + timers);
@@ -264,7 +268,7 @@ public class TimersTest
 
             assertEquals(timerNameSet, timings.keySet(),
                          "Timings does not have expected timer names: "
-                + timings);
+                         + timings);
 
             timings.forEach(
                 (key, value) -> {
@@ -340,7 +344,7 @@ public class TimersTest
             for (String timerName : timerNameSet) {
                 assertTrue(timers.isPaused(timerName),
                            "Paused timer (" + timerName + ") not registering "
-                    + "as paused: " + timers);
+                           + "as paused: " + timers);
                 assertFalse(timers.isRunning(timerName), "Paused timer ("
                     + timerName + ") still " + "registering as running: "
                     + timers);
@@ -364,7 +368,7 @@ public class TimersTest
 
             assertEquals(timerNameSet, timings.keySet(),
                          "Timings does not have expected timer names: "
-                + timings);
+                         + timings);
 
             timings.forEach((key, value) -> {
                 assertTrue((value >= prePause), "Paused timer (" + key
@@ -390,8 +394,10 @@ public class TimersTest
 
             for (String timerName : timerNameSet) {
                 assertTrue(timers.isRunning(timerName), "Resumed timer ("
-                    + timerName + ") not registering " + "as running: "
-                    + timers);
+                                                        + timerName
+                                                        + ") not registering "
+                                                        + "as running: "
+                                                        + timers);
                 assertFalse(timers.isPaused(timerName), "Resumed timer ("
                     + timerName + ") still " + "registering as paused: "
                     + timers);
@@ -406,7 +412,7 @@ public class TimersTest
 
             assertEquals(timerNameSet, timings.keySet(),
                          "Timings does not have expected timer names: "
-                + timings);
+                         + timings);
 
             timings.forEach(
                 (key, value) -> {
@@ -468,15 +474,15 @@ public class TimersTest
             timings.forEach((key, value) -> {
                 if (delayedSet.contains(key)) {
                     assertTrue((value >= duration2b), "Delayed timer (" + key
-                        + ") value (" + value
-                        + ") should not be less than " + duration2b);
+                        + ") value (" + value + ") should not be less than "
+                        + duration2b);
                     assertTrue((value <= duration2a), "Delayed timer (" + key
                         + ") value (" + value
                         + ") should not be greater than " + duration2a);
                 } else {
                     assertTrue((value >= duration1b), "Initial timer (" + key
-                        + ") value (" + value
-                        + ") should not be less than " + duration1b);
+                        + ") value (" + value + ") should not be less than "
+                        + duration1b);
                     assertTrue((value <= duration1a), "Initial timer (" + key
                         + ") value (" + value
                         + ") should not be greater than " + duration1a);
@@ -515,11 +521,11 @@ public class TimersTest
                             + timerName + " ]");
                 } else {
                     assertTrue(timings2.get(timerName)
-                        > timings1.get(timerName),
+                               > timings1.get(timerName),
                                "Running timer value dod not increase.  "
-                        + "timerName=[ " + timerName + " ], value1=[ "
-                        + timings1.get(timerName) + " ], value2=[ "
-                        + timings2.get(timerName) + " ]");
+                               + "timerName=[ " + timerName + " ], value1=[ "
+                               + timings1.get(timerName) + " ], value2=[ "
+                               + timings2.get(timerName) + " ]");
                 }
             }
         } catch (Exception e) {

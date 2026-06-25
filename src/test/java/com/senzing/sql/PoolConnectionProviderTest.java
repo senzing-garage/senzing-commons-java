@@ -45,7 +45,7 @@ public class PoolConnectionProviderTest
             PoolConnectionProvider provider = new PoolConnectionProvider(pool);
             assertEquals(-1L, provider.getMaximumWaitTime(),
                          "Single-arg constructor must default to indefinite "
-                + "wait (-1L)");
+                         + "wait (-1L)");
         } finally {
             pool.shutdown();
         }
@@ -152,7 +152,7 @@ public class PoolConnectionProviderTest
                 = assertThrows(SQLException.class, provider::getConnection);
             assertTrue(sqe.getMessage().contains("could not be obtained"),
                        "SQLException message must mention the failure: "
-                + sqe.getMessage());
+                       + sqe.getMessage());
         } finally {
             if (leased != null) {
                 leased.close();

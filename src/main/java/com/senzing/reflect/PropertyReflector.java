@@ -291,28 +291,28 @@ public class PropertyReflector<T>
      * primitive equivalent if (primType != null) { // get the corresponding
      * promoted type from the primitive type Class promotedType =
      * getPromotedType(primType);
-     * 
+     *
      * // check if the promoted type extends java.lang.Number if
      * (Number.class.isAssignableFrom(promotedType)) { // get the value as a
      * Number Number numberValue = (Number) propertyValue;
-     * 
+     *
      * // iterate over the methods for (Method method : methods) { // get the
      * argument type Class argType = method.getParameterTypes()[0];
-     * 
+     *
      * // check if the argument type is primitive and if so then promote it if
      * (argType.isPrimitive()) { argType = getPromotedType(argType); }
-     * 
+     *
      * // test the argument type if a primitive number if
      * (!Number.class.isAssignableFrom(argType)) continue; if
      * (getPrimitiveType(argType) == null) continue;
-     * 
+     *
      * // convert the value to the primitive number type Object convertedValue =
      * convertPrimitiveNumber(numberValue, argType);
-     * 
+     *
      * try { // invoke the method method.invoke(target, convertedValue);
-     * 
+     *
      * // return here since invoked return;
-     * 
+     *
      * } catch (InvocationTargetException | IllegalAccessException e) { throw
      * new RuntimeException(e); } } } }
      */

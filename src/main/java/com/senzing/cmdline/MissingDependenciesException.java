@@ -30,10 +30,10 @@ public class MissingDependenciesException extends SpecifiedOptionException
                                       String                  specifier,
                                       Set<CommandLineOption>  specifiedOptions)
     {
-        super(source, option, specifier, buildErrorMessage(source, 
-                            option, 
+        super(source, option, specifier, buildErrorMessage(source,
+                            option,
                             option.getDependencies(),
-                            specifier, 
+                            specifier,
                             specifiedOptions));
     }
 

@@ -270,7 +270,7 @@ public class LoggingUtilitiesTest
             }
             assertTrue(isDebugLogging(),
                        "After popping the false override, the true override"
-                + " must be visible again");
+                       + " must be visible again");
         } finally {
             clearDebugOverride();
         }
@@ -582,7 +582,7 @@ public class LoggingUtilitiesTest
         String[] parts = result.split("\\R");
         assertEquals(3, parts.length,
                      "Three input lines must produce three output lines: "
-            + result);
+                     + result);
     }
 
     /**
@@ -658,7 +658,7 @@ public class LoggingUtilitiesTest
         assertSame(ex, thrown);
         assertTrue(isLastLoggedException(ex),
                    "After setLastLoggedAndThrow, isLastLoggedException"
-            + " must report true");
+                   + " must report true");
     }
 
     /**
@@ -714,8 +714,8 @@ public class LoggingUtilitiesTest
         setLastLoggedException(wrapper);
 
         assertTrue(isLastLoggedException(cause)
-            || isLastLoggedException(wrapper),
+                   || isLastLoggedException(wrapper),
                    "Either the wrapper or its cause must register as the"
-            + " last logged exception");
+                   + " last logged exception");
     }
 }

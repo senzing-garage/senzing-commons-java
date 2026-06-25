@@ -176,7 +176,7 @@ public class RecordReaderTest
             RecordReader rr = new RecordReader(sr);
             assertEquals(CSV, rr.getFormat(),
                          "Record format is not as expected for records: "
-                + csvText);
+                         + csvText);
 
             // test first record
             JsonObject record1 = rr.readRecord();
@@ -216,7 +216,7 @@ public class RecordReaderTest
             RecordReader rr = new RecordReader(sr);
             assertEquals(CSV, rr.getFormat(),
                          "Record format is not as expected for records: "
-                + this.csvRecords);
+                         + this.csvRecords);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed with I/O exception", e);
@@ -231,7 +231,7 @@ public class RecordReaderTest
             RecordReader rr = new RecordReader(sr);
             assertEquals(JSON, rr.getFormat(),
                          "Record format is not as expected for records: "
-                + this.jsonRecords);
+                         + this.jsonRecords);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed with I/O exception", e);
@@ -246,7 +246,7 @@ public class RecordReaderTest
             RecordReader rr = new RecordReader(sr);
             assertEquals(JSON_LINES, rr.getFormat(),
                          "Record format is not as expected for records: "
-                + this.jsonLinesRecords);
+                         + this.jsonLinesRecords);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed with I/O exception", e);
@@ -472,7 +472,7 @@ public class RecordReaderTest
         RecordReader reader = new RecordReader(new StringReader("   \n\t "));
         assertSame(RecordReader.Format.JSON_LINES, reader.getFormat(),
                    "Empty/whitespace-only input must default to"
-            + " JSON_LINES");
+                   + " JSON_LINES");
     }
 
     /**

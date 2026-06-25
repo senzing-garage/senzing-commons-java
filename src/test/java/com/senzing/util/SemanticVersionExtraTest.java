@@ -180,7 +180,7 @@ public class SemanticVersionExtraTest
     {
         SystemOut out = new SystemOut();
         out.execute(() -> {
-            SemanticVersion.main(new String[]{ "1.2.3" });
+            SemanticVersion.main(new String[] { "1.2.3" });
         });
 
         String output = out.getText();
@@ -201,7 +201,7 @@ public class SemanticVersionExtraTest
     {
         SystemOut out = new SystemOut();
         out.execute(() -> {
-            SemanticVersion.main(new String[]{ "1.2.3", "1.2.4", "1.2.3" });
+            SemanticVersion.main(new String[] { "1.2.3", "1.2.4", "1.2.3" });
         });
 
         String output = out.getText();

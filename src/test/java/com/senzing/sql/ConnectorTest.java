@@ -83,11 +83,11 @@ public class ConnectorTest
         assertEquals(true, formatted.startsWith("?"),
                  "Output must start with '?'");
         assertEquals(true, formatted.contains("name+with+space")
-            || formatted.contains("name%20with%20space"),
+                           || formatted.contains("name%20with%20space"),
                      "Key spaces must be URL-encoded: " + formatted);
         assertEquals(true, formatted.contains("%26")
-            && formatted.contains("%3D"),
+                           && formatted.contains("%3D"),
                      "'&' and '=' in value must be percent-encoded: "
-            + formatted);
+                     + formatted);
     }
 }
