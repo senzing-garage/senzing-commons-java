@@ -33,7 +33,7 @@ public class BadOptionParameterCountException extends SpecifiedOptionException
                                           List<String>      params)
     {
         super(source, option, specifier,
-          buildErrorMessage(source, option, specifier, params));
+            buildErrorMessage(source, option, specifier, params));
     }
 
     /**
@@ -89,11 +89,13 @@ public class BadOptionParameterCountException extends SpecifiedOptionException
             sb.append("many");
         } else {
             throw new IllegalArgumentException(
-          "The specified parameter list has a parameter count that is valid "
-              + "for the specified option.  source=[ " + source + " ], "
-              + "option=[ " + option + " ], specifier=[ " + specifier
-              + " ], count=[ " + paramCount + " ], minCount=[ " + minCount
-              + " ], maxCount=[ " + maxCount + " ], params=[ " + params + " ]");
+                "The specified parameter list has a "
+                    + "parameter count that is valid for "
+                    + "the specified option.  source=[ " + source + " ], "
+                    + "option=[ " + option + " ], specifier=[ " + specifier
+                    + " ], count=[ " + paramCount + " ], minCount=[ "
+                    + minCount + " ], maxCount=[ " + maxCount + " ], params=[ "
+                    + params + " ]");
         }
         sb.append(" parameters for the ");
         sb.append(SpecifiedOption.sourceDescriptor(source, option, specifier));

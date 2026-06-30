@@ -97,17 +97,16 @@ public class SzUtilitiesTest
     public void startsWithDatabaseUriPrefixAcceptsLegalPrefixes()
     {
         assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-        "sqlite3:///tmp/x.db"));
+            "sqlite3:///tmp/x.db"));
         assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-        "postgresql://host:5432/db"));
+            "postgresql://host:5432/db"));
         assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-        "mysql://host:3306/db"));
+            "mysql://host:3306/db"));
         assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-        "db2://host:50000/db"));
+            "db2://host:50000/db"));
+        assertTrue(SzUtilities.startsWithDatabaseUriPrefix("oci://host/orcl"));
         assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-        "oci://host/orcl"));
-        assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-        "mssql://host:1433/db"));
+            "mssql://host:1433/db"));
     }
 
     /**
@@ -117,7 +116,7 @@ public class SzUtilitiesTest
     public void startsWithDatabaseUriPrefixRejectsUnknownPrefix()
     {
         assertFalse(SzUtilities.startsWithDatabaseUriPrefix(
-        "https://example.com/db"));
+            "https://example.com/db"));
         assertFalse(SzUtilities.startsWithDatabaseUriPrefix("just text"));
         assertFalse(SzUtilities.startsWithDatabaseUriPrefix(""));
     }
@@ -131,8 +130,7 @@ public class SzUtilitiesTest
     {
         assertEquals(6, SzUtilities.DATABASE_URI_PREFIXES.size());
         assertTrue(SzUtilities.DATABASE_URI_PREFIXES.contains("sqlite3://"));
-        assertTrue(SzUtilities.DATABASE_URI_PREFIXES.contains(
-        "postgresql://"));
+        assertTrue(SzUtilities.DATABASE_URI_PREFIXES.contains("postgresql://"));
         assertTrue(SzUtilities.DATABASE_URI_PREFIXES.contains("mysql://"));
         assertTrue(SzUtilities.DATABASE_URI_PREFIXES.contains("db2://"));
         assertTrue(SzUtilities.DATABASE_URI_PREFIXES.contains("oci://"));
@@ -200,7 +198,7 @@ public class SzUtilitiesTest
     {
         System.setProperty("senzing.path", install.root().toString());
         assertThrows(IllegalArgumentException.class,
-                 () -> SzUtilities.basicSettingsFromDatabaseUri(
+                     () -> SzUtilities.basicSettingsFromDatabaseUri(
                      "ftp://nope/db"));
     }
 
@@ -235,7 +233,7 @@ public class SzUtilitiesTest
     public void basicSettingsFromDatabaseUriBase64ThrowsNpeForNullUri()
     {
         assertThrows(NullPointerException.class,
-                 () -> SzUtilities.basicSettingsFromDatabaseUri(
+                     () -> SzUtilities.basicSettingsFromDatabaseUri(
                      null, "base64"));
     }
 
@@ -251,7 +249,7 @@ public class SzUtilitiesTest
         System.setProperty("senzing.path", install.root().toString());
 
         String json = SzUtilities.basicSettingsFromDatabaseUri(
-        "sqlite3:///tmp/test.db", "TEST_BASE64_LICENSE");
+            "sqlite3:///tmp/test.db", "TEST_BASE64_LICENSE");
         JsonObject pipeline = parse(json).getJsonObject("PIPELINE");
         assertEquals("TEST_BASE64_LICENSE",
                  pipeline.getString("LICENSESTRINGBASE64"));
@@ -269,7 +267,7 @@ public class SzUtilitiesTest
     public void basicSettingsFromDatabaseUriFileThrowsNpeForNullUri()
     {
         assertThrows(NullPointerException.class,
-                 () -> SzUtilities.basicSettingsFromDatabaseUri(
+                     () -> SzUtilities.basicSettingsFromDatabaseUri(
                      null, new File("/tmp/license")));
     }
 
@@ -287,7 +285,7 @@ public class SzUtilitiesTest
         licenseFile.createNewFile();
 
         String json = SzUtilities.basicSettingsFromDatabaseUri(
-        "sqlite3:///tmp/test.db", licenseFile);
+            "sqlite3:///tmp/test.db", licenseFile);
         JsonObject pipeline = parse(json).getJsonObject("PIPELINE");
         assertEquals(licenseFile.getCanonicalPath(),
                  pipeline.getString("LICENSEFILE"));
@@ -333,8 +331,8 @@ public class SzUtilitiesTest
     {
         System.setProperty("senzing.path", install.root().toString());
 
-        SQLiteConnector connector = new SQLiteConnector(
-        tempDir.resolve("schema.db").toString());
+        SQLiteConnector connector
+            = new SQLiteConnector(tempDir.resolve("schema.db").toString());
         try (Connection conn = connector.openConnection()) {
             boolean created = SzUtilities.ensureSenzingSQLiteSchema(conn);
             assertTrue(created,
@@ -355,13 +353,13 @@ public class SzUtilitiesTest
         System.setProperty("senzing.path", install.root().toString());
 
         SQLiteConnector connector = new SQLiteConnector(
-        tempDir.resolve("schema-idempotent.db").toString());
+            tempDir.resolve("schema-idempotent.db").toString());
         try (Connection conn = connector.openConnection()) {
             assertTrue(SzUtilities.ensureSenzingSQLiteSchema(conn),
                  "First call returns true");
             assertFalse(SzUtilities.ensureSenzingSQLiteSchema(conn),
-                  "Second call must detect existing schema and"
-                      + " return false");
+                        "Second call must detect existing schema and"
+                        + " return false");
         }
     }
 
@@ -385,25 +383,23 @@ public class SzUtilitiesTest
     private static Connection nonSqliteConnectionProxy()
     {
         DatabaseMetaData md = (DatabaseMetaData) Proxy.newProxyInstance(
-        SzUtilitiesTest.class.getClassLoader(),
-        new Class<?>[] { DatabaseMetaData.class },
-        (proxy, method, args) -> {
-          if ("getDatabaseProductName".equals(method.getName())) {
-            return "PostgreSQL";
-          }
-          return null;
-        });
+            SzUtilitiesTest.class.getClassLoader(),
+            new Class<?>[] { DatabaseMetaData.class },
+            (proxy, method, args) -> {
+                if ("getDatabaseProductName".equals(method.getName())) {
+                    return "PostgreSQL";
+                }
+                return null;
+            });
         return (Connection) Proxy.newProxyInstance(
-        SzUtilitiesTest.class.getClassLoader(),
-        new Class<?>[] { Connection.class },
-        (proxy, method, args) -> {
-          if ("getMetaData".equals(method.getName())) {
-            return md;
-          }
-          // for primitive returns, return null/default as appropriate
-          if (method.getReturnType() == boolean.class) return false;
-          if (method.getReturnType().isPrimitive()) return 0;
-          return null;
-        });
+            SzUtilitiesTest.class.getClassLoader(),
+            new Class<?>[] { Connection.class },
+            (proxy, method, args) -> {
+                if ("getMetaData".equals(method.getName())) return md;
+                // for primitive returns, return null/default as appropriate
+                if (method.getReturnType() == boolean.class) return false;
+                if (method.getReturnType().isPrimitive()) return 0;
+                return null;
+            });
     }
 }

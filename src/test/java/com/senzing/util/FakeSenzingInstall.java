@@ -55,10 +55,10 @@ final class FakeSenzingInstall implements AutoCloseable
             // single CREATE TABLE — comment-only lines would fail the
             // SQLite JDBC execute() call.
             Files.writeString(
-          root.resolve("er/resources/schema/"
-                       + "szcore-schema-sqlite-create.sql"),
-          "CREATE TABLE FAKE_SZ_FIXTURE_TABLE"
-              + " (id INTEGER PRIMARY KEY);\n");
+                root.resolve("er/resources/schema/"
+                             + "szcore-schema-sqlite-create.sql"),
+                "CREATE TABLE FAKE_SZ_FIXTURE_TABLE"
+                    + " (id INTEGER PRIMARY KEY);\n");
             Files.createDirectories(root.resolve("data"));
             return new FakeSenzingInstall(root);
         } catch (IOException e) {
@@ -116,11 +116,11 @@ final class FakeSenzingInstall implements AutoCloseable
         if (dir == null || !Files.exists(dir)) return;
         try (var stream = Files.walk(dir)) {
             stream.sorted(Comparator.reverseOrder()).forEach(p -> {
-              try {
-                Files.delete(p);
-              } catch (IOException e) {
-                throw new UncheckedIOException(e);
-              }
+                try {
+                    Files.delete(p);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
             });
         } catch (UncheckedIOException e) {
             throw e.getCause();

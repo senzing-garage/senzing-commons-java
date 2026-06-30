@@ -30,11 +30,10 @@ public class MissingDependenciesException extends SpecifiedOptionException
                                       String                  specifier,
                                       Set<CommandLineOption>  specifiedOptions)
     {
-        super(source, option, specifier,
-          buildErrorMessage(source, 
-                            option, 
+        super(source, option, specifier, buildErrorMessage(source,
+                            option,
                             option.getDependencies(),
-                            specifier, 
+                            specifier,
                             specifiedOptions));
     }
 
@@ -61,8 +60,7 @@ public class MissingDependenciesException extends SpecifiedOptionException
       String                      specifier,
       Set<CommandLineOption>      specifiedOptions)
     {
-        super(source, option, specifier,
-          buildErrorMessage(source,
+        super(source, option, specifier, buildErrorMessage(source,
                             option,
                             dependencySets,
                             specifier,
@@ -138,7 +136,7 @@ public class MissingDependenciesException extends SpecifiedOptionException
                     pw.print("     o " + dependency.getCommandLineFlag());
                     if (dependency.getEnvironmentVariable() != null) {
                         pw.print(" (env: "
-                            + dependency.getEnvironmentVariable() + ")");
+                                 + dependency.getEnvironmentVariable() + ")");
                     }
                     pw.println();
                 }

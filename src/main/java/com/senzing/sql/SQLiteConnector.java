@@ -100,8 +100,9 @@ public class SQLiteConnector implements Connector
     private static File newFile(String              filePath,
                                 Map<String, String> connProperties)
     {
-        if (connProperties != null && MEMORY_MODE.equals(connProperties.get(
-            MODE_KEY))) {
+        if (connProperties != null
+            && MEMORY_MODE.equals(connProperties.get(MODE_KEY)))
+        {
             return (filePath == null) ? null : new File(filePath);
         }
 
@@ -110,8 +111,8 @@ public class SQLiteConnector implements Connector
         File file = new File(filePath);
         if (file.exists() && file.isDirectory()) {
             throw new IllegalArgumentException(
-                    "The specified file path exists and is a directory: "
-                            + filePath);
+                "The specified file path exists and is a directory: "
+                    + filePath);
         }
         return file;
     }
@@ -198,14 +199,14 @@ public class SQLiteConnector implements Connector
      */
     public SQLiteConnector(File file, Map<String, String> connProperties)
     {
-        if (connProperties == null || !MEMORY_MODE.equals(connProperties.get(
-            MODE_KEY))) {
-            Objects.requireNonNull(
-                    file, "The specified file cannot be null");
+        if (connProperties == null
+            || !MEMORY_MODE.equals(connProperties.get(MODE_KEY)))
+        {
+            Objects.requireNonNull(file, "The specified file cannot be null");
             if (file.exists() && file.isDirectory()) {
                 throw new IllegalArgumentException(
-                        "The specified file path exists and is a "
-                                + "directory: " + file);
+                    "The specified file path exists and is a " + "directory: "
+                        + file);
             }
         }
         this.sqliteFile = file;
@@ -254,8 +255,8 @@ public class SQLiteConnector implements Connector
     public Connection openConnection()
         throws SQLException
     {
-        boolean memoryMode = this.connProperties != null && "memory".equals(
-            this.connProperties.get("mode"));
+        boolean memoryMode = this.connProperties != null
+            && "memory".equals(this.connProperties.get("mode"));
 
         // SQLite URI parameters (e.g. `?mode=memory`) require the
         // `file:` URI scheme. Without it, `:memory:?mode=memory` is
@@ -263,8 +264,7 @@ public class SQLiteConnector implements Connector
         // is created in the CWD. We use the `file:` prefix whenever
         // memory mode is requested (whether or not a backing file is
         // supplied) so the parameters are honored.
-        String jdbcUrl = "jdbc:sqlite:"
-            + (memoryMode ? "file:" : "")
+        String jdbcUrl = "jdbc:sqlite:" + (memoryMode ? "file:" : "")
             + (this.sqliteFile == null ? ":memory:" : this.sqliteFile.getPath())
             + formatConnectionProperties(this.connProperties);
 

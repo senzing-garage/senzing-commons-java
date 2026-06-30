@@ -20,9 +20,8 @@ public class ErrorLogSuppressorTest
     {
         try {
             Result result = null;
-            ErrorLogSuppressor suppressor = new ErrorLogSuppressor(5,
-                                                             1000,
-                                                             1100);
+            ErrorLogSuppressor suppressor
+                = new ErrorLogSuppressor(5, 1000, 1100);
             assertEquals(0, suppressor.getErrorCount(),
                    "Error count is not initially zero");
             assertEquals(1100, suppressor.getSuppressDuration(),
@@ -35,16 +34,16 @@ public class ErrorLogSuppressorTest
             for (int index = 0; index < 10; index++) {
                 if (index <= 5) {
                     assertFalse(suppressor.isSuppressing(),
-                      "Suppressor is suppressing prematurely: " + index);
+                        "Suppressor is suppressing prematurely: " + index);
                 } else {
                     assertTrue(suppressor.isSuppressing(),
-                     "Suppressor is not suppressing: " + index);
+                        "Suppressor is not suppressing: " + index);
                 }
                 assertEquals(index, suppressor.getErrorCount(),
                      "Unexpected error count before update: " + index);
                 assertEquals(index, suppressor.getPeriodCount(),
-                     "Unexpected period error count before update: "
-                         + index);
+                             "Unexpected period error count before update: "
+                             + index);
 
                 // update the suppressor on error
                 result = suppressor.updateOnError();
@@ -53,30 +52,30 @@ public class ErrorLogSuppressorTest
                      "Unexpected error count after update: " + index);
 
                 assertEquals(index + 1, suppressor.getPeriodCount(),
-                     "Unexpected period error count after update: "
-                         + index);
+                             "Unexpected period error count after update: "
+                             + index);
                 if (index >= 5) {
                     assertTrue(suppressor.isSuppressing(),
-                      "Suppressor is not suppressing: " + index);
+                        "Suppressor is not suppressing: " + index);
                     assertEquals(SUPPRESSED, result.getState(),
-                       "ErrorLogSuppressorResult has wrong state");
+                        "ErrorLogSuppressorResult has wrong state");
                     assertEquals((index + 1) - suppressor.getErrorLimit(),
-                       result.getSuppressedCount(),
-                       "Wrong suppression count.");
+                        result.getSuppressedCount(),
+                        "Wrong suppression count.");
                 } else {
                     assertFalse(suppressor.isSuppressing(),
-                      "Suppressor is suppressing prematurely: " + index);
+                        "Suppressor is suppressing prematurely: " + index);
                     assertEquals(ACTIVE, result.getState(),
-                       "ErrorLogSuppressorResult has wrong state");
+                        "ErrorLogSuppressorResult has wrong state");
                     assertEquals(0, result.getSuppressedCount(),
-                       "Non-zero suppression count.");
+                        "Non-zero suppression count.");
                 }
             }
             Thread.sleep(1200);
             result = suppressor.updateOnError();
             assertEquals(REACTIVATED, result.getState(),
-                   "ErrorLogSuppressorResult has wrong state after "
-                       + "reactivation.");
+                         "ErrorLogSuppressorResult has wrong state after "
+                         + "reactivation.");
             assertEquals(5, result.getSuppressedCount(),
                    "Wrong suppressed count after reactivation");
             assertFalse(suppressor.isSuppressing(),
@@ -88,8 +87,8 @@ public class ErrorLogSuppressorTest
 
             result = suppressor.updateOnError();
             assertEquals(ACTIVE, result.getState(),
-                   "ErrorLogSuppressorResult has wrong state after "
-                       + "reactivation.");
+                         "ErrorLogSuppressorResult has wrong state after "
+                         + "reactivation.");
             assertEquals(0, result.getSuppressedCount(),
                    "Wrong suppressed count after reactivation");
             assertFalse(suppressor.isSuppressing(),
@@ -109,9 +108,7 @@ public class ErrorLogSuppressorTest
     {
         try {
             try {
-                ErrorLogSuppressor s = new ErrorLogSuppressor(-10,
-                                                      500,
-                                                      600);
+                ErrorLogSuppressor s = new ErrorLogSuppressor(-10, 500, 600);
                 fail(
                     "Successfully constructed a suppressor with negative error "
                         + "limit.");
@@ -120,9 +117,7 @@ public class ErrorLogSuppressorTest
             }
 
             try {
-                ErrorLogSuppressor s = new ErrorLogSuppressor(0,
-                                                      500,
-                                                      600);
+                ErrorLogSuppressor s = new ErrorLogSuppressor(0, 500, 600);
                 fail(
                     "Successfully constructed a suppressor with zero error limit.");
             } catch (IllegalArgumentException expected) {
@@ -139,9 +134,7 @@ public class ErrorLogSuppressorTest
     {
         try {
             try {
-                ErrorLogSuppressor s = new ErrorLogSuppressor(10,
-                                                      -500,
-                                                      600);
+                ErrorLogSuppressor s = new ErrorLogSuppressor(10, -500, 600);
                 fail(
                     "Successfully constructed a suppressor with negative time "
                         + "window.");
@@ -150,9 +143,7 @@ public class ErrorLogSuppressorTest
             }
 
             try {
-                ErrorLogSuppressor s = new ErrorLogSuppressor(10,
-                                                      0,
-                                                      600);
+                ErrorLogSuppressor s = new ErrorLogSuppressor(10, 0, 600);
                 fail(
                     "Successfully constructed a suppressor with zero time window.");
             } catch (IllegalArgumentException expected) {
@@ -169,9 +160,7 @@ public class ErrorLogSuppressorTest
     {
         try {
             try {
-                ErrorLogSuppressor s = new ErrorLogSuppressor(10,
-                                                      500,
-                                                      -600);
+                ErrorLogSuppressor s = new ErrorLogSuppressor(10, 500, -600);
                 fail(
                     "Successfully constructed a suppressor with negative suppress "
                         + "duration.");
@@ -180,9 +169,7 @@ public class ErrorLogSuppressorTest
             }
 
             try {
-                ErrorLogSuppressor s = new ErrorLogSuppressor(10,
-                                                      500,
-                                                      0);
+                ErrorLogSuppressor s = new ErrorLogSuppressor(10, 500, 0);
                 fail(
                     "Successfully constructed a suppressor with zero suppress "
                         + "duration.");

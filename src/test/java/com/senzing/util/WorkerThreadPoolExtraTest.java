@@ -128,7 +128,7 @@ public class WorkerThreadPoolExtraTest
         try {
             RuntimeException expected = new RuntimeException("boom");
             RuntimeException thrown = assertThrows(RuntimeException.class,
-          () -> pool.execute(() -> { throw expected; }));
+                () -> pool.execute(() -> { throw expected; }));
             assertEquals("boom", thrown.getMessage(),
                    "Task's exception should propagate verbatim");
         } finally {
@@ -188,8 +188,7 @@ public class WorkerThreadPoolExtraTest
         WorkerThreadPool pool = new WorkerThreadPool(1);
         try {
             AccessToken token = new AccessToken();
-            assertThrows(IllegalStateException.class,
-                   () -> pool.resume(token));
+            assertThrows(IllegalStateException.class, () -> pool.resume(token));
         } finally {
             pool.close(true);
         }
@@ -223,11 +222,11 @@ public class WorkerThreadPoolExtraTest
         SystemOut out = new SystemOut();
         SystemErr err = new SystemErr();
         err.execute(() -> {
-      out.execute(() -> {
-        WorkerThreadPool.main(
-            new String[] {"hello", "world", "ERROR-fail", "again"});
-      });
-    });
+            out.execute(() -> {
+                WorkerThreadPool.main(
+                    new String[] {"hello", "world", "ERROR-fail", "again"});
+            });
+        });
 
         String output = out.getText();
         // Each non-ERROR arg produces a line; the JOINING / JOINED

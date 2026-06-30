@@ -15,6 +15,44 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     (`<https://example.com>`), surround lists with blank lines,
     follow standard Markdown conventions.
 
+### PR review-and-prep loop
+
+When iterating on a pull request (this repo or any submodule it
+owns, e.g. `.java-coding-standards`), follow this loop instead of
+pushing-and-waiting:
+
+1. **Local code review.** Run `/senzing-code-review` in an Opus
+   subagent (via the `Agent` tool, `subagent_type: claude`,
+   `model: opus`) against the staged or pushed changes. Pass the
+   PR number and a short description of the change as
+   `ARGUMENTS`. Capture the agent's full report.
+2. **Triage findings.**
+   - For **obvious** issues (clear bugs, contract violations,
+     simple correctness fixes), fix them directly.
+   - For **ambiguous** items (SHOULD-FIXes that are judgment
+     calls, NITs, design questions, anything where the right
+     answer isn't obvious), pause and ask the user. Enumerate
+     each item with a recommendation; do not implement until
+     they decide.
+3. **Apply agreed fixes** (skip if no actionable findings
+   remain).
+4. **Run `/prep`** to gate format + tests + checkstyle on the
+   local working tree. Resolve any failures before proceeding.
+5. **Loop** back to step 1 until the only remaining review
+   findings are invalid, out-of-scope, or genuinely
+   inconsequential — and the user agrees.
+6. **Push** the converged changes to the PR.
+7. **Monitor CI's automated code review** (typically the
+   `review / review` GitHub check). When it posts findings,
+   re-enter the loop at step 2, using the CI review's output in
+   place of the local one. Push fix commits each round until CI
+   converges.
+
+The point is to converge locally on a clean PR before paying
+the CI round-trip, then absorb CI's perspective in the same
+disciplined pattern. Obvious-fix vs. ambiguous-ask discipline
+applies in both the local and CI phases.
+
 ## FAQ MCP Server
 
 This project ships a local FAQ MCP server registered in `.mcp.json` under

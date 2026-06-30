@@ -50,11 +50,11 @@ public class SQLiteConnectorTest
     public void defaultPragmaListMatchesJavadoc()
     {
         List<String> expected = List.of(
-        "PRAGMA foreign_keys = ON;",
-        "PRAGMA journal_mode = WAL;",
-        "PRAGMA synchronous = 1;",
-        "PRAGMA secure_delete = 0;",
-        "PRAGMA automatic_index = 0;");
+            "PRAGMA foreign_keys = ON;",
+            "PRAGMA journal_mode = WAL;",
+            "PRAGMA synchronous = 1;",
+            "PRAGMA secure_delete = 0;",
+            "PRAGMA automatic_index = 0;");
         assertEquals(expected,
                  SQLiteConnector.DEFAULT_PRAGMA_FEATURES_LIST,
                  "DEFAULT_PRAGMA_FEATURES_LIST must match the javadoc");
@@ -68,8 +68,8 @@ public class SQLiteConnectorTest
     public void defaultPragmaListIsUnmodifiable()
     {
         assertThrows(
-        UnsupportedOperationException.class,
-        () -> SQLiteConnector.DEFAULT_PRAGMA_FEATURES_LIST.add("X"));
+            UnsupportedOperationException.class,
+            () -> SQLiteConnector.DEFAULT_PRAGMA_FEATURES_LIST.add("X"));
     }
 
     // -------------------------------------------------------------------
@@ -282,8 +282,8 @@ public class SQLiteConnectorTest
     public void openConnectionReturnsUsableConnection(@TempDir Path tempDir)
         throws SQLException
     {
-        SQLiteConnector connector = new SQLiteConnector(
-        tempDir.resolve("test.db").toString());
+        SQLiteConnector connector
+            = new SQLiteConnector(tempDir.resolve("test.db").toString());
         try (Connection conn = connector.openConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT 1"))
@@ -302,8 +302,8 @@ public class SQLiteConnectorTest
     public void openConnectionAppliesDocumentedPragmas(@TempDir Path tempDir)
         throws SQLException
     {
-        SQLiteConnector connector = new SQLiteConnector(
-        tempDir.resolve("pragmas.db").toString());
+        SQLiteConnector connector
+            = new SQLiteConnector(tempDir.resolve("pragmas.db").toString());
         try (Connection conn = connector.openConnection();
              Statement stmt = conn.createStatement())
         {
@@ -331,8 +331,8 @@ public class SQLiteConnectorTest
       @TempDir Path tempDir)
         throws SQLException
     {
-        SQLiteConnector connector = new SQLiteConnector(
-        tempDir.resolve("autocommit.db").toString());
+        SQLiteConnector connector
+            = new SQLiteConnector(tempDir.resolve("autocommit.db").toString());
         try (Connection conn = connector.openConnection()) {
             assertFalse(conn.getAutoCommit(),
                   "openConnection must disable auto-commit");
@@ -353,8 +353,7 @@ public class SQLiteConnectorTest
     {
         Map<String, String> props = new HashMap<>();
         props.put("mode", "memory");
-        SQLiteConnector connector = new SQLiteConnector(
-        (File) null, props);
+        SQLiteConnector connector = new SQLiteConnector((File) null, props);
 
         try (Connection conn = connector.openConnection();
              Statement stmt = conn.createStatement();
@@ -369,7 +368,7 @@ public class SQLiteConnectorTest
         // SQLiteConnector.openConnection() has regressed.
         File leaked = new File(":memory:?mode=memory");
         assertFalse(leaked.exists(),
-                "Memory-mode open must not create a file in CWD: "
+                    "Memory-mode open must not create a file in CWD: "
                     + leaked.getAbsolutePath());
     }
 

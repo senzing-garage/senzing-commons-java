@@ -175,8 +175,8 @@ public class RecordReaderTest
         try {
             RecordReader rr = new RecordReader(sr);
             assertEquals(CSV, rr.getFormat(),
-                   "Record format is not as expected for records: "
-                       + csvText);
+                         "Record format is not as expected for records: "
+                         + csvText);
 
             // test first record
             JsonObject record1 = rr.readRecord();
@@ -215,8 +215,8 @@ public class RecordReaderTest
         try {
             RecordReader rr = new RecordReader(sr);
             assertEquals(CSV, rr.getFormat(),
-                   "Record format is not as expected for records: "
-                       + this.csvRecords);
+                         "Record format is not as expected for records: "
+                         + this.csvRecords);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed with I/O exception", e);
@@ -230,8 +230,8 @@ public class RecordReaderTest
         try {
             RecordReader rr = new RecordReader(sr);
             assertEquals(JSON, rr.getFormat(),
-                   "Record format is not as expected for records: "
-                       + this.jsonRecords);
+                         "Record format is not as expected for records: "
+                         + this.jsonRecords);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed with I/O exception", e);
@@ -245,8 +245,8 @@ public class RecordReaderTest
         try {
             RecordReader rr = new RecordReader(sr);
             assertEquals(JSON_LINES, rr.getFormat(),
-                   "Record format is not as expected for records: "
-                       + this.jsonLinesRecords);
+                         "Record format is not as expected for records: "
+                         + this.jsonLinesRecords);
         } catch (IOException e) {
             e.printStackTrace();
             fail("Failed with I/O exception", e);
@@ -262,8 +262,7 @@ public class RecordReaderTest
             for (JsonObject expected : this.records) {
                 expected = augmentRecord(expected, null, null);
                 JsonObject actual = rr.readRecord();
-                assertEquals(expected, actual,
-                     multilineFormat(
+                assertEquals(expected, actual, multilineFormat(
                          "Record not as expected:",
                          "EXPECTED: ",
                          JsonUtilities.toJsonText(expected, true),
@@ -308,18 +307,18 @@ public class RecordReaderTest
 
         List<Arguments> result = new LinkedList<>();
         recordsMap.entrySet().forEach(entry -> {
-      String recordsText = entry.getKey();
-      List<JsonObject> expected = entry.getValue();
+            String recordsText = entry.getKey();
+            List<JsonObject> expected = entry.getValue();
 
-      for (Map<String,String> dataSourceMap : dataSourceMaps) {
-        for (String sourceId : sourceIds) {
-          result.add(arguments(recordsText,
+            for (Map<String, String> dataSourceMap : dataSourceMaps) {
+                for (String sourceId : sourceIds) {
+                    result.add(arguments(recordsText,
                                expected,
                                dataSourceMap,
                                sourceId));
-        }
-      }
-    });
+                }
+            }
+        });
         return result;
     }
 
@@ -337,17 +336,16 @@ public class RecordReaderTest
             for (JsonObject expected : expectedRecords) {
                 expected = augmentRecord(expected, dataSourceMap, sourceId);
                 JsonObject actual = rr.readRecord();
-                assertEquals(expected, actual,
-                     multilineFormat(
-                         rr.getFormat() + " record not as expected:",
-                         "RECORDS TEXT: ",
-                         recordsText,
-                         " --> dataSourceMap: "
-                             + ((dsMap != null) ? dsMap.toString() : null),
-                         "EXPECTED: ",
-                         JsonUtilities.toJsonText(expected, true),
-                         "ACTUAL: ",
-                         JsonUtilities.toJsonText(actual, true)));
+                assertEquals(expected, actual, multilineFormat(
+                    rr.getFormat() + " record not as expected:",
+                    "RECORDS TEXT: ",
+                    recordsText,
+                    " --> dataSourceMap: "
+                        + ((dsMap != null) ? dsMap.toString() : null),
+                    "EXPECTED: ",
+                    JsonUtilities.toJsonText(expected, true),
+                    "ACTUAL: ",
+                    JsonUtilities.toJsonText(actual, true)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -360,8 +358,7 @@ public class RecordReaderTest
                                           String              sourceId)
     {
         JsonObjectBuilder job = Json.createObjectBuilder(record);
-        String dataSource = JsonUtilities.getString(
-        record, "DATA_SOURCE", "");
+        String dataSource = JsonUtilities.getString(record, "DATA_SOURCE", "");
 
         dataSource = dataSource.trim().toUpperCase();
 
@@ -420,7 +417,7 @@ public class RecordReaderTest
         assertSame(RecordReader.Format.JSON,
                RecordReader.Format.fromMediaType("application/json"));
         assertSame(RecordReader.Format.JSON_LINES,
-               RecordReader.Format.fromMediaType(
+                   RecordReader.Format.fromMediaType(
                    "application/x-jsonlines"));
         assertSame(RecordReader.Format.CSV,
                RecordReader.Format.fromMediaType("text/csv"));
@@ -449,16 +446,13 @@ public class RecordReaderTest
     {
         assertEquals("application/json",
                  RecordReader.Format.JSON.getMediaType());
-        assertEquals("JSON",
-                 RecordReader.Format.JSON.getSimpleName());
+        assertEquals("JSON", RecordReader.Format.JSON.getSimpleName());
         assertEquals("application/x-jsonlines",
                  RecordReader.Format.JSON_LINES.getMediaType());
         assertEquals("JSON Lines",
                  RecordReader.Format.JSON_LINES.getSimpleName());
-        assertEquals("text/csv",
-                 RecordReader.Format.CSV.getMediaType());
-        assertEquals("CSV",
-                 RecordReader.Format.CSV.getSimpleName());
+        assertEquals("text/csv", RecordReader.Format.CSV.getMediaType());
+        assertEquals("CSV", RecordReader.Format.CSV.getSimpleName());
     }
 
     // -------------------------------------------------------------------
@@ -477,7 +471,7 @@ public class RecordReaderTest
     {
         RecordReader reader = new RecordReader(new StringReader("   \n\t "));
         assertSame(RecordReader.Format.JSON_LINES, reader.getFormat(),
-               "Empty/whitespace-only input must default to"
+                   "Empty/whitespace-only input must default to"
                    + " JSON_LINES");
     }
 
@@ -489,8 +483,8 @@ public class RecordReaderTest
     public void autoDetectSkipsLeadingWhitespace()
         throws IOException
     {
-        RecordReader reader = new RecordReader(
-        new StringReader("\n\t\r   [ {\"X\":1} ]"));
+        RecordReader reader
+            = new RecordReader(new StringReader("\n\t\r   [ {\"X\":1} ]"));
         assertSame(RecordReader.Format.JSON, reader.getFormat());
     }
 
@@ -506,21 +500,17 @@ public class RecordReaderTest
     public void jsonLinesSkipsBlankLines()
         throws IOException
     {
-        String text = "\n"
-            + "{\"DATA_SOURCE\":\"X\",\"NAME\":\"alpha\"}\n"
-            + "\n"
-            + "{\"DATA_SOURCE\":\"Y\",\"NAME\":\"beta\"}\n"
-            + "\n";
+        String text = "\n" + "{\"DATA_SOURCE\":\"X\",\"NAME\":\"alpha\"}\n"
+            + "\n" + "{\"DATA_SOURCE\":\"Y\",\"NAME\":\"beta\"}\n" + "\n";
         RecordReader reader = new RecordReader(
-        RecordReader.Format.JSON_LINES, new StringReader(text));
+            RecordReader.Format.JSON_LINES, new StringReader(text));
 
         JsonObject r1 = reader.readRecord();
         JsonObject r2 = reader.readRecord();
         JsonObject r3 = reader.readRecord();
         assertNotNull(r1);
         assertNotNull(r2);
-        assertNull(r3,
-               "Blank lines must be skipped, no extra record produced");
+        assertNull(r3, "Blank lines must be skipped, no extra record produced");
         assertEquals("alpha", r1.getString("NAME"));
         assertEquals("beta", r2.getString("NAME"));
     }
@@ -538,12 +528,10 @@ public class RecordReaderTest
             + "# another comment\n"
             + "{\"DATA_SOURCE\":\"Y\",\"NAME\":\"beta\"}\n";
         RecordReader reader = new RecordReader(
-        RecordReader.Format.JSON_LINES, new StringReader(text));
+            RecordReader.Format.JSON_LINES, new StringReader(text));
 
-        assertEquals("alpha",
-                 reader.readRecord().getString("NAME"));
-        assertEquals("beta",
-                 reader.readRecord().getString("NAME"));
+        assertEquals("alpha", reader.readRecord().getString("NAME"));
+        assertEquals("beta", reader.readRecord().getString("NAME"));
         assertNull(reader.readRecord());
     }
 
@@ -558,8 +546,8 @@ public class RecordReaderTest
         throws IOException
     {
         RecordReader reader = new RecordReader(
-        RecordReader.Format.JSON_LINES,
-        new StringReader("not a json record\n"));
+            RecordReader.Format.JSON_LINES,
+            new StringReader("not a json record\n"));
         assertThrows(IllegalStateException.class, reader::readRecord);
     }
 
@@ -573,7 +561,7 @@ public class RecordReaderTest
     {
         String text = "{\"NAME\":\"alpha\"}\n" + "{ this is not valid JSON\n";
         RecordReader reader = new RecordReader(
-        RecordReader.Format.JSON_LINES, new StringReader(text));
+            RecordReader.Format.JSON_LINES, new StringReader(text));
 
         // First record reads OK
         assertNotNull(reader.readRecord());
@@ -603,7 +591,7 @@ public class RecordReaderTest
         // Malformed: trailing junk after first object
         String text = "[{\"X\":1}, this is not valid]";
         RecordReader reader = new RecordReader(
-        RecordReader.Format.JSON, new StringReader(text));
+            RecordReader.Format.JSON, new StringReader(text));
 
         // First record OK
         assertNotNull(reader.readRecord());
@@ -613,9 +601,9 @@ public class RecordReaderTest
         // build log stays clean. SAME_THREAD execution so the redirect
         // does not interleave with concurrent tests.
         new SystemOut().execute(() -> {
-      // Second triggers a parse exception
-      assertThrows(Exception.class, reader::readRecord);
-    });
+            // Second triggers a parse exception
+            assertThrows(Exception.class, reader::readRecord);
+        });
 
         assertNotNull(reader.getErrorLineNumber(),
                   "JSON-array parse error must record a line number");
@@ -635,8 +623,8 @@ public class RecordReaderTest
         throws IOException
     {
         String text = "DATA_SOURCE,NAME\nX,alpha\nY,beta\n";
-        RecordReader reader = new RecordReader(
-        RecordReader.Format.CSV, new StringReader(text));
+        RecordReader reader
+            = new RecordReader(RecordReader.Format.CSV, new StringReader(text));
         assertNotNull(reader.readRecord());
         assertNull(reader.getErrorLineNumber());
     }
@@ -654,10 +642,10 @@ public class RecordReaderTest
         throws IOException
     {
         RecordReader reader = new RecordReader(
-        RecordReader.Format.JSON_LINES,
-        new StringReader("{\"DATA_SOURCE\":\"ORIG\",\"NAME\":\"x\"}\n"),
-        (Map<String, String>) null,
-        null);
+            RecordReader.Format.JSON_LINES,
+            new StringReader("{\"DATA_SOURCE\":\"ORIG\",\"NAME\":\"x\"}\n"),
+            (Map<String, String>) null,
+            null);
         JsonObject record = reader.readRecord();
         assertEquals("ORIG", record.getString("DATA_SOURCE"),
                  "Null map must leave DATA_SOURCE unchanged");
@@ -672,9 +660,9 @@ public class RecordReaderTest
         throws IOException
     {
         RecordReader reader = new RecordReader(
-        new StringReader(
-            "{\"DATA_SOURCE\":\"X\",\"NAME\":\"alpha\"}\n"),
-        "  ");
+            new StringReader(
+                "{\"DATA_SOURCE\":\"X\",\"NAME\":\"alpha\"}\n"),
+            "  ");
         JsonObject record = reader.readRecord();
         assertFalse(record.containsKey("SOURCE_ID"),
                 "Whitespace sourceId must be treated as null");

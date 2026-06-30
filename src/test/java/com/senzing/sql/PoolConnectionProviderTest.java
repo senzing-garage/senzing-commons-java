@@ -44,8 +44,8 @@ public class PoolConnectionProviderTest
         try {
             PoolConnectionProvider provider = new PoolConnectionProvider(pool);
             assertEquals(-1L, provider.getMaximumWaitTime(),
-                   "Single-arg constructor must default to indefinite "
-                       + "wait (-1L)");
+                         "Single-arg constructor must default to indefinite "
+                         + "wait (-1L)");
         } finally {
             pool.shutdown();
         }
@@ -61,15 +61,15 @@ public class PoolConnectionProviderTest
     {
         ConnectionPool pool = newPool(1);
         try {
-            assertEquals(0L,
-                   new PoolConnectionProvider(pool, 0L)
-                       .getMaximumWaitTime());
-            assertEquals(5000L,
-                   new PoolConnectionProvider(pool, 5000L)
-                       .getMaximumWaitTime());
-            assertEquals(-1L,
-                   new PoolConnectionProvider(pool, -1L)
-                       .getMaximumWaitTime());
+            assertEquals(0L, new PoolConnectionProvider(
+                pool,
+                0L).getMaximumWaitTime());
+            assertEquals(5000L, new PoolConnectionProvider(
+                pool,
+                5000L).getMaximumWaitTime());
+            assertEquals(-1L, new PoolConnectionProvider(
+                pool,
+                -1L).getMaximumWaitTime());
         } finally {
             pool.shutdown();
         }
@@ -148,11 +148,11 @@ public class PoolConnectionProviderTest
             // already leased
             PoolConnectionProvider provider
                 = new PoolConnectionProvider(pool, 0L);
-            SQLException sqe = assertThrows(SQLException.class,
-                                      provider::getConnection);
+            SQLException sqe
+                = assertThrows(SQLException.class, provider::getConnection);
             assertTrue(sqe.getMessage().contains("could not be obtained"),
-                 "SQLException message must mention the failure: "
-                     + sqe.getMessage());
+                       "SQLException message must mention the failure: "
+                       + sqe.getMessage());
         } finally {
             if (leased != null) {
                 leased.close();

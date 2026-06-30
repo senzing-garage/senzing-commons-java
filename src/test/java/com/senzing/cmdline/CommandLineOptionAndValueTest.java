@@ -207,7 +207,7 @@ public class CommandLineOptionAndValueTest
         // field is correctly skipped, and the enum constant's name
         // ("ONLY") is not "PASSWORD" so the eventual result is false.
         assertFalse(NonStaticFieldOption.ONLY.isSensitive(),
-                "Option whose enum has a non-static public field"
+                    "Option whose enum has a non-static public field"
                     + " must skip that field and not throw");
     }
 
@@ -222,7 +222,7 @@ public class CommandLineOptionAndValueTest
     public void isSensitiveFalseForNonEnumImplementation()
     {
         assertFalse(new NonEnumOption().isSensitive(),
-                "Non-enum option must fall through to 'return false'"
+                    "Non-enum option must fall through to 'return false'"
                     + " — no public-static field equals the instance");
     }
 
@@ -234,11 +234,11 @@ public class CommandLineOptionAndValueTest
     public void setSourceUpdatesSource()
     {
         CommandLineValue val = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN,
-        "--plain",
-        "x",
-        List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
 
         val.setSource(CommandLineSource.ENVIRONMENT);
         assertSame(CommandLineSource.ENVIRONMENT, val.getSource());
@@ -248,11 +248,11 @@ public class CommandLineOptionAndValueTest
     public void setSpecifierUpdatesSpecifier()
     {
         CommandLineValue val = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN,
-        "--plain",
-        "x",
-        List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
 
         val.setSpecifier("MY_VAR");
         assertEquals("MY_VAR", val.getSpecifier());
@@ -265,11 +265,11 @@ public class CommandLineOptionAndValueTest
     public void setProcessedValueUpdatesProcessedValue()
     {
         CommandLineValue val = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN,
-        "--plain",
-        "x",
-        List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
 
         val.setProcessedValue(42);
         assertEquals(42, val.getProcessedValue());
@@ -279,11 +279,11 @@ public class CommandLineOptionAndValueTest
     public void setParametersUpdatesParameters()
     {
         CommandLineValue val = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN,
-        "--plain",
-        "x",
-        List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
 
         val.setParameters(List.of("a", "b"));
         assertEquals(List.of("a", "b"), val.getParameters());
@@ -293,18 +293,17 @@ public class CommandLineOptionAndValueTest
     public void toStringContainsAllComponents()
     {
         CommandLineValue val = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN,
-        "--plain",
-        "v",
-        List.of("v"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN,
+            "--plain",
+            "v",
+            List.of("v"));
 
         String s = val.toString();
         assertTrue(s.contains("PLAIN"), "toString should mention option");
         assertTrue(s.contains("COMMAND_LINE"),
                "toString should mention source");
-        assertTrue(s.contains("--plain"),
-               "toString should mention specifier");
+        assertTrue(s.contains("--plain"), "toString should mention specifier");
         assertTrue(s.contains("v"), "toString should mention value");
     }
 
@@ -312,17 +311,17 @@ public class CommandLineOptionAndValueTest
     public void equalsAndHashCodeReflectAllFields()
     {
         CommandLineValue v1 = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN,
-        "--plain",
-        "x",
-        List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
         CommandLineValue v2 = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN,
-        "--plain",
-        "x",
-        List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
 
         assertEquals(v1, v2,
                  "Two values with identical components must be equal");
@@ -334,11 +333,11 @@ public class CommandLineOptionAndValueTest
     public void equalsReflectsDifferingSource()
     {
         CommandLineValue v1 = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
         CommandLineValue v2 = new CommandLineValue(
-        CommandLineSource.ENVIRONMENT,
-        DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            CommandLineSource.ENVIRONMENT,
+            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
 
         assertNotEquals(v1, v2,
                     "Values with differing source must not be equal");
@@ -348,8 +347,8 @@ public class CommandLineOptionAndValueTest
     public void equalsReturnsTrueForSelf()
     {
         CommandLineValue v = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
         assertEquals(v, v);
     }
 
@@ -357,8 +356,8 @@ public class CommandLineOptionAndValueTest
     public void equalsReturnsFalseForNull()
     {
         CommandLineValue v = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
         assertNotEquals(null, v);
     }
 
@@ -366,8 +365,8 @@ public class CommandLineOptionAndValueTest
     public void equalsReturnsFalseForDifferentClass()
     {
         CommandLineValue v = new CommandLineValue(
-        CommandLineSource.COMMAND_LINE,
-        DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            CommandLineSource.COMMAND_LINE,
+            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
         assertNotEquals("string", v);
     }
 }

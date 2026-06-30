@@ -50,8 +50,8 @@ public enum OtherTestOption implements CommandLineOption<OtherTestOption, OtherT
     {
         if (this == VERSION || this == HELP) return Collections.emptySet();
         String flag = this.getCommandLineFlag();
-        return Collections.singleton("SZ_OTHER_" + flag.substring(2)
-                                                       .toUpperCase());
+        return Collections.singleton("SZ_OTHER_"
+                                     + flag.substring(2).toUpperCase());
     }
 
     @Override
@@ -161,8 +161,8 @@ public enum OtherTestOption implements CommandLineOption<OtherTestOption, OtherT
         {
             if (!(option instanceof OtherTestOption)) {
                 throw new IllegalArgumentException(
-            "Unhandled command-line option: " + option.getCommandLineFlag()
-                + " / "+ option);
+                    "Unhandled command-line option: "
+                        + option.getCommandLineFlag() + " / " + option);
             }
             OtherTestOption testOption = (OtherTestOption) option;
             switch (testOption)
@@ -179,9 +179,9 @@ public enum OtherTestOption implements CommandLineOption<OtherTestOption, OtherT
                     }
                     if ("true".equalsIgnoreCase(boolText)) return Boolean.TRUE;
                     throw new IllegalArgumentException(
-              "The specified parameter for "
-                  + option.getCommandLineFlag()
-                  + " must be true or false: " + params.get(0));
+                        "The specified parameter for "
+                            + option.getCommandLineFlag()
+                            + " must be true or false: " + params.get(0));
 
                 case INPUT:
                 case OUTPUT:
@@ -189,16 +189,15 @@ public enum OtherTestOption implements CommandLineOption<OtherTestOption, OtherT
                         File configFile = new File(params.get(0));
                         if (!configFile.exists()) {
                             throw new IllegalArgumentException(
-                "Specified config file does not exist: " + configFile);
+                                "Specified config file does not exist: " + configFile);
                         }
                         return configFile;
                     }
 
                 default:
                     throw new IllegalArgumentException(
-              "Unhandled command line option: "
-                  + option.getCommandLineFlag()
-                  + " / " + option);
+                        "Unhandled command line option: "
+                            + option.getCommandLineFlag() + " / " + option);
             }
         }
 
@@ -207,7 +206,7 @@ public enum OtherTestOption implements CommandLineOption<OtherTestOption, OtherT
             int port = Integer.parseInt(text);
             if (port < 0) {
                 throw new IllegalArgumentException(
-            "Negative port numbers are not allowed: " + port);
+                    "Negative port numbers are not allowed: " + port);
             }
             return port;
         }

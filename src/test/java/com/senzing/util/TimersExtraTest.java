@@ -121,8 +121,7 @@ public class TimersExtraTest
         Timers timers = new Timers("a", "b");
         timers.pause("a", "b");
         int resumed = timers.start("a", "b");
-        assertEquals(2, resumed,
-                 "start on paused timers should resume each");
+        assertEquals(2, resumed, "start on paused timers should resume each");
         assertTrue(timers.isRunning("a"));
         assertTrue(timers.isRunning("b"));
     }
@@ -224,7 +223,7 @@ public class TimersExtraTest
         long after = t1.getElapsedTime("x");
 
         assertTrue(after >= before,
-               "Merged timer's elapsed time should be at least the "
+                   "Merged timer's elapsed time should be at least the "
                    + "pre-merge value");
     }
 

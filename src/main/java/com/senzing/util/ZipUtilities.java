@@ -36,7 +36,7 @@ public class ZipUtilities
             return baos.toByteArray();
         } catch (IOException e) {
             throw new IllegalStateException(
-          "IOException when using Byte-Array streams", e);
+                "IOException when using Byte-Array streams", e);
         }
     }
 
@@ -56,8 +56,8 @@ public class ZipUtilities
             byte[] buffer = new byte[8192];
             try (InflaterInputStream iis = new InflaterInputStream(bais)) {
                 for (int readCount = iis.read(buffer);
-             readCount >= 0;
-             readCount = iis.read(buffer))
+                     readCount >= 0;
+                     readCount = iis.read(buffer))
                 {
                     baos.write(buffer, 0, readCount);
                 }
@@ -65,7 +65,7 @@ public class ZipUtilities
             return baos.toByteArray();
         } catch (IOException e) {
             throw new IllegalStateException(
-          "IOException when using Byte-Array streams", e);
+                "IOException when using Byte-Array streams", e);
         }
     }
 
@@ -83,7 +83,7 @@ public class ZipUtilities
             return new String(Base64.getEncoder().encode(data), UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(
-          "UTF-8 encoding not recognized", e);
+                "UTF-8 encoding not recognized", e);
         }
     }
 
@@ -116,7 +116,7 @@ public class ZipUtilities
             return zip64(uncompressedText.getBytes(UTF_8));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(
-          "UTF-8 encoding not recognized", e);
+                "UTF-8 encoding not recognized", e);
         }
     }
 
@@ -137,7 +137,7 @@ public class ZipUtilities
             return new String(data, UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(
-          "UTF-8 encoding not recognized", e);
+                "UTF-8 encoding not recognized", e);
         }
     }
 
@@ -158,7 +158,7 @@ public class ZipUtilities
             return baos.toByteArray();
         } catch (IOException e) {
             throw new IllegalStateException(
-          "IOException when using Byte-Array streams", e);
+                "IOException when using Byte-Array streams", e);
         }
     }
 
@@ -178,8 +178,8 @@ public class ZipUtilities
             byte[] buffer = new byte[8192];
             try (GZIPInputStream gzis = new GZIPInputStream(bais)) {
                 for (int readCount = gzis.read(buffer);
-             readCount >= 0;
-             readCount = gzis.read(buffer))
+                     readCount >= 0;
+                     readCount = gzis.read(buffer))
                 {
                     baos.write(buffer, 0, readCount);
                 }
@@ -187,7 +187,7 @@ public class ZipUtilities
             return baos.toByteArray();
         } catch (IOException e) {
             throw new IllegalStateException(
-          "IOException when using Byte-Array streams", e);
+                "IOException when using Byte-Array streams", e);
         }
     }
 
@@ -205,7 +205,7 @@ public class ZipUtilities
             return new String(Base64.getEncoder().encode(data), UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(
-          "UTF-8 encoding not recognized", e);
+                "UTF-8 encoding not recognized", e);
         }
     }
 
@@ -238,7 +238,7 @@ public class ZipUtilities
             return gzip64(uncompressedText.getBytes(UTF_8));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(
-          "UTF-8 encoding not recognized", e);
+                "UTF-8 encoding not recognized", e);
         }
     }
 
@@ -259,7 +259,7 @@ public class ZipUtilities
             return new String(data, UTF_8);
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(
-          "UTF-8 encoding not recognized", e);
+                "UTF-8 encoding not recognized", e);
         }
     }
 
@@ -338,8 +338,9 @@ public class ZipUtilities
             targetZip.putNextEntry(zipEntry);
             try (FileInputStream fis = new FileInputStream(directoryOrFile)) {
                 byte[] bytes = new byte[8192];
-                for (int count = fis.read(bytes); count >= 0; count = fis.read(
-                    bytes))
+                for (int count = fis.read(bytes);
+                     count >= 0;
+                     count = fis.read(bytes))
                 {
                     targetZip.write(bytes, 0, count);
                 }
@@ -398,10 +399,11 @@ public class ZipUtilities
             // embedded in the entry name.
             File canonicalTarget = targetFile.getCanonicalFile();
             if (!canonicalTarget.toPath().startsWith(
-                canonicalTargetDir.toPath())) {
+                    canonicalTargetDir.toPath()))
+            {
                 throw new IOException(
                     "Refusing to extract zip entry outside target "
-                    + "directory: " + zipEntry.getName());
+                        + "directory: " + zipEntry.getName());
             }
             if (directory) {
                 targetFile.mkdirs();
@@ -449,29 +451,25 @@ public class ZipUtilities
                     String compressed = zipText64(arg);
                     String uncompressed = unzipText64(compressed);
                     System.out.println();
-                    System.out.println(index
-                        + " (zip): From "
-                        + arg.length()
-                        + " to "
-                        + compressed.length()
-                        + " --> "
-                        + arg.equals(uncompressed));
+                    System.out.println(index + " (zip): From " + arg.length()
+                                       + " to " + compressed.length() + " --> "
+                                       + arg.equals(uncompressed));
 
                     compressed = gzipText64(arg);
                     uncompressed = gunzipText64(compressed);
-                    System.out.println(index
-                        + " (gzip): From "
-                        + arg.length()
-                        + " to "
-                        + compressed.length()
-                        + " --> "
-                        + arg.equals(uncompressed));
+                    System.out.println(index + " (gzip): From " + arg.length()
+                                       + " to " + compressed.length() + " --> "
+                                       + arg.equals(uncompressed));
                 }
             } else {
-                boolean sourceZip = (source.getName().toLowerCase().endsWith(
-                    ".zip") && !source.isDirectory());
-                boolean targetZip = (target.getName().toLowerCase().endsWith(
-                    ".zip") && !target.isDirectory());
+                boolean sourceZip = (source.getName()
+                                           .toLowerCase()
+                                           .endsWith(".zip")
+                                     && !source.isDirectory());
+                boolean targetZip = (target.getName()
+                                           .toLowerCase()
+                                           .endsWith(".zip")
+                                     && !target.isDirectory());
 
                 // check if extracting
                 if (target.exists() && target.isDirectory() && sourceZip) {

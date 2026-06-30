@@ -35,7 +35,7 @@ public class ConnectionProviderTest
     public void registryIsNonNull()
     {
         assertNotNull(ConnectionProvider.REGISTRY,
-                  "ConnectionProvider.REGISTRY must be initialized"
+                      "ConnectionProvider.REGISTRY must be initialized"
                       + " non-null");
     }
 

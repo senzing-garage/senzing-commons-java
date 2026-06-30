@@ -51,8 +51,7 @@ public class QuantifiedTest
     public void defaultGetNameUsesEnclosingClassPrefix()
     {
         assertEquals("QuantifiedTest:HITS", FixtureStat.HITS.getName());
-        assertEquals("QuantifiedTest:MISSES",
-                 FixtureStat.MISSES.getName());
+        assertEquals("QuantifiedTest:MISSES", FixtureStat.MISSES.getName());
     }
 
     /**

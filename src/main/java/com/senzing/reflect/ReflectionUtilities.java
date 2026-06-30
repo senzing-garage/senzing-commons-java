@@ -196,13 +196,13 @@ public class ReflectionUtilities
             numType = getPromotedType(numType);
         }
 
-        if (!Number.class.isAssignableFrom(numType) || (getPrimitiveType(
-            numType) == null)) {
+        if (!Number.class.isAssignableFrom(numType)
+            || (getPrimitiveType(numType) == null))
+        {
             throw new IllegalArgumentException(
-                    "The specified target number type must extend "
-                            + "java.lang.Number and have a corresponding "
-                            + "primitive numeric type: "
-                            + numType.getName());
+                "The specified target number type must extend "
+                    + "java.lang.Number and have a corresponding "
+                    + "primitive numeric type: " + numType.getName());
         }
 
         // if a null value was specified then return null
@@ -281,21 +281,21 @@ public class ReflectionUtilities
                 targetObject, "The specified target object cannot be null.");
         if (!proxyInterface.isInterface()) {
             throw new IllegalArgumentException(
-                    "The specified proxy class is not an interface: "
-                            + proxyInterface.getName());
+                "The specified proxy class is not an interface: "
+                    + proxyInterface.getName());
         }
         if (!proxyInterface.isAssignableFrom(targetObject.getClass())) {
             throw new IllegalArgumentException(
-                    "The specified target object does not implement the "
-                            + "specified proxy interface.  proxyInterface=[ "
-                            + proxyInterface.getName() + " ], "
-                            + "targetObjectClass=[ "
-                            + targetObject.getClass().getName() + " ]");
+                "The specified target object does not implement the "
+                    + "specified proxy interface.  proxyInterface=[ "
+                    + proxyInterface.getName() + " ], "
+                    + "targetObjectClass=[ "
+                    + targetObject.getClass().getName() + " ]");
         }
         ClassLoader classLoader = targetObject.getClass().getClassLoader();
         Class<?>[] interfaces = { proxyInterface };
-        SynchronizedHandler handler = new SynchronizedHandler(targetObject,
-                monitor);
+        SynchronizedHandler handler
+            = new SynchronizedHandler(targetObject, monitor);
 
         return (I) Proxy.newProxyInstance(classLoader, interfaces, handler);
     }
@@ -408,8 +408,8 @@ public class ReflectionUtilities
 
                 // we know they differ even if the name
                 // is the same, so force difference
-                diff = System.identityHashCode(r1) - System.identityHashCode(
-                    r2);
+                diff = System.identityHashCode(r1)
+                    - System.identityHashCode(r2);
                 return diff;
             }
 
@@ -476,7 +476,7 @@ public class ReflectionUtilities
     public static Object restrictedProxy(Object     targetObject,
                                          Method...  restrictedMethods)
     {
-        Objects.requireNonNull(targetObject, 
+        Objects.requireNonNull(targetObject,
                 "The target object cannot be null");
 
         // get the class loader
@@ -514,10 +514,9 @@ public class ReflectionUtilities
                                          Method...      restrictedMethods)
     {
         // check the target object
-        Objects.requireNonNull(targetObject, 
+        Objects.requireNonNull(targetObject,
                        "The target object cannot be null");
-        Objects.requireNonNull(classLoader,
-                                "The class loader cannot be null");
+        Objects.requireNonNull(classLoader, "The class loader cannot be null");
 
         // check the methods
         for (Method method : restrictedMethods) {
@@ -571,8 +570,11 @@ public class ReflectionUtilities
         if (interfaceSet.size() == 0) {
             throw new IllegalArgumentException(
                 "The specified target object does not implement any interfaces "
-                + "to proxy.  class=[ " + targetObject.getClass().getName()
-                + " ], targetObject=[ " + targetObject + " ]");
+                    + "to proxy.  class=[ "
+                    + targetObject.getClass().getName()
+                    + " ], targetObject=[ "
+                    + targetObject
+                    + " ]");
         }
         interfaces = interfaceSet.toArray(interfaces);
 

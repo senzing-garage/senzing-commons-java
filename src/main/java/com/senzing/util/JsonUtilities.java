@@ -545,8 +545,7 @@ public class JsonUtilities
     {
         if (obj == null) return defaultValue;
         if (!obj.containsKey(key) || obj.isNull(key)) return defaultValue;
-        return Collections.unmodifiableList(
-                obj.getJsonArray(key).getValuesAs(
+        return Collections.unmodifiableList(obj.getJsonArray(key).getValuesAs(
                     JsonUtilities::valueAsString));
     }
 
@@ -598,8 +597,8 @@ public class JsonUtilities
     {
         if (arr == null) return defaultValue;
         if (arr.isNull(index)) return defaultValue;
-        return Collections.unmodifiableList(
-                arr.getJsonArray(index).getValuesAs(
+        return Collections.unmodifiableList(arr.getJsonArray(index)
+                                               .getValuesAs(
                     JsonUtilities::valueAsString));
     }
 
@@ -2213,16 +2212,16 @@ public class JsonUtilities
 
                     for (Map.Entry entry : jsonObject.entrySet()) {
                         String key = (String) entry.getKey();
-                        Object value = normalizeJsonValue(
-                        (JsonValue) entry.getValue());
+                        Object value
+                            = normalizeJsonValue((JsonValue) entry.getValue());
                         result.put(key, value);
                     }
                     return result;
                 }
             default:
                 throw new IllegalStateException(
-                        "Unrecognized JsonValue.ValueType: "
-                                + jsonValue.getValueType());
+                    "Unrecognized JsonValue.ValueType: "
+                        + jsonValue.getValueType());
         }
     }
 
@@ -2343,8 +2342,9 @@ public class JsonUtilities
         // find the get with the default value functions
         for (Method method : methods) {
             int modifiers = method.getModifiers();
-            if (!(Modifier.isPublic(modifiers) && Modifier.isStatic(
-                modifiers))) {
+            if (!(Modifier.isPublic(modifiers)
+                  && Modifier.isStatic(modifiers)))
+            {
                 continue;
             }
             Class<?> returnType = method.getReturnType();
@@ -2352,14 +2352,17 @@ public class JsonUtilities
             if (!method.getName().startsWith("get")) continue;
             Class<?> paramTypes[] = method.getParameterTypes();
             if ((paramTypes.length == 3 && paramTypes[2] == returnType)
-                || (paramTypes.length
-                    == 2 && JsonValue.class.isAssignableFrom(returnType))) {
+                || (paramTypes.length == 2
+                    && JsonValue.class.isAssignableFrom(returnType)))
+            {
                 // check if an object getter
                 if (paramTypes[0].equals(JsonObject.class)
-                    && paramTypes[1].equals(String.class)) {
+                    && paramTypes[1].equals(String.class))
+                {
                     objTypeMethods.put(returnType, method);
                 } else if (paramTypes[0].equals(JsonArray.class)
-                    && paramTypes[1].equals(Integer.TYPE)) {
+                           && paramTypes[1].equals(Integer.TYPE))
+                {
                     arrTypeMethods.put(returnType, method);
                 }
             }
@@ -2502,11 +2505,12 @@ public class JsonUtilities
                 Method fromMethod = type.getMethod("from", Instant.class);
                 int modifiers = fromMethod.getModifiers();
                 if ((returnType.isAssignableFrom(fromMethod.getReturnType())
-                    && Modifier.isPublic(modifiers) && Modifier.isStatic(
-                        modifiers))) {
+                     && Modifier.isPublic(modifiers)
+                     && Modifier.isStatic(modifiers)))
+                {
                     method = methodMap.get(Instant.class);
-                    Instant instant = (Instant) method.invoke(
-                        null, source, locator, null);
+                    Instant instant
+                        = (Instant) method.invoke(null, source, locator, null);
                     if (instant == null) return defaultValue;
                     return (T) fromMethod.invoke(null, instant);
                 }
@@ -2519,8 +2523,9 @@ public class JsonUtilities
                 Method parseMethod = type.getMethod("parse", String.class);
                 int modifiers = parseMethod.getModifiers();
                 if (returnType.isAssignableFrom(parseMethod.getReturnType())
-                    && Modifier.isPublic(modifiers) && Modifier.isStatic(
-                        modifiers)) {
+                    && Modifier.isPublic(modifiers)
+                    && Modifier.isStatic(modifiers))
+                {
                     method = methodMap.get(String.class);
                     String text = (String) method.invoke(source, locator, null);
                     if (text == null) return defaultValue;
@@ -2682,12 +2687,7 @@ public class JsonUtilities
                                           String property2,
                                           Object value2)
     {
-        return toJsonObject(property1,
-                value1,
-                property2,
-                value2,
-                null,
-                null);
+        return toJsonObject(property1, value1, property2, value2, null, null);
     }
 
     /**
@@ -2955,8 +2955,8 @@ public class JsonUtilities
      */
     public static String toJsonText(JsonObjectBuilder builder)
     {
-        return JsonUtilities.toJsonText(
-                new StringWriter(), builder, false).toString();
+        return JsonUtilities.toJsonText(new StringWriter(), builder, false)
+                            .toString();
     }
 
     /**
@@ -2987,8 +2987,8 @@ public class JsonUtilities
      */
     public static String toJsonText(JsonArrayBuilder builder)
     {
-        return JsonUtilities.toJsonText(
-                new StringWriter(), builder, false).toString();
+        return JsonUtilities.toJsonText(new StringWriter(), builder, false)
+                            .toString();
     }
 
     /**
@@ -3144,8 +3144,7 @@ public class JsonUtilities
      */
     public static JsonObject iniToJson(File iniFile)
     {
-        Objects.requireNonNull(
-            iniFile, "The ini file cannot be null");
+        Objects.requireNonNull(iniFile, "The ini file cannot be null");
         try {
             INIConfiguration ini = new INIConfiguration();
 
