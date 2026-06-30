@@ -757,7 +757,7 @@ public class ConnectionPool implements Quantified
         }
 
         // check the max connection leases
-        if (expireTime < 0) {
+        if (retireLimit < 0) {
             throw new IllegalArgumentException(
                 "The maximum connection leases (retire count) cannot"
                     + " be negative: " + retireLimit);
