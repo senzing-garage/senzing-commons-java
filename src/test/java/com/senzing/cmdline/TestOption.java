@@ -255,8 +255,8 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
                         String[] tokens = params.get(0).split(":");
                         if (tokens.length != 2) {
                             throw new IllegalArgumentException(
-                                "Expected format <interface>:<port>. "
-                                    + " Received: " + params.get(0));
+                                "Expected format <interface>:<port>.  "
+                                    + "Received: " + params.get(0));
                         }
                         InetAddress address = parseInterface(tokens[0]);
                         int port = parsePort(tokens[1]);
