@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Tests for the environment-variable handling paths in {@link
  * CommandLineUtilities#parseCommandLine}, exercised by stubbing {@link
- * System#getenv} via {@link
- * EnvironmentVariables#execute(uk.org.webcompere.systemstubs.resource.Executable)}.
+ * System#getenv} via {@link EnvironmentVariables#execute(
+ * uk.org.webcompere.systemstubs.resource.Executable)}.
  *
  * <p>Each test uses {@code @Execution(SAME_THREAD)} because the
  * {@link EnvironmentVariables} stub mutates the process environment

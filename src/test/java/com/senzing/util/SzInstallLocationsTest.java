@@ -12,6 +12,7 @@ import org.junit.jupiter.api.parallel.Resources;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.stream.SystemErr;
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -541,7 +542,7 @@ public class SzInstallLocationsTest
             try {
                 Files.createSymbolicLink(
                     devRoot.resolve("er"), devRoot.resolve("dist"));
-            } catch (UnsupportedOperationException | java.nio.file.FileSystemException e) {
+            } catch (UnsupportedOperationException | FileSystemException e) {
                 // Filesystems that don't support symlinks (e.g. some CI
                 // environments) make this assertion impossible; skip
                 // gracefully.

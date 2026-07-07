@@ -10,7 +10,6 @@ import static com.senzing.cmdline.CommandLineSource.COMMAND_LINE;
 import static com.senzing.cmdline.CommandLineSource.DEFAULT;
 import static com.senzing.cmdline.CommandLineSource.ENVIRONMENT;
 import static com.senzing.cmdline.TestOption.CONFIG;
-import static com.senzing.cmdline.TestOption.HELP;
 import static com.senzing.cmdline.TestOption.PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -124,7 +123,8 @@ public class CmdlineExceptionsTest
             ENVIRONMENT, PORT, "MY_PORT", List.of());
 
         assertEquals("MY_PORT environment variable", ex.getSourceDescriptor(),
-                 "ENVIRONMENT source should produce '<var> environment variable'");
+                     "ENVIRONMENT source should produce "
+                     + "'<var> environment variable'");
     }
 
     @Test

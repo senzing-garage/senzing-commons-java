@@ -6,7 +6,6 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -30,7 +29,8 @@ public class CommandLineOptionAndValueTest
      * CommandLineOption#getCommandLineFlag()}, leaving every other method to
      * its default implementation. Used to verify the default-method behavior.
      */
-    enum DefaultsOption implements CommandLineOption<DefaultsOption, DefaultsOption>
+    enum DefaultsOption
+        implements CommandLineOption<DefaultsOption, DefaultsOption>
     {
         PLAIN("--plain"),
         PASSWORD("--password");
@@ -55,7 +55,8 @@ public class CommandLineOptionAndValueTest
      * iteration sees a non-public-static field and exercises the "skip if not
      * public-static" continue branch.
      */
-    enum NonStaticFieldOption implements CommandLineOption<NonStaticFieldOption, NonStaticFieldOption>
+    enum NonStaticFieldOption
+        implements CommandLineOption<NonStaticFieldOption, NonStaticFieldOption>
     {
         ONLY;
 

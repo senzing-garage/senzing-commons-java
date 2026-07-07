@@ -117,10 +117,10 @@ public class SQLUtilitiesTest
 
         // Row 2: all NULL except ID.
         try (Statement stmt = this.conn.createStatement()) {
-            stmt.execute(
-                "INSERT INTO TEST_TYPES (ID,BIG,BOOL,BY,D,DBL,FLT,I,L,SH,S,T,TS)"
-                    + " VALUES (2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"
-                    + "NULL,NULL,NULL,NULL)");
+            stmt.execute("INSERT INTO TEST_TYPES "
+                         + "(ID,BIG,BOOL,BY,D,DBL,FLT,I,L,SH,S,T,TS)"
+                         + " VALUES (2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"
+                         + "NULL,NULL,NULL,NULL,NULL)");
         }
     }
 

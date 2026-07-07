@@ -109,7 +109,8 @@ public class ConnectionPoolTest
                     Connection conn = this.threadConnMap.get(current);
                     if (conn != null && conn != connection) {
                         throw new IllegalStateException(
-                            "Thread connection does not match specified connection.");
+                            "Thread connection does not match "
+                                + "specified connection.");
                     }
                     if (this.connThreadMap.containsKey(connection)) {
                         Thread thread = this.connThreadMap.get(connection);
@@ -280,7 +281,8 @@ public class ConnectionPoolTest
                     Connection conn = this.pool.acquire(this.maxWait);
                     if (conn == null) {
                         throw new IllegalStateException(
-                            "Failed to obtain connection in allotted time.  " + info);
+                            "Failed to obtain connection in "
+                                + "allotted time.  " + info);
                     }
                     try {
                         // try at least two operations on the connection to
@@ -316,7 +318,8 @@ public class ConnectionPoolTest
                         try {
                             PreparedStatement ps = conn.prepareStatement("");
                             throw new IllegalStateException(
-                                "Used connection after closing without an error.  " + info);
+                                "Used connection after closing without "
+                                    + "an error.  " + info);
                         } catch (SQLException expected) {
                             // do nothing
                         }
@@ -734,8 +737,11 @@ public class ConnectionPoolTest
             final int expireSeconds = 2;
             final int noRetireLimit = 0;
             final int minPoolSize = 0;
-            pool = new ConnectionPool(
-                connector, minPoolSize, maxPoolSize, expireSeconds, noRetireLimit);
+            pool = new ConnectionPool(connector,
+                                      minPoolSize,
+                                      maxPoolSize,
+                                      expireSeconds,
+                                      noRetireLimit);
 
             assertEquals(2000L, pool.getExpireTime(),
                    "Expire time is not as expected.");
@@ -799,8 +805,11 @@ public class ConnectionPoolTest
             final int expireSeconds = 2;
             final int noRetireLimit = 0;
             final int minPoolSize = 0;
-            pool = new ConnectionPool(
-                connector, minPoolSize, maxPoolSize, expireSeconds, noRetireLimit);
+            pool = new ConnectionPool(connector,
+                                      minPoolSize,
+                                      maxPoolSize,
+                                      expireSeconds,
+                                      noRetireLimit);
 
             assertEquals(2000L, pool.getExpireTime(),
                    "Expire time is not as expected.");
@@ -1182,14 +1191,14 @@ public class ConnectionPoolTest
 
             assertFalse(conn.getAutoCommit(), "Auto-commit is not false");
 
-            List<String> setupList
-                = List.of(
-                    "PRAGMA foreign_keys = ON;",
-                    "PRAGMA journal_mode = WAL;",
-                    "PRAGMA synchronous = 0;",
-                    "PRAGMA secure_delete = 0;",
-                    "PRAGMA automatic_index = 0;",
-                    "CREATE TABLE foo (foo_id INTEGER PRIMARY_KEY, description TEXT)");
+            List<String> setupList = List.of(
+                "PRAGMA foreign_keys = ON;",
+                "PRAGMA journal_mode = WAL;",
+                "PRAGMA synchronous = 0;",
+                "PRAGMA secure_delete = 0;",
+                "PRAGMA automatic_index = 0;",
+                "CREATE TABLE foo (foo_id INTEGER PRIMARY_KEY, "
+                    + "description TEXT)");
 
             conn.setAutoCommit(true);
             stmt = conn.createStatement();

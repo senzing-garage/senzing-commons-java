@@ -138,9 +138,11 @@ public class CommandLineUtilitiesTest
         // basic option value add
         Map<CommandLineOption, CommandLineValue> optionMap
             = new LinkedHashMap<>();
-        CommandLineValue value
-            = new CommandLineValue(
-                COMMAND_LINE, PORT, PORT.getCommandLineFlag(), 9080, List.of("9080"));
+        CommandLineValue value = new CommandLineValue(COMMAND_LINE,
+                                   PORT,
+                                   PORT.getCommandLineFlag(),
+                                   9080,
+                                   List.of("9080"));
         result.add(arguments(optionMap, value, null));
 
         // adding a duplicated value
@@ -289,8 +291,9 @@ public class CommandLineUtilitiesTest
         List<Arguments> result = new LinkedList<>();
 
         for (TestOption option : TestOption.values()) {
-            result.add(
-                arguments(TestOption.class, option.getCommandLineFlag(), option));
+            result.add(arguments(TestOption.class,
+                                 option.getCommandLineFlag(),
+                                 option));
             for (String synonymFlag : option.getSynonymFlags()) {
                 result.add(arguments(TestOption.class, synonymFlag, option));
             }
@@ -777,7 +780,9 @@ public class CommandLineUtilitiesTest
                 emptyList,
                 ConflictingOptionsException.class));
 
-            args = new String[] { "--port", "9080", "--interface", "localhost" };
+            args = new String[] {
+                "--port", "9080", "--interface", "localhost"
+            };
 
             result.add(arguments(TestOption.class,
                 args,
@@ -797,7 +802,9 @@ public class CommandLineUtilitiesTest
                 emptyList,
                 NoPrimaryOptionException.class));
 
-            args = new String[] { "--port", "9080", "5080", "--interface", "localhost" };
+            args = new String[] {
+                "--port", "9080", "5080", "--interface", "localhost"
+            };
 
             result.add(arguments(TestOption.class,
                 args,
@@ -837,7 +844,9 @@ public class CommandLineUtilitiesTest
                 emptyList,
                 BadOptionParameterCountException.class));
 
-            args = new String[] { "--config", "test.conf", "--url", "localhost:9080" };
+            args = new String[] {
+                "--config", "test.conf", "--url", "localhost:9080"
+            };
 
             expectedResult = new LinkedHashMap<>(defaultMap);
             expectedResult.put(
@@ -897,7 +906,9 @@ public class CommandLineUtilitiesTest
                 emptyList,
                 MissingDependenciesException.class));
 
-            args = new String[] { "--config", "test.conf", "--url", "localhost:AB12" };
+            args = new String[] {
+                "--config", "test.conf", "--url", "localhost:AB12"
+            };
 
             result.add(arguments(TestOption.class,
                 args,
@@ -917,7 +928,9 @@ public class CommandLineUtilitiesTest
                 emptyList,
                 BadOptionParametersException.class));
 
-            args = new String[] { "--config", "test1.conf", "-config", "test2.conf" };
+            args = new String[] {
+                "--config", "test1.conf", "-config", "test2.conf"
+            };
 
             result.add(arguments(TestOption.class,
                 args,
@@ -937,7 +950,9 @@ public class CommandLineUtilitiesTest
                 emptyList,
                 RepeatedOptionException.class));
 
-            args = new String[] { "--config", "test.conf", "--input", "input.json" };
+            args = new String[] {
+                "--config", "test.conf", "--input", "input.json"
+            };
 
             result.add(arguments(TestOption.class,
                 args,
@@ -957,7 +972,9 @@ public class CommandLineUtilitiesTest
                 emptyList,
                 UnrecognizedOptionException.class));
 
-            args = new String[] { "--config", "test.conf", "--table", "RECORDS" };
+            args = new String[] {
+                "--config", "test.conf", "--table", "RECORDS"
+            };
 
             expectedResult = new LinkedHashMap<>(defaultMap);
             expectedResult.put(

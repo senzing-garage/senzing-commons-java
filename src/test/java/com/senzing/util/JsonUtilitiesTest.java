@@ -3055,9 +3055,9 @@ public class JsonUtilitiesTest
         result.add(arguments(123L, JsonValue.ValueType.NUMBER));
         result.add(arguments(123.456, JsonValue.ValueType.NUMBER));
         result.add(arguments(123.456F, JsonValue.ValueType.NUMBER));
-        result.add(
-            arguments(
-                new Object[] { 10L, 5.5, true, "three" }, JsonValue.ValueType.ARRAY));
+        result.add(arguments(
+                new Object[] { 10L, 5.5, true, "three" },
+                JsonValue.ValueType.ARRAY));
         result.add(arguments(
                 List.of(10L, 5.5, true, "three"), JsonValue.ValueType.ARRAY));
         result.add(arguments(
@@ -3930,9 +3930,10 @@ public class JsonUtilitiesTest
             createObject("phoo", null), "phoo", null, null));
 
         // add a test case that will fail to parse
-        result.add(
-            Arguments.of(
-                createObject("foo", "bar"), "foo", null, DateTimeParseException.class));
+        result.add(Arguments.of(createObject("foo", "bar"),
+                         "foo",
+                         null,
+                         DateTimeParseException.class));
         return result;
     }
 

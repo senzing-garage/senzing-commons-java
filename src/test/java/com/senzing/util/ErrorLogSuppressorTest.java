@@ -118,8 +118,8 @@ public class ErrorLogSuppressorTest
 
             try {
                 ErrorLogSuppressor s = new ErrorLogSuppressor(0, 500, 600);
-                fail(
-                    "Successfully constructed a suppressor with zero error limit.");
+                fail("Successfully constructed a suppressor with "
+                     + "zero error limit.");
             } catch (IllegalArgumentException expected) {
                 // do nothing
             }
@@ -144,8 +144,8 @@ public class ErrorLogSuppressorTest
 
             try {
                 ErrorLogSuppressor s = new ErrorLogSuppressor(10, 0, 600);
-                fail(
-                    "Successfully constructed a suppressor with zero time window.");
+                fail("Successfully constructed a suppressor with "
+                     + "zero time window.");
             } catch (IllegalArgumentException expected) {
                 // do nothing
             }
@@ -161,9 +161,8 @@ public class ErrorLogSuppressorTest
         try {
             try {
                 ErrorLogSuppressor s = new ErrorLogSuppressor(10, 500, -600);
-                fail(
-                    "Successfully constructed a suppressor with negative suppress "
-                        + "duration.");
+                fail("Successfully constructed a suppressor with "
+                     + "negative suppress duration.");
             } catch (IllegalArgumentException expected) {
                 // do nothing
             }

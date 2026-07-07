@@ -1,7 +1,5 @@
 package com.senzing.cmdline;
 
-import java.io.File;
-import java.net.InetAddress;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -10,7 +8,8 @@ import static com.senzing.cmdline.TestOption.*;
 /**
  * Test implementation of {@link CommandLineOption}.
  */
-public enum ExtendedTestOption implements CommandLineOption<ExtendedTestOption, TestOption>
+public enum ExtendedTestOption
+    implements CommandLineOption<ExtendedTestOption, TestOption>
 {
     SQS_QUEUE_URL("--sqs"),
     DATABASE_TABLE("--table"),

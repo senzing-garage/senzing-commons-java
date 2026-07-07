@@ -35,9 +35,8 @@ public class TimersTest
     {
         try {
             Timers timers = new Timers("Foo", null, "Bar");
-            fail(
-                "Expected NullPointerException when constructing with null, but "
-                    + "got success instead");
+            fail("Expected NullPointerException when constructing "
+                 + "with null, but got success instead");
         } catch (NullPointerException e) {
             // success
         } catch (Exception e) {
@@ -270,46 +269,33 @@ public class TimersTest
                          "Timings does not have expected timer names: "
                          + timings);
 
-            timings.forEach(
-                (key, value) -> {
-                    if (pauseSet.contains(key)) {
-                        assertTrue(
-                            (value
-                             >= (prePause + (postTimings2 - postResume))),
-                            "Resumed timer ("
-                                + key
-                                + ") value ("
-                                + value
-                                + ") should not be less than pre-paused + resumed "
-                                + "value: "
-                                + (prePause + (postTimings2 - postResume)));
-                        assertTrue(
-                            (value
-                             <= (postPause + (postTimings2 - preResume))),
-                            "Resumed timer ("
-                                + key
-                                + ") value ("
-                                + value
-                                + ") should not be greater than post-paused + resumed "
-                                + "value: "
-                                + (postPause + (postTimings2 - preResume)));
-                    } else {
-                        assertTrue(
-                            (value
-                             >= (postPause + (postTimings2 - postResume))),
-                            "Running timer ("
-                                + key
-                                + ") value ("
-                                + value
-                                + ") should not be less than post-paused + resumed "
-                                + "value: "
-                                + (postPause + (postTimings2 - postResume)));
-                        assertTrue((value <= postTimings2), "Running timer ("
-                            + key + ") value (" + value + ") "
-                            + "should not be greater than post-timings + "
-                            + "resumed duration: " + postTimings2);
-                    }
-                });
+            timings.forEach((key, value) -> {
+                if (pauseSet.contains(key)) {
+                    assertTrue((value
+                                >= (prePause + (postTimings2 - postResume))),
+                               "Resumed timer (" + key + ") value (" + value
+                               + ") should not be less than pre-paused "
+                               + "+ resumed value: "
+                               + (prePause + (postTimings2 - postResume)));
+                    assertTrue((value
+                                <= (postPause + (postTimings2 - preResume))),
+                               "Resumed timer (" + key + ") value (" + value
+                               + ") should not be greater than "
+                               + "post-paused + resumed value: "
+                               + (postPause + (postTimings2 - preResume)));
+                } else {
+                    assertTrue((value
+                                >= (postPause + (postTimings2 - postResume))),
+                               "Running timer (" + key + ") value (" + value
+                        + ") should not be less than post-paused + resumed "
+                        + "value: "
+                        + (postPause + (postTimings2 - postResume)));
+                    assertTrue((value <= postTimings2), "Running timer ("
+                        + key + ") value (" + value + ") "
+                        + "should not be greater than post-timings + "
+                        + "resumed duration: " + postTimings2);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
             fail("Failed unexpectedly with an exception: " + e);
@@ -425,15 +411,12 @@ public class TimersTest
                             + ") should not be less than pre-paused + resumed "
                             + "value: "
                             + (prePause + (postTimings2 - postResume)));
-                    assertTrue(
-                        (value <= (postPause + (postTimings2 - preResume))),
-                        "Resumed timer ("
-                            + key
-                            + ") value ("
-                            + value
-                            + ") should not be greater than post-paused + resumed "
-                            + "value: "
-                            + (postPause + (postTimings2 - preResume)));
+                    assertTrue((value
+                                <= (postPause + (postTimings2 - preResume))),
+                               "Resumed timer (" + key + ") value (" + value
+                               + ") should not be greater than "
+                               + "post-paused + resumed value: "
+                               + (postPause + (postTimings2 - preResume)));
                 });
         } catch (Exception e) {
             e.printStackTrace();

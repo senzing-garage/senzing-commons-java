@@ -229,9 +229,8 @@ public class TemporaryDataCacheTest
                     "Files already existed in specified directory: " + tempDir);
             }
             if (maxCount == 0) {
-                fail(
-                    "Files with prefix were never created in specified directory: "
-                        + tempDir);
+                fail("Files with prefix were never created in "
+                     + "specified directory: " + tempDir);
             }
             if (postCount > 0) {
                 fail("Files were never deleted from specified directory: "
@@ -289,9 +288,8 @@ public class TemporaryDataCacheTest
                 int count = tempDir.listFiles(
                     f -> f.getName().startsWith("TempDataCache-")).length;
                 if (count > maxCount) {
-                    fail(
-                        "File count increased after consuming TemporaryDataCache: "
-                            + tempDir);
+                    fail("File count increased after consuming "
+                         + "TemporaryDataCache: " + tempDir);
                 }
                 assertEquals(0,count,
                      "File count did not reduce to zero after consuming.");
@@ -299,9 +297,8 @@ public class TemporaryDataCacheTest
                 int count = tempDir.listFiles(
                     f -> f.getName().startsWith("TempDataCache-")).length;
                 if (count > 0) {
-                    fail(
-                        "Files remaining after consuming entire TemporaryDataCache: "
-                            + tempDir);
+                    fail("Files remaining after consuming entire "
+                         + "TemporaryDataCache: " + tempDir);
                 }
                 assertTrue(tdc.isDeleted(),
                            "TemporaryDataCache NOT marked deleted after "
@@ -474,8 +471,8 @@ public class TemporaryDataCacheTest
             byte[] bytes2 = baos2.toByteArray();
             for (int index = 0; index < bytes1.length; index++) {
                 if (bytes1[index] != bytes2[index]) {
-                    fail(
-                        "TemporaryDataCache data is different after reading it twice");
+                    fail("TemporaryDataCache data is different after "
+                         + "reading it twice");
                 }
             }
         } catch (RuntimeException | IOException e) {
@@ -526,8 +523,8 @@ public class TemporaryDataCacheTest
             byte[] bytes2 = baos2.toByteArray();
             for (int index = 0; index < bytes1.length; index++) {
                 if (bytes1[index] != bytes2[index]) {
-                    fail(
-                        "TemporaryDataCache data is different after reading it twice");
+                    fail("TemporaryDataCache data is different after "
+                         + "reading it twice");
                 }
             }
         } catch (RuntimeException | IOException e) {
@@ -575,9 +572,8 @@ public class TemporaryDataCacheTest
                             "TemporaryDataCache should be marked deleted!");
                     }
 
-                    fail(
-                        "Unexpectedly succeeded to read from TemporaryDataCache after "
-                            + "deletion.");
+                    fail("Unexpectedly succeeded to read from "
+                         + "TemporaryDataCache after deletion.");
                 } catch (IOException e) {
                     // all good
                 }

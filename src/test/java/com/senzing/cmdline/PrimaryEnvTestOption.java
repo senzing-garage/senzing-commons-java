@@ -11,7 +11,8 @@ import java.util.Set;
  * {@linkplain CommandLineOption#isPrimary() primary} so the
  * fallback-env-var loop runs.
  */
-public enum PrimaryEnvTestOption implements CommandLineOption<PrimaryEnvTestOption, PrimaryEnvTestOption>
+public enum PrimaryEnvTestOption
+    implements CommandLineOption<PrimaryEnvTestOption, PrimaryEnvTestOption>
 {
     RUN("--run");
 

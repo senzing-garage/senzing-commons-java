@@ -15,7 +15,8 @@ import java.util.Set;
  * command-line flag — e.g. {@code --tags} maps to
  * {@code SENZING_ENV_TEST_TAGS}.</p>
  */
-public enum EnvTestOption implements CommandLineOption<EnvTestOption, EnvTestOption>
+public enum EnvTestOption
+    implements CommandLineOption<EnvTestOption, EnvTestOption>
 {
     /**
      * Multi-value option (1..n parameters) used to exercise the

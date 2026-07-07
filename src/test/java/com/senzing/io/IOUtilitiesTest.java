@@ -489,9 +489,8 @@ public class IOUtilitiesTest
             tempFile = File.createTempFile("test-", ".txt");
             tempFile.deleteOnExit();
             createDirectoryIfMissing(tempFile);
-            fail(
-                "Expected failure, but succeeded in created directory over a file: "
-                    + tempFile);
+            fail("Expected failure, but succeeded in created "
+                 + "directory over a file: " + tempFile);
         } catch (IOException expected) {
             // expected the exception
         } catch (Exception e) {

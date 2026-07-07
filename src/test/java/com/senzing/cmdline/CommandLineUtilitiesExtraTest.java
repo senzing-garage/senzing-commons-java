@@ -1,6 +1,5 @@
 package com.senzing.cmdline;
 
-import com.senzing.util.JsonUtilities;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
@@ -13,7 +12,6 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonString;
 import javax.json.Json;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import static com.senzing.cmdline.CommandLineSource.COMMAND_LINE;
@@ -27,11 +25,8 @@ import static com.senzing.cmdline.CommandLineUtilities.getJarPath;
 import static com.senzing.cmdline.CommandLineUtilities.processCommandLine;
 import static com.senzing.cmdline.TestOption.CONFIG;
 import static com.senzing.cmdline.TestOption.HELP;
-import static com.senzing.cmdline.TestOption.IGNORE_ENV;
-import static com.senzing.cmdline.TestOption.INTERFACE;
 import static com.senzing.cmdline.TestOption.PASSWORD;
 import static com.senzing.cmdline.TestOption.PORT;
-import static com.senzing.cmdline.TestOption.URL;
 import static com.senzing.cmdline.TestOption.VERBOSE;
 import static com.senzing.cmdline.TestOption.VERSION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -443,8 +438,8 @@ public class CommandLineUtilitiesExtraTest
     @Test
     public void extractJarLocationParsesNestedPackageJarUrl()
     {
-        String url
-            = "jar:file:/lib/myapp.jar!/com/senzing/cmdline/CommandLineUtilities.class";
+        String url = "jar:file:/lib/myapp.jar!/com/senzing/cmdline/"
+            + "CommandLineUtilities.class";
         CommandLineUtilities.JarLocation loc
             = CommandLineUtilities.extractJarLocation(
                 url, "com.senzing.cmdline.CommandLineUtilities");

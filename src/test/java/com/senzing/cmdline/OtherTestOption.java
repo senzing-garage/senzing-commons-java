@@ -9,7 +9,8 @@ import java.util.Set;
 /**
  * Test implementation of {@link CommandLineOption}.
  */
-public enum OtherTestOption implements CommandLineOption<OtherTestOption, OtherTestOption>
+public enum OtherTestOption
+    implements CommandLineOption<OtherTestOption, OtherTestOption>
 {
     HELP("--help"),
     VERSION("--version"),
@@ -189,7 +190,8 @@ public enum OtherTestOption implements CommandLineOption<OtherTestOption, OtherT
                         File configFile = new File(params.get(0));
                         if (!configFile.exists()) {
                             throw new IllegalArgumentException(
-                                "Specified config file does not exist: " + configFile);
+                                "Specified config file does not exist: "
+                                    + configFile);
                         }
                         return configFile;
                     }

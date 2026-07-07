@@ -12,14 +12,12 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Date;
@@ -37,7 +35,6 @@ import static com.senzing.util.JsonUtilities.getValue;
 import static com.senzing.util.JsonUtilities.iniToJson;
 import static com.senzing.util.JsonUtilities.jsonEscape;
 import static com.senzing.util.JsonUtilities.normalizeJsonValue;
-import static com.senzing.util.JsonUtilities.parseJsonObject;
 import static com.senzing.util.JsonUtilities.toJsonArray;
 import static com.senzing.util.JsonUtilities.toJsonArrayBuilder;
 import static com.senzing.util.JsonUtilities.toJsonObject;
@@ -264,9 +261,9 @@ public class JsonUtilitiesExtraTest
     @Test
     public void addJobBigInteger()
     {
-        JsonObject obj
-            = buildObject(
-                job -> add(job, "k", new BigInteger("123456789012345678901234567890")));
+        JsonObject obj = buildObject(job -> add(job,
+                           "k",
+                           new BigInteger("123456789012345678901234567890")));
         assertEquals(new BigInteger("123456789012345678901234567890"),
                  obj.getJsonNumber("k").bigIntegerValue());
 
@@ -767,9 +764,10 @@ public class JsonUtilitiesExtraTest
         // Per javadoc switch: NULL -> default, STRING -> parse, default ->
         // IllegalArgumentException.
         JsonArray arr = Json.createArrayBuilder().add(42).build();
-        assertThrows(IllegalArgumentException.class,
-                 () -> getInstant(arr, 0, null),
-                 "Non-string, non-null value must throw IllegalArgumentException");
+        assertThrows(IllegalArgumentException.class, () -> getInstant(arr, 0,
+                                                                      null),
+                     "Non-string, non-null value must throw "
+                     + "IllegalArgumentException");
     }
 
     @Test

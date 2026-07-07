@@ -29,18 +29,29 @@ public class ZipUtilitiesTest
 {
     private static final SecureRandom PRNG = new SecureRandom();
 
-    private static final String[] SENTENCES
-        = {
-      "The quick brown fox jumped over the lazy dog.",
-      "Old Mother Hubbard went to the cupboard to give her poor dog a bone.",
-      "When she came there the cupboard was bare and so the poor dog had none.",
-      "Twinkle, twinkle little star, how I wonder what you are.",
-      "Up above the world so high, like a diamond in the sky.",
-      "Sing a song of six pence, a pocket full of rye.",
-      "Hey, diddle, diddle, the cat and the fiddle, the cow jumped over the moon.",
-      "The little dog laughed to see such fun and the dish ran away with the spoon.",
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      "Aenean at eros diam. Donec sodales feugiat elit sed dapibus. Fusce iaculis quis tortor tincidunt dignissim. Cras vestibulum nibh non mi vulputate condimentum. Sed quis ornare sapien.",
+    private static final String[] SENTENCES = {
+        "The quick brown fox jumped over the lazy dog.",
+        "Old Mother Hubbard went to the cupboard to give her poor dog a bone.",
+        "When she came there the cupboard was bare and so the poor dog had "
+            + "none.",
+        "Twinkle, twinkle little star, how I wonder what you are.",
+        "Up above the world so high, like a diamond in the sky.",
+        "Sing a song of six pence, a pocket full of rye.",
+        "Hey, diddle, diddle, the cat and the fiddle, the cow jumped over "
+            + "the moon.",
+        "The little dog laughed to see such fun and the dish ran away with "
+            + "the spoon.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
+            + "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut "
+            + "enim ad minim veniam, quis nostrud exercitation ullamco "
+            + "laboris nisi ut aliquip ex ea commodo consequat. Duis aute "
+            + "irure dolor in reprehenderit in voluptate velit esse cillum "
+            + "dolore eu fugiat nulla pariatur. Excepteur sint occaecat "
+            + "cupidatat non proident, sunt in culpa qui officia deserunt "
+            + "mollit anim id est laborum.",
+        "Aenean at eros diam. Donec sodales feugiat elit sed dapibus. Fusce "
+            + "iaculis quis tortor tincidunt dignissim. Cras vestibulum nibh "
+            + "non mi vulputate condimentum. Sed quis ornare sapien.",
   };
 
     private static File tempDirectory()
@@ -143,7 +154,8 @@ public class ZipUtilitiesTest
             assertTrue(files[0].isDirectory(),
                  "Target directory does not contain a directory");
             assertEquals(dir.getName(), files[0].getName(),
-                "Unzipped directory name differs from original directory name.");
+                         "Unzipped directory name differs from "
+                         + "original directory name.");
 
             files = files[0].listFiles();
 

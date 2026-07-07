@@ -7,6 +7,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -338,16 +339,16 @@ public class ReflectionUtilitiesTest
 
     /**
      * {@link ReflectionUtilities#restrictedProxy(Object,
-     * java.lang.reflect.Method...)} must produce a proxy where the restricted
-     * method throws {@link UnsupportedOperationException} per the javadoc,
-     * while unrestricted methods still delegate to the target object.
+     * Method...)} must produce a proxy where the restricted method throws
+     * {@link UnsupportedOperationException} per the javadoc, while unrestricted
+     * methods still delegate to the target object.
      */
     @Test
     public void restrictedProxyBlocksOnlyRestrictedMethods()
         throws Exception
     {
         RestrictableImpl target = new RestrictableImpl();
-        java.lang.reflect.Method restrictedMethod
+        Method restrictedMethod
             = RestrictableInterface.class.getMethod("restricted");
 
         RestrictableInterface proxy
@@ -402,7 +403,7 @@ public class ReflectionUtilitiesTest
         RestrictableImpl target = new RestrictableImpl();
         assertThrows(NullPointerException.class,
                      () -> ReflectionUtilities.restrictedProxy(
-                     target, (java.lang.reflect.Method) null));
+                     target, (Method) null));
     }
 
     /**
@@ -416,7 +417,7 @@ public class ReflectionUtilitiesTest
         RestrictableImpl target = new RestrictableImpl();
         assertThrows(NullPointerException.class,
                      () -> ReflectionUtilities.restrictedProxy(
-                     null, target, new java.lang.reflect.Method[0]));
+                     null, target, new Method[0]));
     }
 
     /**
@@ -446,7 +447,7 @@ public class ReflectionUtilitiesTest
         throws Exception
     {
         RestrictableImpl target = new RestrictableImpl();
-        java.lang.reflect.Method restrictedMethod
+        Method restrictedMethod
             = RestrictableInterface.class.getMethod("restricted");
 
         RestrictableInterface proxy
@@ -470,10 +471,9 @@ public class ReflectionUtilitiesTest
         throws Exception
     {
         RestrictableImpl target = new RestrictableImpl();
-        java.lang.reflect.Method restrictedMethod
+        Method restrictedMethod
             = RestrictableInterface.class.getMethod("restricted");
-        java.lang.reflect.Method allowedMethod
-            = RestrictableInterface.class.getMethod("allowed");
+        Method allowedMethod = RestrictableInterface.class.getMethod("allowed");
 
         RestrictableInterface proxy1
             = (RestrictableInterface) ReflectionUtilities.restrictedProxy(
@@ -495,8 +495,8 @@ public class ReflectionUtilitiesTest
     // -------------------------------------------------------------------
 
     /**
-     * Test fixtures used to obtain {@link java.lang.reflect.Method} instances
-     * that exercise each documented branch of the private
+     * Test fixtures used to obtain {@link Method} instances that exercise each
+     * documented branch of the private
      * {@code ReflectionUtilities.MethodComparator}.
      *
      * <p>{@link CompA} provides several overloads of {@code alpha} (so we can
@@ -527,14 +527,14 @@ public class ReflectionUtilitiesTest
      * to declare {@code throws}.
      */
     @SuppressWarnings("unchecked")
-    private static java.util.Comparator<java.lang.reflect.Method> methodComparator()
+    private static java.util.Comparator<Method> methodComparator()
     {
         try {
             java.lang.reflect.Field f
                 = ReflectionUtilities.class.getDeclaredField(
                     "METHOD_COMPARATOR");
             f.setAccessible(true);
-            return (java.util.Comparator<java.lang.reflect.Method>) f.get(null);
+            return (java.util.Comparator<Method>) f.get(null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -542,13 +542,13 @@ public class ReflectionUtilitiesTest
 
     /**
      * The {@code MethodComparator} must return 0 when the two arguments are the
-     * same {@link java.lang.reflect.Method}.
+     * same {@link Method}.
      */
     @Test
     public void methodComparatorReturnsZeroForEqualMethods()
         throws Exception
     {
-        java.lang.reflect.Method alpha = CompA.class.getMethod("alpha");
+        Method alpha = CompA.class.getMethod("alpha");
         assertEquals(0, methodComparator().compare(alpha, alpha));
     }
 
@@ -560,8 +560,8 @@ public class ReflectionUtilitiesTest
     public void methodComparatorOrdersByNameWhenNamesDiffer()
         throws Exception
     {
-        java.lang.reflect.Method alpha = CompA.class.getMethod("alpha");
-        java.lang.reflect.Method beta = CompA.class.getMethod("beta");
+        Method alpha = CompA.class.getMethod("alpha");
+        Method beta = CompA.class.getMethod("beta");
         int expected = "alpha".compareTo("beta");
         int actual = methodComparator().compare(alpha, beta);
         assertEquals(Integer.signum(expected), Integer.signum(actual),
@@ -577,9 +577,9 @@ public class ReflectionUtilitiesTest
     public void methodComparatorOrdersByReturnTypeWhenNamesMatch()
         throws Exception
     {
-        java.lang.reflect.Method aAlpha = CompA.class.getMethod("alpha");
+        Method aAlpha = CompA.class.getMethod("alpha");
         // returns void
-        java.lang.reflect.Method bAlpha = CompB.class.getMethod("alpha");
+        Method bAlpha = CompB.class.getMethod("alpha");
         // returns int
         int expected = "void".compareTo("int");
         int actual = methodComparator().compare(aAlpha, bAlpha);
@@ -595,10 +595,9 @@ public class ReflectionUtilitiesTest
     public void methodComparatorOrdersByParamCount()
         throws Exception
     {
-        java.lang.reflect.Method noArgs = CompA.class.getMethod("alpha");
+        Method noArgs = CompA.class.getMethod("alpha");
         // 0 params
-        java.lang.reflect.Method twoArgs
-            = CompA.class.getMethod("alpha", int.class, int.class);
+        Method twoArgs = CompA.class.getMethod("alpha", int.class, int.class);
         // 2 params
         int actual = methodComparator().compare(noArgs, twoArgs);
         assertTrue(actual < 0,
@@ -619,11 +618,9 @@ public class ReflectionUtilitiesTest
     public void methodComparatorOrdersByParamTypeWhenAllElseEqual()
         throws Exception
     {
-        java.lang.reflect.Method intArg
-            = CompA.class.getMethod("alpha", int.class);
+        Method intArg = CompA.class.getMethod("alpha", int.class);
         // void alpha(int)
-        java.lang.reflect.Method strArg
-            = CompA.class.getMethod("alpha", String.class);
+        Method strArg = CompA.class.getMethod("alpha", String.class);
         // void alpha(String)
         int expected = int.class.getName().compareTo(String.class.getName());
         int actual = methodComparator().compare(intArg, strArg);

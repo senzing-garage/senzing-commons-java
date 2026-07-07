@@ -1,6 +1,5 @@
 package com.senzing.text;
 
-import com.senzing.io.ChunkedEncodingInputStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.parallel.Execution;
@@ -105,9 +104,11 @@ public class TextUtilitiesTest
                     char c1 = text1.charAt(index);
                     char c2 = text2.charAt(index);
                     assertTrue(Character.isAlphabetic(c1),
-                            "Random character is not alphabetic: " + ((int) c1));
+                               "Random character is not alphabetic: "
+                               + ((int) c1));
                     assertTrue(Character.isAlphabetic(c2),
-                            "Random character is not alphabetic: " + ((int) c2));
+                               "Random character is not alphabetic: "
+                               + ((int) c2));
                 }
             }
         } catch (Exception e) {
@@ -141,12 +142,14 @@ public class TextUtilitiesTest
                 for (int index = 0; index < text1.length(); index++) {
                     char c1 = text1.charAt(index);
                     assertTrue(Character.isAlphabetic(c1),
-                            "Random character is not alphabetic: " + ((int) c1));
+                               "Random character is not alphabetic: "
+                               + ((int) c1));
                 }
                 for (int index = 0; index < text2.length(); index++) {
                     char c2 = text2.charAt(index);
                     assertTrue(Character.isAlphabetic(c2),
-                            "Random character is not alphabetic: " + ((int) c2));
+                               "Random character is not alphabetic: "
+                               + ((int) c2));
                 }
             }
         } catch (Exception e) {

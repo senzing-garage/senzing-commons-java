@@ -152,9 +152,8 @@ public class ChunkedEncodingInputStreamTest
                 = new ChunkedEncodingInputStream(tis);
 
             ceis.mark(10);
-            fail(
-                "ChunkedEncodingInputStream.mark() succeeded unexpectedly without "
-                    + "UnsupportedOperationException.");
+            fail("ChunkedEncodingInputStream.mark() succeeded "
+                 + "unexpectedly without " + "UnsupportedOperationException.");
         } catch (UnsupportedOperationException expected) {
             // expected -- success
         } catch (Exception e) {
@@ -262,9 +261,8 @@ public class ChunkedEncodingInputStreamTest
                 = new ChunkedEncodingInputStream(tis);
 
             ceis.mark(10);
-            fail(
-                "ChunkedEncodingInputStream.reset() succeeded unexpectedly without "
-                    + "UnsupportedOperationException.");
+            fail("ChunkedEncodingInputStream.reset() succeeded "
+                 + "unexpectedly without " + "UnsupportedOperationException.");
         } catch (UnsupportedOperationException expected) {
             // expected -- success
         } catch (Exception e) {
