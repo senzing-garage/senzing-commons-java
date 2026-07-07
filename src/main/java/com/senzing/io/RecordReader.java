@@ -156,10 +156,7 @@ public class RecordReader
     public RecordReader(Reader reader)
         throws IOException
     {
-        this(null,
-         reader,
-         Collections.emptyMap(),
-         null);
+        this(null, reader, Collections.emptyMap(), null);
     }
 
     /**
@@ -176,10 +173,7 @@ public class RecordReader
     public RecordReader(Format format, Reader reader)
         throws IOException
     {
-        this(format,
-         reader,
-         Collections.emptyMap(),
-         null);
+        this(format, reader, Collections.emptyMap(), null);
     }
 
     /**
@@ -197,10 +191,7 @@ public class RecordReader
     public RecordReader(Reader reader, String dataSource)
         throws IOException
     {
-        this(null,
-         reader,
-         Collections.singletonMap(null, dataSource),
-         null);
+        this(null, reader, Collections.singletonMap(null, dataSource), null);
     }
 
     /**
@@ -219,10 +210,7 @@ public class RecordReader
     public RecordReader(Format format, Reader reader, String dataSource)
         throws IOException
     {
-        this(format,
-         reader,
-         Collections.singletonMap(null, dataSource),
-         null);
+        this(format, reader, Collections.singletonMap(null, dataSource), null);
     }
 
     /**
@@ -243,9 +231,9 @@ public class RecordReader
         throws IOException
     {
         this(null,
-         reader,
-         Collections.singletonMap(null, dataSource),
-         sourceId);
+            reader,
+            Collections.singletonMap(null, dataSource),
+            sourceId);
     }
 
     /**
@@ -270,9 +258,9 @@ public class RecordReader
         throws IOException
     {
         this(format,
-         reader,
-         Collections.singletonMap(null, dataSource),
-         sourceId);
+            reader,
+            Collections.singletonMap(null, dataSource),
+            sourceId);
     }
 
     /**
@@ -431,7 +419,7 @@ public class RecordReader
                     break;
                 default:
                     throw new IllegalStateException(
-              "Unrecognized RecordReader.Format; " + this.format);
+                        "Unrecognized RecordReader.Format; " + this.format);
             }
         } else {
             // set the format to JSON-Lines
@@ -447,13 +435,13 @@ public class RecordReader
         try {
             if (dataSourceMap != null) {
                 dataSourceMap.entrySet().forEach(entry -> {
-          String key = entry.getKey();
-          if (key != null) {
-            key = key.trim().toUpperCase();
-          }
-          String value = entry.getValue().trim().toUpperCase();
-          this.dataSourceMap.put(key, value);
-        });
+                    String key = entry.getKey();
+                    if (key != null) {
+                        key = key.trim().toUpperCase();
+                    }
+                    String value = entry.getValue().trim().toUpperCase();
+                    this.dataSourceMap.put(key, value);
+                });
                 this.dataSourceMap = Collections.unmodifiableMap(
                     this.dataSourceMap);
             }
@@ -624,7 +612,7 @@ public class RecordReader
                         JsonParsingException jpe = (JsonParsingException) e;
                         System.out.println("LOCATION: " + jpe.getLocation());
                         System.out.println("LINE NUMBER: "
-                                   + jpe.getLocation().getLineNumber());
+                                           + jpe.getLocation().getLineNumber());
                         this.errorLineNumber = jpe.getLocation()
                                                   .getLineNumber();
                     }
@@ -708,7 +696,7 @@ public class RecordReader
                     // check if the line does NOT start with "{"
                     if (!line.startsWith("{")) {
                         throw new IllegalStateException(
-                "Line does not appear to be JSON record: " + line);
+                            "Line does not appear to be JSON record: " + line);
                     }
 
                     // parse the line
@@ -766,13 +754,15 @@ public class RecordReader
                                                    .get();
 
             try {
-                this.parser = CSVParser.builder().setReader(reader).setFormat(
-                    csvFormat).get();
+                this.parser = CSVParser.builder()
+                                       .setReader(reader)
+                                       .setFormat(csvFormat)
+                                       .get();
                 Map<String, Integer> headerMap = this.parser.getHeaderMap();
                 Set<String> headers = new HashSet<>();
                 headerMap.keySet().forEach(h -> {
-          headers.add(h.toUpperCase());
-        });
+                    headers.add(h.toUpperCase());
+                });
                 this.recordIter = parser.iterator();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -843,12 +833,12 @@ public class RecordReader
                     System.out.println();
                     int index = 0;
                     for (JsonObject record = recordReader.readRecord();
-               record != null;
-               record = recordReader.readRecord())
+                         record != null;
+                         record = recordReader.readRecord())
                     {
                         index++;
-                        System.out.println(index
-                            + ": " + JsonUtilities.toJsonText(record));
+                        System.out.println(index + ": "
+                                           + JsonUtilities.toJsonText(record));
                         System.out.println();
                     }
                     System.out.println("COUNT   : " + index);

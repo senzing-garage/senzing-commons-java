@@ -150,8 +150,7 @@ public class RegistryTest
         Registry<String> registry = new Registry<>();
         AccessToken t1 = registry.bind("a", "1");
         AccessToken t2 = registry.bind("b", "2");
-        assertNotSame(t1, t2,
-                  "Each binding must yield a distinct AccessToken");
+        assertNotSame(t1, t2, "Each binding must yield a distinct AccessToken");
     }
 
     // -------------------------------------------------------------------
@@ -191,8 +190,7 @@ public class RegistryTest
     public void lookupThrowsNpeForNullName()
     {
         Registry<String> registry = new Registry<>();
-        assertThrows(NullPointerException.class,
-                 () -> registry.lookup(null));
+        assertThrows(NullPointerException.class, () -> registry.lookup(null));
     }
 
     /**
@@ -244,8 +242,7 @@ public class RegistryTest
     public void isBoundThrowsNpeForNullName()
     {
         Registry<String> registry = new Registry<>();
-        assertThrows(NullPointerException.class,
-                 () -> registry.isBound(null));
+        assertThrows(NullPointerException.class, () -> registry.isBound(null));
     }
 
     /**

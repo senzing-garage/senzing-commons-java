@@ -12,14 +12,12 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Date;
@@ -37,7 +35,6 @@ import static com.senzing.util.JsonUtilities.getValue;
 import static com.senzing.util.JsonUtilities.iniToJson;
 import static com.senzing.util.JsonUtilities.jsonEscape;
 import static com.senzing.util.JsonUtilities.normalizeJsonValue;
-import static com.senzing.util.JsonUtilities.parseJsonObject;
 import static com.senzing.util.JsonUtilities.toJsonArray;
 import static com.senzing.util.JsonUtilities.toJsonArrayBuilder;
 import static com.senzing.util.JsonUtilities.toJsonObject;
@@ -264,8 +261,9 @@ public class JsonUtilitiesExtraTest
     @Test
     public void addJobBigInteger()
     {
-        JsonObject obj = buildObject(
-        job -> add(job, "k", new BigInteger("123456789012345678901234567890")));
+        JsonObject obj = buildObject(job -> add(job,
+                           "k",
+                           new BigInteger("123456789012345678901234567890")));
         assertEquals(new BigInteger("123456789012345678901234567890"),
                  obj.getJsonNumber("k").bigIntegerValue());
 
@@ -276,8 +274,8 @@ public class JsonUtilitiesExtraTest
     @Test
     public void addJobBigDecimal()
     {
-        JsonObject obj = buildObject(
-        job -> add(job, "k", new BigDecimal("1.23")));
+        JsonObject obj
+            = buildObject(job -> add(job, "k", new BigDecimal("1.23")));
         assertEquals(new BigDecimal("1.23"),
                  obj.getJsonNumber("k").bigDecimalValue());
 
@@ -319,7 +317,7 @@ public class JsonUtilitiesExtraTest
                  "Instant should round-trip through add()/getInstant()");
 
         JsonObject nul = buildObject(
-        job -> add(job, "k", (java.time.temporal.TemporalAccessor) null));
+            job -> add(job, "k", (java.time.temporal.TemporalAccessor) null));
         assertTrue(nul.isNull("k"));
     }
 
@@ -470,7 +468,7 @@ public class JsonUtilitiesExtraTest
         assertNotNull(arr.getString(0));
 
         JsonArray nul = buildArray(
-        jab -> add(jab, (java.time.temporal.TemporalAccessor) null));
+            jab -> add(jab, (java.time.temporal.TemporalAccessor) null));
         assertTrue(nul.isNull(0));
     }
 
@@ -498,11 +496,10 @@ public class JsonUtilitiesExtraTest
         addProperty(job, "date", Date.from(Instant.parse(
             "2025-01-01T00:00:00Z")));
         addProperty(job, "instant", Instant.parse("2025-02-02T00:00:00Z"));
-        addProperty(job, "intArray", new int[]{ 1, 2, 3 });
-        addProperty(job, "objArray", new String[]{ "a", "b" });
+        addProperty(job, "intArray", new int[] { 1, 2, 3 });
+        addProperty(job, "objArray", new String[] { "a", "b" });
         addProperty(job, "list", List.of("c", "d"));
-        addProperty(job, "stringMap",
-                Map.of("k1", "v1", "k2", 2));
+        addProperty(job, "stringMap", Map.of("k1", "v1", "k2", 2));
         Map<Object, Object> nonStringKeys = new LinkedHashMap<>();
         nonStringKeys.put(Integer.valueOf(1), "v");
         addProperty(job, "intKeyMap", nonStringKeys);
@@ -574,7 +571,7 @@ public class JsonUtilitiesExtraTest
         addElement(jab, new BigDecimal("7.7"));
         addElement(jab, Date.from(Instant.parse("2025-01-01T00:00:00Z")));
         addElement(jab, Instant.parse("2025-02-02T00:00:00Z"));
-        addElement(jab, new int[]{ 1, 2, 3 });
+        addElement(jab, new int[] { 1, 2, 3 });
         addElement(jab, List.of("c", "d"));
         addElement(jab, Map.of("k", "v"));
         Map<Object, Object> nonStringMap = new LinkedHashMap<>();
@@ -767,9 +764,10 @@ public class JsonUtilitiesExtraTest
         // Per javadoc switch: NULL -> default, STRING -> parse, default ->
         // IllegalArgumentException.
         JsonArray arr = Json.createArrayBuilder().add(42).build();
-        assertThrows(IllegalArgumentException.class,
-                 () -> getInstant(arr, 0, null),
-                 "Non-string, non-null value must throw IllegalArgumentException");
+        assertThrows(IllegalArgumentException.class, () -> getInstant(arr, 0,
+                                                                      null),
+                     "Non-string, non-null value must throw "
+                     + "IllegalArgumentException");
     }
 
     @Test
@@ -836,9 +834,9 @@ public class JsonUtilitiesExtraTest
         // should locate it and use the Instant getter to populate.
         // The text must conform to JsonUtilities.DATE_TIME_FORMATTER pattern
         // (yyyy-MM-dd'T'HH:mm:ss.SSS'Z').
-        JsonObject obj = Json.createObjectBuilder().add(
-            "k",
-            "2025-04-01T12:00:00.000Z").build();
+        JsonObject obj = Json.createObjectBuilder()
+                             .add("k", "2025-04-01T12:00:00.000Z")
+                             .build();
         Date result = getValue(Date.class, obj, "k");
         assertNotNull(result, "Date.from(Instant) fallback should populate");
         assertEquals(Instant.parse("2025-04-01T12:00:00Z"), result.toInstant());
@@ -924,8 +922,7 @@ public class JsonUtilitiesExtraTest
     public void toJsonTextPrettyPrintPath()
     {
         // Pretty-print returns formatted text containing a newline.
-        String s = toJsonText(
-        Json.createObjectBuilder().add("k", 1), true);
+        String s = toJsonText(Json.createObjectBuilder().add("k", 1), true);
         assertTrue(s.contains("\n"),
                "Pretty-print should produce multi-line output");
     }
@@ -945,8 +942,7 @@ public class JsonUtilitiesExtraTest
     @Test
     public void iniToJsonNullFileThrows()
     {
-        assertThrows(NullPointerException.class,
-                 () -> iniToJson(null));
+        assertThrows(NullPointerException.class, () -> iniToJson(null));
     }
 
     @Test

@@ -883,9 +883,9 @@ public class SQLUtilities
         try {
             for (String jdbcUrl : args) {
                 Connection conn = DriverManager.getConnection(jdbcUrl);
-                System.out.println(
-                        jdbcUrl + " : "
-                                + conn.getMetaData().getDatabaseProductName());
+                System.out.println(jdbcUrl + " : "
+                                   + conn.getMetaData()
+                                         .getDatabaseProductName());
             }
         } catch (Exception e) {
             e.printStackTrace();

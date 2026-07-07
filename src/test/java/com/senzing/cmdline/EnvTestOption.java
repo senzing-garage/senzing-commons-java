@@ -15,7 +15,8 @@ import java.util.Set;
  * command-line flag — e.g. {@code --tags} maps to
  * {@code SENZING_ENV_TEST_TAGS}.</p>
  */
-public enum EnvTestOption implements CommandLineOption<EnvTestOption, EnvTestOption>
+public enum EnvTestOption
+    implements CommandLineOption<EnvTestOption, EnvTestOption>
 {
     /**
      * Multi-value option (1..n parameters) used to exercise the
@@ -74,14 +75,14 @@ public enum EnvTestOption implements CommandLineOption<EnvTestOption, EnvTestOpt
     public Set<String> getEnvironmentSynonyms()
     {
         return Collections.singleton(
-        "SZ_ENV_TEST_" + this.flag.substring(2).toUpperCase());
+            "SZ_ENV_TEST_" + this.flag.substring(2).toUpperCase());
     }
 
     @Override
     public List<String> getEnvironmentFallbacks()
     {
         return List.of(
-        "SENZING_ENV_FALLBACK_" + this.flag.substring(2).toUpperCase());
+            "SENZING_ENV_FALLBACK_" + this.flag.substring(2).toUpperCase());
     }
 
     @Override

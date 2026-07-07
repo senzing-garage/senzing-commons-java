@@ -32,21 +32,20 @@ public class CommandLineUtilitiesFallbackTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_PRIMARY_FALLBACK_RUN", "fallback-value").execute(() -> {
-          Map<CommandLineOption, CommandLineValue> result
-              = parseCommandLine(
+            "SENZING_PRIMARY_FALLBACK_RUN", "fallback-value").execute(() -> {
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
                   PrimaryEnvTestOption.class,
                   new String[] {},
                   PrimaryEnvTestOption.PARAMETER_PROCESSOR,
                   null);
 
-          CommandLineValue val = result.get(RUN);
-          assertNotNull(val,
-                        "Primary option should be populated from fallback"
-                            + " env var when primary/synonym are unset");
-          assertEquals("SENZING_PRIMARY_FALLBACK_RUN", val.getSpecifier(),
+            CommandLineValue val = result.get(RUN);
+            assertNotNull(val,
+                          "Primary option should be populated from fallback"
+                          + " env var when primary/synonym are unset");
+            assertEquals("SENZING_PRIMARY_FALLBACK_RUN", val.getSpecifier(),
                        "Specifier should be the fallback env var name");
-          assertEquals("fallback-value", val.getProcessedValue());
+            assertEquals("fallback-value", val.getProcessedValue());
         });
     }
 
@@ -59,19 +58,18 @@ public class CommandLineUtilitiesFallbackTest
         throws Exception
     {
         new EnvironmentVariables(
-        "SENZING_PRIMARY_TEST_RUN", "primary",
-        "SENZING_PRIMARY_FALLBACK_RUN", "fallback").execute(() -> {
-      Map<CommandLineOption, CommandLineValue> result
-          = parseCommandLine(
-              PrimaryEnvTestOption.class,
-              new String[] {},
-              PrimaryEnvTestOption.PARAMETER_PROCESSOR,
-              null);
+            "SENZING_PRIMARY_TEST_RUN", "primary",
+            "SENZING_PRIMARY_FALLBACK_RUN", "fallback").execute(() -> {
+            Map<CommandLineOption, CommandLineValue> result = parseCommandLine(
+                PrimaryEnvTestOption.class,
+                new String[] {},
+                PrimaryEnvTestOption.PARAMETER_PROCESSOR,
+                null);
 
-      CommandLineValue val = result.get(RUN);
-      assertEquals("primary", val.getProcessedValue(),
+            CommandLineValue val = result.get(RUN);
+            assertEquals("primary", val.getProcessedValue(),
                    "Primary env var must take precedence over fallback");
-      assertEquals("SENZING_PRIMARY_TEST_RUN", val.getSpecifier());
-    });
+            assertEquals("SENZING_PRIMARY_TEST_RUN", val.getSpecifier());
+        });
     }
 }

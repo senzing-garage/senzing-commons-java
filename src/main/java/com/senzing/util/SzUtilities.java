@@ -338,14 +338,13 @@ public class SzUtilities
                 if (!startsWithDatabaseUriPrefix(uri)) {
                     throw new IllegalArgumentException(
                         "The specified database URI does not appear to be"
-                        + " legal: "
-                        + uri);
+                            + " legal: " + uri);
                 }
             }
             if (licenseBase64 != null && licenseFile != null) {
                 throw new IllegalArgumentException(
                     "Cannot specify both the license file and the "
-                    + "base-64-encoded license");
+                        + "base-64-encoded license");
             }
 
             JsonObjectBuilder mainBuilder = Json.createObjectBuilder();
@@ -378,7 +377,8 @@ public class SzUtilities
         } catch (IOException e) {
             throw new IllegalStateException(
                 "Should not fail in getting canonical path from install "
-                + "locations files.", e);
+                    + "locations files.",
+                e);
         }
     }
 
@@ -444,8 +444,7 @@ public class SzUtilities
         DatabaseType type = DatabaseType.detect(conn);
         if (type != DatabaseType.SQLITE) {
             throw new IllegalArgumentException(
-                "The specified Connection is not a SQLite connection: "
-                + type);
+                "The specified Connection is not a SQLite connection: " + type);
         }
 
         // first find the file
@@ -483,7 +482,9 @@ public class SzUtilities
              BufferedReader br = new BufferedReader(reader))
         {
             int lineNumber = 0;
-            for (String sql = br.readLine(); sql != null; sql = br.readLine())
+            for (String sql = br.readLine();
+                 sql != null;
+                 sql = br.readLine())
             {
                 lineNumber++;
                 // trim the line
@@ -501,8 +502,7 @@ public class SzUtilities
                     if (space < 0) {
                         throw new IllegalStateException(
                             "Failed to parse schema file at line ("
-                            + lineNumber + "): "
-                            + sql);
+                                + lineNumber + "): " + sql);
                     }
                     String tableName = suffix.substring(0, space).toUpperCase();
 

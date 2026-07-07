@@ -174,9 +174,9 @@ public enum DatabaseType
         throws NullPointerException
     {
         Objects.requireNonNull(first,
-      "The first parameter to LEAST cannot be null");
+            "The first parameter to LEAST cannot be null");
         Objects.requireNonNull(second,
-      "The second parameter to LEAST cannot be null");
+            "The second parameter to LEAST cannot be null");
         StringBuilder sb = new StringBuilder();
         switch (this)
         {
@@ -213,9 +213,9 @@ public enum DatabaseType
         throws NullPointerException
     {
         Objects.requireNonNull(first,
-      "The first parameter to GREATEST cannot be null");
+            "The first parameter to GREATEST cannot be null");
         Objects.requireNonNull(second,
-      "The second parameter to GREATEST cannot be null");
+            "The second parameter to GREATEST cannot be null");
         StringBuilder sb = new StringBuilder();
         switch (this)
         {

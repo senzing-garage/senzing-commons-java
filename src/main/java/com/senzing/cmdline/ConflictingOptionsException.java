@@ -26,7 +26,7 @@ public class ConflictingOptionsException extends CommandLineException
                                      SpecifiedOption conflictingOption)
     {
         super("Cannot specify both the " + firstOption.getSourceDescriptor()
-          + " and " + conflictingOption.getSourceDescriptor() + ".");
+              + " and " + conflictingOption.getSourceDescriptor() + ".");
         this.firstOption = firstOption;
         this.conflictingOption = conflictingOption;
     }

@@ -125,9 +125,8 @@ public class OperatingSystemFamilyTest
             expected = UNIX;
         }
 
-        assertSame(expected, RUNTIME_OS_FAMILY,
-               "RUNTIME_OS_FAMILY (" + RUNTIME_OS_FAMILY
-                   + ") does not match classification of os.name=["
-                   + osName + "]");
+        assertSame(expected, RUNTIME_OS_FAMILY, "RUNTIME_OS_FAMILY ("
+            + RUNTIME_OS_FAMILY
+            + ") does not match classification of os.name=[" + osName + "]");
     }
 }

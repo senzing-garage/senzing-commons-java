@@ -190,7 +190,7 @@ public interface CommandLineOption<T extends Enum<T> & CommandLineOption<T, B>,
                 if (field.get(null) == this) {
                     String fieldName = field.getName().toUpperCase();
                     return (fieldName.equals("PASSWORD")
-                        || fieldName.endsWith("_PASSWORD"));
+                            || fieldName.endsWith("_PASSWORD"));
                 }
             } catch (IllegalAccessException ignore) {
                 continue;

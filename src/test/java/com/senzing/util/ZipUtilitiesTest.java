@@ -29,18 +29,29 @@ public class ZipUtilitiesTest
 {
     private static final SecureRandom PRNG = new SecureRandom();
 
-    private static final String[] SENTENCES
-        = {
-      "The quick brown fox jumped over the lazy dog.",
-      "Old Mother Hubbard went to the cupboard to give her poor dog a bone.",
-      "When she came there the cupboard was bare and so the poor dog had none.",
-      "Twinkle, twinkle little star, how I wonder what you are.",
-      "Up above the world so high, like a diamond in the sky.",
-      "Sing a song of six pence, a pocket full of rye.",
-      "Hey, diddle, diddle, the cat and the fiddle, the cow jumped over the moon.",
-      "The little dog laughed to see such fun and the dish ran away with the spoon.",
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      "Aenean at eros diam. Donec sodales feugiat elit sed dapibus. Fusce iaculis quis tortor tincidunt dignissim. Cras vestibulum nibh non mi vulputate condimentum. Sed quis ornare sapien.",
+    private static final String[] SENTENCES = {
+        "The quick brown fox jumped over the lazy dog.",
+        "Old Mother Hubbard went to the cupboard to give her poor dog a bone.",
+        "When she came there the cupboard was bare and so the poor dog had "
+            + "none.",
+        "Twinkle, twinkle little star, how I wonder what you are.",
+        "Up above the world so high, like a diamond in the sky.",
+        "Sing a song of six pence, a pocket full of rye.",
+        "Hey, diddle, diddle, the cat and the fiddle, the cow jumped over "
+            + "the moon.",
+        "The little dog laughed to see such fun and the dish ran away with "
+            + "the spoon.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
+            + "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut "
+            + "enim ad minim veniam, quis nostrud exercitation ullamco "
+            + "laboris nisi ut aliquip ex ea commodo consequat. Duis aute "
+            + "irure dolor in reprehenderit in voluptate velit esse cillum "
+            + "dolore eu fugiat nulla pariatur. Excepteur sint occaecat "
+            + "cupidatat non proident, sunt in culpa qui officia deserunt "
+            + "mollit anim id est laborum.",
+        "Aenean at eros diam. Donec sodales feugiat elit sed dapibus. Fusce "
+            + "iaculis quis tortor tincidunt dignissim. Cras vestibulum nibh "
+            + "non mi vulputate condimentum. Sed quis ornare sapien.",
   };
 
     private static File tempDirectory()
@@ -127,9 +138,10 @@ public class ZipUtilitiesTest
             assertNotEquals(0, zipLength,
                       "ZIP file appears to be empty: " + targetFile);
 
-            assertTrue(zipLength < totalSize,
-                 "The ZIP file (" + targetFile + ") is larger ("
-                     + zipLength + ") than the original files: " + totalSize);
+            assertTrue(zipLength < totalSize, "The ZIP file (" + targetFile
+                                              + ") is larger (" + zipLength
+                                              + ") than the original files: "
+                                              + totalSize);
 
             targetDir = tempDirectory();
 
@@ -137,20 +149,21 @@ public class ZipUtilitiesTest
 
             File[] files = targetDir.listFiles();
             assertEquals(1, files.length,
-                   "Target directory contained an unexpected number "
-                   + "of files.");
+                         "Target directory contained an unexpected number "
+                         + "of files.");
             assertTrue(files[0].isDirectory(),
                  "Target directory does not contain a directory");
             assertEquals(dir.getName(), files[0].getName(),
-      "Unzipped directory name differs from original directory name.");
+                         "Unzipped directory name differs from "
+                         + "original directory name.");
 
             files = files[0].listFiles();
 
             assertEquals(origFiles.length, files.length,
-                   "Unzipped a different number of files than "
-                       + "originally existed: " + targetDir
-                       + "\n\n" + Arrays.asList(origFiles)
-                       + "\n\n" + Arrays.asList(files));
+                         "Unzipped a different number of files than "
+                         + "originally existed: " + targetDir + "\n\n"
+                         + Arrays.asList(origFiles) + "\n\n"
+                         + Arrays.asList(files));
 
             Map<String, File> origFileMap = new LinkedHashMap<>();
             Map<String, File> fileMap = new LinkedHashMap<>();
@@ -163,18 +176,19 @@ public class ZipUtilitiesTest
             }
 
             assertEquals(origFileMap.keySet(), fileMap.keySet(),
-          "Files unzipped with different names.");
+                "Files unzipped with different names.");
 
             fileMap.forEach((name, file) -> {
-        File origFile = origFileMap.get(name);
-        try {
-          assertFalse(IOUtilities.checkFilesDiffer(file, origFile),
-                      "Unzipped file (" + file
-                          + ") differs from original (" + origFile + ")");
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-      });
+                File origFile = origFileMap.get(name);
+                try {
+                    assertFalse(IOUtilities.checkFilesDiffer(file, origFile),
+                                "Unzipped file (" + file
+                                + ") differs from original (" + origFile
+                                + ")");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
             fail("Failed with an unexpected exception: " + e);
@@ -224,9 +238,10 @@ public class ZipUtilitiesTest
             assertNotEquals(0, zipLength,
                       "ZIP file appears to be empty: " + targetFile);
 
-            assertTrue(zipLength < totalSize,
-                 "The ZIP file (" + targetFile + ") is larger ("
-                     + zipLength + ") than the original file: " + totalSize);
+            assertTrue(zipLength < totalSize, "The ZIP file (" + targetFile
+                                              + ") is larger (" + zipLength
+                                              + ") than the original file: "
+                                              + totalSize);
 
             targetDir = tempDirectory();
 
@@ -234,16 +249,17 @@ public class ZipUtilitiesTest
 
             File[] files = targetDir.listFiles();
             assertEquals(1, files.length,
-                   "Target directory contained an unexpected number "
-                       + "of files.");
+                         "Target directory contained an unexpected number "
+                         + "of files.");
             assertFalse(files[0].isDirectory(),
                  "Target directory should not contain a directory");
             assertEquals(file.getName(), files[0].getName(),
                    "Unzipped file name differs from original file name.");
 
             assertFalse(IOUtilities.checkFilesDiffer(file, files[0]),
-                  "Unzipped file (" + files[0]
-                      + ") differs from original (" + file + ")");
+                        "Unzipped file (" + files[0]
+                        + ") differs from original (" + file
+                        + ")");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Failed with an unexpected exception: " + e);
@@ -469,8 +485,8 @@ public class ZipUtilitiesTest
         // Unzip into a fresh temp directory via the stream variant.
         File extractDir = tempDirectory();
         try {
-            try (ZipInputStream zis = new ZipInputStream(
-          new ByteArrayInputStream(zipBytes))) {
+            try (ZipInputStream zis
+                     = new ZipInputStream(new ByteArrayInputStream(zipBytes))) {
                 ZipUtilities.unzip(zis, extractDir);
             }
 
@@ -505,7 +521,7 @@ public class ZipUtilitiesTest
         System.setOut(new PrintStream(captured, true,
                                   StandardCharsets.UTF_8));
         try {
-            ZipUtilities.main(new String[]{ "hello world" });
+            ZipUtilities.main(new String[] { "hello world" });
             String out = captured.toString(StandardCharsets.UTF_8);
             assertTrue(out.contains("(zip):"),
                  "main output must include zip diagnostic: " + out);
@@ -532,11 +548,10 @@ public class ZipUtilitiesTest
         targetZip.delete();
         try {
             ZipUtilities.main(new String[] {
-          dir.getAbsolutePath(), targetZip.getAbsolutePath()
-      });
+                dir.getAbsolutePath(), targetZip.getAbsolutePath()
+            });
             assertTrue(targetZip.exists(),
-                 "main must create the target ZIP file: "
-                     + targetZip);
+                       "main must create the target ZIP file: " + targetZip);
             assertTrue(targetZip.length() > 0,
                  "main-created ZIP file must be non-empty");
         } finally {
@@ -567,15 +582,14 @@ public class ZipUtilitiesTest
             // Run main(zip, dir) — should call unzip and populate the
             // directory.
             ZipUtilities.main(new String[] {
-          zipFile.getAbsolutePath(), extractDir.getAbsolutePath()
-      });
+                zipFile.getAbsolutePath(), extractDir.getAbsolutePath()
+            });
 
             File[] extracted = extractDir.listFiles();
-            assertNotNull(extracted,
-                    "Extract directory must contain entries");
+            assertNotNull(extracted, "Extract directory must contain entries");
             assertEquals(1, extracted.length,
-                   "Extracted root must contain exactly one entry"
-                       + " (the source dir)");
+                         "Extracted root must contain exactly one entry"
+                         + " (the source dir)");
             assertTrue(extracted[0].isDirectory(),
                  "Extracted entry must be a directory");
         } finally {
@@ -601,8 +615,8 @@ public class ZipUtilitiesTest
                                   StandardCharsets.UTF_8));
         try {
             ZipUtilities.main(new String[] {
-          "first arg", "second arg", "third arg"
-      });
+                "first arg", "second arg", "third arg"
+            });
             String out = captured.toString(StandardCharsets.UTF_8);
             // For each of the 3 args, expect one zip line and one gzip
             // line — so 6 diagnostic lines total.
@@ -628,28 +642,26 @@ public class ZipUtilitiesTest
         File targetDir = tempDirectory();
         File zipFile = File.createTempFile("zipslip-", ".zip");
         zipFile.deleteOnExit();
-        try (ZipOutputStream zos = new ZipOutputStream(
-            new FileOutputStream(zipFile))) {
+        try (ZipOutputStream zos
+                 = new ZipOutputStream(new FileOutputStream(zipFile))) {
             zos.putNextEntry(new ZipEntry("../escape.txt"));
             zos.write("pwned".getBytes(StandardCharsets.UTF_8));
             zos.closeEntry();
         }
-        try (ZipInputStream zis = new ZipInputStream(
-            new FileInputStream(zipFile))) {
+        try (ZipInputStream zis
+                 = new ZipInputStream(new FileInputStream(zipFile))) {
             IOException ex = assertThrows(
                 IOException.class,
                 () -> ZipUtilities.unzip(zis, targetDir),
                 "unzip() must refuse a Zip Slip traversal entry");
-            assertTrue(
-                ex.getMessage().contains("outside target"),
-                "exception message should explain the refusal; "
-                + "got: " + ex.getMessage());
+            assertTrue(ex.getMessage().contains("outside target"),
+                       "exception message should explain the refusal; "
+                       + "got: " + ex.getMessage());
         }
         File escaped = new File(targetDir.getParentFile(), "escape.txt");
-        assertFalse(
-            escaped.exists(),
-            "Zip Slip target should never have been created: "
-            + escaped);
+        assertFalse(escaped.exists(),
+                    "Zip Slip target should never have been created: "
+                    + escaped);
     }
 
     private static int countOccurrences(String haystack, String needle)

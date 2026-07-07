@@ -112,7 +112,7 @@ public class Registry<T>
         }
         if (this.bindingMap.containsKey(name)) {
             throw new NameAlreadyBoundException(
-          "The specified name is already bound: " + name);
+                "The specified name is already bound: " + name);
         }
         AccessToken token = new AccessToken();
         this.bindingMap.put(name, object);
@@ -141,7 +141,7 @@ public class Registry<T>
         Objects.requireNonNull(name, "The specified name cannot be null");
         if (!this.bindingMap.containsKey(name)) {
             throw new NameNotFoundException(
-          "The specified name is not bound: " + name);
+                "The specified name is not bound: " + name);
         }
         return this.bindingMap.get(name);
     }
@@ -192,11 +192,12 @@ public class Registry<T>
         AccessToken expected = this.tokenMap.get(name);
         if (expected == null) {
             throw new NameNotFoundException(
-          "The specified provider name is not recognized: " + name);
+                "The specified provider name is not recognized: " + name);
         }
         if (token != expected) {
             throw new NoPermissionException(
-          "The specified token does not match the specified name: " + name);
+                "The specified token does not match " + "the specified name: "
+                    + name);
         }
         this.bindingMap.remove(name);
         this.tokenMap.remove(name);

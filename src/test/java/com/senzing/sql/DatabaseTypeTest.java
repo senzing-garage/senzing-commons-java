@@ -163,14 +163,14 @@ public class DatabaseTypeTest
     public void detectPropagatesSqlException()
     {
         Connection conn = (Connection) Proxy.newProxyInstance(
-        DatabaseType.class.getClassLoader(),
-        new Class<?>[] { Connection.class },
-        (proxy, method, args) -> {
-          if ("getMetaData".equals(method.getName())) {
-            throw new SQLException("simulated");
-          }
-          return null;
-        });
+            DatabaseType.class.getClassLoader(),
+            new Class<?>[] { Connection.class },
+            (proxy, method, args) -> {
+                if ("getMetaData".equals(method.getName())) {
+                    throw new SQLException("simulated");
+                }
+                return null;
+            });
         assertThrows(SQLException.class, () -> DatabaseType.detect(conn));
     }
 
@@ -277,7 +277,7 @@ public class DatabaseTypeTest
         SQLITE.setTimestamp(cs, 1, ts);
 
         assertEquals(1, recorder.calls.size(),
-                 "Exactly one binding call expected for SQLITE on"
+                     "Exactly one binding call expected for SQLITE on"
                      + " CallableStatement");
         assertEquals("setString", recorder.calls.get(0).method);
     }
@@ -373,8 +373,7 @@ public class DatabaseTypeTest
     @Test
     public void sqlLeastToleratesNullOtherArray()
     {
-        assertEquals("MIN(a, b)",
-                 SQLITE.sqlLeast("a", "b", (String[]) null));
+        assertEquals("MIN(a, b)", SQLITE.sqlLeast("a", "b", (String[]) null));
     }
 
     // -------------------------------------------------------------------
@@ -432,8 +431,7 @@ public class DatabaseTypeTest
     @Test
     public void sqlGreatestIncludesVarargsOtherParameters()
     {
-        assertEquals("MAX(a, b, c, d)",
-                 SQLITE.sqlGreatest("a", "b", "c", "d"));
+        assertEquals("MAX(a, b, c, d)", SQLITE.sqlGreatest("a", "b", "c", "d"));
         assertEquals("GREATEST(a, b, c)",
                  POSTGRESQL.sqlGreatest("a", "b", "c"));
     }
@@ -456,23 +454,21 @@ public class DatabaseTypeTest
     private static Connection connectionWithProductName(String productName)
     {
         DatabaseMetaData md = (DatabaseMetaData) Proxy.newProxyInstance(
-        DatabaseTypeTest.class.getClassLoader(),
-        new Class<?>[] { DatabaseMetaData.class },
-        (proxy, method, args) -> {
-          if ("getDatabaseProductName".equals(method.getName())) {
-            return productName;
-          }
-          return null;
-        });
+            DatabaseTypeTest.class.getClassLoader(),
+            new Class<?>[] { DatabaseMetaData.class },
+            (proxy, method, args) -> {
+                if ("getDatabaseProductName".equals(method.getName())) {
+                    return productName;
+                }
+                return null;
+            });
         return (Connection) Proxy.newProxyInstance(
-        DatabaseTypeTest.class.getClassLoader(),
-        new Class<?>[] { Connection.class },
-        (proxy, method, args) -> {
-          if ("getMetaData".equals(method.getName())) {
-            return md;
-          }
-          return null;
-        });
+            DatabaseTypeTest.class.getClassLoader(),
+            new Class<?>[] { Connection.class },
+            (proxy, method, args) -> {
+                if ("getMetaData".equals(method.getName())) return md;
+                return null;
+            });
     }
 
     /** A single recorded invocation. */
@@ -504,16 +500,16 @@ public class DatabaseTypeTest
     private static PreparedStatement preparedStatementProxy(Recorder r)
     {
         return (PreparedStatement) Proxy.newProxyInstance(
-        DatabaseTypeTest.class.getClassLoader(),
-        new Class<?>[] { PreparedStatement.class },
-        r);
+            DatabaseTypeTest.class.getClassLoader(),
+            new Class<?>[] { PreparedStatement.class },
+            r);
     }
 
     private static CallableStatement callableStatementProxy(Recorder r)
     {
         return (CallableStatement) Proxy.newProxyInstance(
-        DatabaseTypeTest.class.getClassLoader(),
-        new Class<?>[] { CallableStatement.class },
-        r);
+            DatabaseTypeTest.class.getClassLoader(),
+            new Class<?>[] { CallableStatement.class },
+            r);
     }
 }

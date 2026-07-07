@@ -1,7 +1,5 @@
 package com.senzing.cmdline;
 
-import java.io.File;
-import java.net.InetAddress;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -10,7 +8,8 @@ import static com.senzing.cmdline.TestOption.*;
 /**
  * Test implementation of {@link CommandLineOption}.
  */
-public enum ExtendedTestOption implements CommandLineOption<ExtendedTestOption, TestOption>
+public enum ExtendedTestOption
+    implements CommandLineOption<ExtendedTestOption, TestOption>
 {
     SQS_QUEUE_URL("--sqs"),
     DATABASE_TABLE("--table"),
@@ -54,15 +53,15 @@ public enum ExtendedTestOption implements CommandLineOption<ExtendedTestOption, 
     {
         String flag = this.getCommandLineFlag();
         return Collections.singleton(
-        "SZ_EXT_TEST_" + flag.substring(2).toUpperCase());
+            "SZ_EXT_TEST_" + flag.substring(2).toUpperCase());
     }
 
     @Override
     public List<String> getEnvironmentFallbacks()
     {
         String flag = this.getCommandLineFlag();
-        return List.of("SENZING_ALT_EXT_TEST_" + flag.substring(2)
-                                                     .toUpperCase());
+        return List.of("SENZING_ALT_EXT_TEST_"
+                       + flag.substring(2).toUpperCase());
     }
 
     @Override
@@ -136,8 +135,8 @@ public enum ExtendedTestOption implements CommandLineOption<ExtendedTestOption, 
 
             if (!(option instanceof ExtendedTestOption)) {
                 throw new IllegalArgumentException(
-            "Unhandled command-line option: " + option.getCommandLineFlag()
-                + " / "+ option);
+                    "Unhandled command-line option: "
+                        + option.getCommandLineFlag() + " / " + option);
             }
 
             ExtendedTestOption testOption = (ExtendedTestOption) option;
@@ -149,9 +148,8 @@ public enum ExtendedTestOption implements CommandLineOption<ExtendedTestOption, 
 
                 default:
                     throw new IllegalArgumentException(
-              "Unhandled command line option: "
-                  + option.getCommandLineFlag()
-                  + " / " + option);
+                        "Unhandled command line option: "
+                            + option.getCommandLineFlag() + " / " + option);
             }
         }
     }
