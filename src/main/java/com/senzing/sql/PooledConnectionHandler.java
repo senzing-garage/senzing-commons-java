@@ -261,8 +261,9 @@ class PooledConnectionHandler implements InvocationHandler
 
         // check if the return type is an interface
         Class returnType = method.getReturnType();
-        if (returnType.isInterface() && "java.sql".equals(
-            returnType.getPackageName())) {
+        if (returnType.isInterface()
+            && "java.sql".equals(returnType.getPackageName()))
+        {
             // create a sub-handler to handle the proxying the result
             InvocationHandler subHandler
                 = new PooledConnectionHandler(this, result);

@@ -88,12 +88,12 @@ public class PropertyReflector<T>
 
             String name = method.getName();
             // check if we have a standard getter
-            if (name.length()
-                > 3
+            if (name.length() > 3
                 && name.startsWith("get")
                 && Character.isUpperCase(name.charAt(3))
                 && method.getParameterCount() == 0
-                && method.getReturnType() != void.class) {
+                && method.getReturnType() != void.class)
+            {
                 String key = name.substring(3, 4).toLowerCase();
                 if (name.length() > 4) {
                     key += name.substring(4);
@@ -102,14 +102,13 @@ public class PropertyReflector<T>
                 continue;
             }
             // check for a boolean getter
-            if (name.length()
-                > 2
+            if (name.length() > 2
                 && name.startsWith("is")
                 && Character.isUpperCase(name.charAt(2))
                 && method.getParameterCount() == 0
-                && (method.getReturnType()
-                    == Boolean.class || method.getReturnType()
-                        == boolean.class)) {
+                && (method.getReturnType() == Boolean.class
+                    || method.getReturnType() == boolean.class))
+            {
                 String key = name.substring(2, 3).toLowerCase();
                 if (name.length() > 3) {
                     key += name.substring(3);
@@ -118,12 +117,12 @@ public class PropertyReflector<T>
                 continue;
             }
             // check for a setter
-            if (name.length()
-                > 3
+            if (name.length() > 3
                 && name.startsWith("set")
                 && Character.isUpperCase(name.charAt(3))
                 && method.getParameterCount() == 1
-                && method.getReturnType() == void.class) {
+                && method.getReturnType() == void.class)
+            {
                 String key = name.substring(3, 4).toLowerCase();
                 if (name.length() > 4) {
                     key += name.substring(4);
@@ -192,10 +191,10 @@ public class PropertyReflector<T>
             if (this.getMutators().containsKey(propertyKey)) {
                 // NOTE: this is an odd case, but allowed
                 throw new UnsupportedOperationException(
-            "The specified property is write-only: " + propertyKey);
+                    "The specified property is write-only: " + propertyKey);
             } else {
                 throw new IllegalArgumentException(
-            "Unrecognized property key: " + propertyKey);
+                    "Unrecognized property key: " + propertyKey);
             }
         }
         try {
@@ -231,10 +230,10 @@ public class PropertyReflector<T>
             if (this.getAccessors().containsKey(propertyKey)) {
                 // NOTE: this is an odd case, but allowed
                 throw new UnsupportedOperationException(
-            "The specified property is read-only: " + propertyKey);
+                    "The specified property is read-only: " + propertyKey);
             } else {
                 throw new IllegalArgumentException(
-            "Unrecognized property key: " + propertyKey);
+                    "Unrecognized property key: " + propertyKey);
             }
         }
 
@@ -243,17 +242,17 @@ public class PropertyReflector<T>
         // value to null (no primitives allowed)
         if (propertyValue == null) {
             invoked = findAndInvokeMutator(
-          methods,
-          (argType -> !argType.isPrimitive()),
-          target,
-          null);
+                methods,
+                (argType -> !argType.isPrimitive()),
+                target,
+                null);
 
             if (invoked) return;
 
             // if we get here then no method was found
             throw new NullPointerException(
-          "The specified value for the property (" + propertyKey + ") cannot "
-              + "be null.");
+                "The specified value for the property (" + propertyKey
+                    + ") cannot " + "be null.");
         }
 
         // get the value type
@@ -261,7 +260,7 @@ public class PropertyReflector<T>
 
         // for non-null property values, look for an exact type-match first
         invoked = findAndInvokeMutator(
-        methods, (argType -> argType == valueType), target, propertyValue);
+            methods, (argType -> argType == valueType), target, propertyValue);
 
         if (invoked) return;
 
@@ -269,17 +268,19 @@ public class PropertyReflector<T>
         Class primType = getPrimitiveType(valueType);
 
         if (primType != null && primType != valueType) {
-            invoked = findAndInvokeMutator(
-          methods, (argType -> argType == primType), target, propertyValue);
+            invoked = findAndInvokeMutator(methods,
+                                           (argType -> argType == primType),
+                                           target,
+                                           propertyValue);
             if (invoked) return;
         }
 
         // check if we have an assignable-from method
         invoked = findAndInvokeMutator(
-        methods,
-        (argType -> argType.isAssignableFrom(valueType)),
-        target,
-        propertyValue);
+            methods,
+            (argType -> argType.isAssignableFrom(valueType)),
+            target,
+            propertyValue);
 
         if (invoked) return;
 
@@ -290,28 +291,28 @@ public class PropertyReflector<T>
      * primitive equivalent if (primType != null) { // get the corresponding
      * promoted type from the primitive type Class promotedType =
      * getPromotedType(primType);
-     * 
+     *
      * // check if the promoted type extends java.lang.Number if
      * (Number.class.isAssignableFrom(promotedType)) { // get the value as a
      * Number Number numberValue = (Number) propertyValue;
-     * 
+     *
      * // iterate over the methods for (Method method : methods) { // get the
      * argument type Class argType = method.getParameterTypes()[0];
-     * 
+     *
      * // check if the argument type is primitive and if so then promote it if
      * (argType.isPrimitive()) { argType = getPromotedType(argType); }
-     * 
+     *
      * // test the argument type if a primitive number if
      * (!Number.class.isAssignableFrom(argType)) continue; if
      * (getPrimitiveType(argType) == null) continue;
-     * 
+     *
      * // convert the value to the primitive number type Object convertedValue =
      * convertPrimitiveNumber(numberValue, argType);
-     * 
+     *
      * try { // invoke the method method.invoke(target, convertedValue);
-     * 
+     *
      * // return here since invoked return;
-     * 
+     *
      * } catch (InvocationTargetException | IllegalAccessException e) { throw
      * new RuntimeException(e); } } } }
      */
@@ -321,12 +322,13 @@ public class PropertyReflector<T>
             // a null value was specified but all mutators require primitive
             // values
             throw new NullPointerException(
-          "The specified value for the property (" + propertyKey + ") cannot "
-              + "be null.");
+                "The specified value for the property (" + propertyKey
+                    + ") cannot " + "be null.");
         } else {
             throw new ClassCastException(
-          "The specified value for the property (" + propertyKey + ") was not "
-              + "of a valid type: " + propertyValue.getClass().getName());
+                "The specified value for the property (" + propertyKey
+                    + ") was not " + "of a valid type: "
+                    + propertyValue.getClass().getName());
         }
     }
 
@@ -412,9 +414,8 @@ public class PropertyReflector<T>
         throws NullPointerException
     {
         Objects.requireNonNull(
-        builder, "The specified JsonObjectBuilder cannot be null");
-        Objects.requireNonNull(
-        object, "The specified object cannot be null");
+            builder, "The specified JsonObjectBuilder cannot be null");
+        Objects.requireNonNull(object, "The specified object cannot be null");
 
         IdentityHashMap visitedMap = new IdentityHashMap();
         return buildJsonObject(visitedMap, builder, object);
@@ -443,7 +444,7 @@ public class PropertyReflector<T>
     {
         if (visited.containsKey(object)) {
             throw new IllegalStateException(
-          "Circular reference detected for object: " + object);
+                "Circular reference detected for object: " + object);
         }
         visited.put(object, null);
         try {
@@ -471,9 +472,10 @@ public class PropertyReflector<T>
             // iterate over the properties
             for (String propertyKey : keySet) {
                 // get the property value
-                Object propertyValue = (objectMap != null) ? objectMap.get(
-                    propertyKey) : reflector.getPropertyValue(object,
-                                                              propertyKey);
+                Object propertyValue = (objectMap != null)
+                    ? objectMap.get(propertyKey) : reflector.getPropertyValue(
+                    object,
+                    propertyKey);
 
                 // check for a null value
                 if (propertyValue == null) {
@@ -554,7 +556,7 @@ public class PropertyReflector<T>
                         } else {
                             JsonObjectBuilder job = Json.createObjectBuilder();
                             builder.add(propertyKey,
-                  buildJsonObject(visited, job, propertyValue));
+                                buildJsonObject(visited, job, propertyValue));
                         }
                 }
             }
@@ -589,7 +591,7 @@ public class PropertyReflector<T>
 
         if (visited.containsKey(value)) {
             throw new IllegalStateException(
-          "Circular reference detected for object: " + value);
+                "Circular reference detected for object: " + value);
         }
         visited.put(value, null);
         try {

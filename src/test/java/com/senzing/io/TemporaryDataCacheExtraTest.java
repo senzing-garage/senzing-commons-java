@@ -73,8 +73,8 @@ public class TemporaryDataCacheExtraTest
         throws IOException, InterruptedException
     {
         byte[] data = largeBytes();
-        TemporaryDataCache tdc = new TemporaryDataCache(
-        new ByteArrayInputStream(data));
+        TemporaryDataCache tdc
+            = new TemporaryDataCache(new ByteArrayInputStream(data));
         try {
             tdc.waitUntilAppendingComplete();
 
@@ -89,8 +89,8 @@ public class TemporaryDataCacheExtraTest
                 // Read the next byte — should reflect data at offset 64K.
                 int next = is.read();
                 assertEquals(data[64 * 1024] & 0xFF, next,
-                     "Read after skip should return data at the new"
-                         + " position");
+                             "Read after skip should return data at the new"
+                             + " position");
             } finally {
                 is.close();
             }
@@ -104,8 +104,8 @@ public class TemporaryDataCacheExtraTest
         throws IOException, InterruptedException
     {
         byte[] data = largeBytes();
-        TemporaryDataCache tdc = new TemporaryDataCache(
-        new ByteArrayInputStream(data));
+        TemporaryDataCache tdc
+            = new TemporaryDataCache(new ByteArrayInputStream(data));
         try {
             tdc.waitUntilAppendingComplete();
 
@@ -115,9 +115,9 @@ public class TemporaryDataCacheExtraTest
                 // skipped (the total bytes available).
                 long skipped = is.skip(data.length * 2L);
                 assertTrue(skipped > 0L,
-                   "skip past EOF should return non-zero bytes");
+                    "skip past EOF should return non-zero bytes");
                 assertTrue(skipped <= data.length,
-                   "skip should not exceed total data length");
+                    "skip should not exceed total data length");
             } finally {
                 is.close();
             }
@@ -135,8 +135,8 @@ public class TemporaryDataCacheExtraTest
         throws IOException, InterruptedException
     {
         byte[] data = largeBytes();
-        TemporaryDataCache tdc = new TemporaryDataCache(
-        new ByteArrayInputStream(data));
+        TemporaryDataCache tdc
+            = new TemporaryDataCache(new ByteArrayInputStream(data));
         try {
             tdc.waitUntilAppendingComplete();
 
@@ -144,8 +144,8 @@ public class TemporaryDataCacheExtraTest
             try {
                 long total = drain(is);
                 assertEquals(data.length, total,
-                     "Sequential read across parts must return all "
-                         + "bytes written into the cache");
+                             "Sequential read across parts must return all "
+                             + "bytes written into the cache");
             } finally {
                 is.close();
             }
@@ -186,20 +186,20 @@ public class TemporaryDataCacheExtraTest
             // debug logging during consumption, so the redirect must be
             // active before the constructor runs.
             new SystemOut().execute(() -> {
-        TemporaryDataCache tdc = new TemporaryDataCache(
-            new ByteArrayInputStream(data));
-        try {
-          tdc.waitUntilAppendingComplete();
-          InputStream is = tdc.getInputStream();
-          try {
-            drain(is);
-          } finally {
-            is.close();
-          }
-        } finally {
-          tdc.delete();
-        }
-      });
+                TemporaryDataCache tdc
+                    = new TemporaryDataCache(new ByteArrayInputStream(data));
+                try {
+                    tdc.waitUntilAppendingComplete();
+                    InputStream is = tdc.getInputStream();
+                    try {
+                        drain(is);
+                    } finally {
+                        is.close();
+                    }
+                } finally {
+                    tdc.delete();
+                }
+            });
         } finally {
             LoggingUtilities.clearDebugOverride();
         }
@@ -223,14 +223,14 @@ public class TemporaryDataCacheExtraTest
         throws Exception
     {
         byte[] data = largeBytes();
-        TemporaryDataCache tdc = new TemporaryDataCache(
-        new ByteArrayInputStream(data));
+        TemporaryDataCache tdc
+            = new TemporaryDataCache(new ByteArrayInputStream(data));
         try {
             // Wait synchronously for completion, then verify the flag.
             tdc.waitUntilAppendingComplete();
             assertTrue(!tdc.isAppending(),
-                 "isAppending() must return false after consumption "
-                     + "completes");
+                       "isAppending() must return false after consumption "
+                       + "completes");
         } finally {
             tdc.delete();
         }
@@ -246,15 +246,15 @@ public class TemporaryDataCacheExtraTest
         throws Exception
     {
         byte[] data = largeBytes();
-        TemporaryDataCache tdc = new TemporaryDataCache(
-        new ByteArrayInputStream(data));
+        TemporaryDataCache tdc
+            = new TemporaryDataCache(new ByteArrayInputStream(data));
         try {
             // Allow up to 30 seconds — the actual consumption is well
             // under a second on any reasonable machine.
             boolean done = tdc.waitUntilAppendingComplete(30_000L);
             assertTrue(done,
-                 "Bounded waitUntilAppendingComplete must return true"
-                     + " when consumer thread completes within budget");
+                       "Bounded waitUntilAppendingComplete must return true"
+                       + " when consumer thread completes within budget");
         } finally {
             tdc.delete();
         }
@@ -270,13 +270,13 @@ public class TemporaryDataCacheExtraTest
         throws Exception
     {
         byte[] data = largeBytes();
-        TemporaryDataCache tdc = new TemporaryDataCache(
-        new ByteArrayInputStream(data));
+        TemporaryDataCache tdc
+            = new TemporaryDataCache(new ByteArrayInputStream(data));
         try {
             boolean done = tdc.waitUntilAppendingComplete(0L);
             assertTrue(done,
-                 "maxWait <= 0 must delegate to the unbounded wait "
-                     + "and return true after completion");
+                       "maxWait <= 0 must delegate to the unbounded wait "
+                       + "and return true after completion");
         } finally {
             tdc.delete();
         }
@@ -296,23 +296,23 @@ public class TemporaryDataCacheExtraTest
         throws Exception
     {
         byte[] data = largeBytes();
-        TemporaryDataCache tdc = new TemporaryDataCache(
-        new ByteArrayInputStream(data));
+        TemporaryDataCache tdc
+            = new TemporaryDataCache(new ByteArrayInputStream(data));
         try {
             tdc.waitUntilAppendingComplete();
 
             try (InputStream is = tdc.getInputStream(true)) {
                 long total = drain(is);
                 assertEquals(data.length, total,
-                     "Consuming stream should still surface every "
-                         + "byte of the original input");
+                             "Consuming stream should still surface every "
+                             + "byte of the original input");
             }
 
             // After consuming, the cache should be marked deleted (or at
             // least the file parts gone).
             assertTrue(tdc.isDeleted(),
-                 "After fully consuming a consumer-mode input stream"
-                     + " the cache should be marked deleted");
+                       "After fully consuming a consumer-mode input stream"
+                       + " the cache should be marked deleted");
         } finally {
             tdc.delete();
         }
@@ -358,25 +358,25 @@ public class TemporaryDataCacheExtraTest
         };
 
         new SystemErr().execute(() -> {
-      TemporaryDataCache tdc = new TemporaryDataCache(failing);
-      try {
-        // Wait for consumer thread to encounter the failure. The
-        // wait is inside the stub so the consumer thread's uncaught
-        // RuntimeException stack trace, printed by the JVM's default
-        // handler, is captured rather than leaked to the build log.
-        tdc.waitUntilAppendingComplete();
+            TemporaryDataCache tdc = new TemporaryDataCache(failing);
+            try {
+                // Wait for consumer thread to encounter the failure. The
+                // wait is inside the stub so the consumer thread's uncaught
+                // RuntimeException stack trace, printed by the JVM's default
+                // handler, is captured rather than leaked to the build log.
+                tdc.waitUntilAppendingComplete();
 
-        // Reading must surface the failure as a RuntimeException
-        // wrapping the IOException (per setFailure / checkFailure).
-        assertThrows(RuntimeException.class, () -> {
-          try (InputStream is = tdc.getInputStream()) {
-            drain(is);
-          }
+                // Reading must surface the failure as a RuntimeException
+                // wrapping the IOException (per setFailure / checkFailure).
+                assertThrows(RuntimeException.class, () -> {
+                    try (InputStream is = tdc.getInputStream()) {
+                        drain(is);
+                    }
+                });
+            } finally {
+                tdc.delete();
+            }
         });
-      } finally {
-        tdc.delete();
-      }
-    });
     }
 
     // -------------------------------------------------------------------
@@ -393,8 +393,8 @@ public class TemporaryDataCacheExtraTest
         throws IOException, InterruptedException
     {
         byte[] data = largeBytes();
-        TemporaryDataCache tdc = new TemporaryDataCache(
-        new ByteArrayInputStream(data));
+        TemporaryDataCache tdc
+            = new TemporaryDataCache(new ByteArrayInputStream(data));
         tdc.waitUntilAppendingComplete();
 
         InputStream is = tdc.getInputStream();
@@ -408,13 +408,13 @@ public class TemporaryDataCacheExtraTest
             // Subsequent reads that need to attach the next part must
             // throw "Backing files deleted".
             assertThrows(IOException.class, () -> {
-        byte[] buf = new byte[8192];
-        // Read until the next part-boundary forces an attach.
-        int n;
-        while ((n = is.read(buf)) >= 0) {
-          // continue draining
-        }
-      });
+                byte[] buf = new byte[8192];
+                // Read until the next part-boundary forces an attach.
+                int n;
+                while ((n = is.read(buf)) >= 0) {
+                    // continue draining
+                }
+            });
         } finally {
             is.close();
         }

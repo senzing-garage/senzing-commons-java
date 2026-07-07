@@ -66,7 +66,7 @@ public class PropertyReflectorExtraTest
             list.add(BigInteger.valueOf(7L));
             list.add("eight");
             list.add(List.of(9, 10));
-            list.add(new int[]{ 11, 12 });
+            list.add(new int[] { 11, 12 });
             list.add(new SimpleNested("inner"));
             return list;
         }
@@ -145,8 +145,8 @@ public class PropertyReflectorExtraTest
     @Test
     public void toJsonObjectCollectionElementsDispatchAllTypes()
     {
-        JsonObject json = PropertyReflector.toJsonObject(
-        new CollectionElementBean());
+        JsonObject json
+            = PropertyReflector.toJsonObject(new CollectionElementBean());
 
         JsonArray arr = json.getJsonArray("elements");
         // 13 elements: null, Integer, Short, Long, Float, Double, Boolean,
@@ -194,9 +194,8 @@ public class PropertyReflectorExtraTest
         JsonObject json = PropertyReflector.toJsonObject(new NestedBean());
 
         JsonObject nested = json.getJsonObject("nested");
-        assertNotNull(nested,
-                  "Nested non-collection, non-primitive property "
-                      + "should be serialized as a JSON object");
+        assertNotNull(nested, "Nested non-collection, non-primitive property "
+                              + "should be serialized as a JSON object");
         assertEquals("hello", nested.getString("label"));
     }
 
@@ -222,21 +221,20 @@ public class PropertyReflectorExtraTest
     public void buildJsonObjectPublicOverloadAddsToBuilder()
     {
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        JsonObjectBuilder ret = PropertyReflector.buildJsonObject(
-        builder, new NestedBean());
+        JsonObjectBuilder ret
+            = PropertyReflector.buildJsonObject(builder, new NestedBean());
         assertSame(builder, ret,
                "buildJsonObject should return the supplied builder");
 
         JsonObject obj = builder.build();
-        assertEquals("hello",
-                 obj.getJsonObject("nested").getString("label"));
+        assertEquals("hello", obj.getJsonObject("nested").getString("label"));
     }
 
     @Test
     public void buildJsonObjectNullBuilderThrows()
     {
         assertThrows(NullPointerException.class,
-                 () -> PropertyReflector.buildJsonObject(
+                     () -> PropertyReflector.buildJsonObject(
                      null, new NestedBean()));
     }
 
@@ -244,7 +242,7 @@ public class PropertyReflectorExtraTest
     public void buildJsonObjectNullObjectThrows()
     {
         assertThrows(NullPointerException.class,
-                 () -> PropertyReflector.buildJsonObject(
+                     () -> PropertyReflector.buildJsonObject(
                      Json.createObjectBuilder(), null));
     }
 
@@ -270,7 +268,7 @@ public class PropertyReflectorExtraTest
         map.put("bigInt", BigInteger.valueOf(7L));
         map.put("aString", "eight");
         map.put("aColl", List.of(9, 10));
-        map.put("anArray", new int[]{ 11, 12 });
+        map.put("anArray", new int[] { 11, 12 });
         map.put("nested", new SimpleNested("nine"));
 
         JsonObject json = PropertyReflector.toJsonObject(map);
@@ -289,7 +287,6 @@ public class PropertyReflectorExtraTest
         assertEquals("eight", json.getString("aString"));
         assertEquals(2, json.getJsonArray("aColl").size());
         assertEquals(2, json.getJsonArray("anArray").size());
-        assertEquals("nine",
-                 json.getJsonObject("nested").getString("label"));
+        assertEquals("nine", json.getJsonObject("nested").getString("label"));
     }
 }

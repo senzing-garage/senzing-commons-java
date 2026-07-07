@@ -86,11 +86,11 @@ public class NoPrimaryOptionException extends CommandLineException
         throws IllegalArgumentException
     {
         Objects.requireNonNull(
-        primaryOptions, "The Set of primary options cannot be null");
+            primaryOptions, "The Set of primary options cannot be null");
 
         if (primaryOptions.size() == 0) {
             throw new IllegalArgumentException(
-          "There must be at least one primary option");
+                "There must be at least one primary option");
         }
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -99,13 +99,13 @@ public class NoPrimaryOptionException extends CommandLineException
             // check if not primary
             if (!option.isPrimary()) {
                 throw new IllegalArgumentException(
-            "At least one of the specified options in the set is NOT a primary "
-            + "option: " + option);
+                    "At least one of the specified options in "
+                        + "the set is NOT a primary option: " + option);
             }
 
             // add info on this option
             pw.println("     o " + option.getCommandLineFlag()
-                     + (option.isDeprecated() ? " (deprecated)" : ""));
+                       + (option.isDeprecated() ? " (deprecated)" : ""));
         }
         pw.flush();
         return sw.toString();

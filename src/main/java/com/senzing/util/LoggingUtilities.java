@@ -115,7 +115,8 @@ public class LoggingUtilities
                 // with com.senzing and get next part
                 int prefixLength = "com.senzing.".length();
                 if (packageName.startsWith("com.senzing.")
-                    && packageName.length() > prefixLength) {
+                    && packageName.length() > prefixLength)
+                {
                     int index = packageName.indexOf(".", prefixLength);
                     if (index < 0) {
                         index = packageName.length();
@@ -128,8 +129,8 @@ public class LoggingUtilities
                 if (index <= 0) break;
                 if (index == (packageName.length() - 1)) break;
                 packageName = packageName.substring(0, index);
-            } while (packageName.length() > 0 && !packageName.equals(
-                "com.senzing"));
+            } while (packageName.length() > 0
+                     && !packageName.equals("com.senzing"));
 
             // return the base product ID if we get here
             return BASE_PRODUCT_ID;
@@ -306,23 +307,13 @@ public class LoggingUtilities
         String productId = getProductIdForPackage(packageName);
 
         StringBuilder sb = new StringBuilder();
-        String timestamp = LOG_DATE_FORMATTER.format(
-                Instant.now().atZone(LOG_DATE_ZONE));
-        sb.append(timestamp)
-          .append(" senzing-")
-          .append(productId)
-          .append(" (")
-          .append(logType)
-          .append(")")
-          .append(" [")
-          .append(Thread.currentThread().getId())
-          .append("|")
-          .append(callingClass)
-          .append(".")
-          .append(caller.getMethodName())
-          .append(":")
-          .append(caller.getLineNumber())
-          .append("] ")
+        String timestamp
+            = LOG_DATE_FORMATTER.format(Instant.now().atZone(LOG_DATE_ZONE));
+        sb.append(timestamp).append(" senzing-").append(productId).append(" (")
+          .append(logType).append(")").append(" [")
+          .append(Thread.currentThread().getId()).append("|")
+          .append(callingClass).append(".").append(caller.getMethodName())
+          .append(":").append(caller.getLineNumber()).append("] ")
           .append(multilineFormat(lines));
 
         // handle the stack trace if a throwable is provided

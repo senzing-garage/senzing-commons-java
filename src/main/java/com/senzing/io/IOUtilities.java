@@ -51,8 +51,8 @@ public class IOUtilities
         StringBuilder sb = new StringBuilder();
         int readCount = 0;
         for (int readByte = inputStream.read();
-         readByte >= 0;
-         readByte = inputStream.read())
+             readByte >= 0;
+             readByte = inputStream.read())
         {
             readCount++;
             if (readByte == '\n') break;
@@ -106,7 +106,9 @@ public class IOUtilities
             }
 
             StringBuilder sb = new StringBuilder((int) size);
-            for (int nextChar = br.read(); nextChar >= 0; nextChar = br.read())
+            for (int nextChar = br.read();
+                 nextChar >= 0;
+                 nextChar = br.read())
             {
                 if (nextChar == 0) continue;
                 sb.append((char) nextChar);
@@ -129,7 +131,9 @@ public class IOUtilities
     {
         try (BufferedReader br = new BufferedReader(reader)) {
             StringBuilder sb = new StringBuilder();
-            for (int nextChar = br.read(); nextChar >= 0; nextChar = br.read())
+            for (int nextChar = br.read();
+                 nextChar >= 0;
+                 nextChar = br.read())
             {
                 if (nextChar == 0) continue;
                 sb.append((char) nextChar);
@@ -238,7 +242,7 @@ public class IOUtilities
         // check if encoding is null (illegal)
         if (encoding == null) {
             throw new NullPointerException(
-          "Cannot skip byte order mark without specifying the encoding.");
+                "Cannot skip byte order mark without specifying the encoding.");
         }
 
         // check if we have an encoding that is NOT a UTF encoding
@@ -283,8 +287,8 @@ public class IOUtilities
     {
         if (dir.exists() && dir.isDirectory()) return false;
         if (dir.exists()) {
-            throw new IOException(
-          "The named directory file exists, but is not a directory: " + dir);
+            throw new IOException("The named directory file exists, "
+                                  + "but is not a directory: " + dir);
         }
         boolean created = dir.mkdirs();
         if (!created) {
@@ -309,39 +313,39 @@ public class IOUtilities
         int[] failedCount = { 0 };
 
         Files.walkFileTree(
-        dir.toPath(), new FileVisitor<java.nio.file.Path>() {
-          public FileVisitResult preVisitDirectory(
-              java.nio.file.Path     path,
-              BasicFileAttributes    attrs)
-          {
-            return CONTINUE;
-          }
-          public FileVisitResult postVisitDirectory(
-              java.nio.file.Path  path,
-              IOException         e)
-          {
-            if (e != null) return CONTINUE;
-            path.toFile().delete();
-            return CONTINUE;
-          }
-          public FileVisitResult visitFile(
-              java.nio.file.Path     path,
-              BasicFileAttributes    attrs)
-          {
-            boolean result = path.toFile().delete();
-            if (!result) {
-              failedCount[0]++;
-            }
-            return CONTINUE;
-          }
-          public FileVisitResult visitFileFailed(
-              java.nio.file.Path  path,
-              IOException         e)
-          {
-            e.printStackTrace();
-            return CONTINUE;
-          }
-        });
+            dir.toPath(), new FileVisitor<java.nio.file.Path>() {
+              public FileVisitResult preVisitDirectory(
+                  java.nio.file.Path     path,
+                  BasicFileAttributes    attrs)
+              {
+                return CONTINUE;
+              }
+              public FileVisitResult postVisitDirectory(
+                  java.nio.file.Path  path,
+                  IOException         e)
+              {
+                if (e != null) return CONTINUE;
+                path.toFile().delete();
+                return CONTINUE;
+              }
+              public FileVisitResult visitFile(
+                  java.nio.file.Path     path,
+                  BasicFileAttributes    attrs)
+              {
+                boolean result = path.toFile().delete();
+                if (!result) {
+                  failedCount[0]++;
+                }
+                return CONTINUE;
+              }
+              public FileVisitResult visitFileFailed(
+                  java.nio.file.Path  path,
+                  IOException         e)
+              {
+                e.printStackTrace();
+                return CONTINUE;
+              }
+            });
 
         try {
             Files.deleteIfExists(dir.toPath());

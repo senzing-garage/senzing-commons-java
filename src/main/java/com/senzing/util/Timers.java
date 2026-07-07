@@ -128,16 +128,15 @@ public class Timers
                 // check for null
                 if (initialTimer == null) {
                     throw new NullPointerException(
-                            "Timer cannot have a null name: "
-                                    + (Arrays.asList(initialTimers)));
+                        "Timer cannot have a null name: "
+                            + (Arrays.asList(initialTimers)));
                 }
 
                 // check for a duplicate
                 if (this.timerInfos.containsKey(initialTimer)) {
-                    throw new IllegalArgumentException(
-                            "At least one timer (" + initialTimer
-                                    + ") is duplicated: "
-                                    + (Arrays.asList(initialTimers)));
+                    throw new IllegalArgumentException("At least one timer ("
+                        + initialTimer + ") is duplicated: "
+                        + (Arrays.asList(initialTimers)));
                 }
                 this.timerInfos.put(initialTimer, new TimerInfo(startTime));
             }

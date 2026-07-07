@@ -18,7 +18,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,8 +38,7 @@ public class RecordReaderExtraTest
     public void readerOnlyConstructor()
         throws IOException
     {
-        RecordReader rr = new RecordReader(
-        new StringReader("{\"a\":1}\n"));
+        RecordReader rr = new RecordReader(new StringReader("{\"a\":1}\n"));
         assertEquals(RecordReader.Format.JSON_LINES, rr.getFormat());
         JsonObject rec = rr.readRecord();
         assertNotNull(rec);
@@ -52,8 +50,8 @@ public class RecordReaderExtraTest
         throws IOException
     {
         RecordReader rr = new RecordReader(
-        RecordReader.Format.JSON_LINES,
-        new StringReader("{\"x\":1}\n"));
+            RecordReader.Format.JSON_LINES,
+            new StringReader("{\"x\":1}\n"));
         assertEquals(RecordReader.Format.JSON_LINES, rr.getFormat());
     }
 
@@ -61,8 +59,8 @@ public class RecordReaderExtraTest
     public void readerAndDataSourceConstructor()
         throws IOException
     {
-        RecordReader rr = new RecordReader(
-        new StringReader("{\"a\":1}\n"), "TEST");
+        RecordReader rr
+            = new RecordReader(new StringReader("{\"a\":1}\n"), "TEST");
         JsonObject rec = rr.readRecord();
         // The dataSource is applied via the null-key mapping.
         assertEquals("TEST", rec.getString("DATA_SOURCE"));
@@ -73,9 +71,9 @@ public class RecordReaderExtraTest
         throws IOException
     {
         RecordReader rr = new RecordReader(
-        RecordReader.Format.JSON_LINES,
-        new StringReader("{\"a\":1}\n"),
-        "TEST2");
+            RecordReader.Format.JSON_LINES,
+            new StringReader("{\"a\":1}\n"),
+            "TEST2");
         JsonObject rec = rr.readRecord();
         assertEquals("TEST2", rec.getString("DATA_SOURCE"));
     }
@@ -84,8 +82,8 @@ public class RecordReaderExtraTest
     public void readerDataSourceAndSourceIdConstructor()
         throws IOException
     {
-        RecordReader rr = new RecordReader(
-        new StringReader("{\"a\":1}\n"), "DS", "SRC");
+        RecordReader rr
+            = new RecordReader(new StringReader("{\"a\":1}\n"), "DS", "SRC");
         JsonObject rec = rr.readRecord();
         assertEquals("DS", rec.getString("DATA_SOURCE"));
         assertEquals("SRC", rec.getString("SOURCE_ID"));
@@ -96,10 +94,10 @@ public class RecordReaderExtraTest
         throws IOException
     {
         RecordReader rr = new RecordReader(
-        RecordReader.Format.JSON_LINES,
-        new StringReader("{\"a\":1}\n"),
-        "DS",
-        "SRC");
+            RecordReader.Format.JSON_LINES,
+            new StringReader("{\"a\":1}\n"),
+            "DS",
+            "SRC");
         JsonObject rec = rr.readRecord();
         assertEquals("DS", rec.getString("DATA_SOURCE"));
         assertEquals("SRC", rec.getString("SOURCE_ID"));
@@ -111,7 +109,7 @@ public class RecordReaderExtraTest
     {
         Map<String, String> map = Map.of("OLD", "NEW");
         RecordReader rr = new RecordReader(
-        new StringReader("{\"DATA_SOURCE\":\"OLD\",\"a\":1}\n"), map);
+            new StringReader("{\"DATA_SOURCE\":\"OLD\",\"a\":1}\n"), map);
         JsonObject rec = rr.readRecord();
         assertEquals("NEW", rec.getString("DATA_SOURCE"),
                  "Mapped data source code should be substituted");
@@ -123,9 +121,9 @@ public class RecordReaderExtraTest
     {
         Map<String, String> map = Map.of("OLD", "NEW");
         RecordReader rr = new RecordReader(
-        RecordReader.Format.JSON_LINES,
-        new StringReader("{\"DATA_SOURCE\":\"OLD\"}\n"),
-        map);
+            RecordReader.Format.JSON_LINES,
+            new StringReader("{\"DATA_SOURCE\":\"OLD\"}\n"),
+            map);
         JsonObject rec = rr.readRecord();
         assertEquals("NEW", rec.getString("DATA_SOURCE"));
     }
@@ -136,7 +134,7 @@ public class RecordReaderExtraTest
     {
         Map<String, String> map = Map.of("OLD", "NEW");
         RecordReader rr = new RecordReader(
-        new StringReader("{\"DATA_SOURCE\":\"OLD\"}\n"), map, "SRC1");
+            new StringReader("{\"DATA_SOURCE\":\"OLD\"}\n"), map, "SRC1");
         JsonObject rec = rr.readRecord();
         assertEquals("NEW", rec.getString("DATA_SOURCE"));
         assertEquals("SRC1", rec.getString("SOURCE_ID"));
@@ -170,8 +168,8 @@ public class RecordReaderExtraTest
     public void formatInferredJsonArrayFromOpenBracket()
         throws IOException
     {
-        RecordReader rr = new RecordReader(
-        new StringReader("[{\"a\":1},{\"a\":2}]"));
+        RecordReader rr
+            = new RecordReader(new StringReader("[{\"a\":1},{\"a\":2}]"));
         assertEquals(RecordReader.Format.JSON, rr.getFormat());
 
         JsonObject r1 = rr.readRecord();
@@ -186,8 +184,7 @@ public class RecordReaderExtraTest
     public void formatInferredCsvFromAlphabetic()
         throws IOException
     {
-        RecordReader rr = new RecordReader(
-        new StringReader("a,b\n1,2\n"));
+        RecordReader rr = new RecordReader(new StringReader("a,b\n1,2\n"));
         assertEquals(RecordReader.Format.CSV, rr.getFormat());
     }
 
@@ -202,8 +199,8 @@ public class RecordReaderExtraTest
         // Per implementation: null/empty string values are removed from the
         // resulting JSON record.
         RecordReader rr = new RecordReader(
-        RecordReader.Format.CSV,
-        new StringReader("a,b,c\n1,,3\n"));
+            RecordReader.Format.CSV,
+            new StringReader("a,b,c\n1,,3\n"));
         JsonObject rec = rr.readRecord();
         assertTrue(rec.containsKey("a"));
         assertEquals("1", rec.getString("a"));
@@ -221,8 +218,8 @@ public class RecordReaderExtraTest
         // CSV setTrim(true) trims fields, but the explicit check guards
         // against null/empty after trim.
         RecordReader rr = new RecordReader(
-        RecordReader.Format.CSV,
-        new StringReader("a,b\n1,   \n"));
+            RecordReader.Format.CSV,
+            new StringReader("a,b\n1,   \n"));
         JsonObject rec = rr.readRecord();
         assertEquals(false, rec.containsKey("b"),
                  "Whitespace-only CSV value should be omitted");
@@ -239,8 +236,8 @@ public class RecordReaderExtraTest
         // The JSON-Lines provider closes its reader after reading null.
         // After EOF, subsequent readRecord calls should keep returning null.
         RecordReader rr = new RecordReader(
-        RecordReader.Format.JSON_LINES,
-        new StringReader("{\"a\":1}\n"));
+            RecordReader.Format.JSON_LINES,
+            new StringReader("{\"a\":1}\n"));
         assertNotNull(rr.readRecord());
         assertNull(rr.readRecord());
         assertNull(rr.readRecord(),
@@ -265,7 +262,7 @@ public class RecordReaderExtraTest
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             System.setOut(new PrintStream(baos));
-            RecordReader.main(new String[]{ temp.getAbsolutePath() });
+            RecordReader.main(new String[] { temp.getAbsolutePath() });
         } finally {
             System.setOut(origOut);
         }
@@ -287,7 +284,7 @@ public class RecordReaderExtraTest
         PrintStream origErr = System.err;
         try {
             System.setErr(new PrintStream(new ByteArrayOutputStream()));
-            RecordReader.main(new String[]{ "/nonexistent/path/file.json" });
+            RecordReader.main(new String[] { "/nonexistent/path/file.json" });
         } finally {
             System.setErr(origErr);
         }
@@ -302,7 +299,7 @@ public class RecordReaderExtraTest
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             System.setOut(new PrintStream(baos));
-            RecordReader.main(new String[]{});
+            RecordReader.main(new String[] {});
         } finally {
             System.setOut(origOut);
         }

@@ -167,8 +167,8 @@ public class TextUtilitiesExtraTest
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             assertEquals(true, Character.isAlphabetic(c),
-                   "All characters in randomAlphabeticText output "
-                       + "must be alphabetic; got: " + c);
+                         "All characters in randomAlphabeticText output "
+                         + "must be alphabetic; got: " + c);
         }
     }
 
@@ -178,10 +178,10 @@ public class TextUtilitiesExtraTest
         String text = randomAlphanumericText(64);
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            assertEquals(true,
-                   Character.isAlphabetic(c) || Character.isDigit(c),
-                   "All characters in randomAlphanumericText output "
-                       + "must be alphabetic or digit; got: " + c);
+            assertEquals(true, Character.isAlphabetic(c)
+                               || Character.isDigit(c),
+                         "All characters in randomAlphanumericText output "
+                         + "must be alphabetic or digit; got: " + c);
         }
     }
 
@@ -206,7 +206,7 @@ public class TextUtilitiesExtraTest
         // Per URLEncoder default: space → "+" or "%20" depending on form.
         // The implementation uses URLEncoder.encode which produces "+".
         assertEquals(true, encoded.contains("+") || encoded.contains("%20"),
-                 "URL encoding of space should produce + or %20: "
+                     "URL encoding of space should produce + or %20: "
                      + encoded);
     }
 

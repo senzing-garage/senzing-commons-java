@@ -123,9 +123,9 @@ public class ConnectionPool implements Quantified
         {
             if (handler != null && this.currentLeaseHandler != null) {
                 throw new IllegalStateException(
-                        "Setting a connection handler on a pooled "
-                                + "connection that already has one set "
-                                + "(i.e.: is already or still leased)");
+                    "Setting a connection handler on a pooled "
+                        + "connection that already has one set "
+                        + "(i.e.: is already or still leased)");
             }
 
             // set the handler
@@ -202,8 +202,8 @@ public class ConnectionPool implements Quantified
                         pool.expireConnections();
                     } catch (SQLException e) {
                         System.err.println(
-                                "*** WARNING: Exception while expiring "
-                                        + "connections");
+                            "*** WARNING: Exception while expiring "
+                                + "connections");
                         e.printStackTrace();
                     }
                 }
@@ -734,37 +734,33 @@ public class ConnectionPool implements Quantified
         // check the min pool size is non-negative
         if (minPoolSize < 0) {
             throw new IllegalArgumentException(
-                    "The minimum pool size cannot be negative: "
-                            + minPoolSize);
+                "The minimum pool size cannot be negative: " + minPoolSize);
         }
         if (maxPoolSize <= 0) {
             throw new IllegalArgumentException(
-                    "The maximum pool size must be a positive number: "
-                            + maxPoolSize);
+                "The maximum pool size must be a positive number: "
+                    + maxPoolSize);
         }
 
         // check the maximum and minimum pool sizes
         if (minPoolSize > maxPoolSize) {
-            throw new IllegalArgumentException(
-                    "Minimum pool size (" + minPoolSize
-                            + ") cannot exceed maximum poll size ("
-                            + maxPoolSize + ").");
+            throw new IllegalArgumentException("Minimum pool size ("
+                + minPoolSize + ") cannot exceed maximum poll size ("
+                + maxPoolSize + ").");
         }
 
         // check the max connection lifespan
         if (expireTime < 0) {
             throw new IllegalArgumentException(
-                    "The maximum connection lifespan (expire time) cannot"
-                            + " be negative: "
-                            + expireTime);
+                "The maximum connection lifespan (expire time) cannot"
+                    + " be negative: " + expireTime);
         }
 
         // check the max connection leases
-        if (expireTime < 0) {
+        if (retireLimit < 0) {
             throw new IllegalArgumentException(
-                    "The maximum connection leases (retire count) cannot"
-                            + " be negative: "
-                            + retireLimit);
+                "The maximum connection leases (retire count) cannot"
+                    + " be negative: " + retireLimit);
         }
 
         // set the fields
@@ -778,8 +774,8 @@ public class ConnectionPool implements Quantified
         // loop through and populate the initial connections
         this.allConnections = new IdentityHashMap<>();
         for (int index = 0; index < this.minPoolSize; index++) {
-            PooledConnection pooledConnection = new PooledConnection(
-                    this.connector.openConnection());
+            PooledConnection pooledConnection
+                = new PooledConnection(this.connector.openConnection());
 
             this.allConnections.put(pooledConnection,
                     pooledConnection.getCreatedTimeNanos());
@@ -862,10 +858,8 @@ public class ConnectionPool implements Quantified
             putStat(result, Stat.retireLimit, this.getRetireLimit());
             putStat(result, Stat.greatestLeasedCount,
                     this.getGreatestLeasedCount());
-            putStat(result, averageLeasedCount,
-                    this.getAverageLeasedCount());
-            putStat(result, Stat.greatestPoolSize,
-                    this.getGreatestPoolSize());
+            putStat(result, averageLeasedCount, this.getAverageLeasedCount());
+            putStat(result, Stat.greatestPoolSize, this.getGreatestPoolSize());
             putStat(result, expiredConnections,
                     this.getExpiredConnectionCount());
             putStat(result, retiredConnections,
@@ -1000,8 +994,8 @@ public class ConnectionPool implements Quantified
                 // now check if shutdown
                 if (this.isShutdown()) {
                     throw new SQLException(
-                            "Unable to obtain a connection because the "
-                                    + "connection pool was shutdown");
+                        "Unable to obtain a connection because the "
+                            + "connection pool was shutdown");
                 }
 
                 // check if we have any connections that have exceeded
@@ -1016,9 +1010,9 @@ public class ConnectionPool implements Quantified
                 }
 
                 // check if we should grow the pool
-                if (this.availableConnections.size()
-                    == 0 && this.allConnections.size()
-                        < this.getMaximumSize()) {
+                if (this.availableConnections.size() == 0
+                    && this.allConnections.size() < this.getMaximumSize())
+                {
                     // create a new pooled connection
                     acquired = new PooledConnection(
                         this.connector.openConnection());
@@ -1040,16 +1034,16 @@ public class ConnectionPool implements Quantified
             // check if shutdown
             if (acquired == null && this.isShutdown()) {
                 throw new SQLException(
-                        "Unable to obtain a connection because the "
-                                + "connection pool was shutdown");
+                    "Unable to obtain a connection because the "
+                        + "connection pool was shutdown");
             }
 
             // we must have an acquired connection
             if (acquired == null && maxWait < 0L) {
                 // we must have an acquired connection
                 throw new IllegalStateException(
-                        "Exited wait loop, but did not acquire a pooled "
-                                + "connection.");
+                    "Exited wait loop, but did not acquire a pooled "
+                        + "connection.");
             }
 
             // check if we acquired a connection
@@ -1173,20 +1167,20 @@ public class ConnectionPool implements Quantified
                 handler = Proxy.getInvocationHandler(connection);
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(
-                        "The specified Connection is not from this pool "
-                                + "instance (not a proxy).");
+                    "The specified Connection is not from this pool "
+                        + "instance (not a proxy).");
             }
             if (!(handler instanceof PooledConnectionHandler)) {
                 throw new IllegalArgumentException(
-                        "The specified Connection is not from this pool "
-                                + "instance (wrong handler type): "
-                                + handler.getClass().getName());
+                    "The specified Connection is not from this pool "
+                        + "instance (wrong handler type): "
+                        + handler.getClass().getName());
             }
             PooledConnectionHandler pch = (PooledConnectionHandler) handler;
             if (pch.getPool() != this) {
                 throw new IllegalArgumentException(
-                        "The specified Connection is not from this pool "
-                                + "instance (wrong pool instance).");
+                    "The specified Connection is not from this pool "
+                        + "instance (wrong pool instance).");
             }
 
             // get the associated pooled connection
@@ -1234,9 +1228,10 @@ public class ConnectionPool implements Quantified
             pooledConn.setCurrentLeaseHandler(null);
 
             // conditionally make the connection available again
-            if (connectionInvalid || (this.getRetireLimit()
-                != null && pooledConn.getLeaseCount()
-                    > this.getRetireLimit())) {
+            if (connectionInvalid
+                || (this.getRetireLimit() != null
+                    && pooledConn.getLeaseCount() > this.getRetireLimit()))
+            {
                 // remove from the list of all connections
                 this.allConnections.remove(pooledConn);
 
@@ -1548,8 +1543,9 @@ public class ConnectionPool implements Quantified
     public Long getGreatestAcquisitionTime()
     {
         synchronized (this) {
-            if (this.totalLeaseCount == 0 || this.greatestAcquisitionTime
-                < 0L) {
+            if (this.totalLeaseCount == 0
+                || this.greatestAcquisitionTime < 0L)
+            {
                 return null;
             } else {
                 return this.greatestAcquisitionTime;
@@ -1769,8 +1765,8 @@ public class ConnectionPool implements Quantified
 
         // now check if we need to refill to maintain the minimum pool size
         while (this.allConnections.size() < this.getMinimumSize()) {
-            PooledConnection refill = new PooledConnection(
-                this.connector.openConnection());
+            PooledConnection refill
+                = new PooledConnection(this.connector.openConnection());
             this.allConnections.put(refill, refill.getCreatedTimeNanos());
             this.availableConnections.add(refill);
         }
