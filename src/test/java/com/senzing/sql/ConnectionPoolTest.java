@@ -931,8 +931,12 @@ public class ConnectionPoolTest
             DummyConnector connector
                 = new DummyConnector(failures, connThreadMap, threadConnMap);
 
-            pool = new ConnectionPool(
-                connector, minPoolSize, maxPoolSize, expireSeconds, retireLimit);
+            pool = new ConnectionPool(connector,
+                                      minPoolSize,
+                                      maxPoolSize,
+                                      expireSeconds,
+                                      retireLimit);
+
             Thread.sleep(20L);
             long startTime2 = System.nanoTime();
             Thread.sleep(50L);
