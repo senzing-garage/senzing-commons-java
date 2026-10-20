@@ -15,6 +15,7 @@ import static com.senzing.cmdline.EnvTestOption.TAGS;
 import static com.senzing.cmdline.EnvTestOption.VERBOSE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -350,6 +351,65 @@ public class CommandLineUtilitiesEnvTest
                          .noneMatch(v -> v.getSource() == ENVIRONMENT),
                 "No env-sourced values should appear when env vars unset");
         });
+    }
+
+    /**
+     * The {@code ignoreEnvironment} overload must actually honour its flag. Per
+     * its javadoc the environment is consulted only "optionally"; passing
+     * {@code true} must suppress it entirely.
+     *
+     * <p>This overload previously discarded the argument and forwarded a
+     * literal {@code false} to the private implementation, so a caller asking
+     * to skip the environment still had it processed. The defect survived
+     * because no test exercised the parameter.</p>
+     */
+    @Test
+    public void ignoreEnvironmentTrueSuppressesEnvVars()
+        throws Exception
+    {
+        new EnvironmentVariables("SENZING_ENV_TEST_NAME", "alice").execute(
+            () -> {
+                Map<CommandLineOption, CommandLineValue> result
+                    = parseCommandLine(EnvTestOption.class,
+                                       new String[] {},
+                                       EnvTestOption.PARAMETER_PROCESSOR,
+                                       true,
+                                       null);
+
+                assertNull(
+                    result.get(NAME),
+                    "NAME must not be populated from the environment "
+                    + "when ignoreEnvironment is true");
+            });
+    }
+
+    /**
+     * The control for {@link #ignoreEnvironmentTrueSuppressesEnvVars()}: the
+     * same call with {@code false} must still read the environment. Without
+     * this pair the test above would also pass against an implementation that
+     * ignored the environment unconditionally.
+     */
+    @Test
+    public void ignoreEnvironmentFalseStillReadsEnvVars()
+        throws Exception
+    {
+        new EnvironmentVariables("SENZING_ENV_TEST_NAME", "alice").execute(
+            () -> {
+                Map<CommandLineOption, CommandLineValue> result
+                    = parseCommandLine(EnvTestOption.class,
+                                       new String[] {},
+                                       EnvTestOption.PARAMETER_PROCESSOR,
+                                       false,
+                                       null);
+
+                CommandLineValue val = result.get(NAME);
+                assertNotNull(
+                    val,
+                    "NAME should be populated from the environment "
+                    + "when ignoreEnvironment is false");
+                assertSame(ENVIRONMENT, val.getSource(),
+                           "Source should be ENVIRONMENT");
+            });
     }
 
     // Note: the primary-option fallback path

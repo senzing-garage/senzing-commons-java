@@ -780,8 +780,8 @@ public class CommandLineUtilities
             List<DeprecatedOptionWarning>   deprecationWarnings)
         throws CommandLineException
     {
-        return parseCommandLine(enumClass, args, processor, false, null,
-                                deprecationWarnings);
+        return parseCommandLine(enumClass, args, processor, ignoreEnvironment,
+                                null, deprecationWarnings);
     }
 
     /**

@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- The `parseCommandLine` overload of `CommandLineUtilities` that takes a
+  `boolean ignoreEnvironment` ignored that argument and forwarded a literal
+  `false` to the private implementation, so a caller asking to skip
+  environment-variable fallbacks still had them applied. The flag is now
+  forwarded. The sibling overloads were checked and are correct: the
+  four-argument form has no such parameter, and the `ignoreEnvOption` form
+  already forwards its own.
+
 ## [4.0.1] - 2026-06-17
 
 Maintenance release. No public API changes — SemVer PATCH bump.
