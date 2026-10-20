@@ -207,22 +207,20 @@ public class CommandLineValue implements SpecifiedOption
         CommandLineValue value = (CommandLineValue) o;
 
         return Objects.equals(this.getOption(), value.getOption())
-            && this.getSource() == value.getSource() && Objects.equals(
-                this.getSpecifier(),
-                value.getSpecifier()) && Objects.equals(
-                this.getProcessedValue(),
-                value.getProcessedValue()) && Objects.equals(
-                this.getParameters(),
-                value.getParameters());
+            && this.getSource() == value.getSource()
+            && Objects.equals(this.getSpecifier(), value.getSpecifier())
+            && Objects.equals(this.getProcessedValue(),
+                              value.getProcessedValue())
+            && Objects.equals(this.getParameters(), value.getParameters());
     }
 
     @Override
     public int hashCode()
     {
         return Objects.hash(this.getOption(),
-                        this.getSource(),
-                        this.getSpecifier(),
-                        this.getProcessedValue(),
-                        this.getParameters());
+                            this.getSource(),
+                            this.getSpecifier(),
+                            this.getProcessedValue(),
+                            this.getParameters());
     }
 }

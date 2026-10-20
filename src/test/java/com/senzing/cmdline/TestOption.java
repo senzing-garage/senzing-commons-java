@@ -96,8 +96,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
     @Override
     public boolean isPrimary()
     {
-        switch (this)
-        {
+        switch (this) {
             case HELP:
             case VERSION:
             case CONFIG:
@@ -110,8 +109,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
     @Override
     public Set<CommandLineOption> getConflicts()
     {
-        switch (this)
-        {
+        switch (this) {
             case HELP:
                 return Set.of(VERSION, VERBOSE, PORT, INTERFACE);
             case VERSION:
@@ -134,16 +132,15 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
     @Override
     public Set<Set<CommandLineOption>> getDependencies()
     {
-        switch (this)
-        {
+        switch (this) {
             case HELP:
             case VERSION:
             case VERBOSE:
             case CONFIG:
                 return Collections.emptySet();
             case PASSWORD:
-                return Set.of(Set.of(CONFIG, INTERFACE, PORT), Set.of(CONFIG,
-                                                                      URL));
+                return Set.of(Set.of(CONFIG, INTERFACE, PORT),
+                              Set.of(CONFIG, URL));
             case URL:
                 return Set.of(Set.of(CONFIG));
             case PORT:
@@ -160,8 +157,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
     @Override
     public int getMinimumParameterCount()
     {
-        switch (this)
-        {
+        switch (this) {
             case PORT:
             case INTERFACE:
             case CONFIG:
@@ -176,8 +172,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
     @Override
     public int getMaximumParameterCount()
     {
-        switch (this)
-        {
+        switch (this) {
             case PORT:
             case INTERFACE:
             case CONFIG:
@@ -192,8 +187,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
     @Override
     public List<String> getDefaultParameters()
     {
-        switch (this)
-        {
+        switch (this) {
             case VERBOSE:
             case IGNORE_ENV:
                 return List.of("false");
@@ -219,8 +213,7 @@ public enum TestOption implements CommandLineOption<TestOption, TestOption>
                         + option.getCommandLineFlag() + " / " + option);
             }
             TestOption testOption = (TestOption) option;
-            switch (testOption)
-            {
+            switch (testOption) {
                 case HELP:
                 case VERSION:
                     return Boolean.TRUE;

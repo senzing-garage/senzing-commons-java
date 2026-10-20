@@ -230,10 +230,8 @@ public class RecordReader
     public RecordReader(Reader reader, String dataSource, String sourceId)
         throws IOException
     {
-        this(null,
-            reader,
-            Collections.singletonMap(null, dataSource),
-            sourceId);
+        this(null, reader, Collections.singletonMap(null, dataSource),
+             sourceId);
     }
 
     /**
@@ -257,10 +255,8 @@ public class RecordReader
                       String  sourceId)
         throws IOException
     {
-        this(format,
-            reader,
-            Collections.singletonMap(null, dataSource),
-            sourceId);
+        this(format, reader, Collections.singletonMap(null, dataSource),
+             sourceId);
     }
 
     /**
@@ -385,8 +381,7 @@ public class RecordReader
                 pushbackReader.unread(nextChar);
 
                 // switch on the character to determine the format
-                switch ((char) nextChar)
-                {
+                switch ((char) nextChar) {
                     case '[':
                         this.format = Format.JSON;
                         break;
@@ -404,8 +399,7 @@ public class RecordReader
 
         // default to JSON format if EOF detected
         if (this.format != null) {
-            switch (this.format)
-            {
+            switch (this.format) {
                 case JSON:
                     this.recordProvider = new JsonArrayRecordProvider(
                         this.reader);
@@ -583,8 +577,8 @@ public class RecordReader
          */
         public JsonArrayRecordProvider(Reader reader)
         {
-            JsonParserFactory jpf
-                = Json.createParserFactory(Collections.emptyMap());
+            JsonParserFactory jpf = Json.createParserFactory(
+                Collections.emptyMap());
             JsonParser jp = jpf.createParser(reader);
             jp.next();
             this.recordIter = jp.getArrayStream()
@@ -744,14 +738,14 @@ public class RecordReader
 
         public CsvRecordProvider(Reader reader)
         {
-            CSVFormat csvFormat = CSVFormat.Builder.create(CSVFormat.DEFAULT)
-                                                   .setHeader()
-                                                   .setSkipHeaderRecord(true)
-                                                   .setIgnoreEmptyLines(true)
-                                                   .setTrim(true)
-                                                   .setIgnoreSurroundingSpaces(
-                true)
-                                                   .get();
+            CSVFormat csvFormat
+                = CSVFormat.Builder.create(CSVFormat.DEFAULT)
+                                   .setHeader()
+                                   .setSkipHeaderRecord(true)
+                                   .setIgnoreEmptyLines(true)
+                                   .setTrim(true)
+                                   .setIgnoreSurroundingSpaces(true)
+                                   .get();
 
             try {
                 this.parser = CSVParser.builder()

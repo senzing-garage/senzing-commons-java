@@ -73,9 +73,8 @@ public class DeprecatedOptionWarning implements SpecifiedOption
      */
     public DeprecatedOptionWarning(SpecifiedOption specifiedOption)
     {
-        this(specifiedOption.getSource(),
-            specifiedOption.getOption(),
-            specifiedOption.getSpecifier());
+        this(specifiedOption.getSource(), specifiedOption.getOption(),
+             specifiedOption.getSpecifier());
     }
 
     /**

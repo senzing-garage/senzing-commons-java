@@ -31,7 +31,11 @@ public class SzUtilities
      * for the database URI's for the Senzing repository.
      */
     public static final Set<String> DATABASE_URI_PREFIXES = Set.of(
-        "sqlite3://", "postgresql://", "mysql://", "db2://", "oci://",
+        "sqlite3://",
+        "postgresql://",
+        "mysql://",
+        "db2://",
+        "oci://",
         "mssql://");
 
     /**
@@ -349,22 +353,25 @@ public class SzUtilities
 
             JsonObjectBuilder mainBuilder = Json.createObjectBuilder();
             JsonObjectBuilder pipelineBuilder = Json.createObjectBuilder();
-            JsonObjectBuilder sqlBuilder
-                = (uri == null) ? null : Json.createObjectBuilder();
+            JsonObjectBuilder sqlBuilder = (uri == null)
+                ? null : Json.createObjectBuilder();
 
             SzInstallLocations locations = SzInstallLocations.findLocations();
 
-            pipelineBuilder.add("SUPPORTPATH",
+            pipelineBuilder.add(
+                "SUPPORTPATH",
                 locations.getSupportDirectory().getCanonicalPath());
-            pipelineBuilder.add("CONFIGPATH",
+            pipelineBuilder.add(
+                "CONFIGPATH",
                 locations.getConfigDirectory().getCanonicalPath());
-            pipelineBuilder.add("RESOURCEPATH",
+            pipelineBuilder.add(
+                "RESOURCEPATH",
                 locations.getResourceDirectory().getCanonicalPath());
             if (licenseBase64 != null) {
                 pipelineBuilder.add("LICENSESTRINGBASE64", licenseBase64);
             } else if (licenseFile != null) {
                 pipelineBuilder.add("LICENSEFILE",
-                    licenseFile.getCanonicalPath());
+                                    licenseFile.getCanonicalPath());
             }
             mainBuilder.add("PIPELINE", pipelineBuilder);
             if (sqlBuilder != null) {
@@ -377,7 +384,7 @@ public class SzUtilities
         } catch (IOException e) {
             throw new IllegalStateException(
                 "Should not fail in getting canonical path from install "
-                    + "locations files.",
+                + "locations files.",
                 e);
         }
     }
@@ -460,8 +467,8 @@ public class SzUtilities
         }
         File sqlFile = new File(schemaDir, "szcore-schema-sqlite-create.sql");
         if (!sqlFile.exists() || !sqlFile.isFile()) {
-            throw new IllegalStateException(
-                "Unable to find schema file at: " + sqlFile);
+            throw new IllegalStateException("Unable to find schema file at: "
+                                            + sqlFile);
         }
 
         // get the set of known tables
@@ -496,8 +503,8 @@ public class SzUtilities
                 // check if this is a CREATE TABLE statement
                 if (sql.toUpperCase().startsWith("CREATE TABLE ")) {
                     // get the suffix and find the table name
-                    String suffix
-                        = sql.substring("CREATE TABLE ".length()).trim();
+                    String suffix = sql.substring("CREATE TABLE ".length())
+                                       .trim();
                     int space = suffix.indexOf(" ");
                     if (space < 0) {
                         throw new IllegalStateException(

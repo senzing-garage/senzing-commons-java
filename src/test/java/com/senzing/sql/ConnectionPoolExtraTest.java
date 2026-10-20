@@ -41,68 +41,43 @@ public class ConnectionPoolExtraTest
     public void constructorRejectsNullConnector()
     {
         assertThrows(NullPointerException.class,
-                 () -> new ConnectionPool(null, 1));
+                     () -> new ConnectionPool(null, 1));
     }
 
     @Test
     public void constructorRejectsNegativeMinPoolSize()
     {
         // Per javadoc: IllegalArgumentException for negative min pool size.
-        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
-            connector(),
-            null,
-            -1,
-            5,
-            0,
-            0));
+        assertThrows(IllegalArgumentException.class,
+                     () -> new ConnectionPool(connector(), null, -1, 5, 0, 0));
     }
 
     @Test
     public void constructorRejectsZeroMaxPoolSize()
     {
-        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
-            connector(),
-            null,
-            0,
-            0,
-            0,
-            0));
+        assertThrows(IllegalArgumentException.class,
+                     () -> new ConnectionPool(connector(), null, 0, 0, 0, 0));
     }
 
     @Test
     public void constructorRejectsNegativeMaxPoolSize()
     {
-        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
-            connector(),
-            null,
-            0,
-            -1,
-            0,
-            0));
+        assertThrows(IllegalArgumentException.class,
+                     () -> new ConnectionPool(connector(), null, 0, -1, 0, 0));
     }
 
     @Test
     public void constructorRejectsMinGreaterThanMax()
     {
-        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
-            connector(),
-            null,
-            5,
-            2,
-            0,
-            0));
+        assertThrows(IllegalArgumentException.class,
+                     () -> new ConnectionPool(connector(), null, 5, 2, 0, 0));
     }
 
     @Test
     public void constructorRejectsNegativeExpireTime()
     {
-        assertThrows(IllegalArgumentException.class, () -> new ConnectionPool(
-            connector(),
-            null,
-            0,
-            5,
-            -1,
-            0));
+        assertThrows(IllegalArgumentException.class,
+                     () -> new ConnectionPool(connector(), null, 0, 5, -1, 0));
     }
 
     // -------------------------------------------------------------------
@@ -116,9 +91,11 @@ public class ConnectionPoolExtraTest
         ConnectionPool pool = new ConnectionPool(connector(), 1);
         try {
             String info = pool.getDiagnosticLeaseInfo();
-            assertEquals("", info,
-                         "With no active leases the diagnostic info should"
-                         + " be empty");
+            assertEquals(
+                "",
+                info,
+                "With no active leases the diagnostic info should"
+                + " be empty");
         } finally {
             pool.shutdown();
         }
@@ -134,9 +111,10 @@ public class ConnectionPoolExtraTest
             conn = pool.acquire();
             String info = pool.getDiagnosticLeaseInfo();
             assertNotNull(info);
-            assertTrue(info.length() > 0,
-                       "Diagnostic info should be non-empty when a"
-                       + " connection is leased");
+            assertTrue(
+                info.length() > 0,
+                "Diagnostic info should be non-empty when a"
+                + " connection is leased");
         } finally {
             if (conn != null) {
                 pool.release(conn);
@@ -172,10 +150,11 @@ public class ConnectionPoolExtraTest
             stub.execute(() -> pool.release(conn));
 
             String captured = stub.getText();
-            assertTrue(captured.contains("released more than once")
-                       || captured.length() > 0,
-                       "release()-of-already-released should write a "
-                       + "warning to stderr");
+            assertTrue(
+                captured.contains("released more than once")
+                || captured.length() > 0,
+                "release()-of-already-released should write a "
+                + "warning to stderr");
         } finally {
             pool.shutdown();
         }
@@ -210,7 +189,7 @@ public class ConnectionPoolExtraTest
         Connection direct = connector().openConnection();
         try {
             assertThrows(IllegalArgumentException.class,
-                   () -> pool.release(direct));
+                         () -> pool.release(direct));
         } finally {
             direct.close();
             pool.shutdown();
@@ -257,7 +236,7 @@ public class ConnectionPoolExtraTest
             // connection held — must return null without blocking.
             Connection second = pool.acquire(0L);
             assertEquals(null, second,
-                   "No-wait acquire on exhausted pool must return null");
+                         "No-wait acquire on exhausted pool must return null");
         } finally {
             pool.release(first);
             pool.shutdown();

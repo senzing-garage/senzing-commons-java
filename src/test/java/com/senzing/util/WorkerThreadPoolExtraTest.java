@@ -34,14 +34,14 @@ public class WorkerThreadPoolExtraTest
     public void constructorRejectsZeroSize()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> new WorkerThreadPool("test", 0));
+                     () -> new WorkerThreadPool("test", 0));
     }
 
     @Test
     public void constructorRejectsNegativeSize()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> new WorkerThreadPool("test", -1));
+                     () -> new WorkerThreadPool("test", -1));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class WorkerThreadPoolExtraTest
         WorkerThreadPool pool = new WorkerThreadPool(2);
         pool.close(false);
         assertTrue(pool.isClosed(),
-               "close(false) should still mark the pool closed");
+                   "close(false) should still mark the pool closed");
     }
 
     // -------------------------------------------------------------------
@@ -114,7 +114,7 @@ public class WorkerThreadPoolExtraTest
         WorkerThreadPool pool = new WorkerThreadPool(1);
         pool.close(true);
         assertThrows(IllegalStateException.class,
-                 () -> pool.execute(() -> "anything"));
+                     () -> pool.execute(() -> "anything"));
     }
 
     // -------------------------------------------------------------------
@@ -127,10 +127,13 @@ public class WorkerThreadPoolExtraTest
         WorkerThreadPool pool = new WorkerThreadPool(1);
         try {
             RuntimeException expected = new RuntimeException("boom");
-            RuntimeException thrown = assertThrows(RuntimeException.class,
-                () -> pool.execute(() -> { throw expected; }));
+            RuntimeException thrown = assertThrows(
+                RuntimeException.class,
+                () -> pool.execute(() -> {
+                    throw expected;
+                }));
             assertEquals("boom", thrown.getMessage(),
-                   "Task's exception should propagate verbatim");
+                         "Task's exception should propagate verbatim");
         } finally {
             pool.close(true);
         }
@@ -151,7 +154,7 @@ public class WorkerThreadPoolExtraTest
 
             // Subsequent pause() returns null.
             assertNull(pool.pause(),
-                 "Second pause() should return null when already paused");
+                       "Second pause() should return null when already paused");
         } finally {
             pool.close(true);
         }
@@ -202,7 +205,7 @@ public class WorkerThreadPoolExtraTest
             pool.pause();
             AccessToken wrong = new AccessToken();
             assertThrows(IllegalArgumentException.class,
-                   () -> pool.resume(wrong));
+                         () -> pool.resume(wrong));
         } finally {
             pool.close(true);
         }
@@ -224,7 +227,7 @@ public class WorkerThreadPoolExtraTest
         err.execute(() -> {
             out.execute(() -> {
                 WorkerThreadPool.main(
-                    new String[] {"hello", "world", "ERROR-fail", "again"});
+                    new String[] { "hello", "world", "ERROR-fail", "again" });
             });
         });
 
@@ -232,10 +235,10 @@ public class WorkerThreadPoolExtraTest
         // Each non-ERROR arg produces a line; the JOINING / JOINED
         // diagnostics also appear.
         assertTrue(output.contains("hello"),
-               "Output should contain 'hello' result: " + output);
+                   "Output should contain 'hello' result: " + output);
         assertTrue(output.contains("JOINING AGAINST THE POOL"),
-               "Output should contain joining diagnostic: " + output);
+                   "Output should contain joining diagnostic: " + output);
         assertTrue(output.contains("JOINED AGAINST THE POOL"),
-               "Output should contain joined diagnostic: " + output);
+                   "Output should contain joined diagnostic: " + output);
     }
 }

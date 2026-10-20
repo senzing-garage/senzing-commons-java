@@ -43,9 +43,11 @@ public class PoolConnectionProviderTest
         ConnectionPool pool = newPool(1);
         try {
             PoolConnectionProvider provider = new PoolConnectionProvider(pool);
-            assertEquals(-1L, provider.getMaximumWaitTime(),
-                         "Single-arg constructor must default to indefinite "
-                         + "wait (-1L)");
+            assertEquals(
+                -1L,
+                provider.getMaximumWaitTime(),
+                "Single-arg constructor must default to indefinite "
+                + "wait (-1L)");
         } finally {
             pool.shutdown();
         }
@@ -61,15 +63,14 @@ public class PoolConnectionProviderTest
     {
         ConnectionPool pool = newPool(1);
         try {
-            assertEquals(0L, new PoolConnectionProvider(
-                pool,
-                0L).getMaximumWaitTime());
-            assertEquals(5000L, new PoolConnectionProvider(
-                pool,
-                5000L).getMaximumWaitTime());
-            assertEquals(-1L, new PoolConnectionProvider(
-                pool,
-                -1L).getMaximumWaitTime());
+            assertEquals(
+                0L, new PoolConnectionProvider(pool, 0L).getMaximumWaitTime());
+            assertEquals(
+                5000L,
+                new PoolConnectionProvider(pool, 5000L).getMaximumWaitTime());
+            assertEquals(
+                -1L,
+                new PoolConnectionProvider(pool, -1L).getMaximumWaitTime());
         } finally {
             pool.shutdown();
         }
@@ -84,7 +85,7 @@ public class PoolConnectionProviderTest
     public void singleArgConstructorThrowsNpeForNullPool()
     {
         assertThrows(NullPointerException.class,
-                 () -> new PoolConnectionProvider(null));
+                     () -> new PoolConnectionProvider(null));
     }
 
     /**
@@ -95,7 +96,7 @@ public class PoolConnectionProviderTest
     public void twoArgConstructorThrowsNpeForNullPool()
     {
         assertThrows(NullPointerException.class,
-                 () -> new PoolConnectionProvider(null, 1000L));
+                     () -> new PoolConnectionProvider(null, 1000L));
     }
 
     // -------------------------------------------------------------------
@@ -142,17 +143,18 @@ public class PoolConnectionProviderTest
             // exhaust the pool
             leased = pool.acquire();
             assertNotNull(leased,
-                    "Pool must have provided its single connection");
+                          "Pool must have provided its single connection");
 
             // a no-wait provider must fail because the only connection is
             // already leased
-            PoolConnectionProvider provider
-                = new PoolConnectionProvider(pool, 0L);
-            SQLException sqe
-                = assertThrows(SQLException.class, provider::getConnection);
-            assertTrue(sqe.getMessage().contains("could not be obtained"),
-                       "SQLException message must mention the failure: "
-                       + sqe.getMessage());
+            PoolConnectionProvider provider = new PoolConnectionProvider(pool,
+                                                                         0L);
+            SQLException sqe = assertThrows(SQLException.class,
+                                            provider::getConnection);
+            assertTrue(
+                sqe.getMessage().contains("could not be obtained"),
+                "SQLException message must mention the failure: "
+                + sqe.getMessage());
         } finally {
             if (leased != null) {
                 leased.close();

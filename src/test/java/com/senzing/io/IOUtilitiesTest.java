@@ -27,21 +27,21 @@ public class IOUtilitiesTest
         List<Arguments> result = new LinkedList<>();
 
         try {
-            result.add(arguments(
-                "Hello, there.\nMy name is mud.".getBytes("ASCII"),
-                "Hello, there."));
+            result.add(
+                arguments("Hello, there.\nMy name is mud.".getBytes("ASCII"),
+                          "Hello, there."));
 
-            result.add(arguments(
-                "Hello, there.\r\nMy name is mud.".getBytes("ASCII"),
-                "Hello, there."));
+            result.add(
+                arguments(
+                    "Hello, there.\r\nMy name is mud.".getBytes("ASCII"),
+                    "Hello, there."));
 
-            result.add(arguments(
-                "Hello, there.\rMy name is mud.".getBytes("ASCII"),
-                "Hello, there.\rMy name is mud."));
+            result.add(
+                arguments("Hello, there.\rMy name is mud.".getBytes("ASCII"),
+                          "Hello, there.\rMy name is mud."));
 
-            result.add(arguments(
-                "Hello, there.".getBytes("ASCII"),
-                "Hello, there."));
+            result.add(
+                arguments("Hello, there.".getBytes("ASCII"), "Hello, there."));
 
             result.add(arguments("\n".getBytes("ASCII"), ""));
 
@@ -74,7 +74,7 @@ public class IOUtilitiesTest
             String result = readAsciiLine(bais);
 
             assertEquals(expectedResult, result,
-                   "ASCII line result does not match.");
+                         "ASCII line result does not match.");
         } catch (Exception e) {
             e.printStackTrace();
             fail("readAsciiLineTest() failed with exception: " + testInfo
@@ -95,25 +95,30 @@ public class IOUtilitiesTest
     {
         List<Arguments> result = new LinkedList<>();
 
-        result.add(arguments(
-            "Hello, there.  This is some text.\nHow about another line.",
-            "UTF-8"));
+        result.add(
+            arguments(
+                "Hello, there.  This is some text.\nHow about another line.",
+                "UTF-8"));
 
-        result.add(arguments(
-            "Hello, there.  This is some text.\nSee you ma\u00F1ana.",
-            "UTF-8"));
+        result.add(
+            arguments(
+                "Hello, there.  This is some text.\nSee you ma\u00F1ana.",
+                "UTF-8"));
 
-        result.add(arguments(
-            "Hello, there.  This is some text.\nSee you ma\u00F1ana.",
-            "UTF-16"));
+        result.add(
+            arguments(
+                "Hello, there.  This is some text.\nSee you ma\u00F1ana.",
+                "UTF-16"));
 
-        result.add(arguments(
-            "Hello, there.  This is some text.\nSee you ma\u00F1ana.",
-            "UTF-32"));
+        result.add(
+            arguments(
+                "Hello, there.  This is some text.\nSee you ma\u00F1ana.",
+                "UTF-32"));
 
-        result.add(arguments(
-            "Hello, there.  This is some text.\nSee you ma\u00F1ana.",
-            "ISO-8859-1"));
+        result.add(
+            arguments(
+                "Hello, there.  This is some text.\nSee you ma\u00F1ana.",
+                "ISO-8859-1"));
 
         return result;
     }
@@ -122,8 +127,9 @@ public class IOUtilitiesTest
     @ParameterizedTest
     public void readTextFileAsStringTest(String text, String encoding)
     {
-        String testInfo
-            = "text=[ " + text + " ], encoding=[ " + encoding + " ]";
+        String testInfo = "text=[ " + text
+            + " ], encoding=[ " + encoding
+            + " ]";
 
         try {
             File file = File.createTempFile("test-", ".txt");
@@ -141,7 +147,7 @@ public class IOUtilitiesTest
                 text,
                 result,
                 "File read fully as text did not have the correct text: "
-                    + testInfo);
+                + testInfo);
         } catch (IOException e) {
             e.printStackTrace();
             fail("readTextFileAsStringTest() failed with exception: "
@@ -159,7 +165,7 @@ public class IOUtilitiesTest
             String result = readFully(reader);
 
             assertEquals(randomText, result,
-                   "Did not get expected text for readFully(Reader)");
+                         "Did not get expected text for readFully(Reader)");
         } catch (IOException e) {
             e.printStackTrace();
             fail("readFullyTest(Reader) failed with exception: " + e);
@@ -171,26 +177,62 @@ public class IOUtilitiesTest
         List<String> result = new LinkedList<>();
 
         String[] names = {
-        "\u7231\u5B50", "John", "Jane", "No\u00EBl", "Ren\u00E9e", "Mary",
-        "Robert", "Joseph", "William", "Margaret", "Rebecca", "Brian", "Jesse",
-        "Edward", "Josh", "Jeff", "Roy", "Anne", "Kelly", "Leslie", "Joan",
-        "Thomas", "April", "Andrew", "Christopher", "Christine", "Benjamin",
-        "Ronald", "Donald", "Jamie", "Anthony", "James", "Jerry", "Barry",
-        "Keith", "Donna", "Michael", "Gerald", "Laura", "Lauren", "Madison",
-        "Gregory" };
+            "\u7231\u5B50",
+            "John",
+            "Jane",
+            "No\u00EBl",
+            "Ren\u00E9e",
+            "Mary",
+            "Robert",
+            "Joseph",
+            "William",
+            "Margaret",
+            "Rebecca",
+            "Brian",
+            "Jesse",
+            "Edward",
+            "Josh",
+            "Jeff",
+            "Roy",
+            "Anne",
+            "Kelly",
+            "Leslie",
+            "Joan",
+            "Thomas",
+            "April",
+            "Andrew",
+            "Christopher",
+            "Christine",
+            "Benjamin",
+            "Ronald",
+            "Donald",
+            "Jamie",
+            "Anthony",
+            "James",
+            "Jerry",
+            "Barry",
+            "Keith",
+            "Donna",
+            "Michael",
+            "Gerald",
+            "Laura",
+            "Lauren",
+            "Madison",
+            "Gregory"
+        };
 
         String[] greetings = {
-        "Hello _NAME_, how are you?",
-        "Good morning _NAME_. Did you sleep well?",
-        "Happy birthday dear _NAME_.  Happy birthday to you!",
-        "Goodnight _NAME_.  Don't let the bed bugs bite.",
-        "What's up _NAME_.  How's it going?",
-        "Greetings _NAME_.  How may I help you today?",
-        "Hello _NAME_, will you be my neighbor?",
-        "Hey _NAME_, what's up?",
-        "Good evening _NAME_.",
-        "Adios _NAME_.  See you ma\u00F1ana."
-    };
+            "Hello _NAME_, how are you?",
+            "Good morning _NAME_. Did you sleep well?",
+            "Happy birthday dear _NAME_.  Happy birthday to you!",
+            "Goodnight _NAME_.  Don't let the bed bugs bite.",
+            "What's up _NAME_.  How's it going?",
+            "Greetings _NAME_.  How may I help you today?",
+            "Hello _NAME_, will you be my neighbor?",
+            "Hey _NAME_, what's up?",
+            "Good evening _NAME_.",
+            "Adios _NAME_.  See you ma\u00F1ana."
+        };
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -276,7 +318,7 @@ public class IOUtilitiesTest
             file.delete();
 
             assertEquals(encoding, result,
-                   "Character encoding not as expected.");
+                         "Character encoding not as expected.");
         } catch (IOException e) {
             e.printStackTrace();
             fail("detectCharacterEncodingTest() failed with exception: " + e);
@@ -297,8 +339,8 @@ public class IOUtilitiesTest
             try (FileOutputStream fos = new FileOutputStream(file);
                  FileOutputStream bomFOS = new FileOutputStream(bomFile))
             {
-                ByteArrayOutputStream baos
-                    = new ByteArrayOutputStream(text.length());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(
+                    text.length());
                 OutputStreamWriter osw = new OutputStreamWriter(baos, encoding);
                 osw.write(text);
                 osw.flush();
@@ -325,8 +367,8 @@ public class IOUtilitiesTest
                     fos.write(bytes, 0, bytes.length);
                     fos.flush();
 
-                    OutputStreamWriter bomOSW
-                        = new OutputStreamWriter(bomFOS, encoding);
+                    OutputStreamWriter bomOSW = new OutputStreamWriter(
+                        bomFOS, encoding);
                     bomOSW.write(0xFEFF);
                     bomOSW.write(text);
                     bomOSW.flush();
@@ -380,11 +422,12 @@ public class IOUtilitiesTest
                         isr,
                         reader,
                         "Reader for non-UTF-8 encoding is not identical: "
-                            + encoding);
+                        + encoding);
                 } else {
-                    assertNotEquals(isr, reader,
-                                    "Readers are the same, not wrapped: "
-                                    + encoding);
+                    assertNotEquals(
+                        isr,
+                        reader,
+                        "Readers are the same, not wrapped: " + encoding);
                 }
                 Reader bomReader = bomSkippingReader(bomISR, encoding);
                 if (!encoding.startsWith("UTF-")) {
@@ -392,11 +435,12 @@ public class IOUtilitiesTest
                         bomISR,
                         bomReader,
                         "Reader for non-UTF-8 encoding is not identical: "
-                            + encoding);
+                        + encoding);
                 } else {
-                    assertNotEquals(bomISR, bomReader,
-                                    "Readers are the same, not wrapped: "
-                                    + encoding);
+                    assertNotEquals(
+                        bomISR,
+                        bomReader,
+                        "Readers are the same, not wrapped: " + encoding);
                 }
 
                 // read the text
@@ -406,12 +450,14 @@ public class IOUtilitiesTest
             file.delete();
             bomFile.delete();
 
-            assertEquals(text, result,
-                         "Text read via reader with no BOM does not match: "
-                         + encoding);
-            assertEquals(text, bomResult,
-                         "Text read via reader with BOM does not match: "
-                         + encoding);
+            assertEquals(
+                text,
+                result,
+                "Text read via reader with no BOM does not match: " + encoding);
+            assertEquals(
+                text,
+                bomResult,
+                "Text read via reader with BOM does not match: " + encoding);
         } catch (IOException e) {
             e.printStackTrace();
             fail("bomSkippingReaderTest() failed with exception: " + e);
@@ -449,31 +495,33 @@ public class IOUtilitiesTest
     public void createDirectoryIfMissingTest()
     {
         try {
-            File newDirectory
-                = new File("TestDirectory-" + System.currentTimeMillis());
+            File newDirectory = new File("TestDirectory-"
+                                         + System.currentTimeMillis());
             assertFalse(newDirectory.exists(),
-                  "New directory already exists: " + newDirectory);
+                        "New directory already exists: " + newDirectory);
             boolean result = createDirectoryIfMissing(newDirectory);
             assertTrue(newDirectory.exists(),
-                 "New directory does NOT exist: " + newDirectory);
-            assertTrue(newDirectory.isDirectory(),
-                       "New directory exists but is not a directory: "
-                       + newDirectory);
-            assertTrue(result,
-                       "Directory created, but return value was false: "
-                       + newDirectory);
+                       "New directory does NOT exist: " + newDirectory);
+            assertTrue(
+                newDirectory.isDirectory(),
+                "New directory exists but is not a directory: " + newDirectory);
+            assertTrue(
+                result,
+                "Directory created, but return value was false: "
+                + newDirectory);
             newDirectory.deleteOnExit();
             result = createDirectoryIfMissing(newDirectory);
-            assertTrue(newDirectory.exists(),
-                 "New directory does NOT exist on recreate: " + newDirectory);
+            assertTrue(
+                newDirectory.exists(),
+                "New directory does NOT exist on recreate: " + newDirectory);
             assertTrue(
                 newDirectory.isDirectory(),
                 "New directory exists but is not a directory on recreate: "
-                    + newDirectory);
+                + newDirectory);
             assertFalse(
                 result,
                 "Directory already existed, but return value was true: "
-                    + newDirectory);
+                + newDirectory);
             newDirectory.delete();
         } catch (Exception e) {
             e.printStackTrace();
@@ -519,37 +567,43 @@ public class IOUtilitiesTest
             File tmpFile1 = File.createTempFile("temp-", ".txt", rootDir);
             File tmpFile2 = File.createTempFile("temp-", ".txt", subDir);
 
-            assertTrue(rootDir.exists() && rootDir.isDirectory(),
-                       "Root directory does not exist or is not a directory: "
-                       + rootDir);
-            assertTrue(subDir.exists() && subDir.isDirectory(),
-                       "Sub-directory does not exist or is not a directory: "
-                       + subDir);
-            assertTrue(tmpFile1.exists() && !tmpFile1.isDirectory(),
-                       "First temp file does not exist or is a directory: "
-                       + tmpFile1);
-            assertTrue(tmpFile2.exists() && !tmpFile2.isDirectory(),
-                       "Second temp file does not exist or is a directory: "
-                       + tmpFile2);
+            assertTrue(
+                rootDir.exists() && rootDir.isDirectory(),
+                "Root directory does not exist or is not a directory: "
+                + rootDir);
+            assertTrue(
+                subDir.exists() && subDir.isDirectory(),
+                "Sub-directory does not exist or is not a directory: "
+                + subDir);
+            assertTrue(
+                tmpFile1.exists() && !tmpFile1.isDirectory(),
+                "First temp file does not exist or is a directory: "
+                + tmpFile1);
+            assertTrue(
+                tmpFile2.exists() && !tmpFile2.isDirectory(),
+                "Second temp file does not exist or is a directory: "
+                + tmpFile2);
 
             int result = recursiveDeleteDirectory(rootDir);
 
-            assertEquals(0, result, "Some files could not be deleted: "
-                                    + result);
+            assertEquals(0, result,
+                         "Some files could not be deleted: " + result);
 
             assertFalse(
                 tmpFile2.exists(),
                 "Second temp file still exists after recursive delete: "
-                    + tmpFile2);
-            assertFalse(tmpFile1.exists(),
-                        "First temp file still exists after recursive delete: "
-                        + tmpFile1);
-            assertFalse(subDir.exists(),
-                        "Sub-directory still exists after recursive delete: "
-                        + subDir);
-            assertFalse(rootDir.exists(),
-                        "Root directory still exists after recursive delete: "
-                        + rootDir);
+                + tmpFile2);
+            assertFalse(
+                tmpFile1.exists(),
+                "First temp file still exists after recursive delete: "
+                + tmpFile1);
+            assertFalse(
+                subDir.exists(),
+                "Sub-directory still exists after recursive delete: " + subDir);
+            assertFalse(
+                rootDir.exists(),
+                "Root directory still exists after recursive delete: "
+                + rootDir);
         } catch (Exception e) {
             e.printStackTrace();
             fail("recursiveDeleteDirectoryTest() failed with exception: " + e);
@@ -576,17 +630,22 @@ public class IOUtilitiesTest
             fw2.close();
 
             boolean result = checkFilesDiffer(file1, file2);
-            assertFalse(result, "Files show different, but are the same (1): "
-                                + file1 + " vs " + file2);
+            assertFalse(
+                result,
+                "Files show different, but are the same (1): " + file1
+                + " vs " + file2);
 
             result = checkFilesDiffer(file1, file2, false);
-            assertFalse(result, "Files show different, but are the same (2): "
-                                + file1 + " vs " + file2);
+            assertFalse(
+                result,
+                "Files show different, but are the same (2): " + file1
+                + " vs " + file2);
 
             result = checkFilesDiffer(file1, file2, true);
-            assertTrue(result,
-                       "Files show the same despite different timestamps: "
-                       + file1 + " vs " + file2);
+            assertTrue(
+                result,
+                "Files show the same despite different timestamps: " + file1
+                + " vs " + file2);
 
             // update modified timestamps to be the same
             long now = System.currentTimeMillis();
@@ -594,9 +653,10 @@ public class IOUtilitiesTest
             file2.setLastModified(now);
 
             result = checkFilesDiffer(file1, file2, true);
-            assertFalse(result,
-                        "Files show the different despite same timestamps: "
-                        + file1 + " vs " + file2);
+            assertFalse(
+                result,
+                "Files show the different despite same timestamps: " + file1
+                + " vs " + file2);
 
             // delete the files
             file1.delete();
@@ -624,17 +684,22 @@ public class IOUtilitiesTest
             fw2.close();
 
             boolean result = checkFilesDiffer(file1, file2);
-            assertTrue(result, "Files show same, but are different (1): "
-                               + file1 + " vs " + file2);
+            assertTrue(
+                result,
+                "Files show same, but are different (1): " + file1
+                + " vs " + file2);
 
             result = checkFilesDiffer(file1, file2, false);
-            assertTrue(result, "Files show same, but are different (2): "
-                               + file1 + " vs " + file2);
+            assertTrue(
+                result,
+                "Files show same, but are different (2): " + file1
+                + " vs " + file2);
 
             result = checkFilesDiffer(file1, file2, true);
-            assertTrue(result,
-                       "Files same despite different content & timestamps: "
-                       + file1 + " vs " + file2);
+            assertTrue(
+                result,
+                "Files same despite different content & timestamps: " + file1
+                + " vs " + file2);
 
             file1.delete();
             file2.delete();
@@ -663,19 +728,23 @@ public class IOUtilitiesTest
             fw2.close();
 
             boolean result = checkFilesDiffer(file1, file1);
-            assertFalse(result, "Files show different, but are same file: "
-                                + file1);
+            assertFalse(result,
+                        "Files show different, but are same file: " + file1);
 
             file1.delete();
 
             result = checkFilesDiffer(file1, file2);
-            assertTrue(result, "Files show same, but one does not exist: "
-                               + file1 + " vs " + file2);
+            assertTrue(
+                result,
+                "Files show same, but one does not exist: " + file1
+                + " vs " + file2);
 
             file2.delete();
             result = checkFilesDiffer(file1, file2, false);
-            assertFalse(result, "Files show different, but neither exist: "
-                                + file1 + " vs " + file2);
+            assertFalse(
+                result,
+                "Files show different, but neither exist: " + file1
+                + " vs " + file2);
         } catch (Exception e) {
             e.printStackTrace();
             fail("checkFilesDifferTest() failed with exception: " + e);
@@ -693,30 +762,33 @@ public class IOUtilitiesTest
             File newFile = new File(tmpDir, "test-file-" + now + ".txt");
 
             assertFalse(newFile.exists(),
-                  "File to be touched already exists: " + newFile);
+                        "File to be touched already exists: " + newFile);
 
             Thread.sleep(10);
 
             long result = touchFile(newFile);
 
             assertTrue(newFile.exists(),
-                  "Touched file does not exist: " + newFile);
+                       "Touched file does not exist: " + newFile);
 
-            assertTrue((result > now), "Last modified time of touched file ("
-                                       + result + ") is older than expected ("
-                                       + now + "): " + newFile);
+            assertTrue(
+                (result > now),
+                "Last modified time of touched file (" + result
+                + ") is older than expected (" + now
+                + "): " + newFile);
 
             Thread.sleep(10);
 
             long result2 = touchFile(newFile);
 
             assertTrue(newFile.exists(),
-                 "Retouched file does not exist: " + newFile);
+                       "Retouched file does not exist: " + newFile);
 
-            assertTrue((result2 > result),
-                       "Last modified time of retouched file (" + result2
-                       + ") is older than expected (" + result
-                       + "): " + newFile);
+            assertTrue(
+                (result2 > result),
+                "Last modified time of retouched file (" + result2
+                + ") is older than expected (" + result
+                + "): " + newFile);
         } catch (Exception e) {
             e.printStackTrace();
             fail("touchFileTest() failed with exception: " + e);

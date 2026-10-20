@@ -511,9 +511,10 @@ public class TemporaryDataCache
                     // push the file part
                     if (completedLength > 0) {
                         if (!owner.isDeleted()) {
-                            CacheFilePart cfp = new CacheFilePart(completedFile,
-                                                    completedOffset,
-                                                    completedLength);
+                            CacheFilePart cfp = new CacheFilePart(
+                                completedFile,
+                                completedOffset,
+                                completedLength);
                             owner.fileParts.add(cfp);
                             owner.fileParts.notifyAll();
                         }
@@ -546,8 +547,8 @@ public class TemporaryDataCache
                     }
                     File directory = owner.directory;
                     String baseFileName = owner.baseFileName;
-                    String fileName
-                        = baseFileName + "-" + this.partIndex + ".dat";
+                    String fileName = baseFileName + "-" + this.partIndex
+                        + ".dat";
 
                     Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
                     cipher.init(Cipher.ENCRYPT_MODE, owner.keySpec,
@@ -559,10 +560,9 @@ public class TemporaryDataCache
                     this.currentFile = new File(directory, fileName);
                     this.currentFOS = new FileOutputStream(this.currentFile);
                     this.currentCOS = new CipherOutputStream(this.currentFOS,
-                                                           cipher);
+                                                             cipher);
                     this.currentGOS = new GZIPOutputStream(this.currentCOS,
-                                                         gzSize,
-                                                         syncFlush);
+                                                           gzSize, syncFlush);
 
                     // flag the file for deletion on exit
                     this.currentFile.deleteOnExit();
@@ -610,8 +610,9 @@ public class TemporaryDataCache
                     double countLog10 = Math.floor(
                         Math.log10((double) this.currentWriteCount));
 
-                    int logInterval = (int) (Math.max(100, Math.pow(10,
-                                                                    countLog10)
+                    int logInterval = (int) (Math.max(
+                        100,
+                        Math.pow(10, countLog10)
                         * Math.max(1, countLog10 - 1)));
 
                     if ((this.currentWriteCount % logInterval) == 0) {
@@ -655,8 +656,8 @@ public class TemporaryDataCache
                         {
                             // calculate the duration from nanoseconds to
                             // milliseconds
-                            long duration
-                                = (now - this.lastWriteTime) / 1000000L;
+                            long duration = (now - this.lastWriteTime)
+                                / 1000000L;
 
                             // check if the duration exceeds the timeout
                             if (duration >= FILE_PART_TIMEOUT) {
@@ -872,7 +873,7 @@ public class TemporaryDataCache
                             } catch (InterruptedException e) {
                                 throw new IOException(
                                     "Interrupted while waiting for "
-                                        + "an available file.",
+                                    + "an available file.",
                                     e);
                             }
                         } else {
@@ -884,8 +885,8 @@ public class TemporaryDataCache
                 // check if the remaining number of bytes in the file is less
                 // than
                 // the remaining number to skip
-                long remaining
-                    = this.currentFilePart.length - this.currentOffset;
+                long remaining = this.currentFilePart.length
+                    - this.currentOffset;
                 if (remainingSkip < remaining) {
                     long skipped = this.currentIS.skip(remainingSkip);
                     totalSkipped += skipped;
@@ -954,12 +955,13 @@ public class TemporaryDataCache
                             }
                             boolean truncated = (isr.read() >= 0);
 
-                            logDebug("Reading file part "
-                                     + this.currentFileIndex + ": " + filePart,
-                                     (truncated ? "CONTENTS:" : "PREVIEW"),
-                                     "-------------------------------------",
-                                     sb.toString(),
-                                     "-------------------------------------");
+                            logDebug(
+                                "Reading file part " + this.currentFileIndex
+                                + ": " + filePart,
+                                (truncated ? "CONTENTS:" : "PREVIEW"),
+                                "-------------------------------------",
+                                sb.toString(),
+                                "-------------------------------------");
                         }
                     }
 
@@ -1032,7 +1034,7 @@ public class TemporaryDataCache
                             } catch (InterruptedException e) {
                                 throw new IOException(
                                     "Interrupted while waiting for "
-                                        + "an available file.",
+                                    + "an available file.",
                                     e);
                             }
                         } else {

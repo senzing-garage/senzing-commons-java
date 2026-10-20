@@ -38,8 +38,8 @@ public class ConnectorTest
     @Test
     public void formatEmptyMapReturnsEmptyString()
     {
-        assertEquals("", Connector.formatConnectionProperties(
-                     Collections.emptyMap()));
+        assertEquals(
+            "", Connector.formatConnectionProperties(Collections.emptyMap()));
     }
 
     /**
@@ -51,7 +51,7 @@ public class ConnectorTest
         Map<String, String> props = new LinkedHashMap<>();
         props.put("mode", "memory");
         assertEquals("?mode=memory",
-                 Connector.formatConnectionProperties(props));
+                     Connector.formatConnectionProperties(props));
     }
 
     /**
@@ -65,7 +65,7 @@ public class ConnectorTest
         props.put("user", "alice");
         props.put("password", "secret");
         assertEquals("?user=alice&password=secret",
-                 Connector.formatConnectionProperties(props));
+                     Connector.formatConnectionProperties(props));
     }
 
     /**
@@ -81,13 +81,15 @@ public class ConnectorTest
         // Space encoded as either '+' or '%20'; '&' and '=' must be
         // percent-encoded in the value to avoid corrupting the structure.
         assertEquals(true, formatted.startsWith("?"),
-                 "Output must start with '?'");
-        assertEquals(true, formatted.contains("name+with+space")
-                           || formatted.contains("name%20with%20space"),
-                     "Key spaces must be URL-encoded: " + formatted);
-        assertEquals(true, formatted.contains("%26")
-                           && formatted.contains("%3D"),
-                     "'&' and '=' in value must be percent-encoded: "
-                     + formatted);
+                     "Output must start with '?'");
+        assertEquals(
+            true,
+            formatted.contains("name+with+space")
+            || formatted.contains("name%20with%20space"),
+            "Key spaces must be URL-encoded: " + formatted);
+        assertEquals(
+            true,
+            formatted.contains("%26") && formatted.contains("%3D"),
+            "'&' and '=' in value must be percent-encoded: " + formatted);
     }
 }

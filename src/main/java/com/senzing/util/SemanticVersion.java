@@ -33,8 +33,8 @@ public class SemanticVersion implements Comparable<SemanticVersion>
      * their corresponding string suffix representations for use in
      * reconstructing the version string via {@link #toString()}.
      */
-    private static final Map<Integer, String> SUFFIX_MAP
-        = Map.of(RC_VALUE, "-rc", BETA_VALUE, "-beta", ALPHA_VALUE, "-alpha");
+    private static final Map<Integer, String> SUFFIX_MAP = Map.of(
+        RC_VALUE, "-rc", BETA_VALUE, "-beta", ALPHA_VALUE, "-alpha");
 
     /**
      * The {@link List} of version parts.
@@ -77,8 +77,7 @@ public class SemanticVersion implements Comparable<SemanticVersion>
             boolean hasSuffix = false;
             for (String token : tokens) {
                 String lowerToken = token.toLowerCase();
-                switch (lowerToken)
-                {
+                switch (lowerToken) {
                     case "alpha":
                     case "beta":
                     case "rc":
@@ -95,9 +94,9 @@ public class SemanticVersion implements Comparable<SemanticVersion>
                         }
                         hasSuffix = true;
                         this.versionParts.add(
-                            lowerToken.equals("alpha") ? ALPHA_VALUE
-                            : lowerToken.equals("beta") ? BETA_VALUE
-                            : RC_VALUE);
+                            lowerToken.equals("alpha")
+                                ? ALPHA_VALUE : lowerToken.equals("beta")
+                                ? BETA_VALUE : RC_VALUE);
                         break;
                     default:
                         int part = Integer.parseInt(token);
@@ -128,7 +127,7 @@ public class SemanticVersion implements Comparable<SemanticVersion>
             this.normalizedString = buildVersionString(normalized);
         } catch (Exception e) {
             throw new IllegalArgumentException(
-                    "Invalid semantic version string: " + versionString);
+                "Invalid semantic version string: " + versionString);
         }
     }
 
@@ -194,8 +193,7 @@ public class SemanticVersion implements Comparable<SemanticVersion>
     @Override
     public int compareTo(SemanticVersion other)
     {
-        Objects.requireNonNull(
-                other, "The specified parameter cannot be null");
+        Objects.requireNonNull(other, "The specified parameter cannot be null");
         Iterator<Integer> iter1 = this.versionParts.iterator();
         Iterator<Integer> iter2 = other.versionParts.iterator();
 
@@ -258,8 +256,9 @@ public class SemanticVersion implements Comparable<SemanticVersion>
             System.exit(1);
         }
         SemanticVersion version = new SemanticVersion(args[0]);
-        System.out.println(
-                "VERSION: " + version + " (" + version.toString(true) + ")");
+        System.out.println("VERSION: " + version
+                           + " (" + version.toString(true)
+                           + ")");
         for (int index = 1; index < args.length; index++) {
             SemanticVersion version2 = new SemanticVersion(args[index]);
             System.out.println();

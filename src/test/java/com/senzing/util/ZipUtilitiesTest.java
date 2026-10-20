@@ -51,8 +51,8 @@ public class ZipUtilitiesTest
             + "mollit anim id est laborum.",
         "Aenean at eros diam. Donec sodales feugiat elit sed dapibus. Fusce "
             + "iaculis quis tortor tincidunt dignissim. Cras vestibulum nibh "
-            + "non mi vulputate condimentum. Sed quis ornare sapien.",
-  };
+            + "non mi vulputate condimentum. Sed quis ornare sapien."
+    };
 
     private static File tempDirectory()
         throws IOException
@@ -134,36 +134,42 @@ public class ZipUtilitiesTest
             long zipLength = targetFile.length();
 
             assertTrue(targetFile.exists(),
-                 "ZIP file does not exist: " + targetFile);
+                       "ZIP file does not exist: " + targetFile);
             assertNotEquals(0, zipLength,
-                      "ZIP file appears to be empty: " + targetFile);
+                            "ZIP file appears to be empty: " + targetFile);
 
-            assertTrue(zipLength < totalSize, "The ZIP file (" + targetFile
-                                              + ") is larger (" + zipLength
-                                              + ") than the original files: "
-                                              + totalSize);
+            assertTrue(
+                zipLength < totalSize,
+                "The ZIP file (" + targetFile
+                + ") is larger (" + zipLength
+                + ") than the original files: " + totalSize);
 
             targetDir = tempDirectory();
 
             ZipUtilities.unzip(targetFile, targetDir);
 
             File[] files = targetDir.listFiles();
-            assertEquals(1, files.length,
-                         "Target directory contained an unexpected number "
-                         + "of files.");
+            assertEquals(
+                1,
+                files.length,
+                "Target directory contained an unexpected number "
+                + "of files.");
             assertTrue(files[0].isDirectory(),
-                 "Target directory does not contain a directory");
-            assertEquals(dir.getName(), files[0].getName(),
-                         "Unzipped directory name differs from "
-                         + "original directory name.");
+                       "Target directory does not contain a directory");
+            assertEquals(
+                dir.getName(),
+                files[0].getName(),
+                "Unzipped directory name differs from "
+                + "original directory name.");
 
             files = files[0].listFiles();
 
-            assertEquals(origFiles.length, files.length,
-                         "Unzipped a different number of files than "
-                         + "originally existed: " + targetDir + "\n\n"
-                         + Arrays.asList(origFiles) + "\n\n"
-                         + Arrays.asList(files));
+            assertEquals(
+                origFiles.length,
+                files.length,
+                "Unzipped a different number of files than "
+                + "originally existed: " + targetDir + "\n\n"
+                + Arrays.asList(origFiles) + "\n\n" + Arrays.asList(files));
 
             Map<String, File> origFileMap = new LinkedHashMap<>();
             Map<String, File> fileMap = new LinkedHashMap<>();
@@ -176,15 +182,16 @@ public class ZipUtilitiesTest
             }
 
             assertEquals(origFileMap.keySet(), fileMap.keySet(),
-                "Files unzipped with different names.");
+                         "Files unzipped with different names.");
 
             fileMap.forEach((name, file) -> {
                 File origFile = origFileMap.get(name);
                 try {
-                    assertFalse(IOUtilities.checkFilesDiffer(file, origFile),
-                                "Unzipped file (" + file
-                                + ") differs from original (" + origFile
-                                + ")");
+                    assertFalse(
+                        IOUtilities.checkFilesDiffer(file, origFile),
+                        "Unzipped file (" + file
+                        + ") differs from original (" + origFile
+                        + ")");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -234,32 +241,36 @@ public class ZipUtilitiesTest
             long zipLength = targetFile.length();
 
             assertTrue(targetFile.exists(),
-                 "ZIP file does not exist: " + targetFile);
+                       "ZIP file does not exist: " + targetFile);
             assertNotEquals(0, zipLength,
-                      "ZIP file appears to be empty: " + targetFile);
+                            "ZIP file appears to be empty: " + targetFile);
 
-            assertTrue(zipLength < totalSize, "The ZIP file (" + targetFile
-                                              + ") is larger (" + zipLength
-                                              + ") than the original file: "
-                                              + totalSize);
+            assertTrue(
+                zipLength < totalSize,
+                "The ZIP file (" + targetFile
+                + ") is larger (" + zipLength
+                + ") than the original file: " + totalSize);
 
             targetDir = tempDirectory();
 
             ZipUtilities.unzip(targetFile, targetDir);
 
             File[] files = targetDir.listFiles();
-            assertEquals(1, files.length,
-                         "Target directory contained an unexpected number "
-                         + "of files.");
+            assertEquals(
+                1,
+                files.length,
+                "Target directory contained an unexpected number "
+                + "of files.");
             assertFalse(files[0].isDirectory(),
-                 "Target directory should not contain a directory");
+                        "Target directory should not contain a directory");
             assertEquals(file.getName(), files[0].getName(),
-                   "Unzipped file name differs from original file name.");
+                         "Unzipped file name differs from original file name.");
 
-            assertFalse(IOUtilities.checkFilesDiffer(file, files[0]),
-                        "Unzipped file (" + files[0]
-                        + ") differs from original (" + file
-                        + ")");
+            assertFalse(
+                IOUtilities.checkFilesDiffer(file, files[0]),
+                "Unzipped file (" + files[0]
+                + ") differs from original (" + file
+                + ")");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Failed with an unexpected exception: " + e);
@@ -296,7 +307,7 @@ public class ZipUtilitiesTest
         byte[] compressed = ZipUtilities.zip(original);
         byte[] back = ZipUtilities.unzip(compressed);
         assertArrayEquals(original, back,
-                      "zip/unzip must round-trip byte-for-byte");
+                          "zip/unzip must round-trip byte-for-byte");
     }
 
     /**
@@ -310,7 +321,7 @@ public class ZipUtilitiesTest
         byte[] original = "hello world".getBytes(StandardCharsets.UTF_8);
         byte[] compressed = ZipUtilities.zip(original);
         assertTrue(compressed.length > 0,
-               "Compressed output must be non-empty");
+                   "Compressed output must be non-empty");
     }
 
     /**
@@ -342,7 +353,7 @@ public class ZipUtilitiesTest
         byte[] decoded = Base64.getDecoder().decode(base64);
         byte[] zipped = ZipUtilities.zip(original);
         assertArrayEquals(zipped, decoded,
-                      "zip64 must equal Base64-encode(zip(...))");
+                          "zip64 must equal Base64-encode(zip(...))");
     }
 
     /**
@@ -415,11 +426,11 @@ public class ZipUtilitiesTest
         byte[] original = "hello".getBytes(StandardCharsets.UTF_8);
         byte[] compressed = ZipUtilities.gzip(original);
         assertTrue(compressed.length >= 2,
-               "Compressed output too short for GZip header");
+                   "Compressed output too short for GZip header");
         assertEquals((byte) 0x1F, compressed[0],
-                 "GZip magic byte 0 must be 0x1F");
+                     "GZip magic byte 0 must be 0x1F");
         assertEquals((byte) 0x8B, compressed[1],
-                 "GZip magic byte 1 must be 0x8B");
+                     "GZip magic byte 1 must be 0x8B");
     }
 
     // -------------------------------------------------------------------
@@ -471,7 +482,7 @@ public class ZipUtilitiesTest
         File source = File.createTempFile("zip-stream-", ".txt");
         source.deleteOnExit();
         Files.writeString(source.toPath(),
-                      "stream-variant round-trip payload\n");
+                          "stream-variant round-trip payload\n");
 
         // Zip into a byte array via the stream variant.
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -492,10 +503,10 @@ public class ZipUtilitiesTest
 
             File extracted = new File(extractDir, source.getName());
             assertTrue(extracted.exists(),
-                 "Extracted file must exist: " + extracted);
+                       "Extracted file must exist: " + extracted);
             assertEquals(Files.readString(source.toPath()),
-                   Files.readString(extracted.toPath()),
-                   "Extracted content must match the source");
+                         Files.readString(extracted.toPath()),
+                         "Extracted content must match the source");
         } finally {
             IOUtilities.recursiveDeleteDirectory(extractDir);
             source.delete();
@@ -518,17 +529,16 @@ public class ZipUtilitiesTest
     {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(captured, true,
-                                  StandardCharsets.UTF_8));
+        System.setOut(new PrintStream(captured, true, StandardCharsets.UTF_8));
         try {
             ZipUtilities.main(new String[] { "hello world" });
             String out = captured.toString(StandardCharsets.UTF_8);
             assertTrue(out.contains("(zip):"),
-                 "main output must include zip diagnostic: " + out);
+                       "main output must include zip diagnostic: " + out);
             assertTrue(out.contains("(gzip):"),
-                 "main output must include gzip diagnostic: " + out);
+                       "main output must include gzip diagnostic: " + out);
             assertTrue(out.contains("--> true"),
-                 "main output must show successful round-trip: " + out);
+                       "main output must show successful round-trip: " + out);
         } finally {
             System.setOut(originalOut);
         }
@@ -547,13 +557,14 @@ public class ZipUtilitiesTest
         File targetZip = File.createTempFile("main-", ".zip");
         targetZip.delete();
         try {
-            ZipUtilities.main(new String[] {
-                dir.getAbsolutePath(), targetZip.getAbsolutePath()
-            });
+            ZipUtilities.main(
+                new String[] {
+                    dir.getAbsolutePath(), targetZip.getAbsolutePath()
+                });
             assertTrue(targetZip.exists(),
                        "main must create the target ZIP file: " + targetZip);
             assertTrue(targetZip.length() > 0,
-                 "main-created ZIP file must be non-empty");
+                       "main-created ZIP file must be non-empty");
         } finally {
             IOUtilities.recursiveDeleteDirectory(dir);
             targetZip.delete();
@@ -581,17 +592,20 @@ public class ZipUtilitiesTest
 
             // Run main(zip, dir) — should call unzip and populate the
             // directory.
-            ZipUtilities.main(new String[] {
-                zipFile.getAbsolutePath(), extractDir.getAbsolutePath()
-            });
+            ZipUtilities.main(
+                new String[] {
+                    zipFile.getAbsolutePath(), extractDir.getAbsolutePath()
+                });
 
             File[] extracted = extractDir.listFiles();
             assertNotNull(extracted, "Extract directory must contain entries");
-            assertEquals(1, extracted.length,
-                         "Extracted root must contain exactly one entry"
-                         + " (the source dir)");
+            assertEquals(
+                1,
+                extracted.length,
+                "Extracted root must contain exactly one entry"
+                + " (the source dir)");
             assertTrue(extracted[0].isDirectory(),
-                 "Extracted entry must be a directory");
+                       "Extracted entry must be a directory");
         } finally {
             IOUtilities.recursiveDeleteDirectory(sourceDir);
             IOUtilities.recursiveDeleteDirectory(extractDir);
@@ -611,21 +625,19 @@ public class ZipUtilitiesTest
     {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(captured, true,
-                                  StandardCharsets.UTF_8));
+        System.setOut(new PrintStream(captured, true, StandardCharsets.UTF_8));
         try {
-            ZipUtilities.main(new String[] {
-                "first arg", "second arg", "third arg"
-            });
+            ZipUtilities.main(
+                new String[] { "first arg", "second arg", "third arg" });
             String out = captured.toString(StandardCharsets.UTF_8);
             // For each of the 3 args, expect one zip line and one gzip
             // line — so 6 diagnostic lines total.
             int zipCount = countOccurrences(out, "(zip):");
             int gzipCount = countOccurrences(out, "(gzip):");
             assertEquals(3, zipCount,
-                   "Expected one zip diagnostic per argument: " + out);
+                         "Expected one zip diagnostic per argument: " + out);
             assertEquals(3, gzipCount,
-                   "Expected one gzip diagnostic per argument: " + out);
+                         "Expected one gzip diagnostic per argument: " + out);
         } finally {
             System.setOut(originalOut);
         }
@@ -654,14 +666,15 @@ public class ZipUtilitiesTest
                 IOException.class,
                 () -> ZipUtilities.unzip(zis, targetDir),
                 "unzip() must refuse a Zip Slip traversal entry");
-            assertTrue(ex.getMessage().contains("outside target"),
-                       "exception message should explain the refusal; "
-                       + "got: " + ex.getMessage());
+            assertTrue(
+                ex.getMessage().contains("outside target"),
+                "exception message should explain the refusal; " + "got: "
+                + ex.getMessage());
         }
         File escaped = new File(targetDir.getParentFile(), "escape.txt");
-        assertFalse(escaped.exists(),
-                    "Zip Slip target should never have been created: "
-                    + escaped);
+        assertFalse(
+            escaped.exists(),
+            "Zip Slip target should never have been created: " + escaped);
     }
 
     private static int countOccurrences(String haystack, String needle)

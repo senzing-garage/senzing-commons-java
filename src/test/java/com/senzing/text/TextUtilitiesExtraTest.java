@@ -33,49 +33,49 @@ public class TextUtilitiesExtraTest
     public void boundedRandomPrintableTextRejectsNegativeMin()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomPrintableText(-1, 10));
+                     () -> randomPrintableText(-1, 10));
     }
 
     @Test
     public void boundedRandomPrintableTextRejectsNegativeMax()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomPrintableText(0, -1));
+                     () -> randomPrintableText(0, -1));
     }
 
     @Test
     public void boundedRandomPrintableTextRejectsMinGreaterThanMax()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomPrintableText(10, 5));
+                     () -> randomPrintableText(10, 5));
     }
 
     @Test
     public void boundedRandomAlphabeticTextRejectsNegativeMin()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomAlphabeticText(-5, 10));
+                     () -> randomAlphabeticText(-5, 10));
     }
 
     @Test
     public void boundedRandomAlphabeticTextRejectsMinGreaterThanMax()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomAlphabeticText(10, 5));
+                     () -> randomAlphabeticText(10, 5));
     }
 
     @Test
     public void boundedRandomAlphanumericTextRejectsNegativeMax()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomAlphanumericText(0, -3));
+                     () -> randomAlphanumericText(0, -3));
     }
 
     @Test
     public void boundedRandomAlphanumericTextRejectsMinGreaterThanMax()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomAlphanumericText(20, 5));
+                     () -> randomAlphanumericText(20, 5));
     }
 
     /**
@@ -89,7 +89,7 @@ public class TextUtilitiesExtraTest
     {
         String text = randomPrintableText(8, 8);
         assertEquals(8, text.length(),
-                 "When min == max, length must be exactly that value");
+                     "When min == max, length must be exactly that value");
     }
 
     @Test
@@ -115,21 +115,21 @@ public class TextUtilitiesExtraTest
     public void randomPrintableTextRejectsNegativeCount()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomPrintableText(-1));
+                     () -> randomPrintableText(-1));
     }
 
     @Test
     public void randomAlphabeticTextRejectsNegativeCount()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomAlphabeticText(-1));
+                     () -> randomAlphabeticText(-1));
     }
 
     @Test
     public void randomAlphanumericTextRejectsNegativeCount()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> randomAlphanumericText(-1));
+                     () -> randomAlphanumericText(-1));
     }
 
     /**
@@ -166,9 +166,11 @@ public class TextUtilitiesExtraTest
         String text = randomAlphabeticText(64);
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            assertEquals(true, Character.isAlphabetic(c),
-                         "All characters in randomAlphabeticText output "
-                         + "must be alphabetic; got: " + c);
+            assertEquals(
+                true,
+                Character.isAlphabetic(c),
+                "All characters in randomAlphabeticText output "
+                + "must be alphabetic; got: " + c);
         }
     }
 
@@ -178,10 +180,11 @@ public class TextUtilitiesExtraTest
         String text = randomAlphanumericText(64);
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            assertEquals(true, Character.isAlphabetic(c)
-                               || Character.isDigit(c),
-                         "All characters in randomAlphanumericText output "
-                         + "must be alphabetic or digit; got: " + c);
+            assertEquals(
+                true,
+                Character.isAlphabetic(c) || Character.isDigit(c),
+                "All characters in randomAlphanumericText output "
+                + "must be alphabetic or digit; got: " + c);
         }
     }
 
@@ -196,7 +199,7 @@ public class TextUtilitiesExtraTest
         String encoded = urlEncodeUtf8(original);
         String decoded = urlDecodeUtf8(encoded);
         assertEquals(original, decoded,
-                 "urlEncode/urlDecode round-trip must preserve text");
+                     "urlEncode/urlDecode round-trip must preserve text");
     }
 
     @Test
@@ -205,9 +208,10 @@ public class TextUtilitiesExtraTest
         String encoded = urlEncodeUtf8("a b");
         // Per URLEncoder default: space → "+" or "%20" depending on form.
         // The implementation uses URLEncoder.encode which produces "+".
-        assertEquals(true, encoded.contains("+") || encoded.contains("%20"),
-                     "URL encoding of space should produce + or %20: "
-                     + encoded);
+        assertEquals(
+            true,
+            encoded.contains("+") || encoded.contains("%20"),
+            "URL encoding of space should produce + or %20: " + encoded);
     }
 
     @Test

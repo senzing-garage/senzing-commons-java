@@ -55,8 +55,8 @@ public class JsonUtilities
      * {@link #DATE_TIME_PATTERN} using the {@link Locale#UK} locale.
      */
     public static final DateTimeFormatter DATE_TIME_FORMATTER
-        = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, Locale.UK).withZone(
-            ZoneOffset.UTC);
+        = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN, Locale.UK)
+                           .withZone(ZoneOffset.UTC);
 
     /**
      * Private constructor since this class only has static methods.
@@ -82,8 +82,7 @@ public class JsonUtilities
         int escapeCount = 0;
         for (int index = 0; index < string.length(); index++) {
             char c = string.charAt(index);
-            escapeCount += switch (c)
-            {
+            escapeCount += switch (c) {
                 case '\b', '\f', '\n', '\r', '\t', '"', '\\':
                     yield JSON_ESCAPE_BASIC_COUNT;
                 default:
@@ -95,8 +94,7 @@ public class JsonUtilities
         sb.append('"');
         for (int index = 0; index < string.length(); index++) {
             char c = string.charAt(index);
-            switch (c)
-            {
+            switch (c) {
                 case '"', '\\':
                     sb.append('\\').append(c);
                     break;
@@ -362,8 +360,7 @@ public class JsonUtilities
         if (arr == null) return defaultValue;
         JsonValue val = arr.get(index);
         String text = null;
-        switch (val.getValueType())
-        {
+        switch (val.getValueType()) {
             case NULL:
                 return defaultValue;
             case STRING:
@@ -371,7 +368,7 @@ public class JsonUtilities
                 break;
             default:
                 throw new IllegalArgumentException(
-                        "Unexpected value at index (" + index + "): " + val);
+                    "Unexpected value at index (" + index + "): " + val);
         }
         return Instant.from(DATE_TIME_FORMATTER.parse(text));
     }
@@ -444,8 +441,7 @@ public class JsonUtilities
                                         String    defaultValue)
     {
         if (jsonValue == null) return defaultValue;
-        switch (jsonValue.getValueType())
-        {
+        switch (jsonValue.getValueType()) {
             case STRING:
                 return ((JsonString) jsonValue).getString();
             case NULL:
@@ -545,8 +541,8 @@ public class JsonUtilities
     {
         if (obj == null) return defaultValue;
         if (!obj.containsKey(key) || obj.isNull(key)) return defaultValue;
-        return Collections.unmodifiableList(obj.getJsonArray(key).getValuesAs(
-                    JsonUtilities::valueAsString));
+        return Collections.unmodifiableList(
+            obj.getJsonArray(key).getValuesAs(JsonUtilities::valueAsString));
     }
 
     /**
@@ -597,9 +593,8 @@ public class JsonUtilities
     {
         if (arr == null) return defaultValue;
         if (arr.isNull(index)) return defaultValue;
-        return Collections.unmodifiableList(arr.getJsonArray(index)
-                                               .getValuesAs(
-                    JsonUtilities::valueAsString));
+        return Collections.unmodifiableList(
+            arr.getJsonArray(index).getValuesAs(JsonUtilities::valueAsString));
     }
 
     /**
@@ -2166,8 +2161,7 @@ public class JsonUtilities
     public static Object normalizeJsonValue(JsonValue jsonValue)
     {
         if (jsonValue == null) return null;
-        switch (jsonValue.getValueType())
-        {
+        switch (jsonValue.getValueType()) {
             case NULL:
                 {
                     return null;
@@ -2212,8 +2206,8 @@ public class JsonUtilities
 
                     for (Map.Entry entry : jsonObject.entrySet()) {
                         String key = (String) entry.getKey();
-                        Object value
-                            = normalizeJsonValue((JsonValue) entry.getValue());
+                        Object value = normalizeJsonValue(
+                            (JsonValue) entry.getValue());
                         result.put(key, value);
                     }
                     return result;
@@ -2492,8 +2486,8 @@ public class JsonUtilities
             Method method = methodMap.get(returnType);
             if (method != null) {
                 if (method.getParameterTypes().length == 3) {
-                    return (T) method.invoke(
-                        null, source, locator, defaultValue);
+                    return (T) method.invoke(null, source, locator,
+                                             defaultValue);
                 } else if (method.getParameterTypes().length == 2) {
                     T result = (T) method.invoke(null, source, locator);
                     return (result == null) ? defaultValue : result;
@@ -2509,8 +2503,8 @@ public class JsonUtilities
                      && Modifier.isStatic(modifiers)))
                 {
                     method = methodMap.get(Instant.class);
-                    Instant instant
-                        = (Instant) method.invoke(null, source, locator, null);
+                    Instant instant = (Instant) method.invoke(null, source,
+                                                              locator, null);
                     if (instant == null) return defaultValue;
                     return (T) fromMethod.invoke(null, instant);
                 }
@@ -3013,7 +3007,7 @@ public class JsonUtilities
 
         JsonWriter jsonWriter = (prettyPrint)
             ? PRETTY_WRITER_FACTORY.createWriter(writer) : Json.createWriter(
-            writer);
+                writer);
 
         if (jsonValue != null) {
             jsonWriter.write(jsonValue);
@@ -3035,8 +3029,9 @@ public class JsonUtilities
      */
     public static String toJsonText(JsonValue jsonValue, boolean prettyPrint)
     {
-        return JsonUtilities.toJsonText(
-                new StringWriter(), jsonValue, prettyPrint).toString();
+        return JsonUtilities
+            .toJsonText(new StringWriter(), jsonValue, prettyPrint)
+            .toString();
     }
 
     /**
@@ -3061,7 +3056,7 @@ public class JsonUtilities
 
         JsonWriter jsonWriter = (prettyPrint)
             ? PRETTY_WRITER_FACTORY.createWriter(writer) : Json.createWriter(
-            writer);
+                writer);
 
         JsonObject jsonObject = builder.build();
 
@@ -3083,8 +3078,9 @@ public class JsonUtilities
     public static String toJsonText(JsonObjectBuilder   builder,
                                     boolean             prettyPrint)
     {
-        return JsonUtilities.toJsonText(
-                new StringWriter(), builder, prettyPrint).toString();
+        return JsonUtilities
+            .toJsonText(new StringWriter(), builder, prettyPrint)
+            .toString();
     }
 
     /**
@@ -3109,7 +3105,7 @@ public class JsonUtilities
 
         JsonWriter jsonWriter = (prettyPrint)
             ? PRETTY_WRITER_FACTORY.createWriter(writer) : Json.createWriter(
-            writer);
+                writer);
 
         JsonArray jsonArray = builder.build();
 
@@ -3131,8 +3127,9 @@ public class JsonUtilities
     public static String toJsonText(JsonArrayBuilder    builder,
                                     boolean             prettyPrint)
     {
-        return JsonUtilities.toJsonText(
-                new StringWriter(), builder, prettyPrint).toString();
+        return JsonUtilities
+            .toJsonText(new StringWriter(), builder, prettyPrint)
+            .toString();
     }
 
     /**

@@ -178,8 +178,8 @@ public class JsonUtilitiesExtraTest
         JsonObject obj = buildObject(job -> add(job, "k", inner));
         assertEquals(1, obj.getJsonObject("k").getInt("x"));
 
-        JsonObject nul
-            = buildObject(job -> add(job, "k", (JsonObjectBuilder) null));
+        JsonObject nul = buildObject(
+            job -> add(job, "k", (JsonObjectBuilder) null));
         assertTrue(nul.isNull("k"),
                    "Null JsonObjectBuilder must add JSON null");
     }
@@ -191,8 +191,8 @@ public class JsonUtilitiesExtraTest
         JsonObject obj = buildObject(job -> add(job, "k", inner));
         assertEquals("a", obj.getJsonArray("k").getString(0));
 
-        JsonObject nul
-            = buildObject(job -> add(job, "k", (JsonArrayBuilder) null));
+        JsonObject nul = buildObject(
+            job -> add(job, "k", (JsonArrayBuilder) null));
         assertTrue(nul.isNull("k"));
     }
 
@@ -261,11 +261,12 @@ public class JsonUtilitiesExtraTest
     @Test
     public void addJobBigInteger()
     {
-        JsonObject obj = buildObject(job -> add(job,
-                           "k",
-                           new BigInteger("123456789012345678901234567890")));
+        JsonObject obj = buildObject(
+            job -> add(job,
+                       "k",
+                       new BigInteger("123456789012345678901234567890")));
         assertEquals(new BigInteger("123456789012345678901234567890"),
-                 obj.getJsonNumber("k").bigIntegerValue());
+                     obj.getJsonNumber("k").bigIntegerValue());
 
         JsonObject nul = buildObject(job -> add(job, "k", (BigInteger) null));
         assertTrue(nul.isNull("k"));
@@ -274,10 +275,10 @@ public class JsonUtilitiesExtraTest
     @Test
     public void addJobBigDecimal()
     {
-        JsonObject obj
-            = buildObject(job -> add(job, "k", new BigDecimal("1.23")));
+        JsonObject obj = buildObject(
+            job -> add(job, "k", new BigDecimal("1.23")));
         assertEquals(new BigDecimal("1.23"),
-                 obj.getJsonNumber("k").bigDecimalValue());
+                     obj.getJsonNumber("k").bigDecimalValue());
 
         JsonObject nul = buildObject(job -> add(job, "k", (BigDecimal) null));
         assertTrue(nul.isNull("k"));
@@ -301,7 +302,7 @@ public class JsonUtilitiesExtraTest
         // Should round-trip through DATE_TIME_FORMATTER.
         Date parsed = getDate(obj, "k");
         assertEquals(date, parsed,
-                 "Date should round-trip through add()/getDate()");
+                     "Date should round-trip through add()/getDate()");
 
         JsonObject nul = buildObject(job -> add(job, "k", (Date) null));
         assertTrue(nul.isNull("k"));
@@ -314,7 +315,7 @@ public class JsonUtilitiesExtraTest
         JsonObject obj = buildObject(job -> add(job, "k", when));
         Instant parsed = getInstant(obj, "k");
         assertEquals(when, parsed,
-                 "Instant should round-trip through add()/getInstant()");
+                     "Instant should round-trip through add()/getInstant()");
 
         JsonObject nul = buildObject(
             job -> add(job, "k", (java.time.temporal.TemporalAccessor) null));
@@ -418,10 +419,10 @@ public class JsonUtilitiesExtraTest
     @Test
     public void addJabBigInteger()
     {
-        JsonArray arr
-            = buildArray(jab -> add(jab, new BigInteger("99999999999999999")));
+        JsonArray arr = buildArray(
+            jab -> add(jab, new BigInteger("99999999999999999")));
         assertEquals(new BigInteger("99999999999999999"),
-                 arr.getJsonNumber(0).bigIntegerValue());
+                     arr.getJsonNumber(0).bigIntegerValue());
 
         JsonArray nul = buildArray(jab -> add(jab, (BigInteger) null));
         assertTrue(nul.isNull(0));
@@ -432,7 +433,7 @@ public class JsonUtilitiesExtraTest
     {
         JsonArray arr = buildArray(jab -> add(jab, new BigDecimal("0.5")));
         assertEquals(new BigDecimal("0.5"),
-                 arr.getJsonNumber(0).bigDecimalValue());
+                     arr.getJsonNumber(0).bigDecimalValue());
 
         JsonArray nul = buildArray(jab -> add(jab, (BigDecimal) null));
         assertTrue(nul.isNull(0));
@@ -454,7 +455,7 @@ public class JsonUtilitiesExtraTest
         Date date = Date.from(Instant.parse("2024-12-25T00:00:00Z"));
         JsonArray arr = buildArray(jab -> add(jab, date));
         assertNotNull(arr.getString(0),
-                  "Date should be serialized as ISO-8601 text");
+                      "Date should be serialized as ISO-8601 text");
 
         JsonArray nul = buildArray(jab -> add(jab, (Date) null));
         assertTrue(nul.isNull(0));
@@ -493,8 +494,8 @@ public class JsonUtilitiesExtraTest
         addProperty(job, "double", Double.valueOf(5.5));
         addProperty(job, "bigint", new BigInteger("6"));
         addProperty(job, "bigdec", new BigDecimal("7.7"));
-        addProperty(job, "date", Date.from(Instant.parse(
-            "2025-01-01T00:00:00Z")));
+        addProperty(job, "date",
+                    Date.from(Instant.parse("2025-01-01T00:00:00Z")));
         addProperty(job, "instant", Instant.parse("2025-02-02T00:00:00Z"));
         addProperty(job, "intArray", new int[] { 1, 2, 3 });
         addProperty(job, "objArray", new String[] { "a", "b" });
@@ -518,10 +519,10 @@ public class JsonUtilitiesExtraTest
         assertEquals(3, obj.getInt("short"));
         assertEquals(4.5, obj.getJsonNumber("float").doubleValue(), 1e-6);
         assertEquals(5.5, obj.getJsonNumber("double").doubleValue(), 1e-9);
-        assertEquals(new BigInteger("6"), obj.getJsonNumber("bigint")
-                                             .bigIntegerValue());
+        assertEquals(new BigInteger("6"),
+                     obj.getJsonNumber("bigint").bigIntegerValue());
         assertEquals(new BigDecimal("7.7"),
-                 obj.getJsonNumber("bigdec").bigDecimalValue());
+                     obj.getJsonNumber("bigdec").bigDecimalValue());
         assertNotNull(obj.getString("date"));
         assertNotNull(obj.getString("instant"));
         assertEquals(3, obj.getJsonArray("intArray").size());
@@ -531,7 +532,7 @@ public class JsonUtilitiesExtraTest
         assertEquals("v1", obj.getJsonObject("stringMap").getString("k1"));
         // Non-string-keyed map → toString fallback (a JSON string).
         assertEquals(JsonValue.ValueType.STRING,
-                 obj.get("intKeyMap").getValueType());
+                     obj.get("intKeyMap").getValueType());
         // StringBuilder is not handled by any special case — falls through to
         // value.toString().
         assertEquals("toStrFallback", obj.getString("fallback"));
@@ -592,10 +593,10 @@ public class JsonUtilitiesExtraTest
         assertEquals(3, arr.getInt(8));
         assertEquals(4.5, arr.getJsonNumber(9).doubleValue(), 1e-6);
         assertEquals(5.5, arr.getJsonNumber(10).doubleValue(), 1e-9);
-        assertEquals(new BigInteger("6"), arr.getJsonNumber(11)
-                                             .bigIntegerValue());
+        assertEquals(new BigInteger("6"),
+                     arr.getJsonNumber(11).bigIntegerValue());
         assertEquals(new BigDecimal("7.7"),
-                 arr.getJsonNumber(12).bigDecimalValue());
+                     arr.getJsonNumber(12).bigDecimalValue());
         // Date and Instant serialize as ISO-8601 strings.
         assertEquals(JsonValue.ValueType.STRING, arr.get(13).getValueType());
         assertEquals(JsonValue.ValueType.STRING, arr.get(14).getValueType());
@@ -623,7 +624,7 @@ public class JsonUtilitiesExtraTest
         JsonArray arr = jab.build();
 
         assertEquals("CUSTOM", arr.getString(0),
-                 "Unknown type should be added via toString()");
+                     "Unknown type should be added via toString()");
     }
 
     // -------------------------------------------------------------------
@@ -716,25 +717,25 @@ public class JsonUtilitiesExtraTest
         // STRING -> String, NUMBER (integral) -> Long, NUMBER (frac) -> Double,
         //   ARRAY -> List, OBJECT -> Map.
         assertNull(normalizeJsonValue(null),
-               "null input must yield null result");
+                   "null input must yield null result");
         assertNull(normalizeJsonValue(JsonValue.NULL));
         assertSame(Boolean.TRUE, normalizeJsonValue(JsonValue.TRUE));
         assertSame(Boolean.FALSE, normalizeJsonValue(JsonValue.FALSE));
         assertEquals("hi", normalizeJsonValue(Json.createValue("hi")));
         assertEquals(Long.valueOf(7L), normalizeJsonValue(Json.createValue(7)));
         assertEquals(Double.valueOf(2.5),
-                 normalizeJsonValue(Json.createValue(2.5)));
+                     normalizeJsonValue(Json.createValue(2.5)));
 
         JsonArray arr = Json.createArrayBuilder().add(1).add("x").build();
         Object normalizedArr = normalizeJsonValue(arr);
         assertTrue(normalizedArr instanceof List,
-               "ARRAY must normalize to List");
+                   "ARRAY must normalize to List");
         assertEquals(2, ((List<?>) normalizedArr).size());
 
         JsonObject obj = Json.createObjectBuilder().add("a", 1).build();
         Object normalizedObj = normalizeJsonValue(obj);
         assertTrue(normalizedObj instanceof Map,
-               "OBJECT must normalize to Map");
+                   "OBJECT must normalize to Map");
         assertEquals(1L, ((Map<?, ?>) normalizedObj).get("a"));
     }
 
@@ -747,7 +748,7 @@ public class JsonUtilitiesExtraTest
     {
         Instant now = Instant.now();
         assertEquals(now, getInstant((JsonObject) null, "k", now),
-                 "Null object should yield default value");
+                     "Null object should yield default value");
     }
 
     @Test
@@ -755,7 +756,7 @@ public class JsonUtilitiesExtraTest
     {
         Instant now = Instant.now();
         assertEquals(now, getInstant((JsonArray) null, 0, now),
-                 "Null array should yield default value");
+                     "Null array should yield default value");
     }
 
     @Test
@@ -764,10 +765,11 @@ public class JsonUtilitiesExtraTest
         // Per javadoc switch: NULL -> default, STRING -> parse, default ->
         // IllegalArgumentException.
         JsonArray arr = Json.createArrayBuilder().add(42).build();
-        assertThrows(IllegalArgumentException.class, () -> getInstant(arr, 0,
-                                                                      null),
-                     "Non-string, non-null value must throw "
-                     + "IllegalArgumentException");
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> getInstant(arr, 0, null),
+            "Non-string, non-null value must throw "
+            + "IllegalArgumentException");
     }
 
     @Test
@@ -775,14 +777,14 @@ public class JsonUtilitiesExtraTest
     {
         JsonArray arr = Json.createArrayBuilder().add("not-a-date").build();
         assertThrows(DateTimeParseException.class,
-                 () -> getInstant(arr, 0, null));
+                     () -> getInstant(arr, 0, null));
     }
 
     @Test
     public void getJsonArrayFromNullObjectReturnsNull()
     {
         assertNull(getJsonArray((JsonObject) null, "k"),
-               "Null object should yield null");
+                   "Null object should yield null");
     }
 
     @Test
@@ -808,7 +810,7 @@ public class JsonUtilitiesExtraTest
         JsonObject obj = Json.createObjectBuilder().add("a", 1).build();
         String def = "default";
         assertEquals(def, getValue(String.class, obj, "missing", def),
-                 "Missing key should yield default value");
+                     "Missing key should yield default value");
     }
 
     @Test
@@ -849,7 +851,7 @@ public class JsonUtilitiesExtraTest
         String def = "default";
         // Out-of-bounds path is undocumented but the null-array path is.
         assertEquals(def, getValue(String.class, (JsonArray) null, 0, def),
-                 "Null array should yield default");
+                     "Null array should yield default");
     }
 
     @Test
@@ -924,7 +926,7 @@ public class JsonUtilitiesExtraTest
         // Pretty-print returns formatted text containing a newline.
         String s = toJsonText(Json.createObjectBuilder().add("k", 1), true);
         assertTrue(s.contains("\n"),
-               "Pretty-print should produce multi-line output");
+                   "Pretty-print should produce multi-line output");
     }
 
     @Test
@@ -932,7 +934,7 @@ public class JsonUtilitiesExtraTest
     {
         // Per Objects.requireNonNull in implementation.
         assertThrows(NullPointerException.class,
-                 () -> toJsonText(null, Json.createValue("x")));
+                     () -> toJsonText(null, Json.createValue("x")));
     }
 
     // -------------------------------------------------------------------
@@ -952,13 +954,13 @@ public class JsonUtilitiesExtraTest
         File temp = File.createTempFile("jutest-", ".ini");
         temp.deleteOnExit();
         Files.writeString(temp.toPath(),
-                      "[section]\nkey1=value1\nkey2=value2\n");
+                          "[section]\nkey1=value1\nkey2=value2\n");
         JsonObject result = iniToJson(temp);
 
         assertEquals("value1",
-                 result.getJsonObject("section").getString("key1"));
+                     result.getJsonObject("section").getString("key1"));
         assertEquals("value2",
-                 result.getJsonObject("section").getString("key2"));
+                     result.getJsonObject("section").getString("key2"));
     }
 
     @Test

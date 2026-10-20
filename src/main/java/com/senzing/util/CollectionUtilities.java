@@ -90,8 +90,8 @@ public class CollectionUtilities
                     entry.setValue(
                         (V) Collections.unmodifiableSet((Set) value));
                 } else if (value instanceof List) {
-                    entry.setValue((V) recursivelyUnmodifiableList(
-                        (List) value));
+                    entry.setValue(
+                        (V) recursivelyUnmodifiableList((List) value));
                 } else if (value instanceof Map) {
                     entry.setValue((V) recursivelyUnmodifiableMap((Map) value));
                 }

@@ -140,8 +140,8 @@ public class Registry<T>
     {
         Objects.requireNonNull(name, "The specified name cannot be null");
         if (!this.bindingMap.containsKey(name)) {
-            throw new NameNotFoundException(
-                "The specified name is not bound: " + name);
+            throw new NameNotFoundException("The specified name is not bound: "
+                                            + name);
         }
         return this.bindingMap.get(name);
     }

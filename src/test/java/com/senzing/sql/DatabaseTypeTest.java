@@ -64,7 +64,7 @@ public class DatabaseTypeTest
     public void enumDeclaresSixConstants()
     {
         assertEquals(6, DatabaseType.values().length,
-                 "DatabaseType must declare exactly 6 constants");
+                     "DatabaseType must declare exactly 6 constants");
     }
 
     // -------------------------------------------------------------------
@@ -186,7 +186,7 @@ public class DatabaseTypeTest
     public void getTimestampBindingSqlForSqliteUsesStrftime()
     {
         assertEquals("(STRFTIME('%Y-%m-%d %H:%M:%f', ?))",
-                 SQLITE.getTimestampBindingSQL());
+                     SQLITE.getTimestampBindingSQL());
     }
 
     /**
@@ -199,7 +199,7 @@ public class DatabaseTypeTest
         for (DatabaseType type : DatabaseType.values()) {
             if (type == SQLITE) continue;
             assertEquals("?", type.getTimestampBindingSQL(),
-                   type + " must use default '?' binding SQL");
+                         type + " must use default '?' binding SQL");
         }
     }
 
@@ -224,12 +224,12 @@ public class DatabaseTypeTest
         SQLITE.setTimestamp(ps, 1, ts);
 
         assertEquals(1, recorder.calls.size(),
-                 "Exactly one binding call expected for SQLITE");
+                     "Exactly one binding call expected for SQLITE");
         Call c = recorder.calls.get(0);
         assertEquals("setString", c.method);
         assertEquals(1, c.args[0], "Index argument must be 1");
         assertTrue(((String) c.args[1]).startsWith("2025-04-15 "),
-               "Bound string must start with the UTC date prefix");
+                   "Bound string must start with the UTC date prefix");
     }
 
     /**
@@ -248,7 +248,7 @@ public class DatabaseTypeTest
         POSTGRESQL.setTimestamp(ps, 2, ts);
 
         assertEquals(1, recorder.calls.size(),
-                 "Exactly one binding call expected for POSTGRESQL");
+                     "Exactly one binding call expected for POSTGRESQL");
         Call c = recorder.calls.get(0);
         assertEquals("setTimestamp", c.method);
         assertEquals(2, c.args[0]);
@@ -276,9 +276,11 @@ public class DatabaseTypeTest
 
         SQLITE.setTimestamp(cs, 1, ts);
 
-        assertEquals(1, recorder.calls.size(),
-                     "Exactly one binding call expected for SQLITE on"
-                     + " CallableStatement");
+        assertEquals(
+            1,
+            recorder.calls.size(),
+            "Exactly one binding call expected for SQLITE on"
+            + " CallableStatement");
         assertEquals("setString", recorder.calls.get(0).method);
     }
 
@@ -317,7 +319,7 @@ public class DatabaseTypeTest
     public void sqlLeastThrowsNpeForNullFirst()
     {
         assertThrows(NullPointerException.class,
-                 () -> POSTGRESQL.sqlLeast(null, "b"));
+                     () -> POSTGRESQL.sqlLeast(null, "b"));
     }
 
     /**
@@ -330,7 +332,7 @@ public class DatabaseTypeTest
     public void sqlLeastThrowsNpeForNullSecond()
     {
         assertThrows(NullPointerException.class,
-                 () -> POSTGRESQL.sqlLeast("a", null));
+                     () -> POSTGRESQL.sqlLeast("a", null));
     }
 
     /**
@@ -388,7 +390,7 @@ public class DatabaseTypeTest
     public void sqlGreatestThrowsNpeForNullFirst()
     {
         assertThrows(NullPointerException.class,
-                 () -> POSTGRESQL.sqlGreatest(null, "b"));
+                     () -> POSTGRESQL.sqlGreatest(null, "b"));
     }
 
     /**
@@ -399,7 +401,7 @@ public class DatabaseTypeTest
     public void sqlGreatestThrowsNpeForNullSecond()
     {
         assertThrows(NullPointerException.class,
-                 () -> POSTGRESQL.sqlGreatest("a", null));
+                     () -> POSTGRESQL.sqlGreatest("a", null));
     }
 
     /**
@@ -433,7 +435,7 @@ public class DatabaseTypeTest
     {
         assertEquals("MAX(a, b, c, d)", SQLITE.sqlGreatest("a", "b", "c", "d"));
         assertEquals("GREATEST(a, b, c)",
-                 POSTGRESQL.sqlGreatest("a", "b", "c"));
+                     POSTGRESQL.sqlGreatest("a", "b", "c"));
     }
 
     // -------------------------------------------------------------------

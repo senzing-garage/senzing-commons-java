@@ -48,7 +48,7 @@ public class CmdlineExceptionsTest
     {
         CommandLineException ex = new CommandLineException("boom");
         assertEquals("boom", ex.getMessage(),
-                 "Message constructor should preserve message");
+                     "Message constructor should preserve message");
         assertNull(ex.getCause(), "Message constructor should have null cause");
     }
 
@@ -72,13 +72,13 @@ public class CmdlineExceptionsTest
             COMMAND_LINE, CONFIG, "--config", List.of("path"));
 
         assertSame(COMMAND_LINE, ex.getSource(),
-               "getSource() should return constructor argument");
+                   "getSource() should return constructor argument");
         assertSame(CONFIG, ex.getOption(),
-               "getOption() should return constructor argument");
+                   "getOption() should return constructor argument");
         assertEquals("--config", ex.getSpecifier(),
-                 "getSpecifier() should return constructor argument");
+                     "getSpecifier() should return constructor argument");
         assertNull(ex.getMessage(),
-               "Three-arg constructor should not set a message");
+                   "Three-arg constructor should not set a message");
     }
 
     @Test
@@ -91,7 +91,7 @@ public class CmdlineExceptionsTest
         assertSame(PORT, ex.getOption());
         assertEquals("MY_PORT", ex.getSpecifier());
         assertEquals("bad value", ex.getMessage(),
-                 "Message constructor should preserve message");
+                     "Message constructor should preserve message");
     }
 
     @Test
@@ -113,7 +113,7 @@ public class CmdlineExceptionsTest
             COMMAND_LINE, CONFIG, "--config", List.of());
 
         assertEquals("--config option", ex.getSourceDescriptor(),
-                 "COMMAND_LINE source should produce '<flag> option'");
+                     "COMMAND_LINE source should produce '<flag> option'");
     }
 
     @Test
@@ -122,9 +122,11 @@ public class CmdlineExceptionsTest
         BadOptionParametersException ex = new BadOptionParametersException(
             ENVIRONMENT, PORT, "MY_PORT", List.of());
 
-        assertEquals("MY_PORT environment variable", ex.getSourceDescriptor(),
-                     "ENVIRONMENT source should produce "
-                     + "'<var> environment variable'");
+        assertEquals(
+            "MY_PORT environment variable",
+            ex.getSourceDescriptor(),
+            "ENVIRONMENT source should produce "
+            + "'<var> environment variable'");
     }
 
     @Test
@@ -136,7 +138,7 @@ public class CmdlineExceptionsTest
             DEFAULT, CONFIG, null, List.of());
 
         assertEquals("--config default", ex.getSourceDescriptor(),
-                 "DEFAULT source should produce '<flag> default'");
+                     "DEFAULT source should produce '<flag> default'");
     }
 
     @Test
@@ -149,7 +151,7 @@ public class CmdlineExceptionsTest
             COMMAND_LINE, CONFIG, "--config", List.of());
 
         assertEquals(fromStatic, ex.getSourceDescriptor(),
-                 "Static and instance source descriptors should match");
+                     "Static and instance source descriptors should match");
     }
 
     // -------------------------------------------------------------------
@@ -164,7 +166,7 @@ public class CmdlineExceptionsTest
             COMMAND_LINE, CONFIG, "--config", params);
 
         assertEquals(params, ex.getParameters(),
-                 "getParameters() should preserve list contents");
+                     "getParameters() should preserve list contents");
     }
 
     @Test
@@ -173,10 +175,11 @@ public class CmdlineExceptionsTest
         BadOptionParametersException ex = new BadOptionParametersException(
             COMMAND_LINE, CONFIG, "--config", null);
 
-        assertNotNull(ex.getParameters(),
-                  "Null params should be converted to empty list, not null");
+        assertNotNull(
+            ex.getParameters(),
+            "Null params should be converted to empty list, not null");
         assertTrue(ex.getParameters().isEmpty(),
-               "Null params should be converted to empty list");
+                   "Null params should be converted to empty list");
     }
 
     @Test
@@ -188,8 +191,8 @@ public class CmdlineExceptionsTest
 
         // Per javadoc: "unmodifiable List of parameters"
         assertThrows(UnsupportedOperationException.class,
-                 () -> ex.getParameters().add("c"),
-                 "getParameters() must return unmodifiable list");
+                     () -> ex.getParameters().add("c"),
+                     "getParameters() must return unmodifiable list");
     }
 
     @Test
@@ -204,7 +207,7 @@ public class CmdlineExceptionsTest
         params.add("b");
 
         assertEquals(1, ex.getParameters().size(),
-                 "Exception's parameters should snapshot at construction");
+                     "Exception's parameters should snapshot at construction");
         assertEquals("a", ex.getParameters().get(0));
     }
 
@@ -226,20 +229,20 @@ public class CmdlineExceptionsTest
     @Test
     public void unrecognizedOptionRetainsOptionString()
     {
-        UnrecognizedOptionException ex
-            = new UnrecognizedOptionException("--foo");
+        UnrecognizedOptionException ex = new UnrecognizedOptionException(
+            "--foo");
 
         assertEquals("--foo", ex.getOption(),
-                 "getOption() should preserve constructor argument");
+                     "getOption() should preserve constructor argument");
         assertNull(ex.getMessage(),
-               "Single-arg constructor should not set a message");
+                   "Single-arg constructor should not set a message");
     }
 
     @Test
     public void unrecognizedOptionWithMessage()
     {
-        UnrecognizedOptionException ex
-            = new UnrecognizedOptionException("--bar", "no such option");
+        UnrecognizedOptionException ex = new UnrecognizedOptionException(
+            "--bar", "no such option");
 
         assertEquals("--bar", ex.getOption());
         assertEquals("no such option", ex.getMessage());
@@ -251,7 +254,7 @@ public class CmdlineExceptionsTest
         UnrecognizedOptionException ex = new UnrecognizedOptionException(null);
 
         assertNull(ex.getOption(),
-               "Null option should be retained, not converted");
+                   "Null option should be retained, not converted");
     }
 
     @Test
@@ -272,7 +275,7 @@ public class CmdlineExceptionsTest
     {
         TooFewArgumentsException ex = new TooFewArgumentsException();
         assertNull(ex.getMessage(),
-               "Default constructor should have null message");
+                   "Default constructor should have null message");
     }
 
     @Test
@@ -297,7 +300,8 @@ public class CmdlineExceptionsTest
     public void tooFewArgumentsIsUnchecked()
     {
         // Distinguishes from CommandLineException, which is checked.
-        assertTrue(RuntimeException.class.isAssignableFrom(
-            TooFewArgumentsException.class));
+        assertTrue(
+            RuntimeException.class.isAssignableFrom(
+                TooFewArgumentsException.class));
     }
 }

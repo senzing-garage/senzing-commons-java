@@ -180,9 +180,8 @@ public class ErrorLogSuppressor
      */
     public ErrorLogSuppressor()
     {
-        this(DEFAULT_ERROR_LIMIT,
-            DEFAULT_TIME_WINDOW,
-            DEFAULT_SUPPRESS_DURATION);
+        this(DEFAULT_ERROR_LIMIT, DEFAULT_TIME_WINDOW,
+             DEFAULT_SUPPRESS_DURATION);
     }
 
     /**

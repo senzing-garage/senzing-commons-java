@@ -34,9 +34,9 @@ public class ConnectionProviderTest
     @Test
     public void registryIsNonNull()
     {
-        assertNotNull(ConnectionProvider.REGISTRY,
-                      "ConnectionProvider.REGISTRY must be initialized"
-                      + " non-null");
+        assertNotNull(
+            ConnectionProvider.REGISTRY,
+            "ConnectionProvider.REGISTRY must be initialized" + " non-null");
     }
 
     /**
@@ -55,7 +55,7 @@ public class ConnectionProviderTest
         AccessToken token = ConnectionProvider.REGISTRY.bind(name, stub);
         try {
             assertSame(stub, ConnectionProvider.REGISTRY.lookup(name),
-                 "Registry must return the same instance on lookup");
+                       "Registry must return the same instance on lookup");
             assertTrue(ConnectionProvider.REGISTRY.isBound(name));
         } finally {
             ConnectionProvider.REGISTRY.unbind(name, token);

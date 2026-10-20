@@ -56,13 +56,13 @@ public class AccessTokenTest
                 0,
                 failureSet.size(),
                 "At least one of the threads failed to get the same access "
-                    + "token on repeated calls: " + failureSet);
+                + "token on repeated calls: " + failureSet);
 
             Set<AccessToken> set = new LinkedHashSet<>();
             set.addAll(accessTokenMap.values());
 
             assertEquals(THREAD_COUNT, set.size(),
-                   "Multiple threads got the same thread access token");
+                         "Multiple threads got the same thread access token");
         } catch (Exception e) {
             e.printStackTrace();
             fail("getThreadAccessTokenTest() failed with exception: " + e);
@@ -110,12 +110,14 @@ public class AccessTokenTest
                 thread.join();
             }
 
-            assertEquals(0, failureSet.size(),
-                         "At least one of the threads claimed the same access "
-                         + "token on repeated calls: " + failureSet);
+            assertEquals(
+                0,
+                failureSet.size(),
+                "At least one of the threads claimed the same access "
+                + "token on repeated calls: " + failureSet);
 
             assertEquals(LOOP_COUNT * THREAD_COUNT, tokenSet.size(),
-                   "Not all claimed access tokens were unique.");
+                         "Not all claimed access tokens were unique.");
         } catch (Exception e) {
             e.printStackTrace();
             fail("claimThreadAccessTokenTest() failed with exception: " + e);

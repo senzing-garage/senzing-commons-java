@@ -145,8 +145,8 @@ public class PropertyReflectorExtraTest
     @Test
     public void toJsonObjectCollectionElementsDispatchAllTypes()
     {
-        JsonObject json
-            = PropertyReflector.toJsonObject(new CollectionElementBean());
+        JsonObject json = PropertyReflector.toJsonObject(
+            new CollectionElementBean());
 
         JsonArray arr = json.getJsonArray("elements");
         // 13 elements: null, Integer, Short, Long, Float, Double, Boolean,
@@ -168,10 +168,10 @@ public class PropertyReflectorExtraTest
         assertEquals(true, arr.getBoolean(6));
         // BigDecimal
         assertEquals(new BigDecimal("6.5"),
-                 arr.getJsonNumber(7).bigDecimalValue());
+                     arr.getJsonNumber(7).bigDecimalValue());
         // BigInteger
         assertEquals(BigInteger.valueOf(7L),
-                 arr.getJsonNumber(8).bigIntegerValue());
+                     arr.getJsonNumber(8).bigIntegerValue());
         // String
         assertEquals("eight", arr.getString(9));
         // Nested Collection
@@ -194,8 +194,10 @@ public class PropertyReflectorExtraTest
         JsonObject json = PropertyReflector.toJsonObject(new NestedBean());
 
         JsonObject nested = json.getJsonObject("nested");
-        assertNotNull(nested, "Nested non-collection, non-primitive property "
-                              + "should be serialized as a JSON object");
+        assertNotNull(
+            nested,
+            "Nested non-collection, non-primitive property "
+            + "should be serialized as a JSON object");
         assertEquals("hello", nested.getString("label"));
     }
 
@@ -209,8 +211,8 @@ public class PropertyReflectorExtraTest
         // CircularBean.list contains itself, so addToJsonArray recurses
         // into a value that is already in the visited map.
         assertThrows(IllegalStateException.class,
-                 () -> PropertyReflector.toJsonObject(new CircularBean()),
-                 "Circular reference should throw IllegalStateException");
+                     () -> PropertyReflector.toJsonObject(new CircularBean()),
+                     "Circular reference should throw IllegalStateException");
     }
 
     // -------------------------------------------------------------------
@@ -221,10 +223,10 @@ public class PropertyReflectorExtraTest
     public void buildJsonObjectPublicOverloadAddsToBuilder()
     {
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        JsonObjectBuilder ret
-            = PropertyReflector.buildJsonObject(builder, new NestedBean());
+        JsonObjectBuilder ret = PropertyReflector.buildJsonObject(
+            builder, new NestedBean());
         assertSame(builder, ret,
-               "buildJsonObject should return the supplied builder");
+                   "buildJsonObject should return the supplied builder");
 
         JsonObject obj = builder.build();
         assertEquals("hello", obj.getJsonObject("nested").getString("label"));
@@ -233,17 +235,19 @@ public class PropertyReflectorExtraTest
     @Test
     public void buildJsonObjectNullBuilderThrows()
     {
-        assertThrows(NullPointerException.class,
-                     () -> PropertyReflector.buildJsonObject(
-                     null, new NestedBean()));
+        assertThrows(
+            NullPointerException.class,
+            () -> PropertyReflector.buildJsonObject(null, new NestedBean()));
     }
 
     @Test
     public void buildJsonObjectNullObjectThrows()
     {
-        assertThrows(NullPointerException.class,
-                     () -> PropertyReflector.buildJsonObject(
-                     Json.createObjectBuilder(), null));
+        assertThrows(
+            NullPointerException.class,
+            () -> PropertyReflector.buildJsonObject(
+                Json.createObjectBuilder(),
+                null));
     }
 
     // -------------------------------------------------------------------
@@ -281,9 +285,9 @@ public class PropertyReflectorExtraTest
         assertEquals(5.0, json.getJsonNumber("aDouble").doubleValue(), 1e-9);
         assertEquals(true, json.getBoolean("aBool"));
         assertEquals(new BigDecimal("6.5"),
-                 json.getJsonNumber("bigDec").bigDecimalValue());
+                     json.getJsonNumber("bigDec").bigDecimalValue());
         assertEquals(BigInteger.valueOf(7L),
-                 json.getJsonNumber("bigInt").bigIntegerValue());
+                     json.getJsonNumber("bigInt").bigIntegerValue());
         assertEquals("eight", json.getString("aString"));
         assertEquals(2, json.getJsonArray("aColl").size());
         assertEquals(2, json.getJsonArray("anArray").size());

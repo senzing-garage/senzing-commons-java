@@ -211,8 +211,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream
         // get the chunk line
         String chunkLine = sb.toString();
         int index = chunkLine.indexOf(';');
-        String chunkSize
-            = (index <= 0) ? chunkLine : chunkLine.substring(0, index);
+        String chunkSize = (index <= 0)
+            ? chunkLine : chunkLine.substring(0, index);
         int readCount = Integer.parseInt(chunkSize, 16);
 
         // check if final chunk was received
@@ -250,7 +250,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream
             throw new IOException(
                 "Bad chunked encoding.  Expected trailing CR following chunk ("
                     + Integer.toString(readCount, 16).toUpperCase()
-                    + "), but got code point: " + trailerByte);
+                    + "), but got code point: "
+                    + trailerByte);
         }
         trailerByte = this.in.read();
         if (trailerByte < 0) {
@@ -263,7 +264,8 @@ public class ChunkedEncodingInputStream extends FilterInputStream
             throw new IOException(
                 "Bad chunked encoding.  Expected trailing LF following chunk ("
                     + Integer.toString(readCount, 16).toUpperCase()
-                    + "), but got code point: " + trailerByte);
+                    + "), but got code point: "
+                    + trailerByte);
         }
 
         // create the next chunk stream

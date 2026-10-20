@@ -67,8 +67,7 @@ public enum DatabaseType
     {
         if (conn == null) return null;
         String productName = conn.getMetaData().getDatabaseProductName();
-        switch (productName.toUpperCase())
-        {
+        switch (productName.toUpperCase()) {
             case "SQLITE":
                 return SQLITE;
             case "POSTGRESQL":
@@ -93,8 +92,7 @@ public enum DatabaseType
      */
     public String getTimestampBindingSQL()
     {
-        switch (this)
-        {
+        switch (this) {
             case SQLITE:
                 return "(STRFTIME('%Y-%m-%d %H:%M:%f', ?))";
             default:
@@ -114,15 +112,14 @@ public enum DatabaseType
     public void setTimestamp(PreparedStatement ps, int index, Timestamp value)
         throws SQLException
     {
-        switch (this)
-        {
+        switch (this) {
             case SQLITE:
                 {
                     Instant instant = Instant.ofEpochMilli(value.getTime());
                     ZonedDateTime zonedDateTime = instant.atZone(UTC_ZONE);
 
-                    ps.setString(index, DATE_TIME_FORMATTER.format(
-                        zonedDateTime));
+                    ps.setString(index,
+                                 DATE_TIME_FORMATTER.format(zonedDateTime));
                 }
                 break;
             default:
@@ -142,15 +139,14 @@ public enum DatabaseType
     public void setTimestamp(CallableStatement cs, int index, Timestamp value)
         throws SQLException
     {
-        switch (this)
-        {
+        switch (this) {
             case SQLITE:
                 {
                     Instant instant = Instant.ofEpochMilli(value.getTime());
                     ZonedDateTime zonedDateTime = instant.atZone(UTC_ZONE);
 
-                    cs.setString(index, DATE_TIME_FORMATTER.format(
-                        zonedDateTime));
+                    cs.setString(index,
+                                 DATE_TIME_FORMATTER.format(zonedDateTime));
                 }
                 break;
             default:
@@ -174,12 +170,11 @@ public enum DatabaseType
         throws NullPointerException
     {
         Objects.requireNonNull(first,
-            "The first parameter to LEAST cannot be null");
+                               "The first parameter to LEAST cannot be null");
         Objects.requireNonNull(second,
-            "The second parameter to LEAST cannot be null");
+                               "The second parameter to LEAST cannot be null");
         StringBuilder sb = new StringBuilder();
-        switch (this)
-        {
+        switch (this) {
             case SQLITE:
                 sb.append("MIN");
                 break;
@@ -212,13 +207,12 @@ public enum DatabaseType
     public String sqlGreatest(String first, String second, String... other)
         throws NullPointerException
     {
-        Objects.requireNonNull(first,
-            "The first parameter to GREATEST cannot be null");
-        Objects.requireNonNull(second,
-            "The second parameter to GREATEST cannot be null");
+        Objects.requireNonNull(
+            first, "The first parameter to GREATEST cannot be null");
+        Objects.requireNonNull(
+            second, "The second parameter to GREATEST cannot be null");
         StringBuilder sb = new StringBuilder();
-        switch (this)
-        {
+        switch (this) {
             case SQLITE:
                 sb.append("MAX");
                 break;
@@ -238,8 +232,8 @@ public enum DatabaseType
     /**
      * The {@link Calendar} to use for retrieving timestamps from the database.
      */
-    private static final Calendar UTC_CALENDAR
-        = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    private static final Calendar UTC_CALENDAR = Calendar.getInstance(
+        TimeZone.getTimeZone("UTC"));
 
     /**
      * The date-time pattern used to bind timestamp values as strings.

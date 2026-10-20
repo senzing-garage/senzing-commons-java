@@ -307,8 +307,8 @@ public class LoggingUtilities
         String productId = getProductIdForPackage(packageName);
 
         StringBuilder sb = new StringBuilder();
-        String timestamp
-            = LOG_DATE_FORMATTER.format(Instant.now().atZone(LOG_DATE_ZONE));
+        String timestamp = LOG_DATE_FORMATTER.format(
+            Instant.now().atZone(LOG_DATE_ZONE));
         sb.append(timestamp).append(" senzing-").append(productId).append(" (")
           .append(logType).append(")").append(" [")
           .append(Thread.currentThread().getId()).append("|")

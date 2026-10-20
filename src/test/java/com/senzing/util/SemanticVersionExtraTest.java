@@ -35,7 +35,7 @@ public class SemanticVersionExtraTest
     public void negativeVersionPartIsRejected()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> new SemanticVersion("1.-2.3"));
+                     () -> new SemanticVersion("1.-2.3"));
     }
 
     /**
@@ -47,7 +47,7 @@ public class SemanticVersionExtraTest
     public void nonNumericNonPrereleaseTokenIsRejected()
     {
         assertThrows(IllegalArgumentException.class,
-                 () -> new SemanticVersion("1.2.banana"));
+                     () -> new SemanticVersion("1.2.banana"));
     }
 
     /**
@@ -60,9 +60,9 @@ public class SemanticVersionExtraTest
     {
         SemanticVersion v = new SemanticVersion("1.2.0.0");
         assertEquals("1.2.0.0", v.toString(false),
-                 "Non-normalized form should be the original");
+                     "Non-normalized form should be the original");
         assertEquals("1.2", v.toString(true),
-                 "Normalized form should strip trailing zero parts");
+                     "Normalized form should strip trailing zero parts");
     }
 
     /**
@@ -85,7 +85,7 @@ public class SemanticVersionExtraTest
     {
         SemanticVersion v = new SemanticVersion("1.0.2.0");
         assertEquals("1.0.2", v.toString(true),
-                 "Internal zero parts must be preserved");
+                     "Internal zero parts must be preserved");
     }
 
     /**
@@ -100,7 +100,7 @@ public class SemanticVersionExtraTest
         // Normalized: trailing-zero stripping is per-part; the pre-release
         // sentinel value is not a "0" so it is preserved.
         assertTrue(v.toString(true).contains("-beta"),
-               "Pre-release suffix should be preserved when normalized");
+                   "Pre-release suffix should be preserved when normalized");
     }
 
     /**
@@ -123,7 +123,7 @@ public class SemanticVersionExtraTest
     {
         SemanticVersion v = new SemanticVersion("1.2.3");
         assertNotEquals("1.2.3", v,
-                    "equals must return false for non-SemanticVersion");
+                        "equals must return false for non-SemanticVersion");
         assertFalse(v.equals(new Object()));
     }
 
@@ -185,7 +185,7 @@ public class SemanticVersionExtraTest
 
         String output = out.getText();
         assertTrue(output.contains("VERSION: 1.2.3"),
-               "main should print VERSION: <version>: " + output);
+                   "main should print VERSION: <version>: " + output);
     }
 
     /**
@@ -208,12 +208,12 @@ public class SemanticVersionExtraTest
         assertTrue(output.contains("VERSUS"),
                    "main should print 'VERSUS' for each comparison: " + output);
         assertTrue(output.contains("COMPARE"),
-               "main should print 'COMPARE': " + output);
+                   "main should print 'COMPARE': " + output);
         assertTrue(output.contains("EQUALS"),
-               "main should print 'EQUALS': " + output);
+                   "main should print 'EQUALS': " + output);
         assertTrue(output.contains("HASH"),
-               "main should print 'HASH': " + output);
+                   "main should print 'HASH': " + output);
         assertTrue(output.contains("HASH-EQUALITY"),
-               "main should print 'HASH-EQUALITY': " + output);
+                   "main should print 'HASH-EQUALITY': " + output);
     }
 }

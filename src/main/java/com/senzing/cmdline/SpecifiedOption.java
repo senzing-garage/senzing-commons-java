@@ -39,9 +39,8 @@ public interface SpecifiedOption
      */
     default String getSourceDescriptor()
     {
-        return sourceDescriptor(this.getSource(),
-                            this.getOption(),
-                            this.getSpecifier());
+        return sourceDescriptor(this.getSource(), this.getOption(),
+                                this.getSpecifier());
     }
 
     /**
@@ -64,8 +63,7 @@ public interface SpecifiedOption
                                  CommandLineOption  option,
                                  String             specifier)
     {
-        switch (source)
-        {
+        switch (source) {
             case COMMAND_LINE:
                 return specifier + " option";
             case ENVIRONMENT:

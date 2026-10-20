@@ -57,8 +57,8 @@ public class TemporaryDataCacheTest
                 long writeCount = 0L;
                 while (writeCount < fileSize) {
                     double nextValue = random.nextDouble();
-                    int nextIndex
-                        = (int) (((double) characters.length) * nextValue);
+                    int nextIndex = (int) (((double) characters.length)
+                                           * nextValue);
                     bos.write((int) characters[nextIndex]);
                     writeCount++;
                 }
@@ -116,7 +116,7 @@ public class TemporaryDataCacheTest
         }
 
         assertFalse(IOUtilities.checkFilesDiffer(file, tempFile),
-                "Read data differs from source file.");
+                    "Read data differs from source file.");
     }
 
     @Test
@@ -126,8 +126,8 @@ public class TemporaryDataCacheTest
         File tempFile = File.createTempFile("TempDataCache-", ".dat");
         String tempFileName = tempFile.getName();
         int length = tempFileName.length();
-        String tempDirName
-            = tempFileName.substring(0, length - ".dat".length());
+        String tempDirName = tempFileName.substring(0,
+                                                    length - ".dat".length());
         File tempDir = new File(tempFile.getParent(), tempDirName);
 
         // create the directory
@@ -141,9 +141,11 @@ public class TemporaryDataCacheTest
         try {
             TemporaryDataCache tdc = new TemporaryDataCache(fis, tempDir);
 
-            assertEquals(tempDir, tdc.getDirectory(),
-                         "TemporaryDataCache.getDirectory() has unexpected "
-                         + "directory.");
+            assertEquals(
+                tempDir,
+                tdc.getDirectory(),
+                "TemporaryDataCache.getDirectory() has unexpected "
+                + "directory.");
 
             try (InputStream is = tdc.getInputStream();
                  BufferedInputStream bis = new BufferedInputStream(is))
@@ -190,8 +192,8 @@ public class TemporaryDataCacheTest
         File tempFile = File.createTempFile("TempDataCache-", ".dat");
         String tempFileName = tempFile.getName();
         int length = tempFileName.length();
-        String tempDirName
-            = tempFileName.substring(0, length - ".dat".length());
+        String tempDirName = tempFileName.substring(0,
+                                                    length - ".dat".length());
         File tempDir = new File(tempFile.getParent(), tempDirName);
 
         // create the directory
@@ -203,8 +205,8 @@ public class TemporaryDataCacheTest
 
         FileInputStream fis = new FileInputStream(inputFile);
         try {
-            TemporaryDataCache tdc
-                = new TemporaryDataCache(fis, tempDir, "TempDataCache-");
+            TemporaryDataCache tdc = new TemporaryDataCache(fis, tempDir,
+                                                            "TempDataCache-");
 
             try (InputStream is = tdc.getInputStream();
                  BufferedInputStream bis = new BufferedInputStream(is))
@@ -252,8 +254,8 @@ public class TemporaryDataCacheTest
         File tempFile = File.createTempFile("TempDataCache-", ".dat");
         String tempFileName = tempFile.getName();
         int length = tempFileName.length();
-        String tempDirName
-            = tempFileName.substring(0, length - ".dat".length());
+        String tempDirName = tempFileName.substring(0,
+                                                    length - ".dat".length());
         File tempDir = new File(tempFile.getParent(), tempDirName);
 
         // create the directory
@@ -265,13 +267,13 @@ public class TemporaryDataCacheTest
 
         FileInputStream fis = new FileInputStream(inputFile);
         try {
-            TemporaryDataCache tdc
-                = new TemporaryDataCache(fis, tempDir, "TempDataCache-");
+            TemporaryDataCache tdc = new TemporaryDataCache(fis, tempDir,
+                                                            "TempDataCache-");
 
             tdc.waitUntilAppendingComplete();
 
             assertFalse(tdc.isAppending(),
-                  "TemporaryDataCache is still appending.");
+                        "TemporaryDataCache is still appending.");
 
             maxCount = tempDir.listFiles(
                 f -> f.getName().startsWith("TempDataCache-")).length;
@@ -291,8 +293,10 @@ public class TemporaryDataCacheTest
                     fail("File count increased after consuming "
                          + "TemporaryDataCache: " + tempDir);
                 }
-                assertEquals(0,count,
-                     "File count did not reduce to zero after consuming.");
+                assertEquals(
+                    0,
+                    count,
+                    "File count did not reduce to zero after consuming.");
             } finally {
                 int count = tempDir.listFiles(
                     f -> f.getName().startsWith("TempDataCache-")).length;
@@ -300,9 +304,10 @@ public class TemporaryDataCacheTest
                     fail("Files remaining after consuming entire "
                          + "TemporaryDataCache: " + tempDir);
                 }
-                assertTrue(tdc.isDeleted(),
-                           "TemporaryDataCache NOT marked deleted after "
-                           + "consuming all data");
+                assertTrue(
+                    tdc.isDeleted(),
+                    "TemporaryDataCache NOT marked deleted after "
+                    + "consuming all data");
                 tdc.delete();
             }
         } catch (RuntimeException | IOException e) {
@@ -336,7 +341,7 @@ public class TemporaryDataCacheTest
                 }
             } finally {
                 assertFalse(tdc.isAppending(),
-                    "Instance still appending after read completed");
+                            "Instance still appending after read completed");
                 tdc.delete();
             }
 
@@ -554,7 +559,8 @@ public class TemporaryDataCacheTest
                      byteRead = bis.read())
                 {
                     readCount++;
-                    assertFalse(tdc.isDeleted(),
+                    assertFalse(
+                        tdc.isDeleted(),
                         "TemporaryDataCache prematurely marked deleted!");
                     if (readCount > fileSize / 2) break;
                 }
@@ -568,7 +574,8 @@ public class TemporaryDataCacheTest
                          byteRead = bis.read())
                     {
                         readCount++;
-                        assertTrue(tdc.isDeleted(),
+                        assertTrue(
+                            tdc.isDeleted(),
                             "TemporaryDataCache should be marked deleted!");
                     }
 
@@ -664,13 +671,17 @@ public class TemporaryDataCacheTest
                 tdc.waitUntilAppendingComplete();
                 try (InputStream in = tdc.getInputStream()) {
                     long skipped = in.skip(skipAmount);
-                    assertEquals(skipAmount, skipped,
-                                 "Skip must advance by the requested amount"
-                                 + " when bytes are available");
+                    assertEquals(
+                        skipAmount,
+                        skipped,
+                        "Skip must advance by the requested amount"
+                        + " when bytes are available");
                     int actualByte = in.read();
-                    assertEquals(expectedByte, actualByte,
-                                 "Byte after skip must match source-file byte"
-                                 + " at the same offset");
+                    assertEquals(
+                        expectedByte,
+                        actualByte,
+                        "Byte after skip must match source-file byte"
+                        + " at the same offset");
                 }
             } finally {
                 tdc.delete();
@@ -768,8 +779,8 @@ public class TemporaryDataCacheTest
         }
         assertNotNull(filePartClass, "CacheFilePart inner class must exist");
         java.lang.reflect.Constructor<?> ctor
-            = filePartClass.getDeclaredConstructor(
-                File.class, long.class, long.class);
+            = filePartClass.getDeclaredConstructor(File.class, long.class,
+                                                   long.class);
         ctor.setAccessible(true);
         return ctor.newInstance(f, offset, length);
     }
@@ -822,7 +833,7 @@ public class TemporaryDataCacheTest
         Object b = newCacheFilePart(this.testFiles.get(1), 50L, 200L);
         assertTrue(a.equals(b), "Same offset+length must compare equal");
         assertEquals(a.hashCode(), b.hashCode(),
-                 "Equal instances must have equal hash codes");
+                     "Equal instances must have equal hash codes");
     }
 
     /**
@@ -871,12 +882,12 @@ public class TemporaryDataCacheTest
         Comparable cmpD = (Comparable) d;
 
         assertEquals(0, cmpA.compareTo(cmpD));
-        assertTrue(cmpA.compareTo(cmpB) < 0,
-                   "Smaller length must sort before larger when offsets"
-                   + " match");
+        assertTrue(
+            cmpA.compareTo(cmpB) < 0,
+            "Smaller length must sort before larger when offsets" + " match");
         assertTrue(cmpB.compareTo(cmpA) > 0);
         assertTrue(cmpA.compareTo(cmpC) < 0,
-               "Smaller offset must sort before larger");
+                   "Smaller offset must sort before larger");
         assertTrue(cmpC.compareTo(cmpA) > 0);
     }
 }

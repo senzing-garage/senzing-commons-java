@@ -30,9 +30,9 @@ public class AsyncWorkerPoolTest
             final AsyncWorkerPool<Long> pool = new AsyncWorkerPool<>(POOL_SIZE);
 
             assertEquals(POOL_SIZE, pool.size(),
-                   "AsyncWorkerPool is not the expected size.");
+                         "AsyncWorkerPool is not the expected size.");
             assertEquals(false, pool.isClosed(),
-                   "AsyncWorkerPool unexpectedly closed.");
+                         "AsyncWorkerPool unexpectedly closed.");
 
             Runnable runnable = () -> {
                 Long appThreadId = Thread.currentThread().getId();
@@ -85,22 +85,24 @@ public class AsyncWorkerPoolTest
             List<AsyncWorkerPool.AsyncResult<Long>> results = pool.close();
 
             assertEquals(THREAD_COUNT, appThreadIds.size(),
-                   "Unexpected number of application threads");
+                         "Unexpected number of application threads");
             assertEquals(POOL_SIZE, workerThreadIds.size(),
-                   "Unexpected number of worker threads");
+                         "Unexpected number of worker threads");
 
             Set<Long> intersection = new LinkedHashSet<>(appThreadIds);
             intersection.retainAll(workerThreadIds);
 
-            assertEquals(0, intersection.size(),
-                   "Found overlap between application and worker threads");
+            assertEquals(
+                0,
+                intersection.size(),
+                "Found overlap between application and worker threads");
 
             assertEquals(0, failedThreads.size(),
-                   "At least one worker thread failed a result.");
+                         "At least one worker thread failed a result.");
             assertEquals(POOL_SIZE, results.size(),
-                   "Unexpectedly found unfinished results on close");
+                         "Unexpectedly found unfinished results on close");
             assertEquals(true, pool.isClosed(),
-                   "Pool unexpectedly not marked as closed.");
+                         "Pool unexpectedly not marked as closed.");
 
             for (AsyncWorkerPool.AsyncResult<Long> result : results) {
                 Long resultValue = result.getValue();
@@ -138,22 +140,28 @@ public class AsyncWorkerPoolTest
             });
         }
 
-        assertTrue(pool.isBusy(), "Pool is not busy, but should be: " + tasks
-                                  + " tasks / " + poolSize
-                                  + " threads");
+        assertTrue(
+            pool.isBusy(),
+            "Pool is not busy, but should be: " + tasks
+            + " tasks / " + poolSize
+            + " threads");
         try {
             Thread.sleep(tasks * 200L);
         } catch (InterruptedException ignore) {
             // do nothing
         }
-        assertFalse(pool.isBusy(), "Pool is busy, but should not be: " + tasks
-                                   + " tasks / " + poolSize
-                                   + " threads");
+        assertFalse(
+            pool.isBusy(),
+            "Pool is busy, but should not be: " + tasks
+            + " tasks / " + poolSize
+            + " threads");
 
         // close the pool
         pool.close();
-        assertFalse(pool.isBusy(), "Closed pool is busy: " + tasks
-                                   + " tasks / " + poolSize
-                                   + " threads");
+        assertFalse(
+            pool.isBusy(),
+            "Closed pool is busy: " + tasks
+            + " tasks / " + poolSize
+            + " threads");
     }
 }
