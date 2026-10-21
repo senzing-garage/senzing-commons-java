@@ -76,8 +76,8 @@ public class RepeatedOptionException extends CommandLineException
                                          Set<String>        flags)
         throws IllegalArgumentException
     {
-        StringBuilder sb
-            = new StringBuilder("Option specified more than once: ");
+        StringBuilder sb = new StringBuilder(
+            "Option specified more than once: ");
 
         String prefix = "";
         int count = 0;

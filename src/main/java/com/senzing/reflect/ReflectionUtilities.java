@@ -121,8 +121,8 @@ public class ReflectionUtilities
         @Override
         public Object invoke(Object proxy, Method method, Object[] args)
         {
-            final Object monitor
-                = (this.monitor == null) ? proxy : this.monitor;
+            final Object monitor = (this.monitor == null)
+                ? proxy : this.monitor;
             synchronized (monitor) {
                 try {
                     return method.invoke(this.target, args);
@@ -211,8 +211,7 @@ public class ReflectionUtilities
         numType = getPromotedType(numType);
 
         // switch on the target type name
-        switch (numType.getName())
-        {
+        switch (numType.getName()) {
             case "java.lang.Byte":
                 return value.byteValue();
             case "java.lang.Short":
@@ -227,7 +226,7 @@ public class ReflectionUtilities
                 return value.doubleValue();
             default:
                 throw new IllegalStateException(
-                        "Unable to convert to target number type: " + numType);
+                    "Unable to convert to target number type: " + numType);
         }
     }
 
@@ -275,10 +274,10 @@ public class ReflectionUtilities
             Object monitor)
     {
         // check the parameters
-        Objects.requireNonNull(
-                proxyInterface, "The proxy interface cannot be null.");
-        Objects.requireNonNull(
-                targetObject, "The specified target object cannot be null.");
+        Objects.requireNonNull(proxyInterface,
+                               "The proxy interface cannot be null.");
+        Objects.requireNonNull(targetObject,
+                               "The specified target object cannot be null.");
         if (!proxyInterface.isInterface()) {
             throw new IllegalArgumentException(
                 "The specified proxy class is not an interface: "
@@ -294,8 +293,8 @@ public class ReflectionUtilities
         }
         ClassLoader classLoader = targetObject.getClass().getClassLoader();
         Class<?>[] interfaces = { proxyInterface };
-        SynchronizedHandler handler
-            = new SynchronizedHandler(targetObject, monitor);
+        SynchronizedHandler handler = new SynchronizedHandler(targetObject,
+                                                              monitor);
 
         return (I) Proxy.newProxyInstance(classLoader, interfaces, handler);
     }
@@ -477,7 +476,7 @@ public class ReflectionUtilities
                                          Method...  restrictedMethods)
     {
         Objects.requireNonNull(targetObject,
-                "The target object cannot be null");
+                               "The target object cannot be null");
 
         // get the class loader
         ClassLoader loader = targetObject.getClass().getClassLoader();
@@ -515,7 +514,7 @@ public class ReflectionUtilities
     {
         // check the target object
         Objects.requireNonNull(targetObject,
-                       "The target object cannot be null");
+                               "The target object cannot be null");
         Objects.requireNonNull(classLoader, "The class loader cannot be null");
 
         // check the methods
@@ -527,8 +526,8 @@ public class ReflectionUtilities
         // check if we already have a restricted proxy
         if (Proxy.isProxyClass(targetObject.getClass())) {
             // get the invocation handler
-            InvocationHandler handler
-                = Proxy.getInvocationHandler(targetObject);
+            InvocationHandler handler = Proxy.getInvocationHandler(
+                targetObject);
 
             // check if the handler is a RestrictedHandler
             if (handler instanceof RestrictedHandler) {
@@ -587,8 +586,8 @@ public class ReflectionUtilities
         }
 
         // create restricted handler
-        RestrictedHandler handler
-            = new RestrictedHandler(targetObject, methodSet);
+        RestrictedHandler handler = new RestrictedHandler(targetObject,
+                                                          methodSet);
 
         // create the proxy
         return Proxy.newProxyInstance(classLoader, interfaces, handler);

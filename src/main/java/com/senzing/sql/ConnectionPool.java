@@ -677,8 +677,8 @@ public class ConnectionPool implements Quantified
             int retireLimit)
         throws SQLException, IllegalArgumentException, NullPointerException
     {
-        this(connector, null,
-             minPoolSize, maxPoolSize, expireTime, retireLimit);
+        this(connector, null, minPoolSize, maxPoolSize, expireTime,
+             retireLimit);
     }
 
     /**
@@ -729,7 +729,7 @@ public class ConnectionPool implements Quantified
     {
         // check if the connector is null
         Objects.requireNonNull(connector,
-                "The specified connector cannot be null");
+                               "The specified connector cannot be null");
 
         // check the min pool size is non-negative
         if (minPoolSize < 0) {
@@ -774,11 +774,11 @@ public class ConnectionPool implements Quantified
         // loop through and populate the initial connections
         this.allConnections = new IdentityHashMap<>();
         for (int index = 0; index < this.minPoolSize; index++) {
-            PooledConnection pooledConnection
-                = new PooledConnection(this.connector.openConnection());
+            PooledConnection pooledConnection = new PooledConnection(
+                this.connector.openConnection());
 
             this.allConnections.put(pooledConnection,
-                    pooledConnection.getCreatedTimeNanos());
+                                    pooledConnection.getCreatedTimeNanos());
         }
 
         // initialize the greatest pool size
@@ -981,8 +981,8 @@ public class ConnectionPool implements Quantified
                     if (maxWait != 0L) {
                         try {
                             long timeout = (maxWait < 0L)
-                                ? WAIT_TIMEOUT : Math.min(WAIT_TIMEOUT,
-                                          maxWait - elapsed(startTime));
+                                ? WAIT_TIMEOUT : Math.min(
+                                    WAIT_TIMEOUT, maxWait - elapsed(startTime));
                             if (timeout < 0L) break;
                             this.wait(timeout);
                         } catch (InterruptedException ignore) {
@@ -1017,8 +1017,8 @@ public class ConnectionPool implements Quantified
                     acquired = new PooledConnection(
                         this.connector.openConnection());
 
-                    this.allConnections.put(
-                        acquired, acquired.getCreatedTimeNanos());
+                    this.allConnections.put(acquired,
+                                            acquired.getCreatedTimeNanos());
 
                     // record the new pool size
                     newPoolSize = this.allConnections.size();
@@ -1051,7 +1051,7 @@ public class ConnectionPool implements Quantified
                 // we must have an acquired connection
                 // create a handler
                 PooledConnectionHandler handler = new PooledConnectionHandler(
-                        this, acquired.getConnection());
+                    this, acquired.getConnection());
 
                 // set the handler
                 acquired.setCurrentLeaseHandler(handler);
@@ -1069,8 +1069,8 @@ public class ConnectionPool implements Quantified
             // compute the statistics
             if (acquired != null) {
                 // compute acquisition time stats
-                long acquisitionTime
-                    = (System.nanoTime() - startTime) / ONE_MILLION;
+                long acquisitionTime = (System.nanoTime() - startTime)
+                    / ONE_MILLION;
                 this.totalAcquisitionTime += acquisitionTime;
                 if (acquisitionTime > this.greatestAcquisitionTime) {
                     this.greatestAcquisitionTime = acquisitionTime;
@@ -1122,8 +1122,8 @@ public class ConnectionPool implements Quantified
             success = true;
         } finally {
             if (!success) {
-                this.release(acquired.getCurrentLeaseHandler()
-                                     .getProxiedConnection());
+                this.release(
+                    acquired.getCurrentLeaseHandler().getProxiedConnection());
             }
         }
 
@@ -1247,8 +1247,8 @@ public class ConnectionPool implements Quantified
                         PooledConnection refill = new PooledConnection(
                             this.connector.openConnection());
 
-                        this.allConnections.put(
-                            refill, refill.getCreatedTimeNanos());
+                        this.allConnections.put(refill,
+                                                refill.getCreatedTimeNanos());
                         this.availableConnections.add(refill);
                     } catch (SQLException ignore) {
                         ignore.printStackTrace();
@@ -1663,8 +1663,8 @@ public class ConnectionPool implements Quantified
             if (this.leasedMap.size() == 0) return null;
             long greatestTime = -1L;
             for (PooledConnection pooledConn : this.leasedMap.values()) {
-                long leaseTime
-                    = pooledConn.getCurrentLeaseHandler().getLeaseTime();
+                long leaseTime = pooledConn.getCurrentLeaseHandler()
+                                           .getLeaseTime();
                 if (leaseTime > greatestTime) {
                     greatestTime = leaseTime;
                 }
@@ -1765,8 +1765,8 @@ public class ConnectionPool implements Quantified
 
         // now check if we need to refill to maintain the minimum pool size
         while (this.allConnections.size() < this.getMinimumSize()) {
-            PooledConnection refill
-                = new PooledConnection(this.connector.openConnection());
+            PooledConnection refill = new PooledConnection(
+                this.connector.openConnection());
             this.allConnections.put(refill, refill.getCreatedTimeNanos());
             this.availableConnections.add(refill);
         }

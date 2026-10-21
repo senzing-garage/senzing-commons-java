@@ -53,8 +53,12 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonObj, "givenName", "Joe", "John", null));
         result.add(arguments(jsonObj, "surname", "Schmoe", "Doe", null));
         result.add(arguments(jsonObj, "address", null, null, null));
-        result.add(arguments(
-                jsonObj, "address", "101 Main St.", "101 Main St.", null));
+        result.add(
+            arguments(jsonObj,
+                      "address",
+                      "101 Main St.",
+                      "101 Main St.",
+                      null));
         result.add(arguments(jsonObj, "eyeColor", "Brown", "Brown", null));
         result.add(arguments(jsonObj, null, null, null, null));
         result.add(arguments(null, "surname", null, null, null));
@@ -86,19 +90,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getString(jsonObject, key);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonObject=[ " + jsonObject
-                             + " ], key=[ " + key + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonObject=[ " + jsonObject + " ], key=[ "
+                    + key + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -169,19 +177,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getString(jsonArray, index);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonArray=[ " + jsonArray
-                             + " ], index=[ " + index + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonArray=[ " + jsonArray + " ], index=[ "
+                    + index + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -247,10 +259,12 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
@@ -312,10 +326,12 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
@@ -416,19 +432,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getStrings(jsonObject, key);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonObject=[ " + jsonObject
-                             + " ], key=[ " + key + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonObject=[ " + jsonObject + " ], key=[ "
+                    + key + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -524,19 +544,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getStrings(jsonArray, index);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonArray=[ " + jsonArray
-                             + " ], index=[ " + index + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonArray=[ " + jsonArray + " ], index=[ "
+                    + index + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -623,19 +647,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getInteger(jsonObject, key);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonObject=[ " + jsonObject
-                             + " ], key=[ " + key + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonObject=[ " + jsonObject + " ], key=[ "
+                    + key + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -731,19 +759,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getInteger(jsonArray, index);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonArray=[ " + jsonArray
-                             + " ], index=[ " + index + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonArray=[ " + jsonArray + " ], index=[ "
+                    + index + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -831,19 +863,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getLong(jsonObject, key);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonObject=[ " + jsonObject
-                             + " ], key=[ " + key + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonObject=[ " + jsonObject + " ], key=[ "
+                    + key + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -940,19 +976,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getLong(jsonArray, index);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonArray=[ " + jsonArray
-                             + " ], index=[ " + index + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonArray=[ " + jsonArray + " ], index=[ "
+                    + index + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1004,10 +1044,10 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonObj, "one", 15.0, 1.0, null));
         result.add(arguments(jsonObj, "ten", null, 10.0, null));
         result.add(arguments(jsonObj, "ten", 15.0, 10.0, null));
-        result.add(arguments(jsonObj, "long", null, ((double) maxIntPlus1),
-                             null));
-        result.add(arguments(jsonObj, "long", 15.0, ((double) maxIntPlus1),
-                             null));
+        result.add(
+            arguments(jsonObj, "long", null, ((double) maxIntPlus1), null));
+        result.add(
+            arguments(jsonObj, "long", 15.0, ((double) maxIntPlus1), null));
         result.add(arguments(jsonObj, "ten.zero", null, 10.0, null));
         result.add(arguments(jsonObj, "ten.zero", 15.0, 10.0, null));
         result.add(arguments(jsonObj, "ten.five", null, 10.5, null));
@@ -1042,19 +1082,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getDouble(jsonObject, key);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonObject=[ " + jsonObject
-                             + " ], key=[ " + key + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonObject=[ " + jsonObject + " ], key=[ "
+                    + key + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1139,19 +1183,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getDouble(jsonArray, index);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonArray=[ " + jsonArray
-                             + " ], index=[ " + index + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonArray=[ " + jsonArray + " ], index=[ "
+                    + index + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1248,19 +1296,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getBigDecimal(jsonObject, key);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonObject=[ " + jsonObject
-                             + " ], key=[ " + key + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonObject=[ " + jsonObject + " ], key=[ "
+                    + key + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1354,19 +1406,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getBigDecimal(jsonArray, index);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonArray=[ " + jsonArray
-                             + " ], index=[ " + index + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonArray=[ " + jsonArray + " ], index=[ "
+                    + index + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1460,19 +1516,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getBigInteger(jsonObject, key);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonObject=[ " + jsonObject
-                             + " ], key=[ " + key + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonObject=[ " + jsonObject + " ], key=[ "
+                    + key + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1563,19 +1623,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getBigInteger(jsonArray, index);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonArray=[ " + jsonArray
-                             + " ], index=[ " + index + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonArray=[ " + jsonArray + " ], index=[ "
+                    + index + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1627,10 +1691,10 @@ public class JsonUtilitiesTest
         result.add(arguments(jsonObj, "one", 15.0F, 1.0F, null));
         result.add(arguments(jsonObj, "ten", null, 10.0F, null));
         result.add(arguments(jsonObj, "ten", 15.0F, 10.0F, null));
-        result.add(arguments(jsonObj, "long", null, ((float) maxIntPlus1),
-                             null));
-        result.add(arguments(jsonObj, "long", 15.0F, ((float) maxIntPlus1),
-                             null));
+        result.add(
+            arguments(jsonObj, "long", null, ((float) maxIntPlus1), null));
+        result.add(
+            arguments(jsonObj, "long", 15.0F, ((float) maxIntPlus1), null));
         result.add(arguments(jsonObj, "ten.zero", null, 10.0F, null));
         result.add(arguments(jsonObj, "ten.zero", 15.0F, 10.0F, null));
         result.add(arguments(jsonObj, "ten.five", null, 10.5F, null));
@@ -1665,19 +1729,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getFloat(jsonObject, key);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonObject=[ " + jsonObject
-                             + " ], key=[ " + key + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonObject=[ " + jsonObject + " ], key=[ "
+                    + key + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1762,19 +1830,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getFloat(jsonArray, index);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonArray=[ " + jsonArray
-                             + " ], index=[ " + index + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonArray=[ " + jsonArray + " ], index=[ "
+                    + index + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1861,19 +1933,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getBoolean(jsonObject, key);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonObject=[ " + jsonObject
-                             + " ], key=[ " + key + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonObject=[ " + jsonObject + " ], key=[ "
+                    + key + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -1954,19 +2030,23 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
 
             // check if the default value is null
             if (defaultValue == null) {
                 result = getBoolean(jsonArray, index);
 
-                assertEquals(expectedResult, result,
-                             "Unexpected result with no default value "
-                             + "parameter.  jsonArray=[ " + jsonArray
-                             + " ], index=[ " + index + " ]");
+                assertEquals(
+                    expectedResult,
+                    result,
+                    "Unexpected result with no default value "
+                    + "parameter.  jsonArray=[ " + jsonArray + " ], index=[ "
+                    + index + " ]");
             }
         } catch (Exception e) {
             if (expectedFailure == null) {
@@ -2043,10 +2123,12 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
@@ -2122,10 +2204,12 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonObject=[ " + jsonObject
-                         + " ], key=[ " + key
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonObject=[ " + jsonObject
+                + " ], key=[ " + key
+                + " ]");
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
@@ -2199,10 +2283,12 @@ public class JsonUtilitiesTest
                      + expectedFailure.getName() + " ]");
             }
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result.  jsonArray=[ " + jsonArray
-                         + " ], index=[ " + index
-                         + " ]");
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result.  jsonArray=[ " + jsonArray
+                + " ], index=[ " + index
+                + " ]");
         } catch (Exception e) {
             if (expectedFailure == null) {
                 e.printStackTrace();
@@ -2234,22 +2320,28 @@ public class JsonUtilitiesTest
             String textValue = getString(jsonObject, "text");
             String nullValue = getString(jsonObject, "null");
 
-            assertEquals("ABC", textValue,
-                         "Unexpected string result.  jsonObject=[ "
-                         + jsonObject + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonObject=[ " + jsonObject
-                         + " ]");
+            assertEquals(
+                "ABC",
+                textValue,
+                "Unexpected string result.  jsonObject=[ " + jsonObject + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonObject=[ " + jsonObject + " ]");
 
             JsonValue jsonValue = jsonObject.getValue("/text");
-            assertEquals(JsonValue.ValueType.STRING, jsonValue.getValueType(),
-                         "Unexpected string value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.STRING,
+                jsonValue.getValueType(),
+                "Unexpected string value type.  jsonObject=[ " + jsonObject
+                + " ]");
 
             jsonValue = jsonObject.getValue("/null");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonObject=[ " + jsonObject
+                + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail(
@@ -2271,22 +2363,29 @@ public class JsonUtilitiesTest
             Integer numValue = getInteger(jsonObject, "number");
             Integer nullValue = getInteger(jsonObject, "null");
 
-            assertEquals(123, numValue,
-                         "Unexpected numeric result.  jsonObject=[ "
-                         + jsonObject + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonObject=[ " + jsonObject
-                         + " ]");
+            assertEquals(
+                123,
+                numValue,
+                "Unexpected numeric result.  jsonObject=[ " + jsonObject
+                + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonObject=[ " + jsonObject + " ]");
 
             JsonValue jsonValue = jsonObject.getValue("/number");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonObject=[ " + jsonObject
+                + " ]");
 
             jsonValue = jsonObject.getValue("/null");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonObject=[ " + jsonObject
+                + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail(
@@ -2308,22 +2407,29 @@ public class JsonUtilitiesTest
             Long numValue = getLong(jsonObject, "number");
             Long nullValue = getLong(jsonObject, "null");
 
-            assertEquals(123L, numValue,
-                         "Unexpected numeric result.  jsonObject=[ "
-                         + jsonObject + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonObject=[ " + jsonObject
-                         + " ]");
+            assertEquals(
+                123L,
+                numValue,
+                "Unexpected numeric result.  jsonObject=[ " + jsonObject
+                + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonObject=[ " + jsonObject + " ]");
 
             JsonValue jsonValue = jsonObject.getValue("/number");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonObject=[ " + jsonObject
+                + " ]");
 
             jsonValue = jsonObject.getValue("/null");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonObject=[ " + jsonObject
+                + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail(
@@ -2345,22 +2451,29 @@ public class JsonUtilitiesTest
             Double numValue = getDouble(jsonObject, "number");
             Double nullValue = getDouble(jsonObject, "null");
 
-            assertEquals(123.456, numValue,
-                         "Unexpected numeric result.  jsonObject=[ "
-                         + jsonObject + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonObject=[ " + jsonObject
-                         + " ]");
+            assertEquals(
+                123.456,
+                numValue,
+                "Unexpected numeric result.  jsonObject=[ " + jsonObject
+                + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonObject=[ " + jsonObject + " ]");
 
             JsonValue jsonValue = jsonObject.getValue("/number");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonObject=[ " + jsonObject
+                + " ]");
 
             jsonValue = jsonObject.getValue("/null");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonObject=[ " + jsonObject
+                + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail(
@@ -2382,22 +2495,29 @@ public class JsonUtilitiesTest
             Float numValue = getFloat(jsonObject, "number");
             Float nullValue = getFloat(jsonObject, "null");
 
-            assertEquals(123.456F, numValue,
-                         "Unexpected numeric result.  jsonObject=[ "
-                         + jsonObject + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonObject=[ " + jsonObject
-                         + " ]");
+            assertEquals(
+                123.456F,
+                numValue,
+                "Unexpected numeric result.  jsonObject=[ " + jsonObject
+                + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonObject=[ " + jsonObject + " ]");
 
             JsonValue jsonValue = jsonObject.getValue("/number");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonObject=[ " + jsonObject
+                + " ]");
 
             jsonValue = jsonObject.getValue("/null");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonObject=[ " + jsonObject
+                + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail(
@@ -2419,22 +2539,29 @@ public class JsonUtilitiesTest
             BigInteger numValue = getBigInteger(jsonObject, "number");
             BigInteger nullValue = getBigInteger(jsonObject, "null");
 
-            assertEquals(new BigInteger("1234"), numValue,
-                         "Unexpected numeric result.  jsonObject=[ "
-                         + jsonObject + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonObject=[ " + jsonObject
-                         + " ]");
+            assertEquals(
+                new BigInteger("1234"),
+                numValue,
+                "Unexpected numeric result.  jsonObject=[ " + jsonObject
+                + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonObject=[ " + jsonObject + " ]");
 
             JsonValue jsonValue = jsonObject.getValue("/number");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonObject=[ " + jsonObject
+                + " ]");
 
             jsonValue = jsonObject.getValue("/null");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonObject=[ " + jsonObject
+                + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail(
@@ -2456,22 +2583,29 @@ public class JsonUtilitiesTest
             BigDecimal numValue = getBigDecimal(jsonObject, "number");
             BigDecimal nullValue = getBigDecimal(jsonObject, "null");
 
-            assertEquals(new BigDecimal("123.456"), numValue,
-                         "Unexpected numeric result.  jsonObject=[ "
-                         + jsonObject + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonObject=[ " + jsonObject
-                         + " ]");
+            assertEquals(
+                new BigDecimal("123.456"),
+                numValue,
+                "Unexpected numeric result.  jsonObject=[ " + jsonObject
+                + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonObject=[ " + jsonObject + " ]");
 
             JsonValue jsonValue = jsonObject.getValue("/number");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonObject=[ " + jsonObject
+                + " ]");
 
             jsonValue = jsonObject.getValue("/null");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonObject=[ " + jsonObject
+                + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail(
@@ -2495,30 +2629,41 @@ public class JsonUtilitiesTest
             Boolean falseValue = getBoolean(jsonObject, "false");
             Boolean nullValue = getBoolean(jsonObject, "null");
 
-            assertEquals(true, trueValue,
-                         "Unexpected boolean true result.  jsonObject=[ "
-                         + jsonObject + " ]");
-            assertEquals(false, falseValue,
-                         "Unexpected boolean false result.  jsonObject=[ "
-                         + jsonObject + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonObject=[ " + jsonObject
-                         + " ]");
+            assertEquals(
+                true,
+                trueValue,
+                "Unexpected boolean true result.  jsonObject=[ " + jsonObject
+                + " ]");
+            assertEquals(
+                false,
+                falseValue,
+                "Unexpected boolean false result.  jsonObject=[ " + jsonObject
+                + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonObject=[ " + jsonObject + " ]");
 
             JsonValue jsonValue = jsonObject.getValue("/true");
-            assertEquals(JsonValue.ValueType.TRUE, jsonValue.getValueType(),
-                         "Unexpected boolean true value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.TRUE,
+                jsonValue.getValueType(),
+                "Unexpected boolean true value type.  jsonObject=[ "
+                + jsonObject + " ]");
 
             jsonValue = jsonObject.getValue("/false");
-            assertEquals(JsonValue.ValueType.FALSE, jsonValue.getValueType(),
-                         "Unexpected boolean false value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.FALSE,
+                jsonValue.getValueType(),
+                "Unexpected boolean false value type.  jsonObject=[ "
+                + jsonObject + " ]");
 
             jsonValue = jsonObject.getValue("/null");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonObject=[ "
-                         + jsonObject + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonObject=[ " + jsonObject
+                + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail(
@@ -2540,22 +2685,27 @@ public class JsonUtilitiesTest
             String textValue = getString(jsonArray, 0);
             String nullValue = getString(jsonArray, 1);
 
-            assertEquals("ABC", textValue,
-                         "Unexpected string result.  jsonArray=[ " + jsonArray
-                         + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonArray=[ " + jsonArray
-                         + " ]");
+            assertEquals(
+                "ABC",
+                textValue,
+                "Unexpected string result.  jsonArray=[ " + jsonArray + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonArray=[ " + jsonArray + " ]");
 
             JsonValue jsonValue = jsonArray.getValue("/0");
-            assertEquals(JsonValue.ValueType.STRING, jsonValue.getValueType(),
-                         "Unexpected string value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.STRING,
+                jsonValue.getValueType(),
+                "Unexpected string value type.  jsonArray=[ " + jsonArray
+                + " ]");
 
             jsonValue = jsonArray.getValue("/1");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonArray=[ " + jsonArray + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2576,22 +2726,27 @@ public class JsonUtilitiesTest
             Integer numValue = getInteger(jsonArray, 0);
             Integer nullValue = getInteger(jsonArray, 1);
 
-            assertEquals(123, numValue,
-                         "Unexpected numeric result.  jsonArray=[ " + jsonArray
-                         + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonArray=[ " + jsonArray
-                         + " ]");
+            assertEquals(
+                123,
+                numValue,
+                "Unexpected numeric result.  jsonArray=[ " + jsonArray + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonArray=[ " + jsonArray + " ]");
 
             JsonValue jsonValue = jsonArray.getValue("/0");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonArray=[ " + jsonArray
+                + " ]");
 
             jsonValue = jsonArray.getValue("/1");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonArray=[ " + jsonArray + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2612,22 +2767,27 @@ public class JsonUtilitiesTest
             Long numValue = getLong(jsonArray, 0);
             Long nullValue = getLong(jsonArray, 1);
 
-            assertEquals(123L, numValue,
-                         "Unexpected numeric result.  jsonArray=[ " + jsonArray
-                         + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonArray=[ " + jsonArray
-                         + " ]");
+            assertEquals(
+                123L,
+                numValue,
+                "Unexpected numeric result.  jsonArray=[ " + jsonArray + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonArray=[ " + jsonArray + " ]");
 
             JsonValue jsonValue = jsonArray.getValue("/0");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonArray=[ " + jsonArray
+                + " ]");
 
             jsonValue = jsonArray.getValue("/1");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonArray=[ " + jsonArray + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2648,22 +2808,27 @@ public class JsonUtilitiesTest
             Double numValue = getDouble(jsonArray, 0);
             Double nullValue = getDouble(jsonArray, 1);
 
-            assertEquals(123.456, numValue,
-                         "Unexpected numeric result.  jsonArray=[ " + jsonArray
-                         + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonArray=[ " + jsonArray
-                         + " ]");
+            assertEquals(
+                123.456,
+                numValue,
+                "Unexpected numeric result.  jsonArray=[ " + jsonArray + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonArray=[ " + jsonArray + " ]");
 
             JsonValue jsonValue = jsonArray.getValue("/0");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonArray=[ " + jsonArray
+                + " ]");
 
             jsonValue = jsonArray.getValue("/1");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonArray=[ " + jsonArray + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2684,22 +2849,27 @@ public class JsonUtilitiesTest
             Float numValue = getFloat(jsonArray, 0);
             Float nullValue = getFloat(jsonArray, 1);
 
-            assertEquals(123.456F, numValue,
-                         "Unexpected numeric result.  jsonArray=[ " + jsonArray
-                         + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonArray=[ " + jsonArray
-                         + " ]");
+            assertEquals(
+                123.456F,
+                numValue,
+                "Unexpected numeric result.  jsonArray=[ " + jsonArray + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonArray=[ " + jsonArray + " ]");
 
             JsonValue jsonValue = jsonArray.getValue("/0");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonArray=[ " + jsonArray
+                + " ]");
 
             jsonValue = jsonArray.getValue("/1");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonArray=[ " + jsonArray + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2720,22 +2890,27 @@ public class JsonUtilitiesTest
             BigInteger numValue = getBigInteger(jsonArray, 0);
             BigInteger nullValue = getBigInteger(jsonArray, 1);
 
-            assertEquals(new BigInteger("1234"), numValue,
-                         "Unexpected numeric result.  jsonArray=[ " + jsonArray
-                         + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonArray=[ " + jsonArray
-                         + " ]");
+            assertEquals(
+                new BigInteger("1234"),
+                numValue,
+                "Unexpected numeric result.  jsonArray=[ " + jsonArray + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonArray=[ " + jsonArray + " ]");
 
             JsonValue jsonValue = jsonArray.getValue("/0");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonArray=[ " + jsonArray
+                + " ]");
 
             jsonValue = jsonArray.getValue("/1");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonArray=[ " + jsonArray + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2756,22 +2931,27 @@ public class JsonUtilitiesTest
             BigDecimal numValue = getBigDecimal(jsonArray, 0);
             BigDecimal nullValue = getBigDecimal(jsonArray, 1);
 
-            assertEquals(new BigDecimal("123.456"), numValue,
-                         "Unexpected numeric result.  jsonArray=[ " + jsonArray
-                         + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonArray=[ " + jsonArray
-                         + " ]");
+            assertEquals(
+                new BigDecimal("123.456"),
+                numValue,
+                "Unexpected numeric result.  jsonArray=[ " + jsonArray + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonArray=[ " + jsonArray + " ]");
 
             JsonValue jsonValue = jsonArray.getValue("/0");
-            assertEquals(JsonValue.ValueType.NUMBER, jsonValue.getValueType(),
-                         "Unexpected numeric value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NUMBER,
+                jsonValue.getValueType(),
+                "Unexpected numeric value type.  jsonArray=[ " + jsonArray
+                + " ]");
 
             jsonValue = jsonArray.getValue("/1");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonArray=[ " + jsonArray + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2794,30 +2974,40 @@ public class JsonUtilitiesTest
             Boolean falseValue = getBoolean(jsonArray, 1);
             Boolean nullValue = getBoolean(jsonArray, 2);
 
-            assertEquals(true, trueValue,
-                         "Unexpected boolean true result.  jsonArray=[ "
-                         + jsonArray + " ]");
-            assertEquals(false, falseValue,
-                         "Unexpected boolean false result.  jsonArray=[ "
-                         + jsonArray + " ]");
-            assertEquals(null, nullValue,
-                         "Unexpected null result.  jsonArray=[ " + jsonArray
-                         + " ]");
+            assertEquals(
+                true,
+                trueValue,
+                "Unexpected boolean true result.  jsonArray=[ " + jsonArray
+                + " ]");
+            assertEquals(
+                false,
+                falseValue,
+                "Unexpected boolean false result.  jsonArray=[ " + jsonArray
+                + " ]");
+            assertEquals(
+                null,
+                nullValue,
+                "Unexpected null result.  jsonArray=[ " + jsonArray + " ]");
 
             JsonValue jsonValue = jsonArray.getValue("/0");
-            assertEquals(JsonValue.ValueType.TRUE, jsonValue.getValueType(),
-                         "Unexpected boolean true value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.TRUE,
+                jsonValue.getValueType(),
+                "Unexpected boolean true value type.  jsonArray=[ "
+                + jsonArray + " ]");
 
             jsonValue = jsonArray.getValue("/1");
-            assertEquals(JsonValue.ValueType.FALSE, jsonValue.getValueType(),
-                         "Unexpected boolean false value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.FALSE,
+                jsonValue.getValueType(),
+                "Unexpected boolean false value type.  jsonArray=[ "
+                + jsonArray + " ]");
 
             jsonValue = jsonArray.getValue("/2");
-            assertEquals(JsonValue.ValueType.NULL, jsonValue.getValueType(),
-                         "Unexpected null value type.  jsonArray=[ "
-                         + jsonArray + " ]");
+            assertEquals(
+                JsonValue.ValueType.NULL,
+                jsonValue.getValueType(),
+                "Unexpected null value type.  jsonArray=[ " + jsonArray + " ]");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonArray=[ " + jsonArray + " ]: " + e);
@@ -2832,9 +3022,9 @@ public class JsonUtilitiesTest
         builder.add("surname", "Doe");
         JsonObject jsonObject = builder.build();
 
-        result.add(arguments(
-                "{\"givenName\": \"John\", \"surname\": \"Doe\" }",
-                jsonObject));
+        result.add(
+            arguments("{\"givenName\": \"John\", \"surname\": \"Doe\" }",
+                      jsonObject));
 
         builder = Json.createObjectBuilder();
         builder.add("foo", "Bar");
@@ -2842,9 +3032,9 @@ public class JsonUtilitiesTest
         builder.addNull("none");
         jsonObject = builder.build();
 
-        result.add(arguments(
-                "{\"foo\": \"Bar\", \"count\": 10, \"none\": null}",
-                jsonObject));
+        result.add(
+            arguments("{\"foo\": \"Bar\", \"count\": 10, \"none\": null}",
+                      jsonObject));
 
         builder = Json.createObjectBuilder();
         jsonObject = builder.build();
@@ -2863,9 +3053,10 @@ public class JsonUtilitiesTest
         try {
             JsonObject result = parseJsonObject(jsonText);
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result when parsing JSON text: "
-                         + jsonText);
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result when parsing JSON text: " + jsonText);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonText=[ " + jsonText
@@ -2909,9 +3100,10 @@ public class JsonUtilitiesTest
         try {
             JsonArray result = parseJsonArray(jsonText);
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result when parsing JSON text: "
-                         + jsonText);
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result when parsing JSON text: " + jsonText);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonText=[ " + jsonText
@@ -2924,17 +3116,18 @@ public class JsonUtilitiesTest
     {
         List<Arguments> result = new LinkedList<>();
 
-        result.add(arguments(
-                "{\"givenName\": \"John\", \"surname\": \"Doe\" }",
-                Map.of("givenName", "John", "surname", "Doe")));
+        result.add(
+            arguments("{\"givenName\": \"John\", \"surname\": \"Doe\" }",
+                      Map.of("givenName", "John", "surname", "Doe")));
 
         Map map = new LinkedHashMap();
         map.put("foo", "Bar");
         map.put("count", 10L);
         map.put("none", null);
 
-        result.add(arguments(
-                "{\"foo\": \"Bar\", \"count\": 10, \"none\": null}", map));
+        result.add(
+            arguments("{\"foo\": \"Bar\", \"count\": 10, \"none\": null}",
+                      map));
 
         List list = new ArrayList();
         list.add("Bar");
@@ -2964,9 +3157,10 @@ public class JsonUtilitiesTest
         try {
             Object result = normalizeJsonText(jsonText);
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result when normalizing JSON text: "
-                         + jsonText);
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result when normalizing JSON text: " + jsonText);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonText=[ " + jsonText + " ]: " + e);
@@ -2978,11 +3172,11 @@ public class JsonUtilitiesTest
         List<Arguments> result = new LinkedList<>();
 
         JsonObject jsonObject = parseJsonObject(
-                "{\"givenName\": \"John\", \"surname\": \"Doe\" }");
+            "{\"givenName\": \"John\", \"surname\": \"Doe\" }");
 
-        result.add(arguments(
-                jsonObject,
-                Map.of("givenName", "John", "surname", "Doe")));
+        result.add(
+            arguments(jsonObject,
+                      Map.of("givenName", "John", "surname", "Doe")));
 
         Map map = new LinkedHashMap();
         map.put("foo", "Bar");
@@ -2990,7 +3184,7 @@ public class JsonUtilitiesTest
         map.put("none", null);
 
         jsonObject = parseJsonObject(
-                "{\"foo\": \"Bar\", \"count\": 10, \"none\": null}");
+            "{\"foo\": \"Bar\", \"count\": 10, \"none\": null}");
 
         result.add(arguments(jsonObject, map));
 
@@ -3033,9 +3227,10 @@ public class JsonUtilitiesTest
         try {
             Object result = normalizeJsonValue(jsonValue);
 
-            assertEquals(expectedResult, result,
-                         "Unexpected result when normalizing JSON value: "
-                         + jsonValue);
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result when normalizing JSON value: " + jsonValue);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure.  jsonValue=[ " + jsonValue + " ]: " + e);
@@ -3055,16 +3250,18 @@ public class JsonUtilitiesTest
         result.add(arguments(123L, JsonValue.ValueType.NUMBER));
         result.add(arguments(123.456, JsonValue.ValueType.NUMBER));
         result.add(arguments(123.456F, JsonValue.ValueType.NUMBER));
-        result.add(arguments(
-                new Object[] { 10L, 5.5, true, "three" },
-                JsonValue.ValueType.ARRAY));
-        result.add(arguments(
-                List.of(10L, 5.5, true, "three"), JsonValue.ValueType.ARRAY));
-        result.add(arguments(
-                Set.of(10L, 5.5, true, "three"), JsonValue.ValueType.ARRAY));
-        result.add(arguments(
-                Map.of("foo", "bar", "phoo", true, "num", 25L),
-                JsonValue.ValueType.OBJECT));
+        result.add(
+            arguments(new Object[] { 10L, 5.5, true, "three" },
+                      JsonValue.ValueType.ARRAY));
+        result.add(
+            arguments(List.of(10L, 5.5, true, "three"),
+                      JsonValue.ValueType.ARRAY));
+        result.add(
+            arguments(Set.of(10L, 5.5, true, "three"),
+                      JsonValue.ValueType.ARRAY));
+        result.add(
+            arguments(Map.of("foo", "bar", "phoo", true, "num", 25L),
+                      JsonValue.ValueType.OBJECT));
         result.add(arguments(Map.of(1, 10, 2, 20), JsonValue.ValueType.STRING));
 
         return result;
@@ -3081,7 +3278,7 @@ public class JsonUtilitiesTest
             JsonObject jsonObject = builder.build();
 
             assertTrue(jsonObject.containsKey("value"),
-                    "Missing expected property key 'value'.");
+                       "Missing expected property key 'value'.");
 
             JsonValue jsonValue = jsonObject.getValue("/value");
 
@@ -3102,9 +3299,10 @@ public class JsonUtilitiesTest
             addElement(builder, value);
             JsonArray jsonArray = builder.build();
 
-            assertEquals(1, jsonArray.size(),
-                         "Json array is incorrect size after addElement: "
-                         + jsonArray);
+            assertEquals(
+                1,
+                jsonArray.size(),
+                "Json array is incorrect size after addElement: " + jsonArray);
 
             JsonValue jsonValue = jsonArray.getValue("/0");
 
@@ -3119,16 +3317,16 @@ public class JsonUtilitiesTest
             JsonValue jsonValue,
             JsonValue.ValueType expectedType)
     {
-        assertEquals(expectedType, jsonValue.getValueType(),
-                     "Unexpected value type after adding property: " + value
-                     + " / " + ((value == null)
-                                ? null : value.getClass().getName()));
+        assertEquals(
+            expectedType,
+            jsonValue.getValueType(),
+            "Unexpected value type after adding property: " + value
+            + " / " + ((value == null) ? null : value.getClass().getName()));
 
         if (value != null) {
             Object actual = null;
             Object expected = value;
-            switch (value.getClass().getName())
-            {
+            switch (value.getClass().getName()) {
                 case "java.lang.String":
                     actual = ((JsonString) jsonValue).getString();
                     break;
@@ -3197,10 +3395,12 @@ public class JsonUtilitiesTest
                     break;
             }
 
-            assertEquals(expected, actual,
-                         "The property value is not what was expected: "
-                         + value + " / " + jsonValue.getValueType() + " / "
-                         + jsonValue);
+            assertEquals(
+                expected,
+                actual,
+                "The property value is not what was expected: " + value
+                + " / " + jsonValue.getValueType()
+                + " / " + jsonValue);
         }
     }
 
@@ -3214,8 +3414,10 @@ public class JsonUtilitiesTest
 
             JsonObject actual = toJsonObject("foo", "bar");
 
-            assertEquals(expected, actual,
-                    "Unexpected result for toJsonObject() with 1 argument");
+            assertEquals(
+                expected,
+                actual,
+                "Unexpected result for toJsonObject() with 1 argument");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObject1()");
@@ -3233,8 +3435,10 @@ public class JsonUtilitiesTest
 
             JsonObject actual = toJsonObject("foo", "bar", "phoo", true);
 
-            assertEquals(expected, actual,
-                    "Unexpected result for toJsonObject() with 2 arguments");
+            assertEquals(
+                expected,
+                actual,
+                "Unexpected result for toJsonObject() with 2 arguments");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObject2()");
@@ -3251,11 +3455,13 @@ public class JsonUtilitiesTest
             builder.add("num", 10L);
             JsonObject expected = builder.build();
 
-            JsonObject actual
-                = toJsonObject("foo", "bar", "phoo", true, "num", 10L);
+            JsonObject actual = toJsonObject("foo", "bar", "phoo", true, "num",
+                                             10L);
 
-            assertEquals(expected, actual,
-                    "Unexpected result for toJsonObject() with 3 arguments");
+            assertEquals(
+                expected,
+                actual,
+                "Unexpected result for toJsonObject() with 3 arguments");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObject3()");
@@ -3303,8 +3509,8 @@ public class JsonUtilitiesTest
         builder.add("random", map1.get("random").toString());
 
         JsonObject jsonObject1 = builder.build();
-        result.add(arguments(
-                map1.get("object"), jsonObject1.getJsonObject("object")));
+        result.add(
+            arguments(map1.get("object"), jsonObject1.getJsonObject("object")));
         result.add(arguments(map1, jsonObject1));
 
         Map<String, Object> map2 = Map.of();
@@ -3324,9 +3530,10 @@ public class JsonUtilitiesTest
         try {
             JsonObject actual = toJsonObject(map);
 
-            assertEquals(expectedResult, actual,
-                         "Unexpected result for toJsonObject() with map: "
-                         + map);
+            assertEquals(
+                expectedResult,
+                actual,
+                "Unexpected result for toJsonObject() with map: " + map);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObject(): " + map
@@ -3402,8 +3609,10 @@ public class JsonUtilitiesTest
 
             JsonArray actual = toJsonArray("bar", true, 10L);
 
-            assertEquals(expected, actual,
-                    "Unexpected result for toJsonArray() with N arguments");
+            assertEquals(
+                expected,
+                actual,
+                "Unexpected result for toJsonArray() with N arguments");
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonObjectN()");
@@ -3418,9 +3627,10 @@ public class JsonUtilitiesTest
         try {
             JsonArray actual = toJsonArray(list);
 
-            assertEquals(expectedResult, actual,
-                         "Unexpected result for toJsonArray() with list: "
-                         + list);
+            assertEquals(
+                expectedResult,
+                actual,
+                "Unexpected result for toJsonArray() with list: " + list);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for testToJsonArray(): " + list
@@ -3501,15 +3711,15 @@ public class JsonUtilitiesTest
             String result = toJsonText(jsonValue);
 
             assertEquals(expectedText.replaceAll("\\s", ""),
-                    result.replaceAll("\\s", ""),
-                    "Unexpected result for toJsonText(): " + jsonValue);
+                         result.replaceAll("\\s", ""),
+                         "Unexpected result for toJsonText(): " + jsonValue);
 
             result = toJsonText(jsonValue, true);
-            assertEquals(expectedText.replaceAll("\\s", ""), result.replaceAll(
-                "\\s",
-                ""),
-                         "Unexpected pretty-print result for toJsonText(): "
-                         + jsonValue);
+            assertEquals(
+                expectedText.replaceAll("\\s", ""),
+                result.replaceAll("\\s", ""),
+                "Unexpected pretty-print result for toJsonText(): "
+                + jsonValue);
 
             result = result.trim();
 
@@ -3521,9 +3731,10 @@ public class JsonUtilitiesTest
                 actualLineCount++;
             }
 
-            assertEquals(expectedLineCount, actualLineCount,
-                         "Pretty-print JSON line count is unexpected: "
-                         + result);
+            assertEquals(
+                expectedLineCount,
+                actualLineCount,
+                "Pretty-print JSON line count is unexpected: " + result);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for toJsonText(): " + jsonValue
@@ -3557,16 +3768,16 @@ public class JsonUtilitiesTest
             String result = toJsonText(writer, builder1).toString();
 
             assertEquals(expectedText.replaceAll("\\s", ""),
-                    result.replaceAll("\\s", ""),
-                    "Unexpected result for toJsonText(): " + jsonValue);
+                         result.replaceAll("\\s", ""),
+                         "Unexpected result for toJsonText(): " + jsonValue);
 
             writer = new StringWriter();
             result = toJsonText(writer, builder2, true).toString();
-            assertEquals(expectedText.replaceAll("\\s", ""), result.replaceAll(
-                "\\s",
-                ""),
-                         "Unexpected pretty-print result for toJsonText(): "
-                         + jsonValue);
+            assertEquals(
+                expectedText.replaceAll("\\s", ""),
+                result.replaceAll("\\s", ""),
+                "Unexpected pretty-print result for toJsonText(): "
+                + jsonValue);
 
             result = result.trim();
 
@@ -3578,9 +3789,10 @@ public class JsonUtilitiesTest
                 actualLineCount++;
             }
 
-            assertEquals(expectedLineCount, actualLineCount,
-                         "Pretty-print JSON line count is unexpected: "
-                         + result);
+            assertEquals(
+                expectedLineCount,
+                actualLineCount,
+                "Pretty-print JSON line count is unexpected: " + result);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for toJsonText(): " + jsonValue
@@ -3614,16 +3826,16 @@ public class JsonUtilitiesTest
             String result = toJsonText(writer, builder1).toString();
 
             assertEquals(expectedText.replaceAll("\\s", ""),
-                    result.replaceAll("\\s", ""),
-                    "Unexpected result for toJsonText(): " + jsonValue);
+                         result.replaceAll("\\s", ""),
+                         "Unexpected result for toJsonText(): " + jsonValue);
 
             writer = new StringWriter();
             result = toJsonText(writer, builder2, true).toString();
-            assertEquals(expectedText.replaceAll("\\s", ""), result.replaceAll(
-                "\\s",
-                ""),
-                         "Unexpected pretty-print result for toJsonText(): "
-                         + jsonValue);
+            assertEquals(
+                expectedText.replaceAll("\\s", ""),
+                result.replaceAll("\\s", ""),
+                "Unexpected pretty-print result for toJsonText(): "
+                + jsonValue);
 
             result = result.trim();
 
@@ -3635,9 +3847,10 @@ public class JsonUtilitiesTest
                 actualLineCount++;
             }
 
-            assertEquals(expectedLineCount, actualLineCount,
-                         "Pretty-print JSON line count is unexpected: "
-                         + result);
+            assertEquals(
+                expectedLineCount,
+                actualLineCount,
+                "Pretty-print JSON line count is unexpected: " + result);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for toJsonText(): " + jsonValue
@@ -3654,16 +3867,16 @@ public class JsonUtilitiesTest
             String result = toJsonText(writer, jsonValue).toString();
 
             assertEquals(expectedText.replaceAll("\\s", ""),
-                    result.replaceAll("\\s", ""),
-                    "Unexpected result for toJsonText(): " + jsonValue);
+                         result.replaceAll("\\s", ""),
+                         "Unexpected result for toJsonText(): " + jsonValue);
 
             writer = new StringWriter();
             result = toJsonText(jsonValue, true).toString();
-            assertEquals(expectedText.replaceAll("\\s", ""), result.replaceAll(
-                "\\s",
-                ""),
-                         "Unexpected pretty-print result for toJsonText(): "
-                         + jsonValue);
+            assertEquals(
+                expectedText.replaceAll("\\s", ""),
+                result.replaceAll("\\s", ""),
+                "Unexpected pretty-print result for toJsonText(): "
+                + jsonValue);
 
             result = result.trim();
 
@@ -3675,9 +3888,10 @@ public class JsonUtilitiesTest
                 actualLineCount++;
             }
 
-            assertEquals(expectedLineCount, actualLineCount,
-                         "Pretty-print JSON line count is unexpected: "
-                         + result);
+            assertEquals(
+                expectedLineCount,
+                actualLineCount,
+                "Pretty-print JSON line count is unexpected: " + result);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for toJsonText(): " + jsonValue
@@ -3710,15 +3924,15 @@ public class JsonUtilitiesTest
             String result = toJsonText(builder1);
 
             assertEquals(expectedText.replaceAll("\\s", ""),
-                    result.replaceAll("\\s", ""),
-                    "Unexpected result for toJsonText(): " + jsonValue);
+                         result.replaceAll("\\s", ""),
+                         "Unexpected result for toJsonText(): " + jsonValue);
 
             result = toJsonText(builder2, true);
-            assertEquals(expectedText.replaceAll("\\s", ""), result.replaceAll(
-                "\\s",
-                ""),
-                         "Unexpected pretty-print result for toJsonText(): "
-                         + jsonValue);
+            assertEquals(
+                expectedText.replaceAll("\\s", ""),
+                result.replaceAll("\\s", ""),
+                "Unexpected pretty-print result for toJsonText(): "
+                + jsonValue);
 
             result = result.trim();
 
@@ -3730,9 +3944,10 @@ public class JsonUtilitiesTest
                 actualLineCount++;
             }
 
-            assertEquals(expectedLineCount, actualLineCount,
-                         "Pretty-print JSON line count is unexpected: "
-                         + result);
+            assertEquals(
+                expectedLineCount,
+                actualLineCount,
+                "Pretty-print JSON line count is unexpected: " + result);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for toJsonText(): " + jsonValue
@@ -3765,15 +3980,15 @@ public class JsonUtilitiesTest
             String result = toJsonText(builder1);
 
             assertEquals(expectedText.replaceAll("\\s", ""),
-                    result.replaceAll("\\s", ""),
-                    "Unexpected result for toJsonText(): " + jsonValue);
+                         result.replaceAll("\\s", ""),
+                         "Unexpected result for toJsonText(): " + jsonValue);
 
             result = toJsonText(builder2, true);
-            assertEquals(expectedText.replaceAll("\\s", ""), result.replaceAll(
-                "\\s",
-                ""),
-                         "Unexpected pretty-print result for toJsonText(): "
-                         + jsonValue);
+            assertEquals(
+                expectedText.replaceAll("\\s", ""),
+                result.replaceAll("\\s", ""),
+                "Unexpected pretty-print result for toJsonText(): "
+                + jsonValue);
 
             result = result.trim();
 
@@ -3785,9 +4000,10 @@ public class JsonUtilitiesTest
                 actualLineCount++;
             }
 
-            assertEquals(expectedLineCount, actualLineCount,
-                         "Pretty-print JSON line count is unexpected: "
-                         + result);
+            assertEquals(
+                expectedLineCount,
+                actualLineCount,
+                "Pretty-print JSON line count is unexpected: " + result);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for toJsonText(): " + jsonValue
@@ -3811,10 +4027,11 @@ public class JsonUtilitiesTest
         pw.println(" PHOOX=BAXTER");
         pw.flush();
 
-        JsonObject jsonObject = toJsonObject(Map.of("BASIC",
-                        Map.of("FOO", "BAR", "PHOO", "BAX"),
-                        "ADVANCED",
-                        Map.of("FOOX", "BARQS", "PHOOX", "BAXTER")));
+        JsonObject jsonObject = toJsonObject(
+            Map.of("BASIC",
+                   Map.of("FOO", "BAR", "PHOO", "BAX"),
+                   "ADVANCED",
+                   Map.of("FOOX", "BARQS", "PHOOX", "BAXTER")));
 
         result.add(arguments(sw.toString(), jsonObject));
 
@@ -3828,15 +4045,17 @@ public class JsonUtilitiesTest
         pw.println(" PHOOX=BAXTER");
         pw.flush();
 
-        jsonObject = toJsonObject(Map.of("BASIC", Map.of(
-            "FOO",
-            "BAR",
-            "PHOO",
-            "BAX",
-            "FOOX",
-            "BARQS",
-            "PHOOX",
-            "BAXTER")));
+        jsonObject = toJsonObject(
+            Map.of(
+                "BASIC",
+                Map.of("FOO",
+                       "BAR",
+                       "PHOO",
+                       "BAX",
+                       "FOOX",
+                       "BARQS",
+                       "PHOOX",
+                       "BAXTER")));
 
         result.add(arguments(sw.toString(), jsonObject));
 
@@ -3861,7 +4080,7 @@ public class JsonUtilitiesTest
             JsonObject result = iniToJson(file);
 
             assertEquals(expectedResult, result,
-                    "Incorrect JSON for INI: " + iniText);
+                         "Incorrect JSON for INI: " + iniText);
         } catch (Exception e) {
             e.printStackTrace();
             fail("Unexpected failure for iniToJson(): " + iniText + " / " + e);
@@ -3914,23 +4133,24 @@ public class JsonUtilitiesTest
 
             // parse it back to account for precision loss due to JSON date
             // format
-            instant = Instant.from(JsonUtilities.DATE_TIME_FORMATTER.parse(
-                text));
+            instant = Instant.from(
+                JsonUtilities.DATE_TIME_FORMATTER.parse(text));
 
             // generate a distinct property key
             String key = TextUtilities.randomAlphabeticText(3, 8);
 
             // add a test case that should successfully obtain a date value
-            result.add(Arguments.of(createObject(key, text), key, instant,
-                                    null));
+            result.add(
+                Arguments.of(createObject(key, text), key, instant, null));
         }
 
         // add a test case that will result in a null date value
-        result.add(Arguments.of(
-            createObject("phoo", null), "phoo", null, null));
+        result.add(
+            Arguments.of(createObject("phoo", null), "phoo", null, null));
 
         // add a test case that will fail to parse
-        result.add(Arguments.of(createObject("foo", "bar"),
+        result.add(
+            Arguments.of(createObject("foo", "bar"),
                          "foo",
                          null,
                          DateTimeParseException.class));
@@ -3952,21 +4172,26 @@ public class JsonUtilitiesTest
                      + ") when should have " + "failed: "
                      + JsonUtilities.toJsonText(obj));
             }
-            assertEquals(expected, instant, "Instant value for key (" + key
-                                            + ") is not as expected: "
-                                            + JsonUtilities.toJsonText(obj));
+            assertEquals(
+                expected,
+                instant,
+                "Instant value for key (" + key
+                + ") is not as expected: " + JsonUtilities.toJsonText(obj));
 
             String nullResultKey = (expected == null) ? key : key + "-missing";
             Instant now = Instant.now();
             instant = JsonUtilities.getInstant(obj, nullResultKey, now);
-            assertEquals(now, instant,
-                         "Defaulted instant value is not as expected: "
-                         + JsonUtilities.toJsonText(obj));
+            assertEquals(
+                now,
+                instant,
+                "Defaulted instant value is not as expected: "
+                + JsonUtilities.toJsonText(obj));
         } catch (Exception e) {
             if (exceptionType == null || !exceptionType.isInstance(e)) {
-                fail("Unexpected exception on getInstant() for key (" + key
-                     + "): " + JsonUtilities.toJsonText(obj),
-                     e);
+                fail(
+                    "Unexpected exception on getInstant() for key (" + key
+                    + "): " + JsonUtilities.toJsonText(obj),
+                    e);
             }
         }
     }
@@ -3987,20 +4212,26 @@ public class JsonUtilitiesTest
             }
             Date expectedDate = (expected == null) ? null : Date.from(expected);
 
-            assertEquals(expectedDate, date, "Date value for key (" + key
-                                             + ") is not as expected: "
-                                             + JsonUtilities.toJsonText(obj));
+            assertEquals(
+                expectedDate,
+                date,
+                "Date value for key (" + key
+                + ") is not as expected: " + JsonUtilities.toJsonText(obj));
 
             String missingKey = (expected == null) ? key : key + "-missing";
             Date now = Date.from(Instant.now());
             date = JsonUtilities.getDate(obj, missingKey, now);
-            assertEquals(now, date, "Defaulted date value is not as expected: "
-                                    + JsonUtilities.toJsonText(obj));
+            assertEquals(
+                now,
+                date,
+                "Defaulted date value is not as expected: "
+                + JsonUtilities.toJsonText(obj));
         } catch (Exception e) {
             if (exceptionType == null || !exceptionType.isInstance(e)) {
-                fail("Unexpected exception on getDate() for key (" + key
-                     + "): " + JsonUtilities.toJsonText(obj),
-                     e);
+                fail(
+                    "Unexpected exception on getDate() for key (" + key
+                    + "): " + JsonUtilities.toJsonText(obj),
+                    e);
             }
         }
     }
@@ -4057,23 +4288,29 @@ public class JsonUtilitiesTest
 
             // parse it back as an instant to account for lot precision
             // from the JSON date formatting
-            instant = Instant.from(JsonUtilities.DATE_TIME_FORMATTER.parse(
-                text));
+            instant = Instant.from(
+                JsonUtilities.DATE_TIME_FORMATTER.parse(text));
 
             // pick an array index between 2 and 4
             int arrayIndex = (index % 3) + 2;
 
             // add a case that should work with varying array indexes and
             // date values
-            result.add(Arguments.of(
-                createArray(arrayIndex, text), arrayIndex, instant, null));
+            result.add(
+                Arguments.of(createArray(arrayIndex, text),
+                             arrayIndex,
+                             instant,
+                             null));
         }
         // add a case that will result in a null value
         result.add(Arguments.of(createArray(2, null), 2, null, null));
 
         // add a case that will NOT parse as a date
-        result.add(Arguments.of(
-            createArray(3, "bar"), 3, null, DateTimeParseException.class));
+        result.add(
+            Arguments.of(createArray(3, "bar"),
+                         3,
+                         null,
+                         DateTimeParseException.class));
 
         // return the result
         return result;
@@ -4094,21 +4331,26 @@ public class JsonUtilitiesTest
                      + ") when should have " + "failed: "
                      + JsonUtilities.toJsonText(arr));
             }
-            assertEquals(expected, instant, "Instant value at index (" + index
-                                            + ") is not as expected: "
-                                            + JsonUtilities.toJsonText(arr));
+            assertEquals(
+                expected,
+                instant,
+                "Instant value at index (" + index
+                + ") is not as expected: " + JsonUtilities.toJsonText(arr));
 
             int nullIndex = (expected == null) ? index : 0;
             Instant now = Instant.now();
             instant = JsonUtilities.getInstant(arr, nullIndex, now);
-            assertEquals(now, instant,
-                         "Defaulted instant value is not as expected: "
-                         + JsonUtilities.toJsonText(arr));
+            assertEquals(
+                now,
+                instant,
+                "Defaulted instant value is not as expected: "
+                + JsonUtilities.toJsonText(arr));
         } catch (Exception e) {
             if (exceptionType == null || !exceptionType.isInstance(e)) {
-                fail("Unexpected exception on getInstant() for index (" + index
-                     + "): " + JsonUtilities.toJsonText(arr),
-                     e);
+                fail(
+                    "Unexpected exception on getInstant() for index (" + index
+                    + "): " + JsonUtilities.toJsonText(arr),
+                    e);
             }
         }
     }
@@ -4128,20 +4370,26 @@ public class JsonUtilitiesTest
                      + JsonUtilities.toJsonText(arr));
             }
             Date expectedDate = (expected == null) ? null : Date.from(expected);
-            assertEquals(expectedDate, date, "Date value at index (" + index
-                                             + ") is not as expected: "
-                                             + JsonUtilities.toJsonText(arr));
+            assertEquals(
+                expectedDate,
+                date,
+                "Date value at index (" + index
+                + ") is not as expected: " + JsonUtilities.toJsonText(arr));
 
             int nullIndex = (expected == null) ? index : 0;
             Date now = Date.from(Instant.now());
             date = JsonUtilities.getDate(arr, nullIndex, now);
-            assertEquals(now, date, "Defaulted date value is not as expected: "
-                                    + JsonUtilities.toJsonText(arr));
+            assertEquals(
+                now,
+                date,
+                "Defaulted date value is not as expected: "
+                + JsonUtilities.toJsonText(arr));
         } catch (Exception e) {
             if (exceptionType == null || !exceptionType.isInstance(e)) {
-                fail("Unexpected exception on getDate() for index (" + index
-                     + "): " + JsonUtilities.toJsonText(arr),
-                     e);
+                fail(
+                    "Unexpected exception on getDate() for index (" + index
+                    + "): " + JsonUtilities.toJsonText(arr),
+                    e);
             }
         }
     }

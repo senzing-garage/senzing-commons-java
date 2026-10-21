@@ -68,12 +68,12 @@ public class SQLUtilitiesTest
     private static final long V_LONG = 9876543210L;
     private static final short V_SH = (short) 321;
     private static final String V_STR = "hello";
-    private static final java.sql.Date V_DATE
-        = java.sql.Date.valueOf("2025-04-15");
-    private static final java.sql.Time V_TIME
-        = java.sql.Time.valueOf("12:34:56");
-    private static final java.sql.Timestamp V_TS
-        = java.sql.Timestamp.valueOf("2025-04-15 12:34:56.789");
+    private static final java.sql.Date V_DATE = java.sql.Date.valueOf(
+        "2025-04-15");
+    private static final java.sql.Time V_TIME = java.sql.Time.valueOf(
+        "12:34:56");
+    private static final java.sql.Timestamp V_TS = java.sql.Timestamp.valueOf(
+        "2025-04-15 12:34:56.789");
 
     // Column ordering for the SELECT used by index-based tests.
     // 1=BIG, 2=BOOL, 3=BY, 4=D, 5=DBL, 6=FLT, 7=I, 8=L, 9=SH, 10=S,
@@ -89,11 +89,20 @@ public class SQLUtilitiesTest
         this.conn = DriverManager.getConnection("jdbc:sqlite::memory:");
         try (Statement stmt = this.conn.createStatement()) {
             stmt.execute("CREATE TABLE TEST_TYPES ("
-                         + "ID INTEGER PRIMARY KEY," + "BIG DECIMAL,"
-                         + "BOOL INTEGER," + "BY INTEGER," + "D DATE,"
-                         + "DBL REAL," + "FLT REAL," + "I INTEGER,"
-                         + "L INTEGER," + "SH INTEGER," + "S TEXT," + "T TIME,"
-                         + "TS TIMESTAMP" + ")");
+                + "ID INTEGER PRIMARY KEY,"
+                + "BIG DECIMAL,"
+                + "BOOL INTEGER,"
+                + "BY INTEGER,"
+                + "D DATE,"
+                + "DBL REAL,"
+                + "FLT REAL,"
+                + "I INTEGER,"
+                + "L INTEGER,"
+                + "SH INTEGER,"
+                + "S TEXT,"
+                + "T TIME,"
+                + "TS TIMESTAMP"
+                + ")");
         }
 
         // Row 1: all populated.
@@ -118,9 +127,9 @@ public class SQLUtilitiesTest
         // Row 2: all NULL except ID.
         try (Statement stmt = this.conn.createStatement()) {
             stmt.execute("INSERT INTO TEST_TYPES "
-                         + "(ID,BIG,BOOL,BY,D,DBL,FLT,I,L,SH,S,T,TS)"
-                         + " VALUES (2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"
-                         + "NULL,NULL,NULL,NULL,NULL)");
+                + "(ID,BIG,BOOL,BY,D,DBL,FLT,I,L,SH,S,T,TS)"
+                + " VALUES (2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,"
+                + "NULL,NULL,NULL,NULL,NULL)");
         }
     }
 
@@ -329,8 +338,7 @@ public class SQLUtilitiesTest
     {
         PrintStream originalErr = System.err;
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(captured, true,
-                                  StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(captured, true, StandardCharsets.UTF_8));
         try {
             SQLUtilities.rollback(null);
             assertEquals("", captured.toString(StandardCharsets.UTF_8));
@@ -377,17 +385,17 @@ public class SQLUtilitiesTest
 
         PrintStream originalErr = System.err;
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(captured, true,
-                                  StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(captured, true, StandardCharsets.UTF_8));
         try {
             SQLUtilities.rollback(failing);
             // must not throw
             String err = captured.toString(StandardCharsets.UTF_8);
             assertTrue(err.contains("Exception caught when rolling back"),
-                 "Stderr must contain the diagnostic prefix: " + err);
-            assertTrue(err.contains("simulated rollback failure"),
-                       "Stderr must contain the underlying SQLException"
-                       + " message: " + err);
+                       "Stderr must contain the diagnostic prefix: " + err);
+            assertTrue(
+                err.contains("simulated rollback failure"),
+                "Stderr must contain the underlying SQLException"
+                + " message: " + err);
         } finally {
             System.setErr(originalErr);
         }
@@ -682,8 +690,8 @@ public class SQLUtilitiesTest
         throws Exception
     {
         try (ResultSet rs = openRow(1)) {
-            assertEquals(0, V_BIG.compareTo(
-                SQLUtilities.getBigDecimal(rs, "BIG")));
+            assertEquals(
+                0, V_BIG.compareTo(SQLUtilities.getBigDecimal(rs, "BIG")));
         }
     }
 
@@ -967,8 +975,7 @@ public class SQLUtilitiesTest
     {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(captured, true,
-                                  StandardCharsets.UTF_8));
+        System.setOut(new PrintStream(captured, true, StandardCharsets.UTF_8));
         try {
             SQLUtilities.main(new String[0]);
             assertEquals("", captured.toString(StandardCharsets.UTF_8));
@@ -986,14 +993,14 @@ public class SQLUtilitiesTest
     {
         PrintStream originalOut = System.out;
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(captured, true,
-                                  StandardCharsets.UTF_8));
+        System.setOut(new PrintStream(captured, true, StandardCharsets.UTF_8));
         try {
             SQLUtilities.main(new String[] { "jdbc:sqlite::memory:" });
             String out = captured.toString(StandardCharsets.UTF_8);
-            assertTrue(out.contains("jdbc:sqlite::memory:")
-                       && out.toUpperCase().contains("SQLITE"),
-                       "Output must include the URL and product name: " + out);
+            assertTrue(
+                out.contains("jdbc:sqlite::memory:")
+                && out.toUpperCase().contains("SQLITE"),
+                "Output must include the URL and product name: " + out);
         } finally {
             System.setOut(originalOut);
         }
@@ -1010,8 +1017,7 @@ public class SQLUtilitiesTest
     {
         PrintStream originalErr = System.err;
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(captured, true,
-                                  StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(captured, true, StandardCharsets.UTF_8));
         try {
             // Must not throw despite the bad URL.
             SQLUtilities.main(new String[] { "definitely-not-a-jdbc-url" });

@@ -44,7 +44,7 @@ final class FakeSenzingInstall implements AutoCloseable
         try {
             Files.createDirectories(root.resolve("er/etc"));
             Files.writeString(root.resolve("er/etc/cfgVariant.json"),
-                        "{ \"FAKE\": true }\n");
+                              "{ \"FAKE\": true }\n");
             Files.createDirectories(root.resolve("er/resources/schema"));
             // Tests that exercise SzUtilities.ensureSenzingSQLiteSchema
             // need at least one parseable CREATE TABLE statement so the
@@ -58,7 +58,7 @@ final class FakeSenzingInstall implements AutoCloseable
                 root.resolve("er/resources/schema/"
                              + "szcore-schema-sqlite-create.sql"),
                 "CREATE TABLE FAKE_SZ_FIXTURE_TABLE"
-                    + " (id INTEGER PRIMARY KEY);\n");
+                + " (id INTEGER PRIMARY KEY);\n");
             Files.createDirectories(root.resolve("data"));
             return new FakeSenzingInstall(root);
         } catch (IOException e) {

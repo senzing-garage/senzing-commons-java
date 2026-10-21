@@ -312,40 +312,40 @@ public class IOUtilities
     {
         int[] failedCount = { 0 };
 
-        Files.walkFileTree(
-            dir.toPath(), new FileVisitor<java.nio.file.Path>() {
-              public FileVisitResult preVisitDirectory(
+        Files.walkFileTree(dir.toPath(),
+                           new FileVisitor<java.nio.file.Path>() {
+            public FileVisitResult preVisitDirectory(
                   java.nio.file.Path     path,
                   BasicFileAttributes    attrs)
-              {
+            {
                 return CONTINUE;
-              }
-              public FileVisitResult postVisitDirectory(
+            }
+            public FileVisitResult postVisitDirectory(
                   java.nio.file.Path  path,
                   IOException         e)
-              {
+            {
                 if (e != null) return CONTINUE;
                 path.toFile().delete();
                 return CONTINUE;
-              }
-              public FileVisitResult visitFile(
+            }
+            public FileVisitResult visitFile(
                   java.nio.file.Path     path,
                   BasicFileAttributes    attrs)
-              {
+            {
                 boolean result = path.toFile().delete();
                 if (!result) {
-                  failedCount[0]++;
+                    failedCount[0]++;
                 }
                 return CONTINUE;
-              }
-              public FileVisitResult visitFileFailed(
+            }
+            public FileVisitResult visitFileFailed(
                   java.nio.file.Path  path,
                   IOException         e)
-              {
+            {
                 e.printStackTrace();
                 return CONTINUE;
-              }
-            });
+            }
+        });
 
         try {
             Files.deleteIfExists(dir.toPath());

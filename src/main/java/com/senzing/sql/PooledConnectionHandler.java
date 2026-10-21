@@ -92,7 +92,7 @@ class PooledConnectionHandler implements InvocationHandler
         this.thread = Thread.currentThread();
         this.stackTrace = this.thread.getStackTrace();
         this.proxiedConnection = (Connection) Proxy.newProxyInstance(
-                this.getClass().getClassLoader(), interfaces, this);
+            this.getClass().getClassLoader(), interfaces, this);
     }
 
     /**
@@ -213,8 +213,7 @@ class PooledConnectionHandler implements InvocationHandler
             boolean open = (!this.isClosed());
 
             String methodName = method.getName();
-            switch (methodName)
-            {
+            switch (methodName) {
                 case "close":
                     // check if already closed
                     if (!open) return null;
@@ -265,15 +264,15 @@ class PooledConnectionHandler implements InvocationHandler
             && "java.sql".equals(returnType.getPackageName()))
         {
             // create a sub-handler to handle the proxying the result
-            InvocationHandler subHandler
-                = new PooledConnectionHandler(this, result);
+            InvocationHandler subHandler = new PooledConnectionHandler(this,
+                                                                       result);
 
             // create the array of interfaces to proxy
             Class[] interfaces = { method.getReturnType() };
 
             // proxy the result if it is an interface
-            return Proxy.newProxyInstance(
-                    this.getClass().getClassLoader(), interfaces, subHandler);
+            return Proxy.newProxyInstance(this.getClass().getClassLoader(),
+                                          interfaces, subHandler);
         }
 
         // if we get here then just return the result
@@ -285,8 +284,8 @@ class PooledConnectionHandler implements InvocationHandler
      */
     public String getDiagnosticInfo()
     {
-        long duration
-            = (System.nanoTime() - this.createdTimeNanos) / ONE_MILLION;
+        long duration = (System.nanoTime() - this.createdTimeNanos)
+            / ONE_MILLION;
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
 

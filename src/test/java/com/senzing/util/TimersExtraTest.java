@@ -40,7 +40,7 @@ public class TimersExtraTest
         // Per javadoc: "true if the timer exists and is paused" — must
         // return false when timer does not exist.
         assertFalse(timers.isPaused("nope"),
-                "isPaused must return false for unknown timer");
+                    "isPaused must return false for unknown timer");
     }
 
     @Test
@@ -48,7 +48,7 @@ public class TimersExtraTest
     {
         Timers timers = new Timers();
         assertFalse(timers.isRunning("nope"),
-                "isRunning must return false for unknown timer");
+                    "isRunning must return false for unknown timer");
     }
 
     @Test
@@ -69,9 +69,9 @@ public class TimersExtraTest
     {
         Timers timers = new Timers("t1");
         assertEquals(1, timers.pause("t1"),
-                 "Pausing a running timer should return 1");
+                     "Pausing a running timer should return 1");
         assertEquals(0, timers.pause("t1"),
-                 "Pausing an already-paused timer should return 0");
+                     "Pausing an already-paused timer should return 0");
     }
 
     @Test
@@ -80,9 +80,9 @@ public class TimersExtraTest
         Timers timers = new Timers("t1");
         timers.pause("t1");
         assertEquals(1, timers.resume("t1"),
-                 "Resuming a paused timer should return 1");
+                     "Resuming a paused timer should return 1");
         assertEquals(0, timers.resume("t1"),
-                 "Resuming an already-running timer should return 0");
+                     "Resuming an already-running timer should return 0");
     }
 
     @Test
@@ -109,7 +109,7 @@ public class TimersExtraTest
         Timers timers = new Timers();
         int created = timers.start("a", "b", "c");
         assertEquals(3, created,
-                 "start should return one per newly-created timer");
+                     "start should return one per newly-created timer");
         assertTrue(timers.isRunning("a"));
         assertTrue(timers.isRunning("b"));
         assertTrue(timers.isRunning("c"));
@@ -132,7 +132,7 @@ public class TimersExtraTest
         Timers timers = new Timers("a", "b");
         int created = timers.start("a", "b", "c");
         assertEquals(1, created,
-                 "start should return 1 for the only newly-created timer");
+                     "start should return 1 for the only newly-created timer");
     }
 
     @Test
@@ -161,7 +161,7 @@ public class TimersExtraTest
     {
         Timers timers = new Timers("a", "b", "c");
         assertEquals(3, timers.pauseAll(),
-                 "pauseAll should return number of timers paused");
+                     "pauseAll should return number of timers paused");
         // Already paused → second pauseAll returns 0.
         assertEquals(0, timers.pauseAll());
     }
@@ -173,7 +173,7 @@ public class TimersExtraTest
         timers.pauseAll();
         assertEquals(3, timers.resumeAll());
         assertEquals(0, timers.resumeAll(),
-                 "resumeAll on already-running timers should return 0");
+                     "resumeAll on already-running timers should return 0");
     }
 
     // -------------------------------------------------------------------
@@ -186,7 +186,7 @@ public class TimersExtraTest
         Timers timers = new Timers("a");
         timers.mergeWith(null);
         assertNotNull(timers.getTimings().get("a"),
-                  "Existing timers should be untouched");
+                      "Existing timers should be untouched");
     }
 
     @Test
@@ -201,9 +201,9 @@ public class TimersExtraTest
         target.mergeWith(source);
 
         assertTrue(target.hasTimer("x"),
-               "Target should now contain the merged timer");
+                   "Target should now contain the merged timer");
         assertTrue(target.getElapsedTime("x") >= 0L,
-               "Merged timer should have non-negative elapsed time");
+                   "Merged timer should have non-negative elapsed time");
     }
 
     @Test
@@ -222,9 +222,10 @@ public class TimersExtraTest
         t1.mergeWith(t2);
         long after = t1.getElapsedTime("x");
 
-        assertTrue(after >= before,
-                   "Merged timer's elapsed time should be at least the "
-                   + "pre-merge value");
+        assertTrue(
+            after >= before,
+            "Merged timer's elapsed time should be at least the "
+            + "pre-merge value");
     }
 
     // -------------------------------------------------------------------
@@ -257,7 +258,7 @@ public class TimersExtraTest
         long second = timers.getElapsedTime("a");
 
         assertEquals(paused, second,
-                 "Paused timer's elapsed time should not advance");
+                     "Paused timer's elapsed time should not advance");
     }
 
     // -------------------------------------------------------------------

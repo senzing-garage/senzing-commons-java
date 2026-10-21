@@ -177,8 +177,7 @@ public class SzInstallLocations
             }
 
             // check if we are in the dev structure with no senzing path defined
-            switch (RUNTIME_OS_FAMILY)
-            {
+            switch (RUNTIME_OS_FAMILY) {
                 case WINDOWS:
                     defaultSenzingPath = homeSenzing.getCanonicalPath();
                     defaultSupportPath = homeSupport.getCanonicalPath();
@@ -482,7 +481,7 @@ public class SzInstallLocations
             // entry is a symlink to `dist/` is detected per the
             // documented "true if from a development build" contract.
             result.devBuild = ("dist".equals(
-                                   installDir.getCanonicalFile().getName()));
+                installDir.getCanonicalFile().getName()));
 
             // return the result
             return result;

@@ -242,10 +242,7 @@ public class PropertyReflector<T>
         // value to null (no primitives allowed)
         if (propertyValue == null) {
             invoked = findAndInvokeMutator(
-                methods,
-                (argType -> !argType.isPrimitive()),
-                target,
-                null);
+                methods, (argType -> !argType.isPrimitive()), target, null);
 
             if (invoked) return;
 
@@ -474,8 +471,7 @@ public class PropertyReflector<T>
                 // get the property value
                 Object propertyValue = (objectMap != null)
                     ? objectMap.get(propertyKey) : reflector.getPropertyValue(
-                    object,
-                    propertyKey);
+                        object, propertyKey);
 
                 // check for a null value
                 if (propertyValue == null) {
@@ -488,18 +484,17 @@ public class PropertyReflector<T>
                     propertyType = getPromotedType(propertyType);
                 }
 
-                switch (propertyType.getName())
-                {
+                switch (propertyType.getName()) {
                     case "javax.json.JsonObject":
                         JsonObject jsonObj = (JsonObject) propertyValue;
-                        builder.add(propertyKey, Json.createObjectBuilder(
-                            jsonObj));
+                        builder.add(propertyKey,
+                                    Json.createObjectBuilder(jsonObj));
                         break;
 
                     case "javax.json.JsonArray":
                         JsonArray jsonArr = (JsonArray) propertyValue;
-                        builder.add(propertyKey, Json.createArrayBuilder(
-                            jsonArr));
+                        builder.add(propertyKey,
+                                    Json.createArrayBuilder(jsonArr));
                         break;
 
                     case "java.lang.Integer":
@@ -555,7 +550,8 @@ public class PropertyReflector<T>
                             builder.add(propertyKey, jab);
                         } else {
                             JsonObjectBuilder job = Json.createObjectBuilder();
-                            builder.add(propertyKey,
+                            builder.add(
+                                propertyKey,
                                 buildJsonObject(visited, job, propertyValue));
                         }
                 }
@@ -600,8 +596,7 @@ public class PropertyReflector<T>
                 valueType = getPromotedType(valueType);
             }
 
-            switch (valueType.getName())
-            {
+            switch (valueType.getName()) {
                 case "javax.json.JsonObject":
                     JsonObject jsonObj = (JsonObject) value;
                     builder.add(Json.createObjectBuilder(jsonObj));

@@ -47,11 +47,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SzUtilitiesTest
 {
     private static final String[] PROPERTIES = {
-      "senzing.path",
-      "senzing.config.dir",
-      "senzing.support.dir",
-      "senzing.resource.dir",
-  };
+        "senzing.path", "senzing.config.dir", "senzing.support.dir",
+        "senzing.resource.dir"
+    };
 
     private FakeSenzingInstall install;
 
@@ -95,17 +93,18 @@ public class SzUtilitiesTest
     @Test
     public void startsWithDatabaseUriPrefixAcceptsLegalPrefixes()
     {
-        assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-            "sqlite3:///tmp/x.db"));
-        assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-            "postgresql://host:5432/db"));
-        assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-            "mysql://host:3306/db"));
-        assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-            "db2://host:50000/db"));
+        assertTrue(
+            SzUtilities.startsWithDatabaseUriPrefix("sqlite3:///tmp/x.db"));
+        assertTrue(
+            SzUtilities.startsWithDatabaseUriPrefix(
+                "postgresql://host:5432/db"));
+        assertTrue(
+            SzUtilities.startsWithDatabaseUriPrefix("mysql://host:3306/db"));
+        assertTrue(
+            SzUtilities.startsWithDatabaseUriPrefix("db2://host:50000/db"));
         assertTrue(SzUtilities.startsWithDatabaseUriPrefix("oci://host/orcl"));
-        assertTrue(SzUtilities.startsWithDatabaseUriPrefix(
-            "mssql://host:1433/db"));
+        assertTrue(
+            SzUtilities.startsWithDatabaseUriPrefix("mssql://host:1433/db"));
     }
 
     /**
@@ -114,8 +113,8 @@ public class SzUtilitiesTest
     @Test
     public void startsWithDatabaseUriPrefixRejectsUnknownPrefix()
     {
-        assertFalse(SzUtilities.startsWithDatabaseUriPrefix(
-            "https://example.com/db"));
+        assertFalse(
+            SzUtilities.startsWithDatabaseUriPrefix("https://example.com/db"));
         assertFalse(SzUtilities.startsWithDatabaseUriPrefix("just text"));
         assertFalse(SzUtilities.startsWithDatabaseUriPrefix(""));
     }
@@ -136,7 +135,7 @@ public class SzUtilitiesTest
         assertTrue(SzUtilities.DATABASE_URI_PREFIXES.contains("mssql://"));
 
         assertThrows(UnsupportedOperationException.class,
-                 () -> SzUtilities.DATABASE_URI_PREFIXES.add("foo://"));
+                     () -> SzUtilities.DATABASE_URI_PREFIXES.add("foo://"));
     }
 
     // -------------------------------------------------------------------
@@ -159,17 +158,17 @@ public class SzUtilitiesTest
         String json = SzUtilities.bootstrapSettings();
         JsonObject obj = parse(json);
         assertTrue(obj.containsKey("PIPELINE"),
-               "Bootstrap settings must have a PIPELINE object");
+                   "Bootstrap settings must have a PIPELINE object");
         assertFalse(obj.containsKey("SQL"),
-                "Bootstrap settings must NOT have an SQL object");
+                    "Bootstrap settings must NOT have an SQL object");
 
         JsonObject pipeline = obj.getJsonObject("PIPELINE");
         assertEquals(install.supportDir().toFile().getCanonicalPath(),
-                 pipeline.getString("SUPPORTPATH"));
+                     pipeline.getString("SUPPORTPATH"));
         assertEquals(install.configDir().toFile().getCanonicalPath(),
-                 pipeline.getString("CONFIGPATH"));
+                     pipeline.getString("CONFIGPATH"));
         assertEquals(install.resourceDir().toFile().getCanonicalPath(),
-                 pipeline.getString("RESOURCEPATH"));
+                     pipeline.getString("RESOURCEPATH"));
     }
 
     // -------------------------------------------------------------------
@@ -184,7 +183,7 @@ public class SzUtilitiesTest
     public void basicSettingsFromDatabaseUriThrowsNpeForNullUri()
     {
         assertThrows(NullPointerException.class,
-                 () -> SzUtilities.basicSettingsFromDatabaseUri(null));
+                     () -> SzUtilities.basicSettingsFromDatabaseUri(null));
     }
 
     /**
@@ -196,9 +195,9 @@ public class SzUtilitiesTest
     public void basicSettingsFromDatabaseUriThrowsIaeForBadPrefix()
     {
         System.setProperty("senzing.path", install.root().toString());
-        assertThrows(IllegalArgumentException.class,
-                     () -> SzUtilities.basicSettingsFromDatabaseUri(
-                     "ftp://nope/db"));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> SzUtilities.basicSettingsFromDatabaseUri("ftp://nope/db"));
     }
 
     /**
@@ -231,9 +230,9 @@ public class SzUtilitiesTest
     @Test
     public void basicSettingsFromDatabaseUriBase64ThrowsNpeForNullUri()
     {
-        assertThrows(NullPointerException.class,
-                     () -> SzUtilities.basicSettingsFromDatabaseUri(
-                     null, "base64"));
+        assertThrows(
+            NullPointerException.class,
+            () -> SzUtilities.basicSettingsFromDatabaseUri(null, "base64"));
     }
 
     /**
@@ -251,7 +250,7 @@ public class SzUtilitiesTest
             "sqlite3:///tmp/test.db", "TEST_BASE64_LICENSE");
         JsonObject pipeline = parse(json).getJsonObject("PIPELINE");
         assertEquals("TEST_BASE64_LICENSE",
-                 pipeline.getString("LICENSESTRINGBASE64"));
+                     pipeline.getString("LICENSESTRINGBASE64"));
     }
 
     // -------------------------------------------------------------------
@@ -265,9 +264,11 @@ public class SzUtilitiesTest
     @Test
     public void basicSettingsFromDatabaseUriFileThrowsNpeForNullUri()
     {
-        assertThrows(NullPointerException.class,
-                     () -> SzUtilities.basicSettingsFromDatabaseUri(
-                     null, new File("/tmp/license")));
+        assertThrows(
+            NullPointerException.class,
+            () -> SzUtilities.basicSettingsFromDatabaseUri(
+                null,
+                new File("/tmp/license")));
     }
 
     /**
@@ -287,7 +288,7 @@ public class SzUtilitiesTest
             "sqlite3:///tmp/test.db", licenseFile);
         JsonObject pipeline = parse(json).getJsonObject("PIPELINE");
         assertEquals(licenseFile.getCanonicalPath(),
-                 pipeline.getString("LICENSEFILE"));
+                     pipeline.getString("LICENSEFILE"));
     }
 
     // -------------------------------------------------------------------
@@ -302,7 +303,7 @@ public class SzUtilitiesTest
     public void ensureSenzingSqliteSchemaThrowsNpeForNullConnection()
     {
         assertThrows(NullPointerException.class,
-                 () -> SzUtilities.ensureSenzingSQLiteSchema(null));
+                     () -> SzUtilities.ensureSenzingSQLiteSchema(null));
     }
 
     /**
@@ -315,7 +316,7 @@ public class SzUtilitiesTest
     {
         Connection nonSqlite = nonSqliteConnectionProxy();
         assertThrows(IllegalArgumentException.class,
-                 () -> SzUtilities.ensureSenzingSQLiteSchema(nonSqlite));
+                     () -> SzUtilities.ensureSenzingSQLiteSchema(nonSqlite));
     }
 
     /**
@@ -330,12 +331,12 @@ public class SzUtilitiesTest
     {
         System.setProperty("senzing.path", install.root().toString());
 
-        SQLiteConnector connector
-            = new SQLiteConnector(tempDir.resolve("schema.db").toString());
+        SQLiteConnector connector = new SQLiteConnector(
+            tempDir.resolve("schema.db").toString());
         try (Connection conn = connector.openConnection()) {
             boolean created = SzUtilities.ensureSenzingSQLiteSchema(conn);
             assertTrue(created,
-                 "First call must create schema and return true");
+                       "First call must create schema and return true");
         }
     }
 
@@ -355,10 +356,11 @@ public class SzUtilitiesTest
             tempDir.resolve("schema-idempotent.db").toString());
         try (Connection conn = connector.openConnection()) {
             assertTrue(SzUtilities.ensureSenzingSQLiteSchema(conn),
-                 "First call returns true");
-            assertFalse(SzUtilities.ensureSenzingSQLiteSchema(conn),
-                        "Second call must detect existing schema and"
-                        + " return false");
+                       "First call returns true");
+            assertFalse(
+                SzUtilities.ensureSenzingSQLiteSchema(conn),
+                "Second call must detect existing schema and"
+                + " return false");
         }
     }
 

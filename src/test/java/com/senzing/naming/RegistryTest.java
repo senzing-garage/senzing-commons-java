@@ -42,7 +42,7 @@ public class RegistryTest
     {
         Registry<Object> registry = new Registry<>();
         assertFalse(registry.isAllowingNull(),
-                "Default constructor must disallow null bindings");
+                    "Default constructor must disallow null bindings");
     }
 
     /**
@@ -93,7 +93,7 @@ public class RegistryTest
     {
         Registry<String> registry = new Registry<>();
         assertThrows(NullPointerException.class,
-                 () -> registry.bind(null, "value"));
+                     () -> registry.bind(null, "value"));
     }
 
     /**
@@ -105,7 +105,7 @@ public class RegistryTest
     {
         Registry<String> registry = new Registry<>(false);
         assertThrows(NullPointerException.class,
-                 () -> registry.bind("foo", null));
+                     () -> registry.bind("foo", null));
     }
 
     /**
@@ -121,7 +121,7 @@ public class RegistryTest
         AccessToken token = registry.bind("foo", null);
         assertNotNull(token, "bind must return a token even for null value");
         assertNull(registry.lookup("foo"),
-               "lookup must return null for null-bound name");
+                   "lookup must return null for null-bound name");
     }
 
     /**
@@ -135,7 +135,7 @@ public class RegistryTest
         Registry<String> registry = new Registry<>();
         registry.bind("foo", "first");
         assertThrows(NameAlreadyBoundException.class,
-                 () -> registry.bind("foo", "second"));
+                     () -> registry.bind("foo", "second"));
     }
 
     /**
@@ -178,7 +178,7 @@ public class RegistryTest
     {
         Registry<String> registry = new Registry<>();
         assertThrows(NameNotFoundException.class,
-                 () -> registry.lookup("missing"));
+                     () -> registry.lookup("missing"));
     }
 
     /**
@@ -257,7 +257,7 @@ public class RegistryTest
         Registry<String> registry = new Registry<>(true);
         registry.bind("foo", null);
         assertTrue(registry.isBound("foo"),
-               "Null-valued bindings must still report isBound=true");
+                   "Null-valued bindings must still report isBound=true");
     }
 
     // -------------------------------------------------------------------
@@ -276,7 +276,7 @@ public class RegistryTest
         AccessToken token = registry.bind("foo", "value");
         registry.unbind("foo", token);
         assertFalse(registry.isBound("foo"),
-                "After unbind, isBound must be false");
+                    "After unbind, isBound must be false");
     }
 
     /**
@@ -290,7 +290,7 @@ public class RegistryTest
         Registry<String> registry = new Registry<>();
         AccessToken token = registry.bind("foo", "value");
         assertThrows(NullPointerException.class,
-                 () -> registry.unbind(null, token));
+                     () -> registry.unbind(null, token));
     }
 
     /**
@@ -304,7 +304,7 @@ public class RegistryTest
         Registry<String> registry = new Registry<>();
         registry.bind("foo", "value");
         assertThrows(NullPointerException.class,
-                 () -> registry.unbind("foo", null));
+                     () -> registry.unbind("foo", null));
     }
 
     /**
@@ -316,7 +316,7 @@ public class RegistryTest
     {
         Registry<String> registry = new Registry<>();
         assertThrows(NameNotFoundException.class,
-                 () -> registry.unbind("missing", new AccessToken()));
+                     () -> registry.unbind("missing", new AccessToken()));
     }
 
     /**
@@ -332,7 +332,7 @@ public class RegistryTest
         registry.bind("foo", "value");
         AccessToken otherToken = new AccessToken();
         assertThrows(NoPermissionException.class,
-                 () -> registry.unbind("foo", otherToken));
+                     () -> registry.unbind("foo", otherToken));
     }
 
     /**
@@ -349,7 +349,7 @@ public class RegistryTest
         AccessToken second = registry.bind("foo", "second");
         assertNotNull(second);
         assertNotSame(first, second,
-                  "A fresh bind must return a new AccessToken");
+                      "A fresh bind must return a new AccessToken");
         assertEquals("second", registry.lookup("foo"));
     }
 
@@ -366,6 +366,6 @@ public class RegistryTest
         registry.unbind("foo", first);
         registry.bind("foo", "second");
         assertThrows(NoPermissionException.class,
-                 () -> registry.unbind("foo", first));
+                     () -> registry.unbind("foo", first));
     }
 }

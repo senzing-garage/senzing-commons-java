@@ -8,6 +8,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.2] - 2026-10-21
+
+Maintenance release. No public API signature changes, but one
+behavioral fix — see Fixed. SemVer PATCH bump.
+
+### Fixed
+
+- The `parseCommandLine` overload of `CommandLineUtilities` that takes
+  a `boolean ignoreEnvironment` ignored that argument and forwarded a
+  literal `false` to the private implementation, so a caller asking to
+  skip environment-variable fallbacks still had them applied. The flag
+  is now forwarded. **Callers passing `true` that have been relying on
+  the environment still being consulted will see a behavior change.**
+  The sibling overloads were checked and are correct, and are now
+  covered by tests: the four-argument form has no such parameter, and
+  the `ignoreEnvOption` form already forwards its own.
+
+### Changed
+
+- Reformatted to `java-coding-standards` 0.7.0 (submodule pin 0.4.1 →
+  0.7.0, by way of 0.5.3 which landed on `main` after 4.0.1). 82 of
+  106 source files are reflowed; no API or behavior change. One long
+  string literal in `TimersTest` was split by hand, because the
+  formatter cannot split a literal and the release's deeper
+  continuation indent pushed that line past 80 columns.
+- Runtime dependency bumps (propagate to consumers via transitive
+  resolution):
+  - `org.apache.commons:commons-configuration2` 2.15.0 → 2.15.1.
+  - `org.xerial:sqlite-jdbc` 3.53.1.0 → 3.53.4.0.
+- Test and build dependency bumps (do not propagate to consumers —
+  recorded here for `pom.xml` auditability):
+  - `org.junit.jupiter:junit-jupiter` 6.1.0 → 6.1.3.
+  - `io.zonky.test.postgres:embedded-postgres-binaries-linux-arm64v8`
+    18.3.0 → 18.6.0.
+  - `io.zonky.test.postgres:embedded-postgres-binaries-darwin-arm64v8`
+    18.3.0 → 18.6.0.
+  - `org.apache.maven.plugins:maven-compiler-plugin` 3.15.0 → 3.16.0.
+  - `org.apache.maven.plugins:maven-surefire-plugin` 3.5.6 → 3.6.0.
+  - `org.jacoco:jacoco-maven-plugin` 0.8.14 → 0.8.15.
+  - `com.github.spotbugs:spotbugs-maven-plugin` 4.9.8.3 → 4.10.4.1.
+  - `org.sonatype.central:central-publishing-maven-plugin` 0.10.0 →
+    0.11.0.
+
 ## [4.0.1] - 2026-06-17
 
 Maintenance release. No public API changes — SemVer PATCH bump.

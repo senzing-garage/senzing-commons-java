@@ -75,8 +75,8 @@ public class PostgreSqlConnector implements Connector
     public Connection openConnection()
         throws SQLException
     {
-        Connection conn
-            = DriverManager.getConnection(this.jdbcUrl, this.properties);
+        Connection conn = DriverManager.getConnection(this.jdbcUrl,
+                                                      this.properties);
         try {
             conn.setAutoCommit(false);
         } catch (SQLException e) {

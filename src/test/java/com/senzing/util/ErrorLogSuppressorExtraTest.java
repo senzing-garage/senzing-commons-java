@@ -45,9 +45,11 @@ public class ErrorLogSuppressorExtraTest
     public void resultEqualsReturnsFalseForDifferentClass()
     {
         Result r = new Result(State.ACTIVE, 0);
-        assertNotEquals("ACTIVE(0)", r,
-                        "Result must not be equal to a String even with"
-                        + " matching toString");
+        assertNotEquals(
+            "ACTIVE(0)",
+            r,
+            "Result must not be equal to a String even with"
+            + " matching toString");
     }
 
     @Test
@@ -55,8 +57,11 @@ public class ErrorLogSuppressorExtraTest
     {
         Result a = new Result(State.SUPPRESSED, 5);
         Result b = new Result(State.SUPPRESSED, 5);
-        assertEquals(a, b, "Two Result instances with identical state and "
-                           + "suppressedCount must be equal");
+        assertEquals(
+            a,
+            b,
+            "Two Result instances with identical state and "
+            + "suppressedCount must be equal");
     }
 
     @Test
@@ -81,7 +86,7 @@ public class ErrorLogSuppressorExtraTest
         Result a = new Result(State.SUPPRESSED, 5);
         Result b = new Result(State.SUPPRESSED, 5);
         assertEquals(a.hashCode(), b.hashCode(),
-                 "Equal Results must have equal hashCodes");
+                     "Equal Results must have equal hashCodes");
     }
 
     @Test
@@ -89,7 +94,7 @@ public class ErrorLogSuppressorExtraTest
     {
         Result r = new Result(State.SUPPRESSED, 7);
         assertEquals("SUPPRESSED(7)", r.toString(),
-                 "toString format is '<state>(<count>)'");
+                     "toString format is '<state>(<count>)'");
     }
 
     // -------------------------------------------------------------------

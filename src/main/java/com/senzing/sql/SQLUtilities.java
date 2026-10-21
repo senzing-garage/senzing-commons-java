@@ -14,8 +14,8 @@ public class SQLUtilities
      * A {@link Calendar} that can be used for retrieving timestamps from the
      * database.
      */
-    public static final Calendar UTC_CALENDAR
-        = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    public static final Calendar UTC_CALENDAR = Calendar.getInstance(
+        TimeZone.getTimeZone("UTC"));
 
     /**
      * Private constructor.

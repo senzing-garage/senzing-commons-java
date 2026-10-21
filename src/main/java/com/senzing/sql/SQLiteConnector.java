@@ -106,8 +106,8 @@ public class SQLiteConnector implements Connector
             return (filePath == null) ? null : new File(filePath);
         }
 
-        Objects.requireNonNull(
-                filePath, "The specified file path cannot be null");
+        Objects.requireNonNull(filePath,
+                               "The specified file path cannot be null");
         File file = new File(filePath);
         if (file.exists() && file.isDirectory()) {
             throw new IllegalArgumentException(
@@ -265,7 +265,8 @@ public class SQLiteConnector implements Connector
         // memory mode is requested (whether or not a backing file is
         // supplied) so the parameters are honored.
         String jdbcUrl = "jdbc:sqlite:" + (memoryMode ? "file:" : "")
-            + (this.sqliteFile == null ? ":memory:" : this.sqliteFile.getPath())
+            + (this.sqliteFile == null
+               ? ":memory:" : this.sqliteFile.getPath())
             + formatConnectionProperties(this.connProperties);
 
         Connection conn = null;
@@ -273,8 +274,8 @@ public class SQLiteConnector implements Connector
         // create a statement
         Statement statement = null;
         try {
-            conn = DriverManager.getConnection(
-                jdbcUrl, SQLITE_CONFIG_PROPERTIES);
+            conn = DriverManager.getConnection(jdbcUrl,
+                                               SQLITE_CONFIG_PROPERTIES);
             statement = conn.createStatement();
 
             // initialize the connection before use

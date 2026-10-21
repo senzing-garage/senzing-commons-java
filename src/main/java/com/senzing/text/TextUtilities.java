@@ -101,7 +101,7 @@ public class TextUtilities
     {
         if (minCount < 0 || maxCount < 0) {
             throw new IllegalArgumentException(
-                    "Neither of the specified parameters can be negative");
+                "Neither of the specified parameters can be negative");
         }
 
         if (minCount > maxCount) {

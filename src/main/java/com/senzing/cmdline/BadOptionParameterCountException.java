@@ -33,7 +33,7 @@ public class BadOptionParameterCountException extends SpecifiedOptionException
                                           List<String>      params)
     {
         super(source, option, specifier,
-            buildErrorMessage(source, option, specifier, params));
+              buildErrorMessage(source, option, specifier, params));
     }
 
     /**
@@ -94,8 +94,8 @@ public class BadOptionParameterCountException extends SpecifiedOptionException
                     + "the specified option.  source=[ " + source + " ], "
                     + "option=[ " + option + " ], specifier=[ " + specifier
                     + " ], count=[ " + paramCount + " ], minCount=[ "
-                    + minCount + " ], maxCount=[ " + maxCount + " ], params=[ "
-                    + params + " ]");
+                    + minCount + " ], maxCount=[ " + maxCount
+                    + " ], params=[ " + params + " ]");
         }
         sb.append(" parameters for the ");
         sb.append(SpecifiedOption.sourceDescriptor(source, option, specifier));

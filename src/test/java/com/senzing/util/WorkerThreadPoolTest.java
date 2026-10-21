@@ -38,28 +38,28 @@ public class WorkerThreadPoolTest
         try {
             pool = (baseName == null)
                 ? new WorkerThreadPool(POOL_SIZE) : new WorkerThreadPool(
-                baseName,
-                POOL_SIZE);
+                    baseName, POOL_SIZE);
 
             assertEquals(POOL_SIZE, pool.size(), "Pool size not as expected.");
             assertFalse(pool.isClosed(),
-                "Pool unexpectedly registers as closed.");
+                        "Pool unexpectedly registers as closed.");
             assertFalse(pool.isPaused(),
-                  "Pool unexpectedly registers as paused.");
+                        "Pool unexpectedly registers as paused.");
 
             String threadName = pool.execute(() -> {
                 return Thread.currentThread().getName();
             });
 
             if (baseName == null) {
-                assertTrue(threadName.startsWith(DEFAULT_BASE_NAME),
-                           "Thread base name (" + threadName
-                           + ") does not have default prefix: "
-                           + DEFAULT_BASE_NAME);
+                assertTrue(
+                    threadName.startsWith(DEFAULT_BASE_NAME),
+                    "Thread base name (" + threadName
+                    + ") does not have default prefix: " + DEFAULT_BASE_NAME);
             } else {
-                assertTrue(threadName.startsWith(baseName),
-                           "Thread base name (" + threadName
-                           + ") does not have specified prefix: " + baseName);
+                assertTrue(
+                    threadName.startsWith(baseName),
+                    "Thread base name (" + threadName
+                    + ") does not have specified prefix: " + baseName);
             }
 
             // pause the pool
@@ -82,40 +82,44 @@ public class WorkerThreadPoolTest
             Thread.sleep(100L);
             synchronized (completed) {
                 assertFalse(completed[0],
-                    "Paused pool unexpectedly executed a task.");
+                            "Paused pool unexpectedly executed a task.");
             }
 
             // attempt to re-pause
             assertNull(pool.pause(),
-                 "Attempt to re-pause pool did not return null");
+                       "Attempt to re-pause pool did not return null");
 
             Thread.sleep(100L);
 
             // check if paused
             assertTrue(pool.isPaused(),
-                 "Pool is not registering as paused after re-pause.");
+                       "Pool is not registering as paused after re-pause.");
 
             synchronized (completed) {
-                assertFalse(completed[0],
-                            "Paused pool unexpectedly executed a task after "
-                            + "re-pause.");
+                assertFalse(
+                    completed[0],
+                    "Paused pool unexpectedly executed a task after "
+                    + "re-pause.");
             }
 
-            assertFalse(pool.resume(null),
-                        "Attempt to resume without an access token did "
-                        + "not return false");
+            assertFalse(
+                pool.resume(null),
+                "Attempt to resume without an access token did "
+                + "not return false");
 
             Thread.sleep(100L);
 
             // check if paused
-            assertTrue(pool.isPaused(),
-                       "Pool is not registering as paused after resume "
-                       + "with null token");
+            assertTrue(
+                pool.isPaused(),
+                "Pool is not registering as paused after resume "
+                + "with null token");
 
             synchronized (completed) {
-                assertFalse(completed[0],
-                            "Paused pool unexpectedly executed a task after "
-                            + "resume with null token");
+                assertFalse(
+                    completed[0],
+                    "Paused pool unexpectedly executed a task after "
+                    + "resume with null token");
             }
 
             AccessToken fakeToken = new AccessToken();
@@ -128,14 +132,16 @@ public class WorkerThreadPoolTest
 
             Thread.sleep(100L);
             // check if paused
-            assertTrue(pool.isPaused(),
-                       "Pool is not registering as paused after resume "
-                       + "with invalid token.");
+            assertTrue(
+                pool.isPaused(),
+                "Pool is not registering as paused after resume "
+                + "with invalid token.");
 
             synchronized (completed) {
-                assertFalse(completed[0],
-                            "Paused pool unexpectedly executed a task after "
-                            + "resume with invalid token");
+                assertFalse(
+                    completed[0],
+                    "Paused pool unexpectedly executed a task after "
+                    + "resume with invalid token");
             }
 
             // resume the pool for real
@@ -143,13 +149,13 @@ public class WorkerThreadPoolTest
 
             // check if paused
             assertFalse(pool.isPaused(),
-                 "Pool is still registering as paused after resume.");
+                        "Pool is still registering as paused after resume.");
 
             Thread.sleep(100L);
 
             synchronized (completed) {
                 assertTrue(completed[0],
-                    "Pool has not executed a task after resume");
+                           "Pool has not executed a task after resume");
             }
 
             // try to resume when not paused
@@ -165,7 +171,7 @@ public class WorkerThreadPoolTest
 
             // check if closed
             assertTrue(pool.isClosed(),
-                  "Closed pool does not register as closed.");
+                       "Closed pool does not register as closed.");
             pool = null;
         } catch (Exception e) {
             e.printStackTrace();

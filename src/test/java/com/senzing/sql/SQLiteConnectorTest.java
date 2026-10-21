@@ -49,15 +49,13 @@ public class SQLiteConnectorTest
     @Test
     public void defaultPragmaListMatchesJavadoc()
     {
-        List<String> expected = List.of(
-            "PRAGMA foreign_keys = ON;",
-            "PRAGMA journal_mode = WAL;",
-            "PRAGMA synchronous = 1;",
-            "PRAGMA secure_delete = 0;",
-            "PRAGMA automatic_index = 0;");
-        assertEquals(expected,
-                 SQLiteConnector.DEFAULT_PRAGMA_FEATURES_LIST,
-                 "DEFAULT_PRAGMA_FEATURES_LIST must match the javadoc");
+        List<String> expected = List.of("PRAGMA foreign_keys = ON;",
+                                        "PRAGMA journal_mode = WAL;",
+                                        "PRAGMA synchronous = 1;",
+                                        "PRAGMA secure_delete = 0;",
+                                        "PRAGMA automatic_index = 0;");
+        assertEquals(expected, SQLiteConnector.DEFAULT_PRAGMA_FEATURES_LIST,
+                     "DEFAULT_PRAGMA_FEATURES_LIST must match the javadoc");
     }
 
     /**
@@ -85,7 +83,7 @@ public class SQLiteConnectorTest
     {
         SQLiteConnector connector = new SQLiteConnector();
         assertNotNull(connector.getSqliteFile(),
-                  "Default constructor must use a non-null temp file");
+                      "Default constructor must use a non-null temp file");
     }
 
     // -------------------------------------------------------------------
@@ -101,7 +99,7 @@ public class SQLiteConnectorTest
     public void stringConstructorThrowsNpeForNullPath()
     {
         assertThrows(NullPointerException.class,
-                 () -> new SQLiteConnector((String) null));
+                     () -> new SQLiteConnector((String) null));
     }
 
     /**
@@ -115,7 +113,7 @@ public class SQLiteConnectorTest
     {
         String dirPath = tempDir.toString();
         assertThrows(IllegalArgumentException.class,
-                 () -> new SQLiteConnector(dirPath));
+                     () -> new SQLiteConnector(dirPath));
     }
 
     /**
@@ -144,7 +142,7 @@ public class SQLiteConnectorTest
     public void fileConstructorThrowsNpeForNullFile()
     {
         assertThrows(NullPointerException.class,
-                 () -> new SQLiteConnector((File) null));
+                     () -> new SQLiteConnector((File) null));
     }
 
     /**
@@ -172,7 +170,7 @@ public class SQLiteConnectorTest
     {
         File dirFile = tempDir.toFile();
         assertThrows(IllegalArgumentException.class,
-                 () -> new SQLiteConnector(dirFile));
+                     () -> new SQLiteConnector(dirFile));
     }
 
     // -------------------------------------------------------------------
@@ -191,7 +189,7 @@ public class SQLiteConnectorTest
         props.put("mode", "memory");
         SQLiteConnector connector = new SQLiteConnector((String) null, props);
         assertNull(connector.getSqliteFile(),
-               "Memory mode with null path must yield null file");
+                   "Memory mode with null path must yield null file");
     }
 
     /**
@@ -205,7 +203,7 @@ public class SQLiteConnectorTest
         Map<String, String> props = new HashMap<>();
         props.put("foo", "bar");
         assertThrows(NullPointerException.class,
-                 () -> new SQLiteConnector((String) null, props));
+                     () -> new SQLiteConnector((String) null, props));
     }
 
     /**
@@ -221,7 +219,7 @@ public class SQLiteConnectorTest
         props.put("foo", "bar");
         String dirPath = tempDir.toString();
         assertThrows(IllegalArgumentException.class,
-                 () -> new SQLiteConnector(dirPath, props));
+                     () -> new SQLiteConnector(dirPath, props));
     }
 
     // -------------------------------------------------------------------
@@ -252,7 +250,7 @@ public class SQLiteConnectorTest
         Map<String, String> props = new HashMap<>();
         props.put("foo", "bar");
         assertThrows(NullPointerException.class,
-                 () -> new SQLiteConnector((File) null, props));
+                     () -> new SQLiteConnector((File) null, props));
     }
 
     /**
@@ -267,7 +265,7 @@ public class SQLiteConnectorTest
         props.put("foo", "bar");
         File dirFile = tempDir.toFile();
         assertThrows(IllegalArgumentException.class,
-                 () -> new SQLiteConnector(dirFile, props));
+                     () -> new SQLiteConnector(dirFile, props));
     }
 
     // -------------------------------------------------------------------
@@ -282,8 +280,8 @@ public class SQLiteConnectorTest
     public void openConnectionReturnsUsableConnection(@TempDir Path tempDir)
         throws SQLException
     {
-        SQLiteConnector connector
-            = new SQLiteConnector(tempDir.resolve("test.db").toString());
+        SQLiteConnector connector = new SQLiteConnector(
+            tempDir.resolve("test.db").toString());
         try (Connection conn = connector.openConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT 1"))
@@ -302,21 +300,21 @@ public class SQLiteConnectorTest
     public void openConnectionAppliesDocumentedPragmas(@TempDir Path tempDir)
         throws SQLException
     {
-        SQLiteConnector connector
-            = new SQLiteConnector(tempDir.resolve("pragmas.db").toString());
+        SQLiteConnector connector = new SQLiteConnector(
+            tempDir.resolve("pragmas.db").toString());
         try (Connection conn = connector.openConnection();
              Statement stmt = conn.createStatement())
         {
             assertEquals(1, queryInt(stmt, "PRAGMA foreign_keys"),
-                   "foreign_keys must be ON (1) after openConnection");
+                         "foreign_keys must be ON (1) after openConnection");
             assertEquals("wal", queryString(stmt, "PRAGMA journal_mode"),
-                   "journal_mode must be WAL");
+                         "journal_mode must be WAL");
             assertEquals(1, queryInt(stmt, "PRAGMA synchronous"),
-                   "synchronous must be 1 (NORMAL)");
+                         "synchronous must be 1 (NORMAL)");
             assertEquals(0, queryInt(stmt, "PRAGMA secure_delete"),
-                   "secure_delete must be 0");
+                         "secure_delete must be 0");
             assertEquals(0, queryInt(stmt, "PRAGMA automatic_index"),
-                   "automatic_index must be 0");
+                         "automatic_index must be 0");
         }
     }
 
@@ -331,11 +329,11 @@ public class SQLiteConnectorTest
       @TempDir Path tempDir)
         throws SQLException
     {
-        SQLiteConnector connector
-            = new SQLiteConnector(tempDir.resolve("autocommit.db").toString());
+        SQLiteConnector connector = new SQLiteConnector(
+            tempDir.resolve("autocommit.db").toString());
         try (Connection conn = connector.openConnection()) {
             assertFalse(conn.getAutoCommit(),
-                  "openConnection must disable auto-commit");
+                        "openConnection must disable auto-commit");
         }
     }
 
@@ -367,9 +365,10 @@ public class SQLiteConnectorTest
         // open. If this assertion fails, the URL construction in
         // SQLiteConnector.openConnection() has regressed.
         File leaked = new File(":memory:?mode=memory");
-        assertFalse(leaked.exists(),
-                    "Memory-mode open must not create a file in CWD: "
-                    + leaked.getAbsolutePath());
+        assertFalse(
+            leaked.exists(),
+            "Memory-mode open must not create a file in CWD: "
+            + leaked.getAbsolutePath());
     }
 
     // -------------------------------------------------------------------

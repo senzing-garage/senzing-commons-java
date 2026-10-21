@@ -66,8 +66,7 @@ public enum OtherTestOption
     @Override
     public boolean isPrimary()
     {
-        switch (this)
-        {
+        switch (this) {
             case HELP:
             case VERSION:
             case INPUT:
@@ -80,8 +79,7 @@ public enum OtherTestOption
     @Override
     public Set<CommandLineOption> getConflicts()
     {
-        switch (this)
-        {
+        switch (this) {
             case HELP:
                 return Set.of(VERSION, VERBOSE, INPUT, OUTPUT);
             case VERSION:
@@ -98,8 +96,7 @@ public enum OtherTestOption
     @Override
     public Set<Set<CommandLineOption>> getDependencies()
     {
-        switch (this)
-        {
+        switch (this) {
             case HELP:
             case VERSION:
             case VERBOSE:
@@ -115,8 +112,7 @@ public enum OtherTestOption
     @Override
     public int getMinimumParameterCount()
     {
-        switch (this)
-        {
+        switch (this) {
             case INPUT:
             case OUTPUT:
                 return 1;
@@ -128,8 +124,7 @@ public enum OtherTestOption
     @Override
     public int getMaximumParameterCount()
     {
-        switch (this)
-        {
+        switch (this) {
             case INPUT:
             case OUTPUT:
                 return 1;
@@ -141,8 +136,7 @@ public enum OtherTestOption
     @Override
     public List<String> getDefaultParameters()
     {
-        switch (this)
-        {
+        switch (this) {
             case VERBOSE:
                 return List.of("false");
             case OUTPUT:
@@ -166,8 +160,7 @@ public enum OtherTestOption
                         + option.getCommandLineFlag() + " / " + option);
             }
             OtherTestOption testOption = (OtherTestOption) option;
-            switch (testOption)
-            {
+            switch (testOption) {
                 case HELP:
                 case VERSION:
                     return Boolean.TRUE;

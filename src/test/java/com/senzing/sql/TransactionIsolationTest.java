@@ -53,7 +53,7 @@ public class TransactionIsolationTest
     public void enumDeclaresFourConstants()
     {
         assertEquals(4, TransactionIsolation.values().length,
-                 "TransactionIsolation must declare exactly 4 constants");
+                     "TransactionIsolation must declare exactly 4 constants");
     }
 
     // -------------------------------------------------------------------
@@ -68,7 +68,7 @@ public class TransactionIsolationTest
     public void readUncommittedMapsToJdbcConstant()
     {
         assertEquals(TRANSACTION_READ_UNCOMMITTED,
-                 READ_UNCOMMITTED.getIntegerValue());
+                     READ_UNCOMMITTED.getIntegerValue());
     }
 
     /**
@@ -79,7 +79,7 @@ public class TransactionIsolationTest
     public void readCommittedMapsToJdbcConstant()
     {
         assertEquals(TRANSACTION_READ_COMMITTED,
-                 READ_COMMITTED.getIntegerValue());
+                     READ_COMMITTED.getIntegerValue());
     }
 
     /**
@@ -90,7 +90,7 @@ public class TransactionIsolationTest
     public void repeatableReadMapsToJdbcConstant()
     {
         assertEquals(TRANSACTION_REPEATABLE_READ,
-                 REPEATABLE_READ.getIntegerValue());
+                     REPEATABLE_READ.getIntegerValue());
     }
 
     /**
@@ -122,8 +122,8 @@ public class TransactionIsolationTest
                 ? READ_UNCOMMITTED : SERIALIZABLE;
             target.applyTo(conn);
             assertEquals(target.getIntegerValue(),
-                   conn.getTransactionIsolation(),
-                   "applyTo must change isolation to the target value");
+                         conn.getTransactionIsolation(),
+                         "applyTo must change isolation to the target value");
         }
     }
 
@@ -139,10 +139,11 @@ public class TransactionIsolationTest
         try (Connection conn = openSqliteConnection()) {
             conn.setTransactionIsolation(TRANSACTION_READ_UNCOMMITTED);
             READ_UNCOMMITTED.applyTo(conn);
-            assertEquals(TRANSACTION_READ_UNCOMMITTED,
-                         conn.getTransactionIsolation(),
-                         "applyTo with matching level must leave isolation"
-                         + " unchanged");
+            assertEquals(
+                TRANSACTION_READ_UNCOMMITTED,
+                conn.getTransactionIsolation(),
+                "applyTo with matching level must leave isolation"
+                + " unchanged");
         }
     }
 
@@ -157,7 +158,7 @@ public class TransactionIsolationTest
     {
         Connection throwing = throwingConnection();
         assertThrows(SQLException.class,
-                 () -> READ_UNCOMMITTED.applyTo(throwing));
+                     () -> READ_UNCOMMITTED.applyTo(throwing));
     }
 
     // -------------------------------------------------------------------

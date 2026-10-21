@@ -78,10 +78,10 @@ public class LoggingUtilitiesTest
         this.originalOut = System.out;
         this.capturedErr = new ByteArrayOutputStream();
         this.capturedOut = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(this.capturedErr, true,
-                                  StandardCharsets.UTF_8));
-        System.setOut(new PrintStream(this.capturedOut, true,
-                                  StandardCharsets.UTF_8));
+        System.setErr(
+            new PrintStream(this.capturedErr, true, StandardCharsets.UTF_8));
+        System.setOut(
+            new PrintStream(this.capturedOut, true, StandardCharsets.UTF_8));
 
         this.originalDebugProperty = System.getProperty(DEBUG_SYSTEM_PROPERTY);
         System.clearProperty(DEBUG_SYSTEM_PROPERTY);
@@ -124,7 +124,7 @@ public class LoggingUtilitiesTest
             System.clearProperty(DEBUG_SYSTEM_PROPERTY);
         } else {
             System.setProperty(DEBUG_SYSTEM_PROPERTY,
-                         this.originalDebugProperty);
+                               this.originalDebugProperty);
         }
 
         setLastLoggedException(null);
@@ -179,8 +179,8 @@ public class LoggingUtilitiesTest
     @Test
     public void getProductIdForPackageFallsBackToBaseId()
     {
-        assertEquals(BASE_PRODUCT_ID, getProductIdForPackage(
-                     "org.example.completely.unknown"));
+        assertEquals(BASE_PRODUCT_ID,
+                     getProductIdForPackage("org.example.completely.unknown"));
     }
 
     /**
@@ -264,18 +264,19 @@ public class LoggingUtilitiesTest
             overrideDebugLogging(false);
             try {
                 assertFalse(isDebugLogging(),
-                    "Top of stack (false) must win over earlier true");
+                            "Top of stack (false) must win over earlier true");
             } finally {
                 clearDebugOverride();
             }
-            assertTrue(isDebugLogging(),
-                       "After popping the false override, the true override"
-                       + " must be visible again");
+            assertTrue(
+                isDebugLogging(),
+                "After popping the false override, the true override"
+                + " must be visible again");
         } finally {
             clearDebugOverride();
         }
         assertFalse(isDebugLogging(),
-                "After all overrides are cleared, default is false");
+                    "After all overrides are cleared, default is false");
     }
 
     /**
@@ -311,7 +312,7 @@ public class LoggingUtilitiesTest
         System.setProperty(DEBUG_SYSTEM_PROPERTY, "TRUE");
         try {
             assertTrue(isDebugLogging(),
-                 "System property comparison must be case-insensitive");
+                       "System property comparison must be case-insensitive");
         } finally {
             System.clearProperty(DEBUG_SYSTEM_PROPERTY);
         }
@@ -319,7 +320,7 @@ public class LoggingUtilitiesTest
         System.setProperty(DEBUG_SYSTEM_PROPERTY, "no");
         try {
             assertFalse(isDebugLogging(),
-                  "Property values other than 'true' must yield false");
+                        "Property values other than 'true' must yield false");
         } finally {
             System.clearProperty(DEBUG_SYSTEM_PROPERTY);
         }
@@ -341,9 +342,9 @@ public class LoggingUtilitiesTest
         String err = this.capturedErr.toString(StandardCharsets.UTF_8);
         String out = this.capturedOut.toString(StandardCharsets.UTF_8);
         assertTrue(err.contains("(ERROR)"),
-               "logError must include '(ERROR)' tag: " + err);
+                   "logError must include '(ERROR)' tag: " + err);
         assertTrue(err.contains("oh no"),
-               "logError must include the message: " + err);
+                   "logError must include the message: " + err);
         assertEquals("", out, "logError must NOT write to stdout");
     }
 
@@ -357,7 +358,7 @@ public class LoggingUtilitiesTest
         logWarning("watch out");
         String err = this.capturedErr.toString(StandardCharsets.UTF_8);
         assertTrue(err.contains("(WARNING)"),
-               "logWarning must include '(WARNING)' tag: " + err);
+                   "logWarning must include '(WARNING)' tag: " + err);
         assertTrue(err.contains("watch out"));
     }
 
@@ -372,7 +373,7 @@ public class LoggingUtilitiesTest
         String out = this.capturedOut.toString(StandardCharsets.UTF_8);
         String err = this.capturedErr.toString(StandardCharsets.UTF_8);
         assertTrue(out.contains("(INFO)"),
-               "logInfo must include '(INFO)' tag: " + out);
+                   "logInfo must include '(INFO)' tag: " + out);
         assertTrue(out.contains("hello"));
         assertEquals("", err, "logInfo must NOT write to stderr");
     }
@@ -385,7 +386,7 @@ public class LoggingUtilitiesTest
     public void logDebugSuppressesOutputWhenDebugLoggingDisabled()
     {
         assertFalse(isDebugLogging(),
-                "Precondition: debug logging must be off");
+                    "Precondition: debug logging must be off");
         logDebug("should not appear");
         assertEquals("", this.capturedOut.toString(StandardCharsets.UTF_8));
         assertEquals("", this.capturedErr.toString(StandardCharsets.UTF_8));
@@ -404,7 +405,7 @@ public class LoggingUtilitiesTest
             logDebug("debug me");
             String out = this.capturedOut.toString(StandardCharsets.UTF_8);
             assertTrue(out.contains("(DEBUG)"),
-                 "logDebug must include '(DEBUG)' tag: " + out);
+                       "logDebug must include '(DEBUG)' tag: " + out);
             assertTrue(out.contains("debug me"));
         } finally {
             clearDebugOverride();
@@ -422,7 +423,7 @@ public class LoggingUtilitiesTest
         logError(ex, "context");
         String err = this.capturedErr.toString(StandardCharsets.UTF_8);
         assertTrue(err.contains("IllegalStateException"),
-               "Stack trace must be included: " + err);
+                   "Stack trace must be included: " + err);
         assertTrue(err.contains("simulated"));
         assertTrue(err.contains("context"));
     }
@@ -465,16 +466,15 @@ public class LoggingUtilitiesTest
     public void formatStackTraceArrayFormatsAllFrames()
     {
         StackTraceElement[] trace = {
-        new StackTraceElement("com.example.A", "alpha",
-                              "A.java", 11),
-        new StackTraceElement("com.example.B", "beta", "B.java", 22),
-    };
+            new StackTraceElement("com.example.A", "alpha", "A.java", 11),
+            new StackTraceElement("com.example.B", "beta", "B.java", 22)
+        };
         String formatted = formatStackTrace(trace);
         assertNotNull(formatted);
         assertTrue(formatted.contains("com.example.A.alpha(A.java:11)"),
-               "First frame must be present: " + formatted);
+                   "First frame must be present: " + formatted);
         assertTrue(formatted.contains("com.example.B.beta(B.java:22)"),
-               "Second frame must be present: " + formatted);
+                   "Second frame must be present: " + formatted);
     }
 
     /**
@@ -485,8 +485,8 @@ public class LoggingUtilitiesTest
     @Test
     public void formatStackTraceElementPrefixesWithAt()
     {
-        StackTraceElement elem
-            = new StackTraceElement("com.example.X", "go", "X.java", 5);
+        StackTraceElement elem = new StackTraceElement("com.example.X", "go",
+                                                       "X.java", 5);
         String formatted = formatStackTrace(elem);
         assertEquals("        at com.example.X.go(X.java:5)", formatted);
     }
@@ -499,8 +499,8 @@ public class LoggingUtilitiesTest
     @Test
     public void formatStackFrameOmitsAtPrefix()
     {
-        StackTraceElement elem
-            = new StackTraceElement("com.example.X", "go", "X.java", 5);
+        StackTraceElement elem = new StackTraceElement("com.example.X", "go",
+                                                       "X.java", 5);
         String formatted = formatStackFrame(elem);
         assertEquals("com.example.X.go(X.java:5)", formatted);
     }
@@ -526,11 +526,11 @@ public class LoggingUtilitiesTest
     @Test
     public void formatStackFrameUsesUnknownFileSentinel()
     {
-        StackTraceElement elem
-            = new StackTraceElement("com.example.X", "go", null, 5);
+        StackTraceElement elem = new StackTraceElement("com.example.X", "go",
+                                                       null, 5);
         String formatted = formatStackFrame(elem);
         assertTrue(formatted.contains("[unknown file]:5"),
-               "Null filename must be replaced: " + formatted);
+                   "Null filename must be replaced: " + formatted);
     }
 
     /**
@@ -540,11 +540,11 @@ public class LoggingUtilitiesTest
     @Test
     public void formatStackFrameUsesUnknownLineSentinel()
     {
-        StackTraceElement elem
-            = new StackTraceElement("com.example.X", "go", "X.java", -1);
+        StackTraceElement elem = new StackTraceElement("com.example.X", "go",
+                                                       "X.java", -1);
         String formatted = formatStackFrame(elem);
         assertTrue(formatted.contains("[unknown line]"),
-               "Negative line number must be replaced: " + formatted);
+                   "Negative line number must be replaced: " + formatted);
     }
 
     /**
@@ -557,11 +557,10 @@ public class LoggingUtilitiesTest
         // 7-arg ctor: (classLoaderName, moduleName, moduleVersion,
         //              declaringClass, methodName, fileName, lineNumber)
         StackTraceElement elem = new StackTraceElement(
-            "app", "java.base", "21", "com.example.X", "go",
-            "X.java", 5);
+            "app", "java.base", "21", "com.example.X", "go", "X.java", 5);
         String formatted = formatStackFrame(elem);
         assertTrue(formatted.startsWith("java.base/"),
-               "Module name must prefix: " + formatted);
+                   "Module name must prefix: " + formatted);
     }
 
     // -------------------------------------------------------------------
@@ -580,9 +579,10 @@ public class LoggingUtilitiesTest
         assertTrue(result.contains("second"));
         assertTrue(result.contains("third"));
         String[] parts = result.split("\\R");
-        assertEquals(3, parts.length,
-                     "Three input lines must produce three output lines: "
-                     + result);
+        assertEquals(
+            3,
+            parts.length,
+            "Three input lines must produce three output lines: " + result);
     }
 
     /**
@@ -641,7 +641,7 @@ public class LoggingUtilitiesTest
 
         Exception other = new IllegalStateException("different");
         assertFalse(isLastLoggedException(other),
-                "Different throwable instance must not match");
+                    "Different throwable instance must not match");
     }
 
     /**
@@ -653,12 +653,12 @@ public class LoggingUtilitiesTest
     {
         IllegalStateException ex = new IllegalStateException("rethrow me");
         IllegalStateException thrown = assertThrows(
-            IllegalStateException.class,
-            () -> setLastLoggedAndThrow(ex));
+            IllegalStateException.class, () -> setLastLoggedAndThrow(ex));
         assertSame(ex, thrown);
-        assertTrue(isLastLoggedException(ex),
-                   "After setLastLoggedAndThrow, isLastLoggedException"
-                   + " must report true");
+        assertTrue(
+            isLastLoggedException(ex),
+            "After setLastLoggedAndThrow, isLastLoggedException"
+            + " must report true");
     }
 
     /**
@@ -672,15 +672,15 @@ public class LoggingUtilitiesTest
     {
         Exception ex = new IllegalStateException("first time");
         Exception thrown = assertThrows(IllegalStateException.class,
-                                    () -> logOnceAndThrow(ex));
+                                        () -> logOnceAndThrow(ex));
         assertSame(ex, thrown);
 
         String err = this.capturedErr.toString(StandardCharsets.UTF_8);
         assertTrue(err.contains("IllegalStateException"),
-               "First call must print the stack trace: " + err);
+                   "First call must print the stack trace: " + err);
         assertTrue(err.contains("first time"));
         assertTrue(isLastLoggedException(ex),
-               "Throwable must be recorded as last-logged");
+                   "Throwable must be recorded as last-logged");
     }
 
     /**
@@ -713,9 +713,9 @@ public class LoggingUtilitiesTest
         RuntimeException wrapper = new RuntimeException(cause);
         setLastLoggedException(wrapper);
 
-        assertTrue(isLastLoggedException(cause)
-                   || isLastLoggedException(wrapper),
-                   "Either the wrapper or its cause must register as the"
-                   + " last logged exception");
+        assertTrue(
+            isLastLoggedException(cause) || isLastLoggedException(wrapper),
+            "Either the wrapper or its cause must register as the"
+            + " last logged exception");
     }
 }

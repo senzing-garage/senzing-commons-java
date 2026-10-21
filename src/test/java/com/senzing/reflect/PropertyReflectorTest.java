@@ -272,26 +272,30 @@ public class PropertyReflectorTest
     public List<Arguments> getPropertiesTestParameters()
     {
         List<Arguments> result = new LinkedList<>();
-        result.add(arguments(Shape.class, Set.of("area", "perimeter"),
-                             Set.of()));
+        result.add(
+            arguments(Shape.class, Set.of("area", "perimeter"), Set.of()));
 
-        result.add(arguments(
-            Polygon.class, Set.of("area", "perimeter", "sideCount"), Set.of()));
+        result.add(
+            arguments(Polygon.class,
+                      Set.of("area", "perimeter", "sideCount"),
+                      Set.of()));
 
-        result.add(arguments(
-            Rectangle.class,
-            Set.of("area", "perimeter", "sideCount", "width", "length"),
-            Set.of("width", "length")));
+        result.add(
+            arguments(
+                Rectangle.class,
+                Set.of("area", "perimeter", "sideCount", "width", "length"),
+                Set.of("width", "length")));
 
-        result.add(arguments(
-            Square.class,
-            Set.of("area", "perimeter", "sideCount", "width", "length"),
-            Set.of("width", "length")));
+        result.add(
+            arguments(
+                Square.class,
+                Set.of("area", "perimeter", "sideCount", "width", "length"),
+                Set.of("width", "length")));
 
-        result.add(arguments(
-            Circle.class,
-            Set.of("area", "perimeter", "radius"),
-            Set.of("radius")));
+        result.add(
+            arguments(Circle.class,
+                      Set.of("area", "perimeter", "radius"),
+                      Set.of("radius")));
 
         return result;
     }
@@ -308,32 +312,36 @@ public class PropertyReflectorTest
             Map<String, List<Method>> setters = propRef.getMutators();
 
             assertEquals(expectedGetters, getters.keySet(),
-                "Unexpected accessor properties encountered");
+                         "Unexpected accessor properties encountered");
             assertEquals(expectedSetters, setters.keySet(),
-                "Unexpected mutator properties encountered");
+                         "Unexpected mutator properties encountered");
 
             getters.forEach((propName, method) -> {
-                assertTrue(method.getName()
-                                 .toUpperCase()
-                                 .endsWith(propName.toUpperCase()),
-                           "Unexpected accessor method for '" + propName
-                           + "' property: " + method);
-                assertTrue(method.getName().startsWith("get")
-                           || method.getName().startsWith("is"),
-                           "Unexpected accessor method prefix for '"
-                           + propName + "' property: " + method);
+                assertTrue(
+                    method.getName()
+                          .toUpperCase()
+                          .endsWith(propName.toUpperCase()),
+                    "Unexpected accessor method for '" + propName
+                    + "' property: " + method);
+                assertTrue(
+                    method.getName().startsWith("get")
+                    || method.getName().startsWith("is"),
+                    "Unexpected accessor method prefix for '" + propName
+                    + "' property: " + method);
             });
 
             setters.forEach((propName, methods) -> {
                 methods.forEach((method) -> {
-                    assertTrue(method.getName()
-                                     .toUpperCase()
-                                     .endsWith(propName.toUpperCase()),
-                               "Unexpected mutator method for '" + propName
-                               + "' property: " + method);
-                    assertTrue(method.getName().startsWith("set"),
-                               "Unexpected mutator method prefix for '"
-                               + propName + "' property: " + method);
+                    assertTrue(
+                        method.getName()
+                              .toUpperCase()
+                              .endsWith(propName.toUpperCase()),
+                        "Unexpected mutator method for '" + propName
+                        + "' property: " + method);
+                    assertTrue(
+                        method.getName().startsWith("set"),
+                        "Unexpected mutator method prefix for '" + propName
+                        + "' property: " + method);
                 });
             });
         } catch (Exception e) {
@@ -348,8 +356,8 @@ public class PropertyReflectorTest
 
         Rectangle rectangle = newRectangle();
 
-        PropertyReflector<Rectangle> propRef
-            = PropertyReflector.getInstance(Rectangle.class);
+        PropertyReflector<Rectangle> propRef = PropertyReflector.getInstance(
+            Rectangle.class);
 
         Class illegalArg = IllegalArgumentException.class;
 
@@ -375,8 +383,8 @@ public class PropertyReflectorTest
       Class expectedFailure)
     {
         try {
-            Object result
-                = propertyReflector.getPropertyValue(target, propertyKey);
+            Object result = propertyReflector.getPropertyValue(target,
+                                                               propertyKey);
 
             // check if an exception was expected
             if (expectedFailure != null) {
@@ -386,9 +394,12 @@ public class PropertyReflectorTest
             }
 
             // make sure the result is correct
-            assertEquals(expectedValue, result,
-                         "Unexpected result when getting property ("
-                         + propertyKey + "), on target (" + target + ").");
+            assertEquals(
+                expectedValue,
+                result,
+                "Unexpected result when getting property (" + propertyKey
+                + "), on target (" + target
+                + ").");
         } catch (Exception e) {
             // check if no failure is expected
             if (expectedFailure == null) {
@@ -420,8 +431,8 @@ public class PropertyReflectorTest
 
         Rectangle rectangle = new Rectangle(10.0, 20.0);
 
-        PropertyReflector<Rectangle> propRef
-            = PropertyReflector.getInstance(Rectangle.class);
+        PropertyReflector<Rectangle> propRef = PropertyReflector.getInstance(
+            Rectangle.class);
 
         Class illegalArg = IllegalArgumentException.class;
         Class unsupported = UnsupportedOperationException.class;
@@ -433,20 +444,20 @@ public class PropertyReflectorTest
 
         result.add(arguments(propRef, newRectangle(), "length", 22, classCast));
 
-        result.add(arguments(propRef, newRectangle(), "length", 22.0F,
-                             classCast));
+        result.add(
+            arguments(propRef, newRectangle(), "length", 22.0F, classCast));
 
-        result.add(arguments(propRef, newRectangle(), "length", "22.0",
-                             classCast));
+        result.add(
+            arguments(propRef, newRectangle(), "length", "22.0", classCast));
 
-        result.add(arguments(propRef, newRectangle(), "area", 200.0,
-                             unsupported));
+        result.add(
+            arguments(propRef, newRectangle(), "area", 200.0, unsupported));
 
         result.add(
             arguments(propRef, newRectangle(), "perimeter", 60.0, unsupported));
 
-        result.add(arguments(propRef, newRectangle(), "volume", null,
-                             illegalArg));
+        result.add(
+            arguments(propRef, newRectangle(), "volume", null, illegalArg));
 
         return result;
     }
@@ -475,8 +486,8 @@ public class PropertyReflectorTest
                      + expectedFailure.getName());
             }
 
-            Object result
-                = propertyReflector.getPropertyValue(target, propertyKey);
+            Object result = propertyReflector.getPropertyValue(target,
+                                                               propertyKey);
 
             /*
        * // COMMENT THIS OUT SINCE WE ARE NOT DOING NUMERIC CONVERSIONS SINCE
@@ -487,10 +498,12 @@ public class PropertyReflectorTest
        * convertPrimitiveNumber((Number) result, propertyValue.getClass()); }
        */
 
-            assertEquals(propertyValue, result,
-                         "Unexpected property value after setting property ("
-                         + propertyKey + ") to value (" + propVal
-                         + "), on target (" + target + ").");
+            assertEquals(
+                propertyValue,
+                result,
+                "Unexpected property value after setting property ("
+                + propertyKey + ") to value (" + propVal + "), on target ("
+                + target + ").");
         } catch (Exception e) {
             String propVal = (propertyValue == null)
                 ? ("" + null) : (propertyValue.getClass().getName() + ": "
@@ -545,14 +558,10 @@ public class PropertyReflectorTest
         result.add(arguments(circle, circleObj, null));
 
         Person joeSchmoe = new Person("Joe Schmoe");
-        joeSchmoe.addAddress(new Address("101 Main Street",
-            "Las Vegas",
-            "NV",
-            "89143"));
-        joeSchmoe.addAddress(new Address("35401 Beach Road",
-            "Capistrano Beach",
-            "CA",
-            "92624"));
+        joeSchmoe.addAddress(
+            new Address("101 Main Street", "Las Vegas", "NV", "89143"));
+        joeSchmoe.addAddress(
+            new Address("35401 Beach Road", "Capistrano Beach", "CA", "92624"));
 
         job = Json.createObjectBuilder();
         job.add("name", "Joe Schmoe");
@@ -603,7 +612,7 @@ public class PropertyReflectorTest
             }
 
             assertEquals(expectedResult, result,
-                "Unexpected converted JsonObject value");
+                         "Unexpected converted JsonObject value");
         } catch (Exception e) {
             // check if no failure is expected
             if (expectedFailure == null) {
@@ -806,13 +815,13 @@ public class PropertyReflectorTest
     @Test
     public void isPrefixBooleanMethodsAreRecognizedAsAccessors()
     {
-        PropertyReflector<BoolBean> reflector
-            = PropertyReflector.getInstance(BoolBean.class);
+        PropertyReflector<BoolBean> reflector = PropertyReflector.getInstance(
+            BoolBean.class);
         Set<String> accessors = reflector.getAccessors().keySet();
         assertTrue(accessors.contains("done"),
-               "isDone() must be recognized as accessor for 'done'");
+                   "isDone() must be recognized as accessor for 'done'");
         assertTrue(accessors.contains("valid"),
-               "isValid() returning Boolean must be recognized");
+                   "isValid() returning Boolean must be recognized");
     }
 
     // -------------------------------------------------------------------
@@ -833,7 +842,7 @@ public class PropertyReflectorTest
         WriteOnlyBean bean = new WriteOnlyBean();
         bean.setSecret("x");
         assertThrows(UnsupportedOperationException.class,
-                 () -> reflector.getPropertyValue(bean, "secret"));
+                     () -> reflector.getPropertyValue(bean, "secret"));
     }
 
     /**
@@ -846,11 +855,11 @@ public class PropertyReflectorTest
     @Test
     public void setPropertyValueThrowsUnsupportedForReadOnlyProperty()
     {
-        PropertyReflector<Address> reflector
-            = PropertyReflector.getInstance(Address.class);
+        PropertyReflector<Address> reflector = PropertyReflector.getInstance(
+            Address.class);
         Address addr = new Address("a", "b", "c", "d");
         assertThrows(UnsupportedOperationException.class,
-                 () -> reflector.setPropertyValue(addr, "city", "X"));
+                     () -> reflector.setPropertyValue(addr, "city", "X"));
     }
 
     // -------------------------------------------------------------------
@@ -869,7 +878,7 @@ public class PropertyReflectorTest
         MultiSetterBean bean = new MultiSetterBean();
         reflector.setPropertyValue(bean, "tag", "hello");
         assertEquals("S:hello", bean.getTag(),
-                 "Exact String overload must be invoked");
+                     "Exact String overload must be invoked");
     }
 
     /**
@@ -883,9 +892,10 @@ public class PropertyReflectorTest
             = PropertyReflector.getInstance(MultiSetterBean.class);
         MultiSetterBean bean = new MultiSetterBean();
         reflector.setPropertyValue(bean, "tag", 42);
-        assertEquals("I:42", bean.getTag(),
-                     "Integer-to-int primitive promotion must select"
-                     + " setTag(int)");
+        assertEquals(
+            "I:42",
+            bean.getTag(),
+            "Integer-to-int primitive promotion must select" + " setTag(int)");
     }
 
     /**
@@ -903,9 +913,10 @@ public class PropertyReflectorTest
         MultiSetterBean bean = new MultiSetterBean();
         Date now = new Date(0L);
         reflector.setPropertyValue(bean, "tag", now);
-        assertTrue(bean.getTag().startsWith("O:"),
-                   "Date should fall through to Object overload, got: "
-                   + bean.getTag());
+        assertTrue(
+            bean.getTag().startsWith("O:"),
+            "Date should fall through to Object overload, got: "
+            + bean.getTag());
     }
 
     /**
@@ -922,9 +933,10 @@ public class PropertyReflectorTest
         bean.setName("non-null");
 
         reflector.setPropertyValue(bean, "name", null);
-        assertNull(reflector.getPropertyValue(bean, "name"),
-                   "Setting null on a non-primitive setter must succeed"
-                   + " and produce a null value");
+        assertNull(
+            reflector.getPropertyValue(bean, "name"),
+            "Setting null on a non-primitive setter must succeed"
+            + " and produce a null value");
     }
 
     /**
@@ -943,9 +955,9 @@ public class PropertyReflectorTest
         NullPointerException npe = assertThrows(
             NullPointerException.class,
             () -> reflector.setPropertyValue(bean, "count", null));
-        assertTrue(npe.getMessage().contains("count"),
-                   "NPE message must mention the property key: "
-                   + npe.getMessage());
+        assertTrue(
+            npe.getMessage().contains("count"),
+            "NPE message must mention the property key: " + npe.getMessage());
     }
 
     // -------------------------------------------------------------------
@@ -973,9 +985,9 @@ public class PropertyReflectorTest
         assertEquals(5.0d, json.getJsonNumber("d").doubleValue(), 0.0001);
         assertTrue(json.getBoolean("b"));
         assertEquals(new BigDecimal("6.5"),
-                 json.getJsonNumber("bd").bigDecimalValue());
+                     json.getJsonNumber("bd").bigDecimalValue());
         assertEquals(BigInteger.valueOf(7L),
-                 json.getJsonNumber("bi").bigIntegerValue());
+                     json.getJsonNumber("bi").bigIntegerValue());
         assertEquals("eight", json.getString("s"));
 
         // Collection branch
@@ -1026,9 +1038,10 @@ public class PropertyReflectorTest
         // depend on what bean accessors LinkedHashMap exposes — the
         // assertion here is just that no map-key/value entries appear).
         JsonObject json = PropertyReflector.toJsonObject(input);
-        assertFalse(json.containsKey("1"),
-                    "Non-String-keyed map must not be exposed as JSON"
-                    + " entries: " + json);
+        assertFalse(
+            json.containsKey("1"),
+            "Non-String-keyed map must not be exposed as JSON" + " entries: "
+            + json);
         assertFalse(json.containsKey("2"));
     }
 }

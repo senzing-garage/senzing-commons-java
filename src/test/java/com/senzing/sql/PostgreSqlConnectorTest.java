@@ -103,7 +103,7 @@ public class PostgreSqlConnectorTest
             "localhost", port, "postgres", "postgres", "");
         try (Connection conn = connector.openConnection()) {
             assertFalse(conn.getAutoCommit(),
-                  "openConnection must disable auto-commit");
+                        "openConnection must disable auto-commit");
         }
     }
 
@@ -126,12 +126,14 @@ public class PostgreSqlConnectorTest
         try (Connection conn = connector.openConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(
-             "SELECT current_setting('application_name')"))
+                 "SELECT current_setting('application_name')"))
         {
             assertTrue(rs.next());
-            assertEquals("senzing-commons-test", rs.getString(1),
-                         "Addl 'ApplicationName' property must be applied to"
-                         + " the connection");
+            assertEquals(
+                "senzing-commons-test",
+                rs.getString(1),
+                "Addl 'ApplicationName' property must be applied to"
+                + " the connection");
         }
     }
 
@@ -155,8 +157,10 @@ public class PostgreSqlConnectorTest
         PostgreSqlConnector connector = new PostgreSqlConnector(
             "localhost", port, "postgres", "postgres", "", addl);
         try (Connection conn = connector.openConnection()) {
-            assertNotNull(conn, "Explicit user 'postgres' must override the "
-                                + "addlProperties 'user' entry");
+            assertNotNull(
+                conn,
+                "Explicit user 'postgres' must override the "
+                + "addlProperties 'user' entry");
         }
     }
 
@@ -169,8 +173,7 @@ public class PostgreSqlConnectorTest
     public void openConnectionThrowsSqlExceptionForUnknownDatabase()
     {
         PostgreSqlConnector connector = new PostgreSqlConnector(
-            "localhost", port, "definitely_not_a_database",
-            "postgres", "");
+            "localhost", port, "definitely_not_a_database", "postgres", "");
         assertThrows(SQLException.class, connector::openConnection);
     }
 
@@ -185,8 +188,7 @@ public class PostgreSqlConnectorTest
     public void openConnectionThrowsSqlExceptionForUnknownUser()
     {
         PostgreSqlConnector connector = new PostgreSqlConnector(
-            "localhost", port, "postgres",
-            "definitely_not_a_real_user", "");
+            "localhost", port, "postgres", "definitely_not_a_real_user", "");
         assertThrows(SQLException.class, connector::openConnection);
     }
 }

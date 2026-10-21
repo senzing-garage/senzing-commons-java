@@ -103,7 +103,7 @@ public class CommandLineOptionAndValueTest
     public void getSynonymFlagsDefaultsToEmpty()
     {
         assertEquals(Collections.emptySet(),
-                 DefaultsOption.PLAIN.getSynonymFlags());
+                     DefaultsOption.PLAIN.getSynonymFlags());
     }
 
     @Test
@@ -116,35 +116,35 @@ public class CommandLineOptionAndValueTest
     public void getEnvironmentSynonymsDefaultsToEmpty()
     {
         assertEquals(Collections.emptySet(),
-                 DefaultsOption.PLAIN.getEnvironmentSynonyms());
+                     DefaultsOption.PLAIN.getEnvironmentSynonyms());
     }
 
     @Test
     public void getEnvironmentFallbacksDefaultsToEmpty()
     {
         assertEquals(Collections.emptyList(),
-                 DefaultsOption.PLAIN.getEnvironmentFallbacks());
+                     DefaultsOption.PLAIN.getEnvironmentFallbacks());
     }
 
     @Test
     public void getConflictsDefaultsToEmpty()
     {
         assertEquals(Collections.emptySet(),
-                 DefaultsOption.PLAIN.getConflicts());
+                     DefaultsOption.PLAIN.getConflicts());
     }
 
     @Test
     public void getDependenciesDefaultsToEmpty()
     {
         assertEquals(Collections.emptySet(),
-                 DefaultsOption.PLAIN.getDependencies());
+                     DefaultsOption.PLAIN.getDependencies());
     }
 
     @Test
     public void getDeprecationAlternativesDefaultsToEmpty()
     {
         assertEquals(Collections.emptySet(),
-                 DefaultsOption.PLAIN.getDeprecationAlternatives());
+                     DefaultsOption.PLAIN.getDeprecationAlternatives());
     }
 
     @Test
@@ -185,14 +185,14 @@ public class CommandLineOptionAndValueTest
         // declaration and returns true if the field name is literally
         // "PASSWORD" or ends with "_PASSWORD".
         assertTrue(DefaultsOption.PASSWORD.isSensitive(),
-               "Option whose enum name is PASSWORD should be sensitive");
+                   "Option whose enum name is PASSWORD should be sensitive");
     }
 
     @Test
     public void isSensitiveFalseForOrdinaryOption()
     {
         assertFalse(DefaultsOption.PLAIN.isSensitive(),
-                "Ordinary option should not be sensitive");
+                    "Ordinary option should not be sensitive");
     }
 
     /**
@@ -207,9 +207,10 @@ public class CommandLineOptionAndValueTest
         // Should return false without throwing — the public instance
         // field is correctly skipped, and the enum constant's name
         // ("ONLY") is not "PASSWORD" so the eventual result is false.
-        assertFalse(NonStaticFieldOption.ONLY.isSensitive(),
-                    "Option whose enum has a non-static public field"
-                    + " must skip that field and not throw");
+        assertFalse(
+            NonStaticFieldOption.ONLY.isSensitive(),
+            "Option whose enum has a non-static public field"
+            + " must skip that field and not throw");
     }
 
     /**
@@ -222,9 +223,10 @@ public class CommandLineOptionAndValueTest
     @Test
     public void isSensitiveFalseForNonEnumImplementation()
     {
-        assertFalse(new NonEnumOption().isSensitive(),
-                    "Non-enum option must fall through to 'return false'"
-                    + " — no public-static field equals the instance");
+        assertFalse(
+            new NonEnumOption().isSensitive(),
+            "Non-enum option must fall through to 'return false'"
+            + " — no public-static field equals the instance");
     }
 
     // -------------------------------------------------------------------
@@ -303,7 +305,7 @@ public class CommandLineOptionAndValueTest
         String s = val.toString();
         assertTrue(s.contains("PLAIN"), "toString should mention option");
         assertTrue(s.contains("COMMAND_LINE"),
-               "toString should mention source");
+                   "toString should mention source");
         assertTrue(s.contains("--plain"), "toString should mention specifier");
         assertTrue(s.contains("v"), "toString should mention value");
     }
@@ -325,9 +327,9 @@ public class CommandLineOptionAndValueTest
             List.of("x"));
 
         assertEquals(v1, v2,
-                 "Two values with identical components must be equal");
+                     "Two values with identical components must be equal");
         assertEquals(v1.hashCode(), v2.hashCode(),
-                 "Equal values must have equal hashCodes");
+                     "Equal values must have equal hashCodes");
     }
 
     @Test
@@ -335,13 +337,19 @@ public class CommandLineOptionAndValueTest
     {
         CommandLineValue v1 = new CommandLineValue(
             CommandLineSource.COMMAND_LINE,
-            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
         CommandLineValue v2 = new CommandLineValue(
             CommandLineSource.ENVIRONMENT,
-            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
 
         assertNotEquals(v1, v2,
-                    "Values with differing source must not be equal");
+                        "Values with differing source must not be equal");
     }
 
     @Test
@@ -349,7 +357,10 @@ public class CommandLineOptionAndValueTest
     {
         CommandLineValue v = new CommandLineValue(
             CommandLineSource.COMMAND_LINE,
-            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
         assertEquals(v, v);
     }
 
@@ -358,7 +369,10 @@ public class CommandLineOptionAndValueTest
     {
         CommandLineValue v = new CommandLineValue(
             CommandLineSource.COMMAND_LINE,
-            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
         assertNotEquals(null, v);
     }
 
@@ -367,7 +381,10 @@ public class CommandLineOptionAndValueTest
     {
         CommandLineValue v = new CommandLineValue(
             CommandLineSource.COMMAND_LINE,
-            DefaultsOption.PLAIN, "--plain", "x", List.of("x"));
+            DefaultsOption.PLAIN,
+            "--plain",
+            "x",
+            List.of("x"));
         assertNotEquals("string", v);
     }
 }

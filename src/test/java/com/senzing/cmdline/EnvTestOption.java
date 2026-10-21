@@ -74,15 +74,15 @@ public enum EnvTestOption
     @Override
     public Set<String> getEnvironmentSynonyms()
     {
-        return Collections.singleton(
-            "SZ_ENV_TEST_" + this.flag.substring(2).toUpperCase());
+        return Collections.singleton("SZ_ENV_TEST_"
+                                     + this.flag.substring(2).toUpperCase());
     }
 
     @Override
     public List<String> getEnvironmentFallbacks()
     {
-        return List.of(
-            "SENZING_ENV_FALLBACK_" + this.flag.substring(2).toUpperCase());
+        return List.of("SENZING_ENV_FALLBACK_"
+                       + this.flag.substring(2).toUpperCase());
     }
 
     @Override

@@ -52,8 +52,8 @@ public enum ExtendedTestOption
     public Set<String> getEnvironmentSynonyms()
     {
         String flag = this.getCommandLineFlag();
-        return Collections.singleton(
-            "SZ_EXT_TEST_" + flag.substring(2).toUpperCase());
+        return Collections.singleton("SZ_EXT_TEST_"
+                                     + flag.substring(2).toUpperCase());
     }
 
     @Override
@@ -67,8 +67,7 @@ public enum ExtendedTestOption
     @Override
     public int getMinimumParameterCount()
     {
-        switch (this)
-        {
+        switch (this) {
             case SQS_QUEUE_URL:
             case DATABASE_TABLE:
             case DATABASE_PASSWORD:
@@ -81,8 +80,7 @@ public enum ExtendedTestOption
     @Override
     public int getMaximumParameterCount()
     {
-        switch (this)
-        {
+        switch (this) {
             case SQS_QUEUE_URL:
             case DATABASE_TABLE:
             case DATABASE_PASSWORD:
@@ -95,8 +93,7 @@ public enum ExtendedTestOption
     @Override
     public Set<CommandLineOption> getConflicts()
     {
-        switch (this)
-        {
+        switch (this) {
             case SQS_QUEUE_URL:
                 return Set.of(DATABASE_TABLE, DATABASE_PASSWORD, HELP, VERSION);
             case DATABASE_TABLE:
@@ -109,8 +106,7 @@ public enum ExtendedTestOption
     @Override
     public Set<Set<CommandLineOption>> getDependencies()
     {
-        switch (this)
-        {
+        switch (this) {
             case DATABASE_PASSWORD:
                 return Set.of(Set.of(DATABASE_TABLE));
             case SQS_QUEUE_URL:
@@ -140,8 +136,7 @@ public enum ExtendedTestOption
             }
 
             ExtendedTestOption testOption = (ExtendedTestOption) option;
-            switch (testOption)
-            {
+            switch (testOption) {
                 case SQS_QUEUE_URL:
                 case DATABASE_TABLE:
                     return params.get(0);

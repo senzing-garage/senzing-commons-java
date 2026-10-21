@@ -30,11 +30,15 @@ public class MissingDependenciesException extends SpecifiedOptionException
                                       String                  specifier,
                                       Set<CommandLineOption>  specifiedOptions)
     {
-        super(source, option, specifier, buildErrorMessage(source,
-                            option,
-                            option.getDependencies(),
-                            specifier,
-                            specifiedOptions));
+        super(
+            source,
+            option,
+            specifier,
+            buildErrorMessage(source,
+                              option,
+                              option.getDependencies(),
+                              specifier,
+                              specifiedOptions));
     }
 
     /**
@@ -60,11 +64,15 @@ public class MissingDependenciesException extends SpecifiedOptionException
       String                      specifier,
       Set<CommandLineOption>      specifiedOptions)
     {
-        super(source, option, specifier, buildErrorMessage(source,
-                            option,
-                            dependencySets,
-                            specifier,
-                            specifiedOptions));
+        super(
+            source,
+            option,
+            specifier,
+            buildErrorMessage(source,
+                              option,
+                              dependencySets,
+                              specifier,
+                              specifiedOptions));
     }
 
     /**
@@ -101,8 +109,8 @@ public class MissingDependenciesException extends SpecifiedOptionException
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
 
-        String sourceDescriptor
-            = SpecifiedOption.sourceDescriptor(source, option, specifier);
+        String sourceDescriptor = SpecifiedOption.sourceDescriptor(
+            source, option, specifier);
 
         pw.println("Dependent options for the " + sourceDescriptor
                    + " are missing.");

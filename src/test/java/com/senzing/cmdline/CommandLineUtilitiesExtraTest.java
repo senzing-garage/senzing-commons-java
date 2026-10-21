@@ -60,9 +60,9 @@ public class CommandLineUtilitiesExtraTest
         String text = formatUsageOptionsList(0, HELP);
         // Per implementation: bullet "o " + flag + newline.
         assertTrue(text.contains("--help"),
-               "Output should contain the option flag");
+                   "Output should contain the option flag");
         assertTrue(text.startsWith("o "),
-               "Output should begin with bullet marker");
+                   "Output should begin with bullet marker");
         assertTrue(text.endsWith("\n"), "Output should end with a newline");
     }
 
@@ -72,7 +72,7 @@ public class CommandLineUtilitiesExtraTest
         String text = formatUsageOptionsList(4, HELP);
         // Indent of 4 produces 4 spaces of indent before bullet.
         assertTrue(text.startsWith("    "),
-               "Output should begin with indent spaces");
+                   "Output should begin with indent spaces");
         assertTrue(text.contains("--help"));
     }
 
@@ -84,7 +84,7 @@ public class CommandLineUtilitiesExtraTest
         // Implementation does not emit a final newline if columnIndex is 0
         // and no options were processed.
         assertEquals("", text,
-                 "Empty options list should produce empty string");
+                     "Empty options list should produce empty string");
     }
 
     @Test
@@ -124,10 +124,11 @@ public class CommandLineUtilitiesExtraTest
         // directory URL.
         String url = getJarBaseUrl(CommandLineUtilitiesExtraTest.class);
         assertNotNull(url, "Base URL should be non-null for a loaded class");
-        assertTrue(url.startsWith("file:")
-                   || url.startsWith("jar:")
-                   || url.startsWith("nested:"),
-                   "Base URL should be a URL: " + url);
+        assertTrue(
+            url.startsWith("file:")
+            || url.startsWith("jar:")
+            || url.startsWith("nested:"),
+            "Base URL should be a URL: " + url);
     }
 
     @Test
@@ -155,7 +156,7 @@ public class CommandLineUtilitiesExtraTest
         if (name != null) {
             // Loaded from a JAR — should end with ".jar"
             assertTrue(name.endsWith(".jar"),
-                 "JAR name should end with .jar: " + name);
+                       "JAR name should end with .jar: " + name);
         }
         // If null, the JAR may not be on the test classpath as a JAR — that
         // is also a legal outcome for this static helper.
@@ -171,7 +172,7 @@ public class CommandLineUtilitiesExtraTest
         // without throwing.
         if (path != null) {
             assertTrue(path.startsWith("/"),
-                 "JAR path should be absolute: " + path);
+                       "JAR path should be absolute: " + path);
         }
     }
 
@@ -205,8 +206,8 @@ public class CommandLineUtilitiesExtraTest
                                             Object processedValue,
                                             List<String> params)
     {
-        return new CommandLineValue(source, option, specifier,
-                                processedValue, params);
+        return new CommandLineValue(source, option, specifier, processedValue,
+                                    params);
     }
 
     @Test
@@ -214,8 +215,13 @@ public class CommandLineUtilitiesExtraTest
     {
         // PASSWORD is sensitive — should serialize to REDACTED in JSON.
         Map<CommandLineOption, CommandLineValue> input = new LinkedHashMap<>();
-        input.put(PASSWORD, makeValue(COMMAND_LINE, PASSWORD, "--password",
-                        "secret", List.of("secret")));
+        input.put(
+            PASSWORD,
+            makeValue(COMMAND_LINE,
+                      PASSWORD,
+                      "--password",
+                      "secret",
+                      List.of("secret")));
 
         Map<CommandLineOption, Object> result = new LinkedHashMap<>();
         JsonObjectBuilder job = Json.createObjectBuilder();
@@ -228,7 +234,7 @@ public class CommandLineUtilitiesExtraTest
         // redacted.
         String json = sb.toString();
         assertFalse(json.contains("\"secret\""),
-                "Sensitive value should be redacted from JSON");
+                    "Sensitive value should be redacted from JSON");
     }
 
     @Test
@@ -239,9 +245,13 @@ public class CommandLineUtilitiesExtraTest
         // Use VERBOSE for a multi-value test by hand-crafting a
         // CommandLineValue.
         Map<CommandLineOption, CommandLineValue> input = new LinkedHashMap<>();
-        input.put(VERBOSE, makeValue(COMMAND_LINE, VERBOSE, "--verbose",
-                        Boolean.TRUE,
-                        List.of("a", "b", "c")));
+        input.put(
+            VERBOSE,
+            makeValue(COMMAND_LINE,
+                      VERBOSE,
+                      "--verbose",
+                      Boolean.TRUE,
+                      List.of("a", "b", "c")));
 
         JsonObjectBuilder job = Json.createObjectBuilder();
         StringBuilder sb = new StringBuilder();
@@ -250,7 +260,7 @@ public class CommandLineUtilitiesExtraTest
         JsonObject result = job.build();
         JsonObject verbose = result.getJsonObject(VERBOSE.toString());
         assertNotNull(verbose.getJsonArray("values"),
-                  "Multi-value params should serialize as 'values' array");
+                      "Multi-value params should serialize as 'values' array");
         assertEquals(3, verbose.getJsonArray("values").size());
     }
 
@@ -258,16 +268,20 @@ public class CommandLineUtilitiesExtraTest
     public void processCommandLineSingleValueParameter()
     {
         Map<CommandLineOption, CommandLineValue> input = new LinkedHashMap<>();
-        input.put(PORT, makeValue(COMMAND_LINE, PORT, "--port",
-                        Integer.valueOf(8080),
-                        List.of("8080")));
+        input.put(
+            PORT,
+            makeValue(COMMAND_LINE,
+                      PORT,
+                      "--port",
+                      Integer.valueOf(8080),
+                      List.of("8080")));
 
         JsonObjectBuilder job = Json.createObjectBuilder();
         processCommandLine(input, new LinkedHashMap<>(), job, null);
 
         JsonObject result = job.build();
         assertEquals("8080",
-                 result.getJsonObject(PORT.toString()).getString("value"));
+                     result.getJsonObject(PORT.toString()).getString("value"));
     }
 
     @Test
@@ -276,8 +290,9 @@ public class CommandLineUtilitiesExtraTest
         // DEFAULT source values typically have a null specifier — the
         // "via" field should not be emitted in JSON.
         Map<CommandLineOption, CommandLineValue> input = new LinkedHashMap<>();
-        input.put(VERBOSE, makeValue(DEFAULT, VERBOSE, null, Boolean.FALSE,
-                        List.of("false")));
+        input.put(
+            VERBOSE,
+            makeValue(DEFAULT, VERBOSE, null, Boolean.FALSE, List.of("false")));
 
         JsonObjectBuilder job = Json.createObjectBuilder();
         processCommandLine(input, new LinkedHashMap<>(), job, null);
@@ -286,15 +301,20 @@ public class CommandLineUtilitiesExtraTest
         JsonObject verbose = result.getJsonObject(VERBOSE.toString());
         assertEquals("DEFAULT", verbose.getString("source"));
         assertFalse(verbose.containsKey("via"),
-                "DEFAULT source with null specifier should omit 'via'");
+                    "DEFAULT source with null specifier should omit 'via'");
     }
 
     @Test
     public void processCommandLineEnvironmentSourceIncludesViaSpecifier()
     {
         Map<CommandLineOption, CommandLineValue> input = new LinkedHashMap<>();
-        input.put(PORT, makeValue(ENVIRONMENT, PORT, "SENZING_TEST_PORT",
-                        Integer.valueOf(8080), List.of("8080")));
+        input.put(
+            PORT,
+            makeValue(ENVIRONMENT,
+                      PORT,
+                      "SENZING_TEST_PORT",
+                      Integer.valueOf(8080),
+                      List.of("8080")));
 
         JsonObjectBuilder job = Json.createObjectBuilder();
         processCommandLine(input, new LinkedHashMap<>(), job, null);
@@ -311,14 +331,13 @@ public class CommandLineUtilitiesExtraTest
         // The key in the map and the option in the value must match.
         Map<CommandLineOption, CommandLineValue> input = new LinkedHashMap<>();
         // Put under PORT key but with HELP option in the value.
-        input.put(PORT, makeValue(COMMAND_LINE, HELP, "--help",
-                        Boolean.TRUE, List.of()));
+        input.put(
+            PORT,
+            makeValue(COMMAND_LINE, HELP, "--help", Boolean.TRUE, List.of()));
 
-        assertThrows(IllegalArgumentException.class, () -> processCommandLine(
-            input,
-            new LinkedHashMap<>(),
-            null,
-            null));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> processCommandLine(input, new LinkedHashMap<>(), null, null));
     }
 
     @Test
@@ -327,16 +346,21 @@ public class CommandLineUtilitiesExtraTest
         // When jsonBuilder is supplied (and stringBuilder is null), it
         // populates that builder directly without an intermediate.
         Map<CommandLineOption, CommandLineValue> input = new LinkedHashMap<>();
-        input.put(PORT, makeValue(COMMAND_LINE, PORT, "--port",
-                        Integer.valueOf(80), List.of("80")));
+        input.put(
+            PORT,
+            makeValue(COMMAND_LINE,
+                      PORT,
+                      "--port",
+                      Integer.valueOf(80),
+                      List.of("80")));
 
         JsonObjectBuilder job = Json.createObjectBuilder();
         Map<CommandLineOption, Object> resultMap = new LinkedHashMap<>();
-        Map<CommandLineOption, Object> returned
-            = processCommandLine(input, resultMap, job, null);
+        Map<CommandLineOption, Object> returned = processCommandLine(
+            input, resultMap, job, null);
 
         assertSame(resultMap, returned,
-               "Should return the supplied result map when non-null");
+                   "Should return the supplied result map when non-null");
         assertEquals(80, ((Integer) returned.get(PORT)).intValue());
 
         JsonObject built = job.build();
@@ -347,11 +371,16 @@ public class CommandLineUtilitiesExtraTest
     public void processCommandLineCreatesResultMapIfNull()
     {
         Map<CommandLineOption, CommandLineValue> input = new LinkedHashMap<>();
-        input.put(VERBOSE, makeValue(COMMAND_LINE, VERBOSE, "--verbose",
-                        Boolean.TRUE, List.of()));
+        input.put(
+            VERBOSE,
+            makeValue(COMMAND_LINE,
+                      VERBOSE,
+                      "--verbose",
+                      Boolean.TRUE,
+                      List.of()));
 
-        Map<CommandLineOption, Object> result
-            = processCommandLine(input, null, (StringBuilder) null);
+        Map<CommandLineOption, Object> result = processCommandLine(
+            input, null, (StringBuilder) null);
 
         assertNotNull(result, "Null result map arg should yield a fresh map");
         assertEquals(Boolean.TRUE, result.get(VERBOSE));
@@ -363,12 +392,17 @@ public class CommandLineUtilitiesExtraTest
         // When neither jsonBuilder nor stringBuilder is supplied, the JSON
         // path is skipped entirely.
         Map<CommandLineOption, CommandLineValue> input = new LinkedHashMap<>();
-        input.put(VERBOSE, makeValue(COMMAND_LINE, VERBOSE, "--verbose",
-                        Boolean.TRUE, List.of()));
+        input.put(
+            VERBOSE,
+            makeValue(COMMAND_LINE,
+                      VERBOSE,
+                      "--verbose",
+                      Boolean.TRUE,
+                      List.of()));
 
         Map<CommandLineOption, Object> result = new LinkedHashMap<>();
-        Map<CommandLineOption, Object> returned
-            = processCommandLine(input, result, null, null);
+        Map<CommandLineOption, Object> returned = processCommandLine(
+            input, result, null, null);
 
         assertSame(result, returned);
         assertEquals(Boolean.TRUE, returned.get(VERBOSE));
@@ -399,7 +433,7 @@ public class CommandLineUtilitiesExtraTest
             = CommandLineUtilities.extractJarLocation(null, "com.example.Foo");
 
         assertSame(CommandLineUtilities.JarLocation.EMPTY, loc,
-               "Null URL should yield the EMPTY sentinel");
+                   "Null URL should yield the EMPTY sentinel");
         assertNull(loc.baseUrl());
         assertNull(loc.fileName());
         assertNull(loc.pathToJar());
@@ -428,11 +462,11 @@ public class CommandLineUtilitiesExtraTest
         // Base URL is everything up to (but not including) the package
         // path inside the JAR.
         assertEquals("jar:file:/some/path/foo.jar!/", loc.baseUrl(),
-                 "baseUrl should end at the JAR's '!/' boundary");
+                     "baseUrl should end at the JAR's '!/' boundary");
         assertEquals("foo.jar", loc.fileName(),
-                 "fileName should be the bare JAR file name");
+                     "fileName should be the bare JAR file name");
         assertEquals("/some/path", loc.pathToJar(),
-                 "pathToJar should be the directory containing the JAR");
+                     "pathToJar should be the directory containing the JAR");
     }
 
     @Test
@@ -459,11 +493,11 @@ public class CommandLineUtilitiesExtraTest
             = CommandLineUtilities.extractJarLocation(url, "com.example.Foo");
 
         assertNotNull(loc.baseUrl(),
-                  "baseUrl should still be derived from class name path");
+                      "baseUrl should still be derived from class name path");
         assertNull(loc.fileName(),
-               "fileName should be null when URL has no '!' marker");
+                   "fileName should be null when URL has no '!' marker");
         assertNull(loc.pathToJar(),
-               "pathToJar should be null when URL has no '!' marker");
+                   "pathToJar should be null when URL has no '!' marker");
     }
 
     @Test
@@ -479,9 +513,9 @@ public class CommandLineUtilitiesExtraTest
         boolean fromJar = CommandLineUtilities.JAR_FILE_NAME != null;
         if (fromJar) {
             assertNotNull(CommandLineUtilities.JAR_BASE_URL,
-                    "If FILE_NAME is set, BASE_URL must be set");
+                          "If FILE_NAME is set, BASE_URL must be set");
             assertNotNull(CommandLineUtilities.PATH_TO_JAR,
-                    "If FILE_NAME is set, PATH_TO_JAR must be set");
+                          "If FILE_NAME is set, PATH_TO_JAR must be set");
         } else {
             assertNull(CommandLineUtilities.JAR_BASE_URL);
             assertNull(CommandLineUtilities.PATH_TO_JAR);

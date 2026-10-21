@@ -85,8 +85,8 @@ public class NoPrimaryOptionException extends CommandLineException
             Set<CommandLineOption> primaryOptions)
         throws IllegalArgumentException
     {
-        Objects.requireNonNull(
-            primaryOptions, "The Set of primary options cannot be null");
+        Objects.requireNonNull(primaryOptions,
+                               "The Set of primary options cannot be null");
 
         if (primaryOptions.size() == 0) {
             throw new IllegalArgumentException(

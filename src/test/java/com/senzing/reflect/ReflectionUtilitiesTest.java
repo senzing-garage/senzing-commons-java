@@ -130,10 +130,10 @@ public class ReflectionUtilitiesTest
         thread2.join();
         if (sync) {
             assertFalse(testObject.isFailed(),
-                  "Synchronized test failed to protect data");
+                        "Synchronized test failed to protect data");
         } else {
             assertTrue(testObject.isFailed(),
-                 "Unsynchronized test managed to protect data");
+                       "Unsynchronized test managed to protect data");
         }
     }
 
@@ -205,7 +205,7 @@ public class ReflectionUtilitiesTest
     {
         Class result = ReflectionUtilities.getPrimitiveType(paramType);
         assertEquals(expectedResult, result,
-                 "Unexpected primitive type for " + paramType);
+                     "Unexpected primitive type for " + paramType);
     }
 
     @ParameterizedTest
@@ -214,7 +214,7 @@ public class ReflectionUtilitiesTest
     {
         Class result = ReflectionUtilities.getPromotedType(paramType);
         assertEquals(expectedResult, result,
-                 "Unexpected promoted type for " + paramType);
+                     "Unexpected promoted type for " + paramType);
     }
 
     public List<Arguments> getConvertPrimitiveParams()
@@ -241,8 +241,8 @@ public class ReflectionUtilitiesTest
         result.add(arguments(null, int.class, null, null));
 
         result.add(arguments(10, null, null, NullPointerException.class));
-        result.add(arguments(
-            10, String.class, null, IllegalArgumentException.class));
+        result.add(
+            arguments(10, String.class, null, IllegalArgumentException.class));
 
         return result;
     }
@@ -258,8 +258,8 @@ public class ReflectionUtilitiesTest
         String targetType = (numType == null) ? null : numType.getName();
 
         try {
-            Number result
-                = ReflectionUtilities.convertPrimitiveNumber(value, numType);
+            Number result = ReflectionUtilities.convertPrimitiveNumber(value,
+                                                                       numType);
 
             if (exceptionClass != null) {
                 fail("Expected failure when converting " + value
@@ -267,10 +267,12 @@ public class ReflectionUtilitiesTest
                      + " to " + targetType
                      + ": " + exceptionClass.getName());
             }
-            assertEquals(expectedResult, result,
-                         "Unexpected result when converting " + value
-                         + " from " + valueClass
-                         + " to " + targetType);
+            assertEquals(
+                expectedResult,
+                result,
+                "Unexpected result when converting " + value
+                + " from " + valueClass
+                + " to " + targetType);
         } catch (Exception e) {
             if (exceptionClass == null) {
                 e.printStackTrace();
@@ -348,19 +350,19 @@ public class ReflectionUtilitiesTest
         throws Exception
     {
         RestrictableImpl target = new RestrictableImpl();
-        Method restrictedMethod
-            = RestrictableInterface.class.getMethod("restricted");
+        Method restrictedMethod = RestrictableInterface.class.getMethod(
+            "restricted");
 
         RestrictableInterface proxy
             = (RestrictableInterface) ReflectionUtilities.restrictedProxy(
-                target,
-                restrictedMethod);
+                target, restrictedMethod);
 
         assertEquals("allowed-result", proxy.allowed(),
-                 "Unrestricted method must still delegate to target");
-        assertThrows(UnsupportedOperationException.class, proxy::restricted,
-                     "Restricted method must throw"
-                     + " UnsupportedOperationException");
+                     "Unrestricted method must still delegate to target");
+        assertThrows(
+            UnsupportedOperationException.class,
+            proxy::restricted,
+            "Restricted method must throw" + " UnsupportedOperationException");
     }
 
     /**
@@ -376,9 +378,11 @@ public class ReflectionUtilitiesTest
         RestrictableInterface proxy
             = (RestrictableInterface) ReflectionUtilities.restrictedProxy(
                 target);
-        assertThrows(IllegalStateException.class, proxy::throwingMethod,
-                     "Proxy must unwrap InvocationTargetException and"
-                     + " propagate the original cause");
+        assertThrows(
+            IllegalStateException.class,
+            proxy::throwingMethod,
+            "Proxy must unwrap InvocationTargetException and"
+            + " propagate the original cause");
     }
 
     /**
@@ -389,7 +393,7 @@ public class ReflectionUtilitiesTest
     public void restrictedProxyThrowsNpeForNullTarget()
     {
         assertThrows(NullPointerException.class,
-                 () -> ReflectionUtilities.restrictedProxy(null));
+                     () -> ReflectionUtilities.restrictedProxy(null));
     }
 
     /**
@@ -401,9 +405,9 @@ public class ReflectionUtilitiesTest
     public void restrictedProxyThrowsNpeForNullMethodArgument()
     {
         RestrictableImpl target = new RestrictableImpl();
-        assertThrows(NullPointerException.class,
-                     () -> ReflectionUtilities.restrictedProxy(
-                     target, (Method) null));
+        assertThrows(
+            NullPointerException.class,
+            () -> ReflectionUtilities.restrictedProxy(target, (Method) null));
     }
 
     /**
@@ -415,9 +419,11 @@ public class ReflectionUtilitiesTest
     public void restrictedProxyThrowsNpeForNullClassLoader()
     {
         RestrictableImpl target = new RestrictableImpl();
-        assertThrows(NullPointerException.class,
-                     () -> ReflectionUtilities.restrictedProxy(
-                     null, target, new Method[0]));
+        assertThrows(
+            NullPointerException.class,
+            () -> ReflectionUtilities.restrictedProxy(null,
+                                                      target,
+                                                      new Method[0]));
     }
 
     /**
@@ -434,7 +440,7 @@ public class ReflectionUtilitiesTest
     {
         NoInterfacesClass target = new NoInterfacesClass();
         assertThrows(IllegalArgumentException.class,
-                 () -> ReflectionUtilities.restrictedProxy(target));
+                     () -> ReflectionUtilities.restrictedProxy(target));
     }
 
     /**
@@ -447,19 +453,20 @@ public class ReflectionUtilitiesTest
         throws Exception
     {
         RestrictableImpl target = new RestrictableImpl();
-        Method restrictedMethod
-            = RestrictableInterface.class.getMethod("restricted");
+        Method restrictedMethod = RestrictableInterface.class.getMethod(
+            "restricted");
 
         RestrictableInterface proxy
             = (RestrictableInterface) ReflectionUtilities.restrictedProxy(
-                target,
-                restrictedMethod);
+                target, restrictedMethod);
 
-        Object reproxied
-            = ReflectionUtilities.restrictedProxy(proxy, restrictedMethod);
-        assertSame(proxy, reproxied,
-                   "Re-applying the same restriction must short-circuit"
-                   + " and return the same proxy");
+        Object reproxied = ReflectionUtilities.restrictedProxy(
+            proxy, restrictedMethod);
+        assertSame(
+            proxy,
+            reproxied,
+            "Re-applying the same restriction must short-circuit"
+            + " and return the same proxy");
     }
 
     /**
@@ -471,21 +478,19 @@ public class ReflectionUtilitiesTest
         throws Exception
     {
         RestrictableImpl target = new RestrictableImpl();
-        Method restrictedMethod
-            = RestrictableInterface.class.getMethod("restricted");
+        Method restrictedMethod = RestrictableInterface.class.getMethod(
+            "restricted");
         Method allowedMethod = RestrictableInterface.class.getMethod("allowed");
 
         RestrictableInterface proxy1
             = (RestrictableInterface) ReflectionUtilities.restrictedProxy(
-                target,
-                restrictedMethod);
+                target, restrictedMethod);
         RestrictableInterface proxy2
             = (RestrictableInterface) ReflectionUtilities.restrictedProxy(
-                proxy1,
-                allowedMethod);
+                proxy1, allowedMethod);
 
         assertNotSame(proxy1, proxy2,
-                  "Adding a new restriction must produce a new proxy");
+                      "Adding a new restriction must produce a new proxy");
         assertThrows(UnsupportedOperationException.class, proxy2::allowed);
         assertThrows(UnsupportedOperationException.class, proxy2::restricted);
     }
@@ -565,7 +570,7 @@ public class ReflectionUtilitiesTest
         int expected = "alpha".compareTo("beta");
         int actual = methodComparator().compare(alpha, beta);
         assertEquals(Integer.signum(expected), Integer.signum(actual),
-                 "Sign must match the names' compareTo result");
+                     "Sign must match the names' compareTo result");
     }
 
     /**
@@ -600,13 +605,14 @@ public class ReflectionUtilitiesTest
         Method twoArgs = CompA.class.getMethod("alpha", int.class, int.class);
         // 2 params
         int actual = methodComparator().compare(noArgs, twoArgs);
-        assertTrue(actual < 0,
-                   "Method with fewer params must sort before one with"
-                   + " more: got " + actual);
+        assertTrue(
+            actual < 0,
+            "Method with fewer params must sort before one with"
+            + " more: got " + actual);
 
         int reverse = methodComparator().compare(twoArgs, noArgs);
         assertTrue(reverse > 0,
-               "Reverse comparison must be positive: got " + reverse);
+                   "Reverse comparison must be positive: got " + reverse);
     }
 
     /**

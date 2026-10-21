@@ -39,7 +39,7 @@ public class OperatingSystemFamilyTest
     public void enumDeclaresThreeConstants()
     {
         assertEquals(3, OperatingSystemFamily.values().length,
-                 "OperatingSystemFamily must declare exactly 3 constants");
+                     "OperatingSystemFamily must declare exactly 3 constants");
     }
 
     // -------------------------------------------------------------------
@@ -94,7 +94,7 @@ public class OperatingSystemFamilyTest
     public void runtimeOsFamilyIsNonNull()
     {
         assertNotNull(RUNTIME_OS_FAMILY,
-                  "RUNTIME_OS_FAMILY must be initialized non-null");
+                      "RUNTIME_OS_FAMILY must be initialized non-null");
     }
 
     /**
@@ -125,8 +125,11 @@ public class OperatingSystemFamilyTest
             expected = UNIX;
         }
 
-        assertSame(expected, RUNTIME_OS_FAMILY, "RUNTIME_OS_FAMILY ("
-            + RUNTIME_OS_FAMILY
-            + ") does not match classification of os.name=[" + osName + "]");
+        assertSame(
+            expected,
+            RUNTIME_OS_FAMILY,
+            "RUNTIME_OS_FAMILY (" + RUNTIME_OS_FAMILY
+            + ") does not match classification of os.name=[" + osName
+            + "]");
     }
 }

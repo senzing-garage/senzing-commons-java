@@ -49,9 +49,8 @@ public class RecordReaderExtraTest
     public void formatAndReaderConstructor()
         throws IOException
     {
-        RecordReader rr = new RecordReader(
-            RecordReader.Format.JSON_LINES,
-            new StringReader("{\"x\":1}\n"));
+        RecordReader rr = new RecordReader(RecordReader.Format.JSON_LINES,
+                                           new StringReader("{\"x\":1}\n"));
         assertEquals(RecordReader.Format.JSON_LINES, rr.getFormat());
     }
 
@@ -59,8 +58,8 @@ public class RecordReaderExtraTest
     public void readerAndDataSourceConstructor()
         throws IOException
     {
-        RecordReader rr
-            = new RecordReader(new StringReader("{\"a\":1}\n"), "TEST");
+        RecordReader rr = new RecordReader(new StringReader("{\"a\":1}\n"),
+                                           "TEST");
         JsonObject rec = rr.readRecord();
         // The dataSource is applied via the null-key mapping.
         assertEquals("TEST", rec.getString("DATA_SOURCE"));
@@ -70,10 +69,9 @@ public class RecordReaderExtraTest
     public void formatReaderAndDataSourceConstructor()
         throws IOException
     {
-        RecordReader rr = new RecordReader(
-            RecordReader.Format.JSON_LINES,
-            new StringReader("{\"a\":1}\n"),
-            "TEST2");
+        RecordReader rr = new RecordReader(RecordReader.Format.JSON_LINES,
+                                           new StringReader("{\"a\":1}\n"),
+                                           "TEST2");
         JsonObject rec = rr.readRecord();
         assertEquals("TEST2", rec.getString("DATA_SOURCE"));
     }
@@ -82,8 +80,8 @@ public class RecordReaderExtraTest
     public void readerDataSourceAndSourceIdConstructor()
         throws IOException
     {
-        RecordReader rr
-            = new RecordReader(new StringReader("{\"a\":1}\n"), "DS", "SRC");
+        RecordReader rr = new RecordReader(new StringReader("{\"a\":1}\n"),
+                                           "DS", "SRC");
         JsonObject rec = rr.readRecord();
         assertEquals("DS", rec.getString("DATA_SOURCE"));
         assertEquals("SRC", rec.getString("SOURCE_ID"));
@@ -93,11 +91,10 @@ public class RecordReaderExtraTest
     public void formatReaderDataSourceSourceIdConstructor()
         throws IOException
     {
-        RecordReader rr = new RecordReader(
-            RecordReader.Format.JSON_LINES,
-            new StringReader("{\"a\":1}\n"),
-            "DS",
-            "SRC");
+        RecordReader rr = new RecordReader(RecordReader.Format.JSON_LINES,
+                                           new StringReader("{\"a\":1}\n"),
+                                           "DS",
+                                           "SRC");
         JsonObject rec = rr.readRecord();
         assertEquals("DS", rec.getString("DATA_SOURCE"));
         assertEquals("SRC", rec.getString("SOURCE_ID"));
@@ -112,7 +109,7 @@ public class RecordReaderExtraTest
             new StringReader("{\"DATA_SOURCE\":\"OLD\",\"a\":1}\n"), map);
         JsonObject rec = rr.readRecord();
         assertEquals("NEW", rec.getString("DATA_SOURCE"),
-                 "Mapped data source code should be substituted");
+                     "Mapped data source code should be substituted");
     }
 
     @Test
@@ -154,7 +151,7 @@ public class RecordReaderExtraTest
         try {
             System.setErr(new PrintStream(new ByteArrayOutputStream()));
             assertThrows(NullPointerException.class,
-                   () -> new RecordReader(new StringReader("{}\n"), map));
+                         () -> new RecordReader(new StringReader("{}\n"), map));
         } finally {
             System.setErr(origErr);
         }
@@ -168,8 +165,8 @@ public class RecordReaderExtraTest
     public void formatInferredJsonArrayFromOpenBracket()
         throws IOException
     {
-        RecordReader rr
-            = new RecordReader(new StringReader("[{\"a\":1},{\"a\":2}]"));
+        RecordReader rr = new RecordReader(
+            new StringReader("[{\"a\":1},{\"a\":2}]"));
         assertEquals(RecordReader.Format.JSON, rr.getFormat());
 
         JsonObject r1 = rr.readRecord();
@@ -198,15 +195,14 @@ public class RecordReaderExtraTest
     {
         // Per implementation: null/empty string values are removed from the
         // resulting JSON record.
-        RecordReader rr = new RecordReader(
-            RecordReader.Format.CSV,
-            new StringReader("a,b,c\n1,,3\n"));
+        RecordReader rr = new RecordReader(RecordReader.Format.CSV,
+                                           new StringReader("a,b,c\n1,,3\n"));
         JsonObject rec = rr.readRecord();
         assertTrue(rec.containsKey("a"));
         assertEquals("1", rec.getString("a"));
         // Empty value for "b" is removed.
         assertEquals(false, rec.containsKey("b"),
-                 "Empty CSV column should be omitted from JSON record");
+                     "Empty CSV column should be omitted from JSON record");
         assertTrue(rec.containsKey("c"));
     }
 
@@ -217,12 +213,11 @@ public class RecordReaderExtraTest
         // Whitespace-only values trim() to empty and are removed.
         // CSV setTrim(true) trims fields, but the explicit check guards
         // against null/empty after trim.
-        RecordReader rr = new RecordReader(
-            RecordReader.Format.CSV,
-            new StringReader("a,b\n1,   \n"));
+        RecordReader rr = new RecordReader(RecordReader.Format.CSV,
+                                           new StringReader("a,b\n1,   \n"));
         JsonObject rec = rr.readRecord();
         assertEquals(false, rec.containsKey("b"),
-                 "Whitespace-only CSV value should be omitted");
+                     "Whitespace-only CSV value should be omitted");
     }
 
     // -------------------------------------------------------------------
@@ -235,13 +230,12 @@ public class RecordReaderExtraTest
     {
         // The JSON-Lines provider closes its reader after reading null.
         // After EOF, subsequent readRecord calls should keep returning null.
-        RecordReader rr = new RecordReader(
-            RecordReader.Format.JSON_LINES,
-            new StringReader("{\"a\":1}\n"));
+        RecordReader rr = new RecordReader(RecordReader.Format.JSON_LINES,
+                                           new StringReader("{\"a\":1}\n"));
         assertNotNull(rr.readRecord());
         assertNull(rr.readRecord());
         assertNull(rr.readRecord(),
-               "Subsequent calls after EOF should remain null");
+                   "Subsequent calls after EOF should remain null");
     }
 
     // -------------------------------------------------------------------
@@ -269,9 +263,9 @@ public class RecordReaderExtraTest
 
         String output = baos.toString();
         assertTrue(output.contains("FORMAT"),
-               "main() should print FORMAT header: " + output);
+                   "main() should print FORMAT header: " + output);
         assertTrue(output.contains("COUNT"),
-               "main() should print COUNT footer: " + output);
+                   "main() should print COUNT footer: " + output);
     }
 
     @Test
@@ -304,6 +298,6 @@ public class RecordReaderExtraTest
             System.setOut(origOut);
         }
         assertEquals("", baos.toString().trim(),
-                 "main with no args should produce no output");
+                     "main with no args should produce no output");
     }
 }
