@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [4.0.2] - 2026-10-21
 
 Maintenance release. No public API signature changes, but one
-behavioural fix — see Fixed. SemVer PATCH bump.
+behavioral fix — see Fixed. SemVer PATCH bump.
 
 ### Fixed
 
@@ -20,7 +20,7 @@ behavioural fix — see Fixed. SemVer PATCH bump.
   literal `false` to the private implementation, so a caller asking to
   skip environment-variable fallbacks still had them applied. The flag
   is now forwarded. **Callers passing `true` that have been relying on
-  the environment still being consulted will see a behaviour change.**
+  the environment still being consulted will see a behavior change.**
   The sibling overloads were checked and are correct, and are now
   covered by tests: the four-argument form has no such parameter, and
   the `ignoreEnvOption` form already forwards its own.
@@ -29,7 +29,7 @@ behavioural fix — see Fixed. SemVer PATCH bump.
 
 - Reformatted to `java-coding-standards` 0.7.0 (submodule pin 0.4.1 →
   0.7.0, by way of 0.5.3 which landed on `main` after 4.0.1). 82 of
-  106 source files are reflowed; no API or behaviour change. One long
+  106 source files are reflowed; no API or behavior change. One long
   string literal in `TimersTest` was split by hand, because the
   formatter cannot split a literal and the release's deeper
   continuation indent pushed that line past 80 columns.
