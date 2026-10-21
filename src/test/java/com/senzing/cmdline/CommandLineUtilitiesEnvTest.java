@@ -412,6 +412,69 @@ public class CommandLineUtilitiesEnvTest
             });
     }
 
+    /**
+     * The `ignoreEnvOption` overload suppresses the environment when the
+     * nominated option is present among the explicitly specified arguments.
+     *
+     * <p>Its javadoc states that use of the environment is disabled when
+     * that parameter is non-null and the option "is present in the explicitly
+     * specified command-line arguments and either has no parameter value or any
+     * value other than <code>false</code>". This pins the documented contract;
+     * the sibling `ignoreEnvironment` overload was found to silently drop its
+     * argument, and that defect had survived because nothing exercised it.</p>
+     */
+    @Test
+    public void ignoreEnvOptionPresentSuppressesEnvVars()
+        throws Exception
+    {
+        new EnvironmentVariables("SENZING_ENV_TEST_NAME", "alice").execute(
+            () -> {
+                Map<CommandLineOption, CommandLineValue> result
+                    = parseCommandLine(EnvTestOption.class,
+                                       new String[] { "--verbose" },
+                                       EnvTestOption.PARAMETER_PROCESSOR,
+                                       VERBOSE,
+                                       null);
+
+                assertNull(
+                    result.get(NAME),
+                    "NAME must not be populated from the environment "
+                    + "when the ignoreEnvOption is specified");
+            });
+    }
+
+    /**
+     * The control for {@link #ignoreEnvOptionPresentSuppressesEnvVars()}:
+     * naming an ignore option that is NOT specified on the command line must
+     * leave the environment in play.
+     *
+     * <p>Without this the test above would also pass against an
+     * implementation that ignored the environment whenever `ignoreEnvOption`
+     * was non-null, which is not what the javadoc promises.</p>
+     */
+    @Test
+    public void ignoreEnvOptionAbsentStillReadsEnvVars()
+        throws Exception
+    {
+        new EnvironmentVariables("SENZING_ENV_TEST_NAME", "alice").execute(
+            () -> {
+                Map<CommandLineOption, CommandLineValue> result
+                    = parseCommandLine(EnvTestOption.class,
+                                       new String[] {},
+                                       EnvTestOption.PARAMETER_PROCESSOR,
+                                       VERBOSE,
+                                       null);
+
+                CommandLineValue val = result.get(NAME);
+                assertNotNull(
+                    val,
+                    "NAME should be populated from the environment "
+                    + "when the ignoreEnvOption is not specified");
+                assertSame(ENVIRONMENT, val.getSource(),
+                           "Source should be ENVIRONMENT");
+            });
+    }
+
     // Note: the primary-option fallback path
     // (CommandLineUtilities.processEnvironment lines 1156-1170) requires
     // a primary option that has environment fallbacks. Adding an
