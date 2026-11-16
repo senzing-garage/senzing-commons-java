@@ -22,10 +22,10 @@ public class SzInstallLocations
      * was previously the file checked here, because it is now compiled into the
      * native library. These four remain installed.
      *
-     * <p>Package-private rather than private so the tests assert against
-     * this list instead of a copy of it; it is deliberately
-     * not public, as it is an implementation detail of
-     * the validation rather than part of this class's API.
+     * <p>Package-private rather than private so the tests assert against this
+     * list instead of a copy of it. It is deliberately not public: it is an
+     * implementation detail of the validation rather than part of this class's
+     * API.
      */
     static final String[] REQUIRED_CONFIG_FILES = {
         "defaultGNRCP.config", "customGn.txt", "customSn.txt", "customOn.txt"
