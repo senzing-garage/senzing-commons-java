@@ -17,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -570,12 +572,51 @@ public class SzInstallLocationsTest
     }
 
     /**
+     * Pins the CONTENTS of
+     * {@link SzInstallLocations#REQUIRED_CONFIG_FILES}.
+     *
+     * <p>Every other test here is driven from that constant, so they
+     * verify the validation MECHANISM while following whatever the list happens
+     * to say. That is what stops them drifting from production, but it also
+     * means none of them can tell a correct list from a wrong one. This test is
+     * the one that can.
+     *
+     * <p>It exists because a wrong list is exactly the defect that
+     * shipped: 4.0.2 required {@code cfgVariant.json}, which Senzing 4.5.0
+     * stopped installing, and every Senzing 4.5.0+ installation was rejected.
+     * Senzing confirmed these four files remain installed.
+     */
+    @Test
+    public void requiredConfigFilesAreTheExpectedFiles()
+    {
+        assertArrayEquals(
+            new String[] {
+                "defaultGNRCP.config", "customGn.txt", "customSn.txt",
+                "customOn.txt"
+            },
+            SzInstallLocations.REQUIRED_CONFIG_FILES,
+            "The required config file list changed. If Senzing changed "
+            + "what it installs this is correct, but update the "
+            + "CHANGELOG and confirm the new list with Senzing first.");
+
+        for (String fileName : SzInstallLocations.REQUIRED_CONFIG_FILES) {
+            assertNotEquals(
+                "cfgVariant.json",
+                fileName,
+                "cfgVariant.json must not be required again -- Senzing "
+                + "4.5.0 compiles it into the native library rather "
+                + "than installing it.");
+        }
+    }
+
+    /**
      * Writes the config files that {@link SzInstallLocations} requires in order
      * to consider a config directory valid.
      *
-     * <p>Driven from {@link FakeSenzingInstall#REQUIRED_CONFIG_FILES} so
-     * the tests cannot drift from the production list: adding a required file
-     * there updates every fixture here at once.
+     * <p>Driven from {@link SzInstallLocations#REQUIRED_CONFIG_FILES} --
+     * the list the production check actually reads -- so these fixtures cannot
+     * drift from it. An earlier version of this helper copied the list into the
+     * test tree and could not honestly make that claim.
      *
      * @param configDir The directory to populate.
      *
@@ -584,7 +625,7 @@ public class SzInstallLocationsTest
     private static void writeRequiredConfigFiles(Path configDir)
         throws IOException
     {
-        for (String fileName : FakeSenzingInstall.REQUIRED_CONFIG_FILES) {
+        for (String fileName : SzInstallLocations.REQUIRED_CONFIG_FILES) {
             Files.writeString(configDir.resolve(fileName), "FAKE\n");
         }
     }
@@ -613,7 +654,7 @@ public class SzInstallLocationsTest
                     IllegalStateException.class,
                     SzInstallLocations::findLocations);
                 for (String fileName
-                        : FakeSenzingInstall.REQUIRED_CONFIG_FILES)
+                        : SzInstallLocations.REQUIRED_CONFIG_FILES)
                 {
                     assertTrue(
                         ise.getMessage().contains(fileName),
@@ -643,7 +684,7 @@ public class SzInstallLocationsTest
         Files.createDirectories(root.resolve("er/etc"));
         Files.createDirectories(root.resolve("er/resources"));
         Files.createDirectories(root.resolve("data"));
-        String present = FakeSenzingInstall.REQUIRED_CONFIG_FILES[0];
+        String present = SzInstallLocations.REQUIRED_CONFIG_FILES[0];
         Files.writeString(root.resolve("er/etc").resolve(present), "FAKE\n");
         try {
             System.setProperty("senzing.path", root.toString());
@@ -657,7 +698,7 @@ public class SzInstallLocationsTest
                     message.contains(present),
                     "Present file must not be reported missing: " + message);
                 for (String fileName
-                        : FakeSenzingInstall.REQUIRED_CONFIG_FILES)
+                        : SzInstallLocations.REQUIRED_CONFIG_FILES)
                 {
                     if (fileName.equals(present)) continue;
                     assertTrue(
