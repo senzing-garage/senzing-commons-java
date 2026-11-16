@@ -668,6 +668,50 @@ public class SzInstallLocationsTest
     }
 
     /**
+     * A required file may be satisfied from the SUPPORT
+     * directory rather than the config directory, so an install
+     * that splits them between the two must still validate.
+     *
+     * <p>The check reads {@code !configFile.exists() && !supportFile.exists()},
+     * and every other test here puts all four files in the config directory,
+     * leaving the support-directory half of that condition unexercised. A check
+     * that consulted only the config directory would pass all of them.
+     */
+    @Test
+    public void requiredFilesMaySplitAcrossConfigAndSupportDirs()
+        throws Exception
+    {
+        Path root = Files.createTempDirectory("split-cfg-");
+        Path etc = root.resolve("er/etc");
+        Path data = root.resolve("data");
+        Files.createDirectories(etc);
+        Files.createDirectories(data);
+        Files.createDirectories(root.resolve("er/resources"));
+
+        String[] required = SzInstallLocations.REQUIRED_CONFIG_FILES;
+        // First half in the config dir, remainder in the support dir.
+        int split = required.length / 2;
+        for (int index = 0; index < required.length; index++) {
+            Path target = (index < split) ? etc : data;
+            Files.writeString(target.resolve(required[index]), "FAKE\n");
+        }
+        try {
+            System.setProperty("senzing.path", root.toString());
+
+            SzInstallLocations result = SzInstallLocations.findLocations();
+            assertNotNull(
+                result,
+                "An install splitting the required files between "
+                + "the config and support directories must " + "validate");
+            assertEquals(etc.toFile().getCanonicalFile(),
+                         result.getConfigDirectory().getCanonicalFile(),
+                         "Config directory should still be er/etc");
+        } finally {
+            deleteRecursively(root);
+        }
+    }
+
+    /**
      * A config directory holding only SOME of the required files must still be
      * rejected, and the message must name the ones that are absent rather than
      * the ones that are present.
