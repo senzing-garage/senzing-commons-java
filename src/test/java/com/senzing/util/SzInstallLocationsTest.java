@@ -176,15 +176,14 @@ public class SzInstallLocationsTest
 
     /**
      * An explicit {@code senzing.config.dir} system property must override the
-     * default. The override directory must contain
-     * {@code cfgVariant.json}.
+     * default. The override directory must contain the required config files.
      */
     @Test
     public void explicitConfigDirOverridesDefault()
         throws Exception
     {
         Path altConfig = Files.createTempDirectory("alt-config-");
-        Files.writeString(altConfig.resolve("cfgVariant.json"), "{}");
+        writeRequiredConfigFiles(altConfig);
         try {
             System.setProperty("senzing.path", install.root().toString());
             System.setProperty("senzing.config.dir", altConfig.toString());
@@ -442,15 +441,15 @@ public class SzInstallLocationsTest
 
     /**
      * {@code SENZING_CONFIG_DIR} env var must be honored when
-     * {@code senzing.config.dir} is unset. The directory must contain
-     * {@code cfgVariant.json}.
+     * {@code senzing.config.dir} is unset. The directory must contain the
+     * required config files.
      */
     @Test
     public void findLocationsFromConfigDirEnvVar()
         throws Exception
     {
         Path altConfig = Files.createTempDirectory("alt-config-env-");
-        Files.writeString(altConfig.resolve("cfgVariant.json"), "{}");
+        writeRequiredConfigFiles(altConfig);
         try {
             System.setProperty("senzing.path", install.root().toString());
             new EnvironmentVariables("SENZING_CONFIG_DIR",
@@ -533,7 +532,7 @@ public class SzInstallLocationsTest
         // instead of "er".
         Path devRoot = Files.createTempDirectory("dev-build-");
         Files.createDirectories(devRoot.resolve("dist/etc"));
-        Files.writeString(devRoot.resolve("dist/etc/cfgVariant.json"), "{}");
+        writeRequiredConfigFiles(devRoot.resolve("dist/etc"));
         Files.createDirectories(devRoot.resolve("dist/resources"));
         Files.createDirectories(devRoot.resolve("data"));
         try {
@@ -571,21 +570,41 @@ public class SzInstallLocationsTest
     }
 
     /**
-     * If the config directory exists but is missing
-     * {@code cfgVariant.json} (and the support dir does not have it
-     * either), {@code findLocations} must throw
-     * {@link IllegalStateException} naming the missing file.
+     * Writes the config files that {@link SzInstallLocations} requires in order
+     * to consider a config directory valid.
+     *
+     * <p>Driven from {@link FakeSenzingInstall#REQUIRED_CONFIG_FILES} so
+     * the tests cannot drift from the production list: adding a required file
+     * there updates every fixture here at once.
+     *
+     * @param configDir The directory to populate.
+     *
+     * @throws IOException If a file could not be written.
+     */
+    private static void writeRequiredConfigFiles(Path configDir)
+        throws IOException
+    {
+        for (String fileName : FakeSenzingInstall.REQUIRED_CONFIG_FILES) {
+            Files.writeString(configDir.resolve(fileName), "FAKE\n");
+        }
+    }
+
+    /**
+     * If the config directory exists but is missing the required config files
+     * (and the support dir does not have them either),
+     * {@code findLocations} must throw {@link IllegalStateException}
+     * naming every missing file.
      */
     @Test
-    public void missingCfgVariantThrows()
+    public void missingConfigFilesThrows()
         throws Exception
     {
-        // Build a fake install with config dir but no cfgVariant.json.
+        // Build a fake install with an EMPTY config dir.
         Path root = Files.createTempDirectory("missing-cfg-");
         Files.createDirectories(root.resolve("er/etc"));
         Files.createDirectories(root.resolve("er/resources"));
         Files.createDirectories(root.resolve("data"));
-        // NOTE: deliberately omit cfgVariant.json under er/etc and data/.
+        // NOTE: deliberately omit the required files under er/etc and data/.
         try {
             System.setProperty("senzing.path", root.toString());
 
@@ -593,10 +612,59 @@ public class SzInstallLocationsTest
                 IllegalStateException ise = assertThrows(
                     IllegalStateException.class,
                     SzInstallLocations::findLocations);
-                assertTrue(
-                    ise.getMessage().contains("cfgVariant.json"),
-                    "Error message must name the missing file: "
-                    + ise.getMessage());
+                for (String fileName
+                        : FakeSenzingInstall.REQUIRED_CONFIG_FILES)
+                {
+                    assertTrue(
+                        ise.getMessage().contains(fileName),
+                        "Error message must name the missing file "
+                        + fileName + ": " + ise.getMessage());
+                }
+            });
+        } finally {
+            deleteRecursively(root);
+        }
+    }
+
+    /**
+     * A config directory holding only SOME of the required files must still be
+     * rejected, and the message must name the ones that are absent rather than
+     * the ones that are present.
+     *
+     * <p>Without this, a check that passed on the first file found would
+     * look correct against both the all-present and none-present cases above
+     * while silently accepting a partial install.
+     */
+    @Test
+    public void partialConfigFilesThrows()
+        throws Exception
+    {
+        Path root = Files.createTempDirectory("partial-cfg-");
+        Files.createDirectories(root.resolve("er/etc"));
+        Files.createDirectories(root.resolve("er/resources"));
+        Files.createDirectories(root.resolve("data"));
+        String present = FakeSenzingInstall.REQUIRED_CONFIG_FILES[0];
+        Files.writeString(root.resolve("er/etc").resolve(present), "FAKE\n");
+        try {
+            System.setProperty("senzing.path", root.toString());
+
+            new SystemErr().execute(() -> {
+                IllegalStateException ise = assertThrows(
+                    IllegalStateException.class,
+                    SzInstallLocations::findLocations);
+                String message = ise.getMessage();
+                assertFalse(
+                    message.contains(present),
+                    "Present file must not be reported missing: " + message);
+                for (String fileName
+                        : FakeSenzingInstall.REQUIRED_CONFIG_FILES)
+                {
+                    if (fileName.equals(present)) continue;
+                    assertTrue(
+                        message.contains(fileName),
+                        "Absent file " + fileName
+                        + " must be reported: " + message);
+                }
             });
         } finally {
             deleteRecursively(root);

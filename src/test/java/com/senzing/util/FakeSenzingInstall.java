@@ -16,7 +16,10 @@ import java.util.Comparator;
  * <pre>
  *   &lt;root&gt;/
  *     er/                                          (install dir)
- *     er/etc/cfgVariant.json                       (required config file)
+ *     er/etc/defaultGNRCP.config                   (required config file)
+ *     er/etc/customGn.txt                          (required config file)
+ *     er/etc/customSn.txt                          (required config file)
+ *     er/etc/customOn.txt                          (required config file)
  *     er/resources/                                (resource dir)
  *     er/resources/schema/szcore-schema-sqlite-create.sql
  *     data/                                        (support dir)
@@ -30,6 +33,15 @@ import java.util.Comparator;
  */
 final class FakeSenzingInstall implements AutoCloseable
 {
+    /**
+     * The config files {@link SzInstallLocations} requires to consider a config
+     * directory valid. Senzing 4.5.0 and later no longer install
+     * {@code cfgVariant.json}, which this fixture used to create.
+     */
+    static final String[] REQUIRED_CONFIG_FILES = {
+        "defaultGNRCP.config", "customGn.txt", "customSn.txt", "customOn.txt"
+    };
+
     private final Path root;
 
     /**
@@ -43,8 +55,13 @@ final class FakeSenzingInstall implements AutoCloseable
         Path root = Files.createTempDirectory("senzing-test-");
         try {
             Files.createDirectories(root.resolve("er/etc"));
-            Files.writeString(root.resolve("er/etc/cfgVariant.json"),
-                              "{ \"FAKE\": true }\n");
+            // Senzing 4.5.0 stopped installing cfgVariant.json -- it is
+            // compiled into libSz -- so the install check requires these
+            // four files instead. See SzInstallLocations.findLocations().
+            for (String fileName : REQUIRED_CONFIG_FILES) {
+                Files.writeString(root.resolve("er/etc").resolve(fileName),
+                                  "FAKE\n");
+            }
             Files.createDirectories(root.resolve("er/resources/schema"));
             // Tests that exercise SzUtilities.ensureSenzingSQLiteSchema
             // need at least one parseable CREATE TABLE statement so the

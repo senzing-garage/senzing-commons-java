@@ -8,6 +8,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.3] - 2026-11-16
+
+Bug-fix release. One defect, and it blocks consumers outright on
+Senzing 4.5.0 and later. SemVer PATCH: no public API change.
+
+### Fixed
+
+- `SzInstallLocations.findLocations()` rejected every Senzing
+  4.5.0+ installation. It validated the config directory by
+  requiring `cfgVariant.json`, which Senzing 4.5.0 stopped
+  installing — it is compiled into the native library instead —
+  so discovery failed before any work could begin:
+
+  ```text
+  Senzing config directory appears invalid: /etc/opt/senzing
+      cfgVariant.json was not found in config directory
+  ```
+
+  The check now requires the four config files Senzing still
+  installs: `defaultGNRCP.config`, `customGn.txt`, `customSn.txt`
+  and `customOn.txt`. The surrounding logic is unchanged — each
+  file may satisfy the check from either the config directory or
+  the support directory, and a file missing from both is named in
+  the error.
+
+  This mirrors the fix already made in `sz-sdk-java`'s
+  `InstallLocations` (that repository's PR #400), where Senzing
+  confirmed those four files remain installed in 4.5.0. This
+  class is the public counterpart of that test-only one, so the
+  two had drifted apart.
+
+  **Impact.** Downstream CI had been red since roughly 2026-11-11
+  wherever a staging Senzing build moved to 4.6.0 —
+  `data-mart-replicator` among them, on every PR and on `main`.
+  Nothing involving install discovery could run.
+
+### Changed
+
+- Build and test dependency bumps (these do not propagate to
+  consumers — recorded for `pom.xml` auditability):
+  - `org.sonatype.central:central-publishing-maven-plugin`
+    0.11.0 → 0.12.0.
+  - `org.apache.maven.plugins:maven-surefire-plugin` 3.6.0 →
+    3.6.1.
+  - `com.github.spotbugs:spotbugs-maven-plugin` 4.10.4.1 →
+    4.10.5.0.
+  - `org.jacoco:jacoco-maven-plugin` 0.8.15 → 0.8.16.
+- `java-coding-standards` submodule pinned at 0.7.1. No source
+  reformatting resulted.
+
+No runtime dependency changed in this release.
+
 ## [4.0.2] - 2026-10-21
 
 Maintenance release. No public API signature changes, but one
