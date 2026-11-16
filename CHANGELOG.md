@@ -46,6 +46,18 @@ Senzing 4.5.0 and later. SemVer PATCH: no public API change.
 
 ### Changed
 
+- Runtime dependency bump (propagates to consumers via transitive
+  resolution):
+  - `com.ibm.icu:icu4j` 78.3 → 79.1. Used in exactly one place,
+    `IOUtilities`, for `CharsetDetector` and `CharsetMatch`
+    character-encoding detection. This is a MAJOR ICU version
+    jump; ICU cuts majors on a time-based cadence rather than for
+    breaking changes, and the 51 `IOUtilitiesTest` and 109
+    `RecordReaderTest` cases that exercise detection all pass
+    against 79.1. ICU's own release notes were not reviewed for
+    detection-heuristic changes, so a consumer relying on exact
+    charset-detection results for ambiguous input should verify
+    against its own data.
 - Build and test dependency bumps (these do not propagate to
   consumers — recorded for `pom.xml` auditability):
   - `org.sonatype.central:central-publishing-maven-plugin`
@@ -57,8 +69,6 @@ Senzing 4.5.0 and later. SemVer PATCH: no public API change.
   - `org.jacoco:jacoco-maven-plugin` 0.8.15 → 0.8.16.
 - `java-coding-standards` submodule pinned at 0.7.1. No source
   reformatting resulted.
-
-No runtime dependency changed in this release.
 
 ## [4.0.2] - 2026-10-21
 
