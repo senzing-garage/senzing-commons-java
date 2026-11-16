@@ -701,8 +701,8 @@ public class SzInstallLocationsTest
             SzInstallLocations result = SzInstallLocations.findLocations();
             assertNotNull(
                 result,
-                "An install splitting the required files between "
-                + "the config and support directories must " + "validate");
+                "An install splitting the required files between the "
+                + "config and support directories must validate");
             assertEquals(etc.toFile().getCanonicalFile(),
                          result.getConfigDirectory().getCanonicalFile(),
                          "Config directory should still be er/etc");
