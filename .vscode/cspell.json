@@ -29,6 +29,7 @@
     "getenv",
     "GHSA",
     "glassfish",
+    "GNRCP",
     "ICLA",
     "ignorefile",
     "jacoco",

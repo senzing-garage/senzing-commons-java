@@ -16,8 +16,10 @@ import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -176,15 +178,14 @@ public class SzInstallLocationsTest
 
     /**
      * An explicit {@code senzing.config.dir} system property must override the
-     * default. The override directory must contain
-     * {@code cfgVariant.json}.
+     * default. The override directory must contain the required config files.
      */
     @Test
     public void explicitConfigDirOverridesDefault()
         throws Exception
     {
         Path altConfig = Files.createTempDirectory("alt-config-");
-        Files.writeString(altConfig.resolve("cfgVariant.json"), "{}");
+        writeRequiredConfigFiles(altConfig);
         try {
             System.setProperty("senzing.path", install.root().toString());
             System.setProperty("senzing.config.dir", altConfig.toString());
@@ -442,15 +443,15 @@ public class SzInstallLocationsTest
 
     /**
      * {@code SENZING_CONFIG_DIR} env var must be honored when
-     * {@code senzing.config.dir} is unset. The directory must contain
-     * {@code cfgVariant.json}.
+     * {@code senzing.config.dir} is unset. The directory must contain the
+     * required config files.
      */
     @Test
     public void findLocationsFromConfigDirEnvVar()
         throws Exception
     {
         Path altConfig = Files.createTempDirectory("alt-config-env-");
-        Files.writeString(altConfig.resolve("cfgVariant.json"), "{}");
+        writeRequiredConfigFiles(altConfig);
         try {
             System.setProperty("senzing.path", install.root().toString());
             new EnvironmentVariables("SENZING_CONFIG_DIR",
@@ -533,7 +534,7 @@ public class SzInstallLocationsTest
         // instead of "er".
         Path devRoot = Files.createTempDirectory("dev-build-");
         Files.createDirectories(devRoot.resolve("dist/etc"));
-        Files.writeString(devRoot.resolve("dist/etc/cfgVariant.json"), "{}");
+        writeRequiredConfigFiles(devRoot.resolve("dist/etc"));
         Files.createDirectories(devRoot.resolve("dist/resources"));
         Files.createDirectories(devRoot.resolve("data"));
         try {
@@ -571,21 +572,80 @@ public class SzInstallLocationsTest
     }
 
     /**
-     * If the config directory exists but is missing
-     * {@code cfgVariant.json} (and the support dir does not have it
-     * either), {@code findLocations} must throw
-     * {@link IllegalStateException} naming the missing file.
+     * Pins the CONTENTS of
+     * {@link SzInstallLocations#REQUIRED_CONFIG_FILES}.
+     *
+     * <p>Every other test here is driven from that constant, so they
+     * verify the validation MECHANISM while following whatever the list happens
+     * to say. That is what stops them drifting from production, but it also
+     * means none of them can tell a correct list from a wrong one. This test is
+     * the one that can.
+     *
+     * <p>It exists because a wrong list is exactly the defect that
+     * shipped: 4.0.2 required {@code cfgVariant.json}, which Senzing 4.5.0
+     * stopped installing, and every Senzing 4.5.0+ installation was rejected.
+     * Senzing confirmed these four files remain installed.
      */
     @Test
-    public void missingCfgVariantThrows()
+    public void requiredConfigFilesAreTheExpectedFiles()
+    {
+        assertArrayEquals(
+            new String[] {
+                "defaultGNRCP.config", "customGn.txt", "customSn.txt",
+                "customOn.txt"
+            },
+            SzInstallLocations.REQUIRED_CONFIG_FILES,
+            "The required config file list changed. If Senzing changed "
+            + "what it installs this is correct, but update the "
+            + "CHANGELOG and confirm the new list with Senzing first.");
+
+        for (String fileName : SzInstallLocations.REQUIRED_CONFIG_FILES) {
+            assertNotEquals(
+                "cfgVariant.json",
+                fileName,
+                "cfgVariant.json must not be required again -- Senzing "
+                + "4.5.0 compiles it into the native library rather "
+                + "than installing it.");
+        }
+    }
+
+    /**
+     * Writes the config files that {@link SzInstallLocations} requires in order
+     * to consider a config directory valid.
+     *
+     * <p>Driven from {@link SzInstallLocations#REQUIRED_CONFIG_FILES} --
+     * the list the production check actually reads -- so these fixtures cannot
+     * drift from it. An earlier version of this helper copied the list into the
+     * test tree and could not honestly make that claim.
+     *
+     * @param configDir The directory to populate.
+     *
+     * @throws IOException If a file could not be written.
+     */
+    private static void writeRequiredConfigFiles(Path configDir)
+        throws IOException
+    {
+        for (String fileName : SzInstallLocations.REQUIRED_CONFIG_FILES) {
+            Files.writeString(configDir.resolve(fileName), "FAKE\n");
+        }
+    }
+
+    /**
+     * If the config directory exists but is missing the required config files
+     * (and the support dir does not have them either),
+     * {@code findLocations} must throw {@link IllegalStateException}
+     * naming every missing file.
+     */
+    @Test
+    public void missingConfigFilesThrows()
         throws Exception
     {
-        // Build a fake install with config dir but no cfgVariant.json.
+        // Build a fake install with an EMPTY config dir.
         Path root = Files.createTempDirectory("missing-cfg-");
         Files.createDirectories(root.resolve("er/etc"));
         Files.createDirectories(root.resolve("er/resources"));
         Files.createDirectories(root.resolve("data"));
-        // NOTE: deliberately omit cfgVariant.json under er/etc and data/.
+        // NOTE: deliberately omit the required files under er/etc and data/.
         try {
             System.setProperty("senzing.path", root.toString());
 
@@ -593,10 +653,103 @@ public class SzInstallLocationsTest
                 IllegalStateException ise = assertThrows(
                     IllegalStateException.class,
                     SzInstallLocations::findLocations);
-                assertTrue(
-                    ise.getMessage().contains("cfgVariant.json"),
-                    "Error message must name the missing file: "
-                    + ise.getMessage());
+                for (String fileName
+                        : SzInstallLocations.REQUIRED_CONFIG_FILES)
+                {
+                    assertTrue(
+                        ise.getMessage().contains(fileName),
+                        "Error message must name the missing file "
+                        + fileName + ": " + ise.getMessage());
+                }
+            });
+        } finally {
+            deleteRecursively(root);
+        }
+    }
+
+    /**
+     * A required file may be satisfied from the SUPPORT
+     * directory rather than the config directory, so an install
+     * that splits them between the two must still validate.
+     *
+     * <p>The check reads {@code !configFile.exists() && !supportFile.exists()},
+     * and every other test here puts all four files in the config directory,
+     * leaving the support-directory half of that condition unexercised. A check
+     * that consulted only the config directory would pass all of them.
+     */
+    @Test
+    public void requiredFilesMaySplitAcrossConfigAndSupportDirs()
+        throws Exception
+    {
+        Path root = Files.createTempDirectory("split-cfg-");
+        Path etc = root.resolve("er/etc");
+        Path data = root.resolve("data");
+        Files.createDirectories(etc);
+        Files.createDirectories(data);
+        Files.createDirectories(root.resolve("er/resources"));
+
+        String[] required = SzInstallLocations.REQUIRED_CONFIG_FILES;
+        // First half in the config dir, remainder in the support dir.
+        int split = required.length / 2;
+        for (int index = 0; index < required.length; index++) {
+            Path target = (index < split) ? etc : data;
+            Files.writeString(target.resolve(required[index]), "FAKE\n");
+        }
+        try {
+            System.setProperty("senzing.path", root.toString());
+
+            SzInstallLocations result = SzInstallLocations.findLocations();
+            assertNotNull(
+                result,
+                "An install splitting the required files between the "
+                + "config and support directories must validate");
+            assertEquals(etc.toFile().getCanonicalFile(),
+                         result.getConfigDirectory().getCanonicalFile(),
+                         "Config directory should still be er/etc");
+        } finally {
+            deleteRecursively(root);
+        }
+    }
+
+    /**
+     * A config directory holding only SOME of the required files must still be
+     * rejected, and the message must name the ones that are absent rather than
+     * the ones that are present.
+     *
+     * <p>Without this, a check that passed on the first file found would
+     * look correct against both the all-present and none-present cases above
+     * while silently accepting a partial install.
+     */
+    @Test
+    public void partialConfigFilesThrows()
+        throws Exception
+    {
+        Path root = Files.createTempDirectory("partial-cfg-");
+        Files.createDirectories(root.resolve("er/etc"));
+        Files.createDirectories(root.resolve("er/resources"));
+        Files.createDirectories(root.resolve("data"));
+        String present = SzInstallLocations.REQUIRED_CONFIG_FILES[0];
+        Files.writeString(root.resolve("er/etc").resolve(present), "FAKE\n");
+        try {
+            System.setProperty("senzing.path", root.toString());
+
+            new SystemErr().execute(() -> {
+                IllegalStateException ise = assertThrows(
+                    IllegalStateException.class,
+                    SzInstallLocations::findLocations);
+                String message = ise.getMessage();
+                assertFalse(
+                    message.contains(present),
+                    "Present file must not be reported missing: " + message);
+                for (String fileName
+                        : SzInstallLocations.REQUIRED_CONFIG_FILES)
+                {
+                    if (fileName.equals(present)) continue;
+                    assertTrue(
+                        message.contains(fileName),
+                        "Absent file " + fileName
+                        + " must be reported: " + message);
+                }
             });
         } finally {
             deleteRecursively(root);

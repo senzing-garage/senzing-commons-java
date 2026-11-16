@@ -16,7 +16,10 @@ import java.util.Comparator;
  * <pre>
  *   &lt;root&gt;/
  *     er/                                          (install dir)
- *     er/etc/cfgVariant.json                       (required config file)
+ *     er/etc/defaultGNRCP.config                   (required config file)
+ *     er/etc/customGn.txt                          (required config file)
+ *     er/etc/customSn.txt                          (required config file)
+ *     er/etc/customOn.txt                          (required config file)
  *     er/resources/                                (resource dir)
  *     er/resources/schema/szcore-schema-sqlite-create.sql
  *     data/                                        (support dir)
@@ -43,8 +46,14 @@ final class FakeSenzingInstall implements AutoCloseable
         Path root = Files.createTempDirectory("senzing-test-");
         try {
             Files.createDirectories(root.resolve("er/etc"));
-            Files.writeString(root.resolve("er/etc/cfgVariant.json"),
-                              "{ \"FAKE\": true }\n");
+            // Driven from the production list so this fixture cannot
+            // fall out of step with what findLocations() requires.
+            // Senzing 4.5.0 stopped installing cfgVariant.json -- it is
+            // compiled into libSz instead.
+            for (String fileName : SzInstallLocations.REQUIRED_CONFIG_FILES) {
+                Files.writeString(root.resolve("er/etc").resolve(fileName),
+                                  "FAKE\n");
+            }
             Files.createDirectories(root.resolve("er/resources/schema"));
             // Tests that exercise SzUtilities.ensureSenzingSQLiteSchema
             // need at least one parseable CREATE TABLE statement so the

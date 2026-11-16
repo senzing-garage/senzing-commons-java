@@ -4,7 +4,7 @@
   <groupId>com.senzing</groupId>
   <artifactId>senzing-commons</artifactId>
   <packaging>jar</packaging>
-  <version>4.0.2</version>
+  <version>4.0.3</version>
   <name>Senzing Commons</name>
   <description>Utility classes and functions common to multiple Senzing projects.</description>
   <url>http://github.com/senzing-garage/senzing-commons-java</url>
@@ -61,7 +61,7 @@
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
-      <version>78.3</version>
+      <version>79.1</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

@@ -14,6 +14,24 @@ import static com.senzing.util.OperatingSystemFamily.RUNTIME_OS_FAMILY;
 public class SzInstallLocations
 {
     /**
+     * The config files that must be present for a config directory to be
+     * considered valid. Each may be satisfied from either the config directory
+     * or the support directory.
+     *
+     * <p>Senzing 4.5.0 stopped installing {@code cfgVariant.json}, which
+     * was previously the file checked here, because it is now compiled into the
+     * native library. These four remain installed.
+     *
+     * <p>Package-private rather than private so the tests assert against this
+     * list instead of a copy of it. It is deliberately not public: it is an
+     * implementation detail of the validation rather than part of this class's
+     * API.
+     */
+    static final String[] REQUIRED_CONFIG_FILES = {
+        "defaultGNRCP.config", "customGn.txt", "customSn.txt", "customOn.txt"
+    };
+
+    /**
      * The installation location.
      */
     private File installDir;
@@ -402,11 +420,9 @@ public class SzInstallLocations
             // validate the contents of the config directory
             List<String> missingFiles = new LinkedList<>();
 
-            // check if the config directory does not exist
+            // check that the config directory contains the required files
             if (configDir != null && configDir.exists()) {
-                String[] requiredFiles = { "cfgVariant.json" };
-
-                for (String fileName : requiredFiles) {
+                for (String fileName : REQUIRED_CONFIG_FILES) {
                     File configFile = new File(configDir, fileName);
                     File supportFile = new File(supportDir, fileName);
                     if (!configFile.exists() && !supportFile.exists()) {
